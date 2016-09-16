@@ -30,6 +30,8 @@ $(function(){
             data: {'id':$('#itemId').val()},
             success: function(result){
                 processData(result);
+                $('.sp-wrap').smoothproducts();
+                $('.sp-thumbs a')[0].click();
                 console.log(result);
             },
             error: function(result){
@@ -73,6 +75,11 @@ $(function(){
             /*sizeQty.text(sizeMap[val].qty)*/
 
         });
+        var sp = $('.sp-wrap');
+        for(i = 0; i<data.images.length; i++){
+            var url = magic+'../..'+data.images[i];
+            sp.append('<a href="'+url+'"><img src="'+url+'"></a>')
+        }
     }
 
     function processMeasurements(code, data){
@@ -91,7 +98,7 @@ $(function(){
     }
 
     function resolveGroupCommonCode (name){
-        pattern = name.trim();
+        var pattern = name.trim();
         var en = locale;
         switch (pattern){
             case locale.group_jeans:           return {code: 1, item_group: en.group_jeans};
@@ -110,5 +117,6 @@ $(function(){
         }
     }
     refreshData();
+    /*$('.sp-wrap').smoothproducts();*/
 });
 /*]]>*/

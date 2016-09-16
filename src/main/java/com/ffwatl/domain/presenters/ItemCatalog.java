@@ -7,22 +7,21 @@ import com.ffwatl.domain.items.clothes.ClothesItem;
 import com.ffwatl.domain.items.clothes.size.Size;
 import com.ffwatl.domain.items.color.Color;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 public class ItemCatalog {
 
-    private static final String PHOTO_URL = "/storage/items/images/";
-
+    private String photoUrl;
     private Item item;
     private String thumbnail_url;
     private List<Size> size;
 
-    public ItemCatalog(Item item) throws IOException {
+    public ItemCatalog(Item item, String photoUrl) {
         if(item == null) throw  new IllegalArgumentException();
         this.item = item;
+        this.photoUrl = photoUrl;
         this.thumbnail_url = getThumbnailUrl();
         if(item instanceof ClothesItem) this.size = ((ClothesItem) item).getSize();
     }
@@ -79,9 +78,9 @@ public class ItemCatalog {
         return item.getLastChangeDate();
     }
 
-    public String getThumbnailUrl() throws IOException {
+    public String getThumbnailUrl() {
         if(this.thumbnail_url != null) return this.thumbnail_url;
-        this.thumbnail_url = PHOTO_URL + "item_" + getId() + "/image1l.jpg";
+        this.thumbnail_url = photoUrl + "item_" + getId() + "/image1l.jpg";
         return this.thumbnail_url;
     }
 }

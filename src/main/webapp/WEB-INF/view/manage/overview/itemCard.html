@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/resources/css/custom/main.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/overview/item.card.css" th:href="@{/resources/css/custom/overview/item.card.css}" type="text/css">
     <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
+    <script rel="script" src="../../../../resources/js/smoothproducts.js" th:src="@{/resources/js/smoothproducts.js}" ></script>
     <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
     <script rel="script" src="../../../../resources/js/jquery.tabslet.min.js" th:src="@{/resources/js/jquery.tabslet.min.js}"></script>
     <script rel="script" src="../../../../resources/js/custom/overview/item.card.js" th:src="@{/resources/js/custom/overview/item.card.js}" ></script>
@@ -53,12 +54,16 @@
     <div class="content col-lg-12">
         <div class="col-lg-6 gallery">
             <input id="itemId" hidden th:value="${itemId}">
+            <div class="sp-wrap">
+                <a th:remove="all" href="../../../../resources/img/asos/item_1/image1xl.jpg"><img src="../../../../resources/img/asos/item_1/image1xl.jpg" alt=""></a>
+                <a th:remove="all" href="../../../../resources/img/asos/item_1/image2xl.jpg"><img src="../../../../resources/img/asos/item_1/image2xl.jpg" alt=""></a>
+            </div>
         </div>
         <div class="col-lg-6 main">
             <div class="col-lg-10 float_right">
                 <h3 class="item_title">ASOS Mens Skinny Jeans navy</h3>
                 <div id="totalQTY" class="itemInactive">
-                    <span class="stock">Total qty.:</span>
+                    <span class="stock" th:text="(#{label.totalQty}+':')">Total qty.:</span>
                     <p class="qty">6</p>
                 </div>
                 <ul class="list-inline price_list">
@@ -77,13 +82,12 @@
                         <span class="line-through">539</span>
                     </li>
                 </ul>
-
                 <br>
                 <br>
                 <br>
                 <div class="size_block">
                     <ul class="list-inline sizeSelect_ul">
-                        <li><label>Size:</label>
+                        <li><label th:text="#{label.size}">Size:</label>
                             <div class="dropdown">
                                 <button class="dropbtn button-bordered inline size_choice button-bordered" th:text="#{new.item.choose}">W32 L32</button>
                                 <div class="dropdown-content">
@@ -96,7 +100,7 @@
                         <!--<li><div class="size_qty">3</div></li>-->
 
                     </ul>
-                    <label>Color:</label>
+                    <label th:text="#{new.item.color}">Color:</label>
                     <div class="inline">
                         <ul class="list-inline">
                             <li>
@@ -108,14 +112,14 @@
                 </div>
                 <br>
                 <div class="buttons">
-                    <button class="button-typical button" id="edit_button">Edit</button>
-                    <button class="button-warn" id="addToBag_button">Add to bag</button>
+                    <button class="button-typical button" id="edit_button" th:text="#{label.edit}">Edit</button>
+                    <button class="button-warn" id="addToBag_button" th:text="#{label.addToBag}">Add to bag</button>
                 </div>
                 <div class="tabs">
                     <ul id="forTabs" class="forTabs">
-                        <li id="main_info" class="active" ><a href="#tab-1" th:text="#{label.all}">Main info</a></li>
-                        <li id="description" ><a href="#tab-2" th:text="#{label.active}">Brand</a></li>
-                        <li id="extra_info" ><a href="#tab-3" th:text="#{label.inactive}">Extra Info</a></li>
+                        <li id="main_info" class="active" ><a href="#tab-1" th:text="#{label.mainInfo}">Main info</a></li>
+                        <li id="description" ><a href="#tab-2" th:text="#{new.item.brand}">Brand</a></li>
+                        <li id="extra_info" ><a href="#tab-3" th:text="#{label.extraInfo}">Extra Info</a></li>
                     </ul>
                     <div id="tab-1">
                         <p>Here is the main information about product: </p>

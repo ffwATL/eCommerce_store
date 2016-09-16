@@ -1,6 +1,7 @@
 package com.ffwatl;
 
 
+import com.ffwatl.controller.AjaxController;
 import com.ffwatl.dao.items.ClothesItemRepository;
 import com.ffwatl.dao.items.ItemRepository;
 import com.ffwatl.domain.filter.grid_filter.ClothesGridFilter;
@@ -12,6 +13,7 @@ import com.ffwatl.domain.items.Item;
 import com.ffwatl.service.clothes.ClothesPaginationService;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.service.items.ItemPaginationServiceImpl;
+import com.ffwatl.service.items.ItemService;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +42,10 @@ public class SpecificationTest {
     private ItemRepository itemRepository;
     @Autowired
     private ItemPaginationServiceImpl itemPaginationService;
+    @Autowired
+    private ItemService itemService;
+    @Autowired
+    private AjaxController ajaxController;
 
     @Autowired
     private ItemGroupService itemGroupService;
@@ -100,6 +106,11 @@ public class SpecificationTest {
         System.err.println("result: " + list);
         System.err.println("*** gender: " + gender);
 
+    }*/
+
+   /* @Test
+    public void imageReadTest() throws IOException {
+        ajaxController.fillWrapper(itemService.findAll());
     }*/
 
     @Test

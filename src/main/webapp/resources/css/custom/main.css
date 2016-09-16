@@ -334,7 +334,7 @@ input{
     outline: none;
 }
 input[type="checkbox"]{
-    width:  0;
+   /* width:  0;*/
 }
 input[type="checkbox"]:before {
     border: solid black 1px;

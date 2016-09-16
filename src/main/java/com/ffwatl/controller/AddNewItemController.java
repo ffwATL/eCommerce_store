@@ -6,6 +6,7 @@ import com.ffwatl.domain.items.clothes.ClothesItem;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesItemService;
 import com.ffwatl.service.group.ItemGroupService;
+import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.imgscalr.Scalr;
@@ -33,7 +34,7 @@ import java.util.List;
 @Controller
 public class AddNewItemController {
 
-    private static final String PHOTO_DIR = "c:\\atl_folder\\items\\images\\";
+
 
     @Autowired
     private ItemGroupService itemGroupService;
@@ -41,6 +42,9 @@ public class AddNewItemController {
     private BrandService brandService;
     @Autowired
     private ClothesItemService clothesItemService;
+
+    @Autowired
+    private Settings settings;
 
     private static final Logger logger = LogManager.getLogger("com.ffwatl.controller.AddNewItemController");
 
@@ -74,7 +78,7 @@ public class AddNewItemController {
             }
             clothesItemService.save(clothesItem);
             logger.info("clothes item saved: " + clothesItem);
-            String dirPath = PHOTO_DIR + "item_" + clothesItem.getId();
+            String dirPath = settings.getPhotoDir() + "item_" + clothesItem.getId();
             Path path = Paths.get(dirPath).toAbsolutePath();
             Files.createDirectory(path);
             int count = 1;

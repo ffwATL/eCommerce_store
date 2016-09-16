@@ -8,11 +8,12 @@ import com.ffwatl.domain.filter.ui.ClothesFilterOptions;
 import com.ffwatl.domain.group.ItemGroup;
 import com.ffwatl.domain.items.CommonCategory;
 import com.ffwatl.domain.items.Item;
-import com.ffwatl.domain.presenters.ItemCatalog;
-import com.ffwatl.domain.presenters.ItemCatalogPresenter;
 import com.ffwatl.domain.items.brand.Brand;
 import com.ffwatl.domain.items.clothes.size.EuroSize;
 import com.ffwatl.domain.items.color.Color;
+import com.ffwatl.domain.presenters.ItemCatalog;
+import com.ffwatl.domain.presenters.ItemCatalogPresenter;
+import com.ffwatl.domain.presenters.ItemPresenter;
 import com.ffwatl.domain.update.ItemUpdate;
 import com.ffwatl.domain.update.express_info.ItemsExpressInfo;
 import com.ffwatl.service.clothes.BrandService;
@@ -22,6 +23,7 @@ import com.ffwatl.service.items.ColorService;
 import com.ffwatl.service.items.EuroSizeService;
 import com.ffwatl.service.items.ItemPaginationServiceImpl;
 import com.ffwatl.service.items.ItemService;
+import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,8 @@ public class AjaxController {
     private EuroSizeService euroSizeService;
     @Autowired
     private ColorService colorService;
+    @Autowired
+    private Settings settings;
 
     @RequestMapping(value = "/manage/ajax/get/itemgroup", method = RequestMethod.POST)
     @ResponseBody
@@ -119,7 +122,7 @@ public class AjaxController {
             holder.setTotalPages(page.getTotalPages());
             holder.setTotalItems(page.getTotalElements());
             return ResponseEntity.ok(holder);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -136,8 +139,8 @@ public class AjaxController {
 
     @RequestMapping(value = "/manage/ajax/get/item/single", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Item> ajaxSingleItem(@RequestParam long id){
-        return ResponseEntity.ok(itemService.findById(id));
+    public ResponseEntity<ItemPresenter> ajaxSingleItem(@RequestParam long id){
+        return ResponseEntity.ok(itemService.findItemPresenterById(id));
     }
 
     private Page<? extends Item> getPage(String cat, Map<String, String> params){
@@ -151,10 +154,10 @@ public class AjaxController {
         return itemPaginationService.findAll(filter);
     }
 
-    private List<ItemCatalog> fillWrapper(List<Item> items) throws IOException {
+    private List<ItemCatalog> fillWrapper(List<Item> items){
         List<ItemCatalog> wrapperList = new ArrayList<>(items.size());
         for(Item i: items){
-            ItemCatalog wrapper = new ItemCatalog(i);
+            ItemCatalog wrapper = new ItemCatalog(i, settings.getPhotoUrl());
             wrapperList.add(wrapper);
         }
         return wrapperList;

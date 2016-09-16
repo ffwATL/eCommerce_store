@@ -179,7 +179,7 @@
 }
 #sidebar label{
    margin-top: 5px;
-    margin-left: 15px;
+    margin-left: 2px;
     font-weight: 200;
     font-size: 11px;
 }
@@ -382,6 +382,7 @@ input.check{
     border: none;
     outline: none;
     background: url("../../../img/delete-icon.svg") no-repeat;
+    vertical-align: middle;
 }
 .filter-list li button:hover{
     display: inline;
