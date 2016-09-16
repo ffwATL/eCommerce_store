@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../../resources/css/bootstrap.css" th:href="@{/css/bootstrap.css}" type="text/css">
+    <link rel="stylesheet" href="../../../resources/css/custom/main.css" th:href="@{/css/custom/main.css}" type="text/css">
+    <link rel="stylesheet" href="../../../resources/css/custom/overview/popup.css" th:href="@{/resources/css/custom/overview/popup.css}" type="text/css">
+    <link rel="stylesheet" href="../../../resources/css/custom/new/new.item.css" th:href="@{/resources/css/custom/new/new.item.css}" type="text/css">
+    <script rel="script" src="../../../resources/js/jquery-1.12.3.min.js" th:src="@{/js/jquery-1.12.3.min.js}" ></script>
+    <script rel="script" src="../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/resources/js/jquery.popupoverlay.min.js}"></script>
+    <script rel="script" src="../../../resources/js/jquery.cookie.js" th:src="@{/resources/js/jquery.cookie.js}"></script>
+    <script rel="script" src="../../../resources/js/custom/locale.js" th:src="@{/resources/js/custom/locale.js}"></script>
+    <style>
+
+    </style>
+
+    <title></title>
+</head>
+<script>
+    $(function(){
+        var lang = 'en';
+        function resolveLocale(obj){
+            switch (lang){
+                case 'en': return obj.locale_en;
+                case 'ru': return obj.locale_ru;
+                case 'ua': return obj.locale_ua;
+                default:   return obj.locale_en;
+            }
+        }
+        var edit = $('#add-cat-popup').popup({
+            opacity: 0.3,
+            transition: 'all 0.3s'
+        });
+        edit.popup('show');
+
+        var levels = [{},{},
+            {
+                header_li: $('.s2'),
+                level_div: $('#level-2'),
+                headerText: {locale_en: 'For whom', locale_ru:'RU', locale_ua:'UA'},
+                level: 2,
+                active: false,
+                root: true
+            },
+            {
+                header_li: $('.s3'),
+                level_div: $('#level-3'),
+                headerText: {locale_en: '.', locale_ru:'.', locale_ua:'.'},
+                level: 3,
+                active: false,
+                root: false
+            },
+            {
+                header_li: $('.s4'),
+                level_div: $('#level-4'),
+                headerText: {locale_en: '.', locale_ru:'.', locale_ua:'.'},
+                level: 4,
+                active: false,
+                root: false
+            }
+        ];
+        drawCategoryPopup([
+            {
+                text: 'Men\'s',
+                nodes:[
+                    {text: 'sample 1_1', nodes:[{text:'finish!!', level: 4}], level: 3},
+                    {text: 'sample 1_2', nodes:[{text:'finish 2!!', level: 4},{text:'finish 3!!', level: 4}], level: 3}
+                ],
+                level: 2
+            },
+            {
+                text: 'Women\'s',
+                nodes: [],
+                level: 2
+            }
+        ], $('#level-2').find('ul'), [3,4]);
+
+
+        function drawCategoryPopup(data, lvl, id){
+            for(var i=0; i< data.length; i++){
+                var child = '<input hidden type="number" value="'+i+'">';
+                if(data[i].nodes != undefined && data[i].nodes.length > 0) child= child+'<span class="glyphicon glyphicon-menu-right"></span>';
+                lvl.append('<li id="lvl-'+data[i].level+i+'">'+data[i].text+child+'</li>');
+                child = '#lvl-'+data[i].level+i;
+                $(child).click(function(){
+                    var li = $(this);
+                    li.parent().find('.chosen').removeClass('chosen');
+                    var number = li.find('input').val();
+                    var level = levels[data[number].level];
+                    li.addClass('chosen');
+                    resolveActiveDependencies(level, data[number].text,data[number].nodes != undefined);
+                    if(data[number].nodes == undefined){
+                        console.log('leaves');
+                        return;
+                    }
+                    drawCategoryPopup(data[number].nodes, levels[data[number].level+1].level_div.find('ul'))
+
+                })
+            }
+        }
+
+        function showActive(level, text){
+            level.header_li.removeClass('stage_ina');
+            level.header_li.text(text);
+            level.header_li.addClass('stage_comp');
+            level.level_div.addClass('completed');
+        }
+        function hideActive(level){
+            level.header_li.text(resolveLocale(level.headerText));
+            level.header_li.removeClass('stage_comp');
+            level.level_div.removeClass('completed');
+            level.level_div.find('li').remove();
+            level.header_li.addClass('stage_ina');
+        }
+
+        function resolveActiveDependencies(level, text){
+            var accept = $('#accept_group');
+            switch (level.level){
+                case 2:{
+                    hideActive(levels[3]);
+                    hideActive(levels[4]);
+                    if(!level.active) showActive(level, text);
+                    accept.prop('disabled',true);
+                    break;
+                }
+                case 3:{
+                    hideActive(levels[4]);
+                    if(!level.active) showActive(level, text);
+                    accept.prop('disabled',true);
+                    break;
+                }
+                case 4:{
+                    if(!level.active) showActive(level, text);
+                    accept.prop('disabled',false);
+                }
+            }
+        }
+
+    });
+</script>
+<body>
+<div id="add-cat-popup" class="popup">
+    <div class="popup-header" id="category-header">
+        <menu>
+            <li id="root" class="s2">For whom</li>
+            <li class="stage_ina s3">.</li>
+            <li class="stage_ina s4">.</li>
+        </menu>
+    </div>
+    <div class="content">
+        <div class="cat-list">
+            <div id="level-2" class="inline lvl">
+                <ul class="list-unstyled">
+                </ul>
+            </div>
+            <div id="level-3" class="inline lvl level-d">
+                <ul class="list-unstyled">
+                </ul>
+            </div>
+            <div id="level-4" class="inline lvl d">
+                <ul class="list-unstyled">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="button button-typical" id="accept_group" disabled>Accept</button>
+    </div>
+</div>
+
+</body>
+</html>

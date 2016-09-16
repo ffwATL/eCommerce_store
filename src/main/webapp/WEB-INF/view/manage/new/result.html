@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <title th:text="#{new.item.title}">Add Item</title>
+    <link href="../../../../resources/img/favicon.gif" th:href="@{/resources/img/favicon.gif}" rel="shortcut icon" type="image/gif">
+    <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/resources/css/bootstrap.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/resources/css/custom/main.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/new/result.css" th:href="@{/resources/css/custom/new/result.css}" type="text/css">
+    <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
+    <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
+
+</head>
+<body>
+<div class="content-wrapper">
+    <div th:replace="template :: header" class="header col-lg-12">
+        <ul class="list-inline" id="logo">
+            <li><a th:href="@{/}"><img src="../../../../resources/img/logo.jpg" th:src="@{/resources/img/logo.jpg}"></a></li>
+        </ul>
+        <ul class="list-inline" id="search">
+            <li><input type="text" placeholder="Search" class="form-control"></li>
+        </ul>
+        <ul id="locale" class="list-inline">
+            <li><a>EN</a></li>
+            <li><a>RU</a></li>
+        </ul>
+    </div>
+    <div class="custom_jumbo col-lg-12 text-center">
+        <p class="head-text">Add new item</p>
+    </div>
+    <div class="col-lg-12">
+        <input hidden type="text" id="isError" th:value="${isError}">
+        <div id="info_list">
+            <table>
+                <tr>
+                    <td class="resp" id="img">
+                        <img id="ok" th:unless="${isError}" src="../../../../resources/img/checked.svg" th:src="@{/resources/img/checked.svg}">
+                        <img id="fail" th:if="${isError}" src="../../../../resources/img/unchecked.svg" th:src="@{/resources/img/unchecked.svg}">
+                    </td>
+                    <td id="info">
+                        <div th:unless="${isError}" th:utext="#{result.info.success(${itemName})}">
+                            Oops something went wrong =/ <br><code>photos\product x 6 (Access is denied)</code><br>
+                            You can try again or <a class="contact">contact</a> your system administrator.
+                        </div>
+                        <div th:if="${isError}" th:utext="#{result.info.fail(${errorMessage})}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="resp"></td>
+                    <td id="button-list">
+                        <a th:href="@{/}"><button id="home" class="button button-bordered button-danger" th:text="#{label.home}">Home</button></a>
+                        <a th:href="@{/manage/new/item}"><button id="one_more" class="button button-success" th:text="#{label.oneMore}">One more</button></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<footer th:replace="template :: footer" class="col-lg-12 panel-footer">Footer</footer>
+</body>
+</html>

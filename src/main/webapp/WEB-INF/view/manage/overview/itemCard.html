@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Item name</title>
+    <link href="../../../../resources/img/favicon.gif" th:href="@{/resources/img/favicon.gif}" rel="shortcut icon" type="image/gif">
+    <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/resources/css/bootstrap.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/resources/css/custom/main.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/overview/item.card.css" th:href="@{/resources/css/custom/overview/item.card.css}" type="text/css">
+    <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
+    <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
+    <script rel="script" src="../../../../resources/js/jquery.tabslet.min.js" th:src="@{/resources/js/jquery.tabslet.min.js}"></script>
+    <script rel="script" src="../../../../resources/js/custom/overview/item.card.js" th:src="@{/resources/js/custom/overview/item.card.js}" ></script>
+
+</head>
+<body>
+
+<div class="content-wrapper">
+    <div th:replace="template :: header" class="header col-lg-12">
+        <ul class="list-inline" id="logo">
+            <li><a th:href="@{/}"><img src="../../../../resources/img/logo.png" th:src="@{/resources/img/logo.png}"></a></li>
+        </ul>
+        <ul class="list-inline" id="search">
+            <li><input type="text" placeholder="Search" class="form-control"></li>
+        </ul>
+        <ul id="locale" class="list-inline">
+            <script>
+                function showLang(e){
+                    $(e.srcElement.parentElement).find('.dropdown-content').toggle(150);
+                }
+            </script>
+            <li>
+                <div class="lang">
+                    <div class="dropdown">
+                        <button class="lang-dropbtn dropbtn" onclick="showLang(event)">EN</button>
+                        <div class="dropdown-content">
+                            <a>EN</a>
+                            <a>RU</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a th:href="@{/logout}"><img src="../../../../resources/img/logout.svg" th:src="@{/resources/img/logout.svg}"></a>
+            </li>
+        </ul>
+    </div>
+    <div class="custom_jumbo col-lg-12 text-center">
+        <p class="head-text"></p>
+    </div>
+    <div class="content col-lg-12">
+        <div class="col-lg-6 gallery">
+            <input id="itemId" hidden th:value="${itemId}">
+        </div>
+        <div class="col-lg-6 main">
+            <div class="col-lg-10 float_right">
+                <h3 class="item_title">ASOS Mens Skinny Jeans navy</h3>
+                <div id="totalQTY" class="itemInactive">
+                    <span class="stock">Total qty.:</span>
+                    <p class="qty">6</p>
+                </div>
+                <ul class="list-inline price_list">
+                    <li ><span class="currency origin">₴</span></li>
+                    <li class="noPadding">
+                        <span class="originPrice">319</span>
+                    </li>
+                </ul>
+                <ul class="list-inline price_list">
+                    <li><span class="currency">₴</span></li>
+                    <li class="noPadding">
+                        <span class="salePrice">519</span>
+                    </li>
+                    <li class="prev_price"><span class="line-through">₴</span></li>
+                    <li class="noPadding prev_price">
+                        <span class="line-through">539</span>
+                    </li>
+                </ul>
+
+                <br>
+                <br>
+                <br>
+                <div class="size_block">
+                    <ul class="list-inline sizeSelect_ul">
+                        <li><label>Size:</label>
+                            <div class="dropdown">
+                                <button class="dropbtn button-bordered inline size_choice button-bordered" th:text="#{new.item.choose}">W32 L32</button>
+                                <div class="dropdown-content">
+                                    <a th:remove="all"><button value="W32 L32">W32 L32<span class="qty">In stock: 3</span></button></a>
+                                    <a th:remove="all"><button value="W32 L32">W32 L32<span class="qty">In stock: 3</span></button></a>
+                                    <a th:remove="all"><button value="W32 L32">W32 L32<span class="qty">In stock: 3</span></button></a>
+                                </div>
+                            </div>
+                        </li>
+                        <!--<li><div class="size_qty">3</div></li>-->
+
+                    </ul>
+                    <label>Color:</label>
+                    <div class="inline">
+                        <ul class="list-inline">
+                            <li>
+                                <div id="color_hex"></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="color_name" class="inline"></div>
+                </div>
+                <br>
+                <div class="buttons">
+                    <button class="button-typical button" id="edit_button">Edit</button>
+                    <button class="button-warn" id="addToBag_button">Add to bag</button>
+                </div>
+                <div class="tabs">
+                    <ul id="forTabs" class="forTabs">
+                        <li id="main_info" class="active" ><a href="#tab-1" th:text="#{label.all}">Main info</a></li>
+                        <li id="description" ><a href="#tab-2" th:text="#{label.active}">Brand</a></li>
+                        <li id="extra_info" ><a href="#tab-3" th:text="#{label.inactive}">Extra Info</a></li>
+                    </ul>
+                    <div id="tab-1">
+                        <p>Here is the main information about product: </p>
+                        <div id="measurement">
+
+                        </div>
+                        <!--<div id="clothes_bottom">
+                            <ul class="list-inline">
+                                <li class="first"><label>Waist:</label>
+                                    <input type="text" readonly value="82-84">
+                                </li>
+                                <li class="second"><label>Length:</label>
+                                    <input type="text" readonly value="103-104">
+                                </li>
+                                <li class="third"><label>Bottom:</label>
+                                    <input type="text" readonly value="16-16.5">
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="clothes_top"></div>
+
+                        <ul class="list-inline" >
+                            <li><label>Sleeve:</label>
+                                <input type="text" readonly value="67-68">
+                            </li>
+                        </ul>-->
+                        <p class="info"><span style="font-weight: 600">Jeans</span> by <span style="font-weight: 600">ASOS</span></p>
+                        <ul class="list-group-item-text" id="itemDescription">
+                            <li>Skinny fit</li>
+                            <li>Stretch cotton</li>
+                            <li>Zip fly</li>
+                            <li>98% cotton, 2% elastan</li>
+                        </ul>
+                    </div>
+                    <div id="tab-2">
+                        <p class="info">About Cheap Monday</p>
+                        <p>Known for their skinny jeans and their characteristic skull logo, Stockholm based label Cheap Monday channel their slick Scandinavian style to a range of clothing, with everything from check shirts to selvedge denim.</p>
+                    </div>
+                    <div id="tab-3">
+                        <p>One of size W34 L32 have W32 L32 measurements. This size marked * on the top of package.
+                            And added to the system as W32 L32 size.</p>
+                    </div>
+                </div>
+                <!--<label style="font-size: 12px">Product ID: <span>3556</span></label>-->
+            </div>
+        </div>
+    </div>
+    <div th:replace="template :: footer" class="col-lg-12 panel-footer footer" id="footer">Footer</div>
+</div>
+</body>
+</html>

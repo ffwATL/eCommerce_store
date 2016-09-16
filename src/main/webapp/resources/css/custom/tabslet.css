@@ -1,0 +1,67 @@
+@media screen and (max-width: 767px){
+	.forTabs A {
+		font-size: 14px;
+	}
+}
+@media screen and (min-width: 767px){
+	.forTabs A {
+		font-size: 16px;
+	}
+}
+.tabs > DIV {
+	margin-top: 8px;
+	background: white !important;
+}
+.tabs{
+	margin-top: 20px;
+}
+#forTabs{
+	text-align: center;
+	margin-bottom: 25px;
+	padding-left: 0;
+}
+.forTabs UL.horizontal {
+	list-style: none outside none;
+	margin: 0;
+}
+.forTabs LI {
+	margin-right: -2px;
+	margin-left: -2px;
+	background: #f1f4fb;
+	border-bottom: solid #e6e8ef 1px;
+	border-left: solid #e6e8ef 1px;
+	border-top: solid #f1f4fb 2px;
+	min-width: 306px;
+	display: inline-block;
+}
+.forTabs li#onSale{
+	border-right: solid #e6e8ef 1px;
+}
+.forTabs A {
+	color: #a6a9b0;
+	display: block;
+	font-weight: 300;
+	padding: 4px 0px;
+	text-decoration: none;
+}
+.forTabs .active a{
+	color: #272B30;
+}
+.forTabs LI:hover {
+	border-top: solid #dee0e7 2px;
+}
+.forTabs LI:hover A, .forTabs LI:hover {
+	transition: 0.3s;
+	color: black;
+}
+.forTabs .active, .forTabs LI.active:hover {
+	border-bottom: none;
+	border-top: solid #272B30 2px;
+}
+.tabs{
+	height: auto;
+}
+.forTabs .active A {
+	background: white;
+	border-radius: 0px;
+}

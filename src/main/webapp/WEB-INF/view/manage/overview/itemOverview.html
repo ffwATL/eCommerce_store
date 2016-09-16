@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Overview</title>
+    <link href="../../../../resources/img/favicon.gif" th:href="@{/img/favicon.gif}" rel="shortcut icon" type="image/gif">
+    <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/resources/css/bootstrap.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/ion.rangeSlider.css" th:href="@{/resources/css/ion.rangeSlider.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/resources/css/custom/main.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/overview/popup.css" th:href="@{/resources/css/custom/overview/popup.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/overview/item.overview.css" th:href="@{/resources/css/custom/overview/item.overview.css}" type="text/css">
+    <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
+    <script rel="script" src="../../../../resources/js/ion.rangeSlider.min.js" th:src="@{/resources/js/ion.rangeSlider.min.js}" ></script>
+    <script rel="script" src="../../../../resources/js/jquery.sticky-kit.min.js" th:src="@{/resources/js/jquery.sticky-kit.min.js}" ></script>
+    <script rel="script" src="../../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/resources/js/jquery.popupoverlay.min.js}"></script>
+    <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
+    <script rel="script" src="../../../../resources/js/jquery.tabslet.min.js" th:src="@{/resources/js/jquery.tabslet.min.js}"></script>
+    <script rel="script" src="../../../../resources/js/custom/overview/item.overview.js" th:src="@{/resources/js/custom/overview/item.overview.js}" ></script>
+
+</head>
+<body>
+<div id="global_edit_popup" class="popup">
+    <div class="popup-header"><h3 th:text="#{label.expressEdit.price}">Price</h3></div>
+    <div class="global_sale">
+        <div class="up">
+            <ul class="list-inline">
+                <li><h4 th:text="#{label.expressEdit.sale}">Sale</h4></li>
+                <li class="sale">
+                    <input type="number" value="0">
+                </li>
+            </ul>
+            <div class="float_right">
+                <p th:text="#{overview.items.globalEdit.info}">This values WILL BE ADDED to the current sale price</p>
+            </div>
+        </div>
+        <div class="down">
+            <ul class="list-inline">
+                <li><h4 th:text="(#{label.discount}+', %')">Discount, %</h4></li>
+                <li class="discount">
+                    <input type="number" min="0" max="100" value="0" disabled>
+                </li>
+            </ul>
+        </div>
+        <div class="buttons">
+            <ul class="list-inline">
+                <li><button class="update-button button-typical global_close" th:text="#{label.update}">Update</button></li>
+                <li><button class="cancel-button button-bordered global_close" th:text="#{label.cancel}">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="edit_popup" class="popup">
+    <div class="popup-header"><h3 th:text="#{label.expressEdit.popup}">Express edit</h3></div>
+    <div class="left">
+        <div class="wrapper">
+            <img class="preview">
+            <span class="status offer"><img src="../../../../resources/img/offer.png" th:src="@{/resources/img/offer.png}"></span>
+            <span class="last offer">-55%</span>
+        </div>
+        <ul class="list-inline">
+            <li>
+                <div class="final">
+                    <div class="origin-price">
+                        <span class="price">350</span>
+                        <span class="currency">UAH</span>
+                    </div>
+                    <div class="sale-price">
+                        <span class="price">1200</span>
+                        <span class="currency">UAH</span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="activate">
+                    <label class="switch-active"><input type="checkbox"><div class="slider"></div></label>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="right">
+        <div class="name">
+            <label for="item-name" th:text="#{label.itemName}">Item name</label>
+            <input id="item-name" type="text" placeholder="Item name" value="Asos Skinny chinos navy">
+        </div>
+        <div class="prices">
+            <h4 th:text="#{label.expressEdit.price}">Price</h4>
+            <ul class="list-inline">
+                <li><label for="sale" th:text="#{label.expressEdit.sale}">Sale, ₴</label><input id="sale" class="" type="number" value="719"></li>
+                <li class="discount"><label for="discount" th:text="(#{label.discount}+', %')">Discount, %</label><input id="discount" class="" type="number" value="15"></li>
+            </ul>
+            <input hidden class="id" type="number">
+        </div>
+        <div class="options">
+            <ul class="list-inline">
+                <li><h4 id="options" th:text="#{label.options}">Options</h4></li>
+                <li class="currency main-option">
+                    <div class="dropdown1">
+                        <button class="dropbtn currency" id="currency-select">UAH</button>
+                        <div class="dropdown-content">
+                            <a class="currency-value">UAH</a>
+                            <a class="currency-value">USD</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="color main-option">
+                    <div class="dropdown1">
+                        <button class="dropbtn color" id="color-select"><input hidden type="number"><span id="hex" class="hex"></span></button>
+                        <div class="dropdown-content">
+                            <a class="color-value" th:remove="all"><input hidden type="number"><span class="hex"></span></a>
+                            <a class="color-value" th:remove="all">light blue</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="second-option">
+                    <div class="item-group">
+                        <div class="dropdown">
+                            <button class="dropbtn item-group button-bordered">Chinos</button>
+                            <div class="dropdown-content group-content"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="buttons">
+            <ul class="list-inline">
+                <li><button class="update-button button-typical edit_close" th:text="#{label.update}">Update</button></li>
+                <li><button class="cancel-button button-bordered edit_close" th:text="#{label.cancel}">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content-wrapper">
+    <div th:replace="template :: header" class="header col-lg-12">
+        <ul class="list-inline" id="logo">
+            <li><a th:href="@{/}"><img src="../../../../resources/img/logo.png" th:src="@{/img/logo.png}"></a></li>
+        </ul>
+        <ul class="list-inline" id="search">
+            <li><input type="text" placeholder="Search" class="form-control"></li>
+        </ul>
+        <ul id="locale" class="list-inline">
+            <script>
+                function showLang(e){
+                    $(e.srcElement.parentElement).find('.dropdown-content').toggle(150);
+                }
+            </script>
+            <li>
+                <div class="lang">
+                    <div class="dropdown">
+                        <button class="lang-dropbtn dropbtn" onclick="showLang(event)">EN</button>
+                        <div class="dropdown-content">
+                            <a>EN</a>
+                            <a>RU</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a th:href="@{/logout}"><img src="../../../../resources/img/logout.svg" th:src="@{/resources/img/logout.svg}"></a>
+            </li>
+        </ul>
+    </div>
+    <div class="custom_jumbo col-lg-12 text-center">
+        <p class="head-text"></p>
+    </div>
+    <div class="content col-lg-12" data-sticky_parent>
+        <div class="col-lg-2 sidebar medium" id="sidebar" data-sticky_column>
+            <h4 th:text="#{overview.items.refine}">Refine by</h4>
+            <hr>
+            <div class="firstTabFilter">
+                <div class="filter-block0">
+                    <div id="filter-global0" class="line">
+                        <h5 th:text="#{overview.items.productType}">Product</h5>
+                        <ul class="list-unstyled">
+                            <li th:each="group, index : ${globalCategories}">
+                                <span>
+                                    <input type="checkbox" th:id="'global_'+${index.index}">
+                                    <label th:text="${group.getGroupName().getLocale_en()}">Clothes</label>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="filter-price">
+                    <hr>
+                    <h5 th:text="#{overview.items.salePrice}">Sale Price</h5>
+                    <div id="slider_tab0_1"></div>
+                </div>
+                <div class="filter-price">
+                    <hr>
+                    <h5 th:text="#{overview.items.originPrice}">Origin Price</h5>
+                    <div id="slider_tab0_2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 main" id="main" data-sticky_column>
+            <div class="info">
+                <h2 class="text-center info_h2">All items</h2>
+                <h5 class="text-center info_h5">
+                    Here is all of your items. You can switch between important tabs.
+                </h5>
+                <hr>
+            </div>
+            <div class="tabs">
+                <ul id="forTabs" class="forTabs">
+                    <li id="all" class="active"><a href="#tab-1" th:text="#{label.all}">All</a></li>
+                    <li id="isActive" ><a href="#tab-3" th:text="#{label.active}">Active</a></li>
+                    <li id="inactive" ><a href="#tab-2" th:text="#{label.inactive}">Inactive</a></li>
+                    <li id="onSale" ><a href="#tab-4" th:text="#{label.sale}">On Sale</a></li>
+                </ul>
+                <div id="tab-1">
+                    <div class="all">
+                        <div class="sort-bar">
+                            <div>
+                                <div class="switch list-inline">
+                                    <button class="list-view"></button>
+                                    <button class="thumbnail-view"></button>
+                                </div>
+                                <div class="view">
+                                    <ul class="list-inline">
+                                        <li class="items_found">12 items found</li>
+                                        <li>
+                                            <a class="view_per_page">View 40 per page</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <label for="sort_all"><select id="sort_all" class="sort-by">
+                                    <option value="1" th:text="#{overview.items.whatsNew}">What's new</option>
+                                    <option value="2" th:text="#{overview.items.whatsOld}">What's old</option>
+                                    <option value="3" th:text="#{overview.items.originLowToHigh}">Origin low to high</option>
+                                    <option value="4" th:text="#{overview.items.originHighToLow}">Origin high to low</option>
+                                    <option value="5" th:text="#{overview.items.saleLowToHigh}">Sale low to high</option>
+                                    <option value="6" th:text="#{overview.items.saleHighToLow}">Sale high to low</option>
+                                </select>
+                                    Sort by</label>
+                            </div>
+                        </div>
+                        <div class="block-wrapper">
+                            <ul class="list-inline filter-list" id="filter-list1">
+                                <li th:remove="all" class="checked">Clothes<button></button></li>
+                            </ul>
+                            <hr>
+                            <ul id="grid-all" class="list-unstyled items">
+                            </ul>
+                            <div class="action-panel">
+                                <ul class="list-inline left-side">
+                                    <li>
+                                       <div class="dropdown">
+                                           <button class="dropbtn orderState" th:text="#{label.changeStatus}">Change status</button>
+                                           <div class="dropdown-content">
+                                               <a class="status_a" th:text="#{label.active}">Active</a>
+                                               <a class="status_b" th:text="#{label.inactive}">Inactive</a>
+                                           </div>
+                                       </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown">
+                                            <button class="dropbtn price" th:text="#{label.options}">Options</button>
+                                            <div class="dropdown-content">
+                                                <a class="changePrice globalEdit" th:text="#{label.expressEdit.price}">Price</a>
+                                                <a class="changePromo" th:text="#{label.add.promoGroup}">Add promo group</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="list-inline right-side">
+                                    <li>
+                                        <a th:href="@{/WEB-INF/view/manage/new/item}"><button class="addItem" th:text="#{label.new.item}">Add item</button></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <table class="list-items">
+                                <thead class="action-panel"><tr>
+                                    <th><input class="main-check" type="checkbox"></th>
+                                    <th class="id">Id</th>
+                                    <th class="prev_image"></th>
+                                    <th class="item-name" th:text="#{label.itemName}">Item name</th>
+                                    <th class="qty" th:text="#{label.qty}">Qty.</th>
+                                    <th class="status_item" th:text="#{label.status}">Status</th>
+                                    <th class="date" th:text="#{label.date}">Date</th>
+                                    <th class="origin" th:text="#{new.item.originPrice}">Origin</th>
+                                    <th class="sale" th:text="#{new.item.salePrice}">Sale</th>
+                                    <th class="item_options"></th>
+                                </tr></thead>
+                                <tr th:remove="all">
+                                    <td colspan="10" class="notFound"><img class="notFoundImg" src="../../../../resources/img/sad.jpg"></td>
+                                </tr>
+                            </table>
+                            <div class="bottom-bar">
+                                <div class="sort-bar">
+                                    <div>
+                                        <ul class="list-inline hide-me">
+                                            <li class="items_found">5 items found</li>
+                                            <li>
+                                                <a class="view_per_page">View 40 per page</a>
+                                            </li>
+                                        </ul>
+                                        <div id="pgnt1" class="btn-group">
+                                            <a th:remove="all"><< Previous</a>
+                                            <button th:remove="all" class="active">1</button>
+                                            <button th:remove="all">2</button>
+                                            <a th:remove="all">Next >></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-2">
+                    <div class="inactive">
+                        <div class="sort-bar">
+                            <div>
+                                <div class="view">
+                                    <ul class="list-inline">
+                                        <li class="items_found">5 items found</li>
+                                        <li>
+                                            <a class="view_per_page">View 40 per page</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <select id="sort_inactive" class="sort-by">
+                                    <option value="1" th:text="#{overview.items.whatsNew}">What's new</option>
+                                    <option value="2" th:text="#{overview.items.whatsOld}">What's old</option>
+                                    <option value="3" th:text="#{overview.items.originLowToHigh}">Origin low to high</option>
+                                    <option value="4" th:text="#{overview.items.originHighToLow}">Origin high to low</option>
+                                    <option value="5" th:text="#{overview.items.saleLowToHigh}">Sale low to high</option>
+                                    <option value="6" th:text="#{overview.items.saleHighToLow}">Sale high to low</option>
+                                </select>
+                                <div class="switch list-inline">
+                                    <button class="list-view"></button>
+                                    <button class="thumbnail-view"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-wrapper">
+                            <ul class="list-inline filter-list" id="filter-list2">
+                                <li th:remove="all" class="checked">Clothes<button></button></li>
+                            </ul>
+                            <hr>
+                            <ul id="grid-inactive" class="items">
+                            </ul>
+                            <div class="action-panel">
+                                <ul class="list-inline left-side">
+                                    <li>
+                                        <div class="dropdown">
+                                            <button class="dropbtn orderState" th:text="#{label.changeStatus}">Change status</button>
+                                            <div class="dropdown-content">
+                                                <a class="status_a" th:text="#{label.active}">Active</a>
+                                                <a class="status_b" th:text="#{label.inactive}">Inactive</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown">
+                                            <button class="dropbtn price" th:text="#{label.options}">Options</button>
+                                            <div class="dropdown-content">
+                                                <a class="changePrice globalEdit" th:text="#{label.expressEdit.price}">Price</a>
+                                                <a class="changePromo" th:text="#{label.add.promoGroup}">Add promo group</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="list-inline right-side">
+                                    <li>
+                                        <a th:href="@{/WEB-INF/view/manage/new/item}"><button class="addItem" th:text="#{label.new.item}">Add item</button></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <table class="list-items">
+                                <thead class="action-panel"><tr>
+                                    <th><input class="main-check" type="checkbox"></th>
+                                    <th class="id">Id</th>
+                                    <th class="prev_image"></th>
+                                    <th class="item-name" th:text="#{label.itemName}">Item name</th>
+                                    <th class="qty" th:text="#{label.qty}">Qty.</th>
+                                    <th class="status_item" th:text="#{label.status}">Status</th>
+                                    <th class="date" th:text="#{label.date}">Date</th>
+                                    <th class="origin" th:text="#{new.item.originPrice}">Origin</th>
+                                    <th class="sale" th:text="#{new.item.salePrice}">Sale</th>
+                                    <th class="item_options"></th>
+                                </tr></thead>
+                            </table>
+                            <div class="bottom-bar">
+                                <div class="sort-bar">
+                                    <div>
+                                        <ul class="list-inline hide-me">
+                                            <li class="items_found">5 items found</li>
+                                            <li>
+                                                <a class="view_per_page">View 40 per page</a>
+                                            </li>
+                                        </ul>
+                                        <div id="pgnt2" class="btn-group">
+                                            <a th:remove="all"><< Previous</a>
+                                            <button th:remove="all" class="active">1</button>
+                                            <button th:remove="all">2</button>
+                                            <a th:remove="all">Next >></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-3" class="isActive">
+                    <div class="isActive">
+                        <div class="sort-bar">
+                            <div>
+                                <div class="view">
+                                    <ul class="list-inline">
+                                        <li class="items_found">5 items found</li>
+                                        <li>
+                                            <a class="view_per_page">View 40 per page</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <select id="sort_isActive" class="sort-by">
+                                    <option value="1" th:text="#{overview.items.whatsNew}">What's new</option>
+                                    <option value="2" th:text="#{overview.items.whatsOld}">What's old</option>
+                                    <option value="3" th:text="#{overview.items.originLowToHigh}">Origin low to high</option>
+                                    <option value="4" th:text="#{overview.items.originHighToLow}">Origin high to low</option>
+                                    <option value="5" th:text="#{overview.items.saleLowToHigh}">Sale low to high</option>
+                                    <option value="6" th:text="#{overview.items.saleHighToLow}">Sale high to low</option>
+                                </select>
+                                <div class="switch list-inline">
+                                    <button class="list-view"></button>
+                                    <button class="thumbnail-view"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-wrapper">
+                            <ul class="list-inline filter-list" id="filter-list3">
+                                <li th:remove="all" class="checked">Clothes<button></button></li>
+                            </ul>
+                            <hr>
+                            <ul id="grid-isActive" class="items">
+                            </ul>
+                            <div class="action-panel">
+                                <ul class="list-inline left-side">
+                                    <li>
+                                        <div class="dropdown">
+                                            <button class="dropbtn orderState" th:text="#{label.changeStatus}">Change status</button>
+                                            <div class="dropdown-content">
+                                                <a class="status_a" th:text="#{label.active}">Active</a>
+                                                <a class="status_b" th:text="#{label.inactive}">Inactive</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown">
+                                            <button class="dropbtn price" th:text="#{label.options}">Options</button>
+                                            <div class="dropdown-content">
+                                                <a class="changePrice globalEdit" th:text="#{label.expressEdit.price}">Price</a>
+                                                <a class="changePromo" th:text="#{label.add.promoGroup}">Add promo group</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="list-inline right-side">
+                                    <li>
+                                        <a th:href="@{/WEB-INF/view/manage/new/item}"><button class="addItem" th:text="#{label.new.item}">Add item</button></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <table class="list-items">
+                                <thead class="action-panel"><tr>
+                                    <th><input class="main-check" type="checkbox"></th>
+                                    <th class="id">Id</th>
+                                    <th class="prev_image"></th>
+                                    <th class="item-name" th:text="#{label.itemName}">Item name</th>
+                                    <th class="qty" th:text="#{label.qty}">Qty.</th>
+                                    <th class="status_item" th:text="#{label.status}">Status</th>
+                                    <th class="date" th:text="#{label.date}">Date</th>
+                                    <th class="origin" th:text="#{new.item.originPrice}">Origin</th>
+                                    <th class="sale" th:text="#{new.item.salePrice}">Sale</th>
+                                    <th class="item_options"></th>
+                                </tr></thead>
+                            </table>
+                            <div class="bottom-bar">
+                                <div class="sort-bar">
+                                    <div>
+                                        <ul class="list-inline hide-me">
+                                            <li class="items_found">5 items found</li>
+                                            <li>
+                                                <a class="view_per_page">View 40 per page</a>
+                                            </li>
+                                        </ul>
+                                        <div id="pgnt3" class="btn-group">
+                                            <a th:remove="all"><< Previous</a>
+                                            <button th:remove="all" class="active">1</button>
+                                            <button th:remove="all">2</button>
+                                            <a th:remove="all">Next >></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-4" class="sale">
+                    <div class="sale">
+                        <div class="sort-bar">
+                            <div>
+                                <div class="view">
+                                    <ul class="list-inline">
+                                        <li class="items_found">5 items found</li>
+                                        <li>
+                                            <a class="view_per_page">View 40 per page</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <select id="sort_sale" class="sort-by">
+                                    <option value="1" th:text="#{overview.items.whatsNew}">What's new</option>
+                                    <option value="2" th:text="#{overview.items.whatsOld}">What's old</option>
+                                    <option value="3" th:text="#{overview.items.originLowToHigh}">Origin low to high</option>
+                                    <option value="4" th:text="#{overview.items.originHighToLow}">Origin high to low</option>
+                                    <option value="5" th:text="#{overview.items.saleLowToHigh}">Sale low to high</option>
+                                    <option value="6" th:text="#{overview.items.saleHighToLow}">Sale high to low</option>
+                                </select>
+                                <div class="switch list-inline">
+                                    <button class="list-view"></button>
+                                    <button class="thumbnail-view"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-wrapper">
+                            <ul class="list-inline filter-list" id="filter-list4">
+                            </ul>
+                            <hr>
+                            <ul id="grid-sale" class="items">
+                            </ul>
+                            <div class="action-panel">
+                                <ul class="list-inline left-side">
+                                    <li>
+                                        <div class="dropdown">
+                                            <button class="dropbtn orderState" th:text="#{label.changeStatus}">Change status</button>
+                                            <div class="dropdown-content">
+                                                <a class="status_a" th:text="#{label.active}">Active</a>
+                                                <a class="status_b" th:text="#{label.inactive}">Inactive</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown">
+                                            <button class="dropbtn price" th:text="#{label.options}">Options</button>
+                                            <div class="dropdown-content">
+                                                <a class="changePrice globalEdit" th:text="#{label.expressEdit.price}">Price</a>
+                                                <a class="changePromo" th:text="#{label.add.promoGroup}">Add promo group</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="list-inline right-side">
+                                    <li>
+                                        <a th:href="@{/WEB-INF/view/manage/new/item}"><button class="addItem" th:text="#{label.new.item}">Add item</button></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <table class="list-items">
+                                <thead class="action-panel"><tr>
+                                    <th><input class="main-check" type="checkbox"></th>
+                                    <th class="id">Id</th>
+                                    <th class="prev_image"></th>
+                                    <th class="item-name" th:text="#{label.itemName}">Item name</th>
+                                    <th class="qty" th:text="#{label.qty}">Qty.</th>
+                                    <th class="status_item" th:text="#{label.status}">Status</th>
+                                    <th class="date" th:text="#{label.date}">Date</th>
+                                    <th class="origin" th:text="#{new.item.originPrice}">Origin</th>
+                                    <th class="sale" th:text="#{new.item.salePrice}">Sale</th>
+                                    <th class="item_options"></th>
+                                </tr></thead>
+                            </table>
+                            <div class="bottom-bar">
+                                <div class="sort-bar">
+                                    <div>
+                                        <ul class="list-inline hide-me">
+                                            <li class="items_found">5 items found</li>
+                                            <li>
+                                                <a class="view_per_page">View 40 per page</a>
+                                            </li>
+                                        </ul>
+                                        <div id="pgnt4" class="btn-group">
+                                            <a th:remove="all"><< Previous</a>
+                                            <button th:remove="all" class="active">1</button>
+                                            <button th:remove="all">2</button>
+                                            <a th:remove="all">Next >></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="template :: footer" class="col-lg-12 panel-footer footer" id="footer">Footer</div>
+</div>
+</body>
+</html>

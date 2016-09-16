@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../../resources/css/bootstrap.css" th:href="@{/resources/css/bootstrap.css}" type="text/css">
+    <link rel="stylesheet" href="../../../resources/css/custom/main.css" th:href="@{/resources/css/custom/main.css}" type="text/css">
+    <link rel="stylesheet" href="../../../resources/css/custom/overview/popup.css" th:href="@{/resources/css/custom/overview/popup.css}" type="text/css">
+    <link rel="stylesheet" href="../../../resources/css/custom/new/new.item.css" th:href="@{/resources/css/custom/new/new.item.css}" type="text/css">
+    <script rel="script" src="../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
+    <script rel="script" src="../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/resources/js/jquery.popupoverlay.min.js}"></script>
+    <script rel="script" src="../../../resources/js/jquery.cookie.js" th:src="@{/resources/js/jquery.cookie.js}"></script>
+    <script rel="script" src="../../../resources/js/custom/locale.js" th:src="@{/resources/js/custom/locale.js}"></script>
+    <!--<script rel="script" src="../../../resources/js/custom/new/new.item.js" th:inline="javascript" th:src="@{/resources/js/custom/new/new.item.js}" ></script>-->
+    <style>
+
+    </style>
+
+    <title></title>
+</head>
+<script>
+    $(function(){
+        var lang = 'en';
+        function resolveLocale(obj){
+            switch (lang){
+                case 'en': return obj.locale_en;
+                case 'ru': return obj.locale_ru;
+                case 'ua': return obj.locale_ua;
+                default:   return obj.locale_en;
+            }
+        }
+
+
+    });
+</script>
+<body>
+<div class="content-wrapper">
+    <div th:replace="template :: header" class="header col-lg-12 text-center">
+        <input type="text" placeholder="Search" class="form-control">
+    </div>
+    <div class="custom_jumbo col-lg-12 text-center">
+        <p class="head-text" th:text="#{new.item.title}">Add new item form</p>
+    </div>
+    <div class="col-lg-12 main-content">
+        <div class="input-form center-block">
+            <h3 th:text="#{new.item.generalInformation}">General information</h3>
+            <hr class="hr">
+            <label id="name" th:utext="|#{new.item.itemName}| + #{red}">Item name<span class="red">*</span></label>
+            <input class="input-name highlight block height" id="item-name" type="text">
+            <div id="section_1">
+                <div id="group_one">
+                    <label class="block" th:utext="|#{new.item.itemGroup}|+#{red}">Item group<span class="red">*</span></label>
+                    <button class="button button-bordered changeGroup" id="changeGroup" th:text="#{label.change}">Change</button>
+                </div>
+                <div class="brand-list">
+                    <ul class="list-inline">
+                        <li id="brand">
+                            <label class="block" th:text="#{new.item.brand}">Brand</label>
+                            <div class="dropdown">
+                                <button class="dropbtn button-bordered inline" th:text="#{new.item.choose}">choose</button>
+                                <button class="inline plus" id="brand-plus">+</button>
+                                <div class="dropdown-content">
+                                </div>
+                            </div>
+                        </li>
+                        <li id="brand-logo">
+                            <img src="../../../resources/img/asos/smog_logo.jpg">
+                        </li>
+                    </ul>
+                </div>
+                <div class="color-list">
+                    <ul class="list-inline">
+                        <li id="color">
+                            <label class="block" th:text="#{new.item.color}">Color</label>
+                            <div class="dropdown">
+                                <button class="dropbtn button-bordered inline" th:text="#{new.item.choose}">red <span class="hex"></span></button>
+                                <button class="inline plus" id="color-plus">+</button>
+                                <div class="dropdown-content">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div><label class="inline">Multi / print</label> <input type="checkbox"></div>
+                </div>
+            </div>
+            <div id="section_2">
+                <h3 th:text="#{new.item.colorBrand}">Color & brand</h3>
+                <hr class="hr">
+                <ul class="list-inline" id="section_2_ul">
+                   <!-- <li>
+                        <label class="block" th:text="#{new.item.color}">Color</label>
+                        <input class="highlight block height" id="color" type="text">
+                    </li>-->
+
+                </ul>
+                <h3 th:text="#{new.item.photos}">Photos</h3>
+                <hr class="hr">
+                <div id="image_upload" class="col-lg-12">
+                    <p class="info" th:text="#{new.item.photosTip}">You can choose up to 8 photos, but you should upload at least one.</p>
+                    <form action="/manage/new/item" th:action="@{/new/item}" method="post" enctype="multipart/form-data" id="img">
+                        <input type="file" name="files[]" id="filer_input" multiple="multiple">
+                        <input id="item" hidden name="item">
+                        <input hidden type="submit" id="sub">
+                    </form>
+                    <div id="upload_wrapper"></div>
+                </div>
+            </div>
+            <div class="col-lg-12 null"><hr class="null"></div>
+            <div class="section_end col-lg-12"><button class="button button-typical" id="save" disabled th:text="#{new.item.save}">Save</button></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
