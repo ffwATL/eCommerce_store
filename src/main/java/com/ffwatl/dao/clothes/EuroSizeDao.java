@@ -1,4 +1,4 @@
-package com.ffwatl.service.items;
+package com.ffwatl.dao.clothes;
 
 
 import com.ffwatl.domain.items.CommonCategory;
@@ -6,17 +6,15 @@ import com.ffwatl.domain.items.clothes.size.EuroSize;
 
 import java.util.List;
 
-public interface EuroSizeService {
+public interface EuroSizeDao {
+
+    List<EuroSize> findByCat(CommonCategory cat);
 
     EuroSize findById(long id);
 
     void save(EuroSize eu);
 
-    void save(List<EuroSize> list);
-
     List<EuroSize> findAll();
-
-    List<EuroSize> findByCat(CommonCategory cat);
 
     List<EuroSize> findAllUsed();
 

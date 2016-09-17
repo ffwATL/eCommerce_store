@@ -1,6 +1,6 @@
 package com.ffwatl.service.items;
 
-import com.ffwatl.dao.items.EuroSizeRepository;
+import com.ffwatl.dao.clothes.EuroSizeDao;
 import com.ffwatl.domain.items.CommonCategory;
 import com.ffwatl.domain.items.clothes.size.EuroSize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,36 +13,42 @@ import java.util.List;
 public class EuroSizeServiceImpl implements EuroSizeService {
 
     @Autowired
-    private EuroSizeRepository euroSizeRepository;
+    private EuroSizeDao euroSizeDao;
 
 
     @Override
     public EuroSize findById(long id) {
-        return euroSizeRepository.findOne(id);
+        return euroSizeDao.findById(id);
     }
 
     @Override
     @Transactional
     public void save(EuroSize eu) {
-        euroSizeRepository.save(eu);
+        euroSizeDao.save(eu);
 
     }
 
     @Override
     @Transactional
     public List<EuroSize> findByCat(CommonCategory cat){
-        return euroSizeRepository.findByCat(cat);
+        return euroSizeDao.findByCat(cat);
+    }
+
+    @Override
+    public List<EuroSize> findAllUsed() {
+        return euroSizeDao.findAllUsed();
     }
 
     @Override
     @Transactional
     public void save(List<EuroSize> list) {
-        euroSizeRepository.save(list);
+        if(list == null || list.size() < 1) return;
+        list.forEach(this::save);
     }
 
     @Override
     public List<EuroSize> findAll() {
-        return euroSizeRepository.findAll();
+        return euroSizeDao.findAll();
     }
 
 }

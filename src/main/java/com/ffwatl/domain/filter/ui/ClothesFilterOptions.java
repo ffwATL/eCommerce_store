@@ -38,6 +38,8 @@ public class ClothesFilterOptions implements Serializable {
      */
     private List<GroupWrapper> allCategories = new ArrayList<>();
 
+    private List<GroupWrapper> usedCat = new ArrayList<>();
+
     /**
      * List of 'gender' item groups.
      */
@@ -48,6 +50,9 @@ public class ClothesFilterOptions implements Serializable {
      */
     private List<Color> colors;
 
+    public List<GroupWrapper> getUsedCat() {
+        return usedCat;
+    }
 
     public List<Color> getColors() {
         return colors;
@@ -77,8 +82,16 @@ public class ClothesFilterOptions implements Serializable {
         this.size = size;
     }
 
-    public void setItemGroup(ItemGroup itemGroup) {
+    public void setItemGroupAll(ItemGroup itemGroup) {
         resolveItemGroup(itemGroup, this.allCategories, this.gender);
+    }
+
+    public void setUsedCat(List<GroupWrapper> usedCat) {
+        this.usedCat = usedCat;
+    }
+
+    public void setGender(List<GroupWrapper> gender) {
+        this.gender = gender;
     }
 
     public void setColors(List<Color> colors) {

@@ -3,7 +3,6 @@ package com.ffwatl.service.group;
 
 import com.ffwatl.dao.group.ItemGroupDao;
 import com.ffwatl.domain.group.ItemGroup;
-
 import com.ffwatl.domain.group.wrap.GroupWrapper;
 import com.ffwatl.domain.items.CommonCategory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +115,20 @@ public class ItemGroupServiceImpl implements ItemGroupService{
         return result;
     }
 
+    @Override
+    public List<GroupWrapper> findGenderGroup(){
+        List<ItemGroup> list = findByLvlLazyWithoutChild(2);
+        List<GroupWrapper> result = new ArrayList<>();
+        for(ItemGroup i: list){
+            result.add(new GroupWrapper()
+                    .setLvl(2)
+                    .setCat(i.getCat())
+                    .setGroupName(i.getGroupName())
+                    .setId(i.getId()));
+        }
+        return result;
+    }
+
     /**
      * Returns list of ItemGroup object from the DB by its depth level.
      * Result list will always contain all the children. A lot of additional
@@ -128,6 +141,29 @@ public class ItemGroupServiceImpl implements ItemGroupService{
     public List<ItemGroup> findByLvlEager(int lvl) {
         List<ItemGroup> result = itemGroupDao.findByLvl(lvl);
         System.out.println(result);
+        return result;
+    }
+
+    @Override
+    public List<ItemGroup> findAllUsed() {
+        List<ItemGroup> list = itemGroupDao.findAllUsed();
+        for(ItemGroup i: list){
+            i.setChild(null);
+        }
+        return list;
+    }
+
+    @Override
+    public List<GroupWrapper> findAllUsedWrapper(){
+        List<ItemGroup> list = findAllUsed();
+        List<GroupWrapper> result = new ArrayList<>();
+        for(ItemGroup i: list){
+            result.add(new GroupWrapper()
+                    .setLvl(i.getLevel())
+                    .setCat(i.getCat())
+                    .setGroupName(i.getGroupName())
+                    .setId(i.getId()));
+        }
         return result;
     }
 

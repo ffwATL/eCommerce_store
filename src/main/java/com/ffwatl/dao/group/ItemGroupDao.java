@@ -21,4 +21,6 @@ public interface ItemGroupDao {
     List<ItemGroup> findByCat(CommonCategory cat);
 
     List<ItemGroup> findByLvl(int lvl);
+
+    List<ItemGroup> findAllUsed();
 }

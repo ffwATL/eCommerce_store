@@ -17,4 +17,6 @@ public interface BrandDao {
 
     void remove(Brand brand);
 
+    public List<Brand> findAllUsed();
+
 }

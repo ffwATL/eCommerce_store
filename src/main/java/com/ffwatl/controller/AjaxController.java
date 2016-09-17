@@ -92,10 +92,11 @@ public class AjaxController {
     @ResponseBody
     public ResponseEntity<ClothesFilterOptions> ajaxClothesFilters(){
         ClothesFilterOptions result = new ClothesFilterOptions();
-        result.setBrandList(brandService.findAll());
-        result.setSize(euroSizeService.findAll());
-        result.setItemGroup(itemGroupService.findByLvlAndByNameNoLazy(1, "Clothes"));
-        result.setColors(colorService.findAll());
+        result.setBrandList(brandService.findAllUsed());
+        result.setSize(euroSizeService.findAllUsed());
+        result.setUsedCat(itemGroupService.findAllUsedWrapper());
+        result.setGender(itemGroupService.findGenderGroup());
+        result.setColors(colorService.findAllUsed());
         return ResponseEntity.ok(result);
     }
 

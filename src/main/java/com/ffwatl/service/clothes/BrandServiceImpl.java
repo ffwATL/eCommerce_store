@@ -53,4 +53,9 @@ public class BrandServiceImpl implements BrandService {
         if(b == null) throw new IllegalArgumentException("Such element not present in DB");
         brandDao.remove(b);
     }
+
+    @Override
+    public List<Brand> findAllUsed() {
+        return brandDao.findAllUsed();
+    }
 }

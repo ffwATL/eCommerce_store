@@ -569,7 +569,8 @@ function drawItems (result, paginationDiv){
      * @param r result response object from server side.
      */
     function addClothesCategoryFilter (r){
-        r = r.allCategories;
+        r = r.usedCat;
+        console.log(r);
         var filterClothes = filterDiv.find('#filter-clothes');
         filterClothes.append('<hr><div class="category" id="category">' +
             '<h5>'+locale.grid_filter_category+'</h5><ul class="list-unstyled"></ul></div>');

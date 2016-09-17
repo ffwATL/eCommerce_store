@@ -39,4 +39,9 @@ public class BrandDaoImpl implements BrandDao{
     public void remove(Brand brand) {
         em.remove(brand);
     }
+
+    @Override
+    public List<Brand> findAllUsed(){
+        return em.createQuery("SELECT DISTINCT i.brand FROM ClothesItem i", Brand.class).getResultList();
+    }
 }

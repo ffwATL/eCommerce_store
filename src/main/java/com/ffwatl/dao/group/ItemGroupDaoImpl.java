@@ -64,4 +64,9 @@ public class ItemGroupDaoImpl implements ItemGroupDao{
                 .getResultList();
     }
 
+    @Override
+    public List<ItemGroup> findAllUsed() {
+        return em.createQuery("SELECT DISTINCT i.itemGroup FROM Item i", ItemGroup.class).getResultList();
+    }
+
 }

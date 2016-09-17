@@ -1,7 +1,7 @@
 package com.ffwatl.service.items;
 
 
-import com.ffwatl.dao.items.ColorRepository;
+import com.ffwatl.dao.items.ColorDao;
 import com.ffwatl.domain.items.color.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,29 +13,34 @@ import java.util.List;
 public class ColorServiceImpl implements ColorService{
 
     @Autowired
-    private ColorRepository colorRepository;
+    private ColorDao colorDao;
 
     @Override
     public Color findById(long id) {
-        return colorRepository.findOne(id);
+        return colorDao.findById(id);
     }
 
     @Override
     @Transactional
     public void save(Color c) {
         if(c == null) throw new IllegalArgumentException("Entity Color can't be null");
-        colorRepository.save(c);
+        colorDao.save(c);
     }
 
     @Override
     @Transactional
     public void save(List<Color> list) {
         if(list == null || list.size() < 1) throw new IllegalArgumentException("Entity Color can't be null");
-        colorRepository.save(list);
+        list.forEach(this::save);
     }
 
     @Override
     public List<Color> findAll() {
-        return colorRepository.findAll();
+        return colorDao.findAll();
+    }
+
+    @Override
+    public List<Color> findAllUsed() {
+        return colorDao.findAllUsed();
     }
 }

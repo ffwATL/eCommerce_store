@@ -18,4 +18,6 @@ public interface BrandService {
     List<Brand> findAll();
 
     void removeByName(String name);
+
+    public List<Brand> findAllUsed();
 }

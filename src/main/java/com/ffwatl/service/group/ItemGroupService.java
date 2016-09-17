@@ -25,4 +25,10 @@ public interface ItemGroupService {
 
     List<ItemGroup> findByLvlEager(int lvl);
 
+    List<ItemGroup> findAllUsed();
+
+    List<GroupWrapper> findGenderGroup();
+
+    List<GroupWrapper> findAllUsedWrapper();
+
 }
