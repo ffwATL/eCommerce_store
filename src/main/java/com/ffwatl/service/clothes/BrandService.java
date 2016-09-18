@@ -1,7 +1,7 @@
 package com.ffwatl.service.clothes;
 
 
-import com.ffwatl.domain.items.brand.Brand;
+import com.ffwatl.manage.entities.items.brand.Brand;
 
 import java.util.List;
 

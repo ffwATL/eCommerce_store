@@ -1,7 +1,7 @@
 package com.ffwatl.service.i18n;
 
 import com.ffwatl.dao.i18n.I18nDao;
-import com.ffwatl.domain.i18n.I18n;
+import com.ffwatl.manage.entities.i18n.I18n;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

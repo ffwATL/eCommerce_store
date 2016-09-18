@@ -1,12 +1,13 @@
 package com.ffwatl.service.items;
 
 import com.ffwatl.dao.clothes.EuroSizeDao;
-import com.ffwatl.domain.items.CommonCategory;
-import com.ffwatl.domain.items.clothes.size.EuroSize;
+import com.ffwatl.manage.entities.items.CommonCategory;
+import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -36,7 +37,9 @@ public class EuroSizeServiceImpl implements EuroSizeService {
 
     @Override
     public List<EuroSize> findAllUsed() {
-        return euroSizeDao.findAllUsed();
+        List<EuroSize> list = euroSizeDao.findAllUsed();
+        Collections.sort(list);
+        return list;
     }
 
     @Override

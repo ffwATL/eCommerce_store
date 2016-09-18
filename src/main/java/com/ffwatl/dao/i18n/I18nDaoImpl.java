@@ -1,6 +1,6 @@
 package com.ffwatl.dao.i18n;
 
-import com.ffwatl.domain.i18n.I18n;
+import com.ffwatl.manage.entities.i18n.I18n;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

@@ -1,6 +1,6 @@
 package com.ffwatl;
 
-import com.ffwatl.domain.group.ItemGroup;
+import com.ffwatl.manage.entities.group.ItemGroup;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.junit.Ignore;

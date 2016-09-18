@@ -3,12 +3,12 @@ package com.ffwatl;
 
 import com.ffwatl.dao.items.ClothesItemRepository;
 import com.ffwatl.dao.items.ItemRepository;
-import com.ffwatl.domain.filter.grid_filter.ClothesGridFilter;
-import com.ffwatl.domain.filter.grid_filter.ItemGridFilter;
-import com.ffwatl.domain.group.ItemGroup;
-import com.ffwatl.domain.group.wrap.GroupWrapper;
-import com.ffwatl.domain.items.CommonCategory;
-import com.ffwatl.domain.items.Item;
+import com.ffwatl.manage.entities.filter.grid_filter.ClothesGridFilter;
+import com.ffwatl.manage.entities.filter.grid_filter.ItemGridFilter;
+import com.ffwatl.manage.entities.group.ItemGroup;
+import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.manage.entities.items.CommonCategory;
+import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesPaginationService;
 import com.ffwatl.service.group.ItemGroupService;
@@ -69,9 +69,9 @@ public class SpecificationTest {
         /*params.put("parentGroup","Clothes");*/
     }
 
-    private GroupWrapper resolveItemGroup(ItemGroup itemGroup, List<GroupWrapper> all, List<GroupWrapper> gender){
+    private ItemGroupPresenter resolveItemGroup(ItemGroup itemGroup, List<ItemGroupPresenter> all, List<ItemGroupPresenter> gender){
         if(itemGroup.getLevel() == 2){
-            gender.add(new GroupWrapper()
+            gender.add(new ItemGroupPresenter()
                     .setGroupName(itemGroup.getGroupName())
                     .setId(itemGroup.getId())
                     .setLvl(itemGroup.getLevel())
@@ -83,7 +83,7 @@ public class SpecificationTest {
                 else resolveItemGroup(i, all, gender);
             }
         }
-        return new GroupWrapper()
+        return new ItemGroupPresenter()
                 .setCat(itemGroup.getCat())
                 .setGroupName(itemGroup.getGroupName())
                 .setId(itemGroup.getId())
@@ -104,8 +104,8 @@ public class SpecificationTest {
    /* @Test
     public void lazyInitTest(){
         ItemGroup itemGroup = itemGroupService.findByLvlAndByNameNoLazy(1, "Clothes");
-        List<GroupWrapper> gender = new ArrayList<>();
-        List<GroupWrapper> list = new ArrayList<>();
+        List<ItemGroupPresenter> gender = new ArrayList<>();
+        List<ItemGroupPresenter> list = new ArrayList<>();
         resolveItemGroup(itemGroup, list, gender);
         System.err.println("result: " + list);
         System.err.println("*** gender: " + gender);
@@ -114,7 +114,7 @@ public class SpecificationTest {
 
     @Test
     public void imageReadTest(){
-        System.err.println("********" + itemGroupService.findAllUsed());
+        System.err.println("********" + euroSizeService.findAllUsed());
     }
 
     @Test

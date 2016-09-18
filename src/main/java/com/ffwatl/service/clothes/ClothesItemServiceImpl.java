@@ -1,10 +1,8 @@
 package com.ffwatl.service.clothes;
 
 import com.ffwatl.dao.clothes.ClothesItemDao;
-import com.ffwatl.domain.group.ItemGroup;
-import com.ffwatl.domain.items.clothes.ClothesItem;
-import com.ffwatl.domain.items.brand.Brand;
-import com.ffwatl.domain.items.clothes.size.Size;
+import com.ffwatl.manage.entities.items.clothes.ClothesItem;
+import com.ffwatl.manage.entities.items.clothes.size.Size;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.service.items.ColorService;
 import com.ffwatl.service.items.EuroSizeService;

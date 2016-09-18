@@ -1,7 +1,7 @@
 package com.ffwatl.dao.users;
 
 
-import com.ffwatl.domain.users.User;
+import com.ffwatl.manage.entities.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

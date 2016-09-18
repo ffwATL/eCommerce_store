@@ -2,9 +2,9 @@ package com.ffwatl.service.group;
 
 
 import com.ffwatl.dao.group.ItemGroupDao;
-import com.ffwatl.domain.group.ItemGroup;
-import com.ffwatl.domain.group.wrap.GroupWrapper;
-import com.ffwatl.domain.items.CommonCategory;
+import com.ffwatl.manage.entities.group.ItemGroup;
+import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.manage.entities.items.CommonCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,11 +86,11 @@ public class ItemGroupServiceImpl implements ItemGroupService{
     }
 
     @Override
-    public List<GroupWrapper> findByCatNoChildren(CommonCategory cat) {
+    public List<ItemGroupPresenter> findByCatNoChildren(CommonCategory cat) {
         List<ItemGroup> groupList = itemGroupDao.findByCat(cat);
-        List<GroupWrapper> result = new ArrayList<>();
+        List<ItemGroupPresenter> result = new ArrayList<>();
         for(ItemGroup i: groupList){
-            result.add(new GroupWrapper()
+            result.add(new ItemGroupPresenter()
                     .setCat(cat)
                     .setId(i.getId())
                     .setGroupName(i.getGroupName())
@@ -116,11 +116,11 @@ public class ItemGroupServiceImpl implements ItemGroupService{
     }
 
     @Override
-    public List<GroupWrapper> findGenderGroup(){
+    public List<ItemGroupPresenter> findGenderGroup(){
         List<ItemGroup> list = findByLvlLazyWithoutChild(2);
-        List<GroupWrapper> result = new ArrayList<>();
+        List<ItemGroupPresenter> result = new ArrayList<>();
         for(ItemGroup i: list){
-            result.add(new GroupWrapper()
+            result.add(new ItemGroupPresenter()
                     .setLvl(2)
                     .setCat(i.getCat())
                     .setGroupName(i.getGroupName())
@@ -154,11 +154,11 @@ public class ItemGroupServiceImpl implements ItemGroupService{
     }
 
     @Override
-    public List<GroupWrapper> findAllUsedWrapper(){
+    public List<ItemGroupPresenter> findAllUsedWrapper(){
         List<ItemGroup> list = findAllUsed();
-        List<GroupWrapper> result = new ArrayList<>();
+        List<ItemGroupPresenter> result = new ArrayList<>();
         for(ItemGroup i: list){
-            result.add(new GroupWrapper()
+            result.add(new ItemGroupPresenter()
                     .setLvl(i.getLevel())
                     .setCat(i.getCat())
                     .setGroupName(i.getGroupName())

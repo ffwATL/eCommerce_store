@@ -1,8 +1,8 @@
 package com.ffwatl.dao.group;
 
 
-import com.ffwatl.domain.group.ItemGroup;
-import com.ffwatl.domain.items.CommonCategory;
+import com.ffwatl.manage.entities.group.ItemGroup;
+import com.ffwatl.manage.entities.items.CommonCategory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

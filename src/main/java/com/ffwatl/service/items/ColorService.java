@@ -1,7 +1,7 @@
 package com.ffwatl.service.items;
 
 
-import com.ffwatl.domain.items.color.Color;
+import com.ffwatl.manage.entities.items.color.Color;
 
 import java.util.List;
 

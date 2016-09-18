@@ -1,9 +1,9 @@
 package com.ffwatl.service.items;
 
 
-import com.ffwatl.domain.items.Item;
-import com.ffwatl.domain.presenters.ItemPresenter;
-import com.ffwatl.domain.update.ItemUpdate;
+import com.ffwatl.manage.entities.items.Item;
+import com.ffwatl.manage.presenters.items.ItemPresenter;
+import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface ItemService {
     List<Item> findAll();
     void save(Item item);
     void remove(Item item);
-    void updateSingleItem(ItemUpdate update);
-    void updateItems(ItemUpdate update);
+    void updateSingleItem(ItemUpdatePresenter update);
+    void updateItems(ItemUpdatePresenter update);
     ItemPresenter findItemPresenterById(long id);
 }

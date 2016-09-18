@@ -39,16 +39,16 @@
         <Root level="trace">
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name ="com.ffwatl.controller.IndexController" level="trace" additivity="false">
+        <Logger name ="com.ffwatl.manage.controller.IndexController" level="trace" additivity="false">
             <AppenderRef ref="rootFile"/>
         </Logger>
-        <Logger name="com.ffwatl.controller.OverviewController" level="trace" additivity="false">
+        <Logger name="com.ffwatl.manage.controller.OverviewController" level="trace" additivity="false">
             <AppenderRef ref="overviewAll"/>
         </Logger>
-        <Logger name ="com.ffwatl.controller.AddNewItemController" level="trace" additivity="false">
+        <Logger name ="com.ffwatl.manage.controller.AddNewItemController" level="trace" additivity="false">
             <AppenderRef ref="addItemAppender"/>
         </Logger>
-        <Logger name ="com.ffwatl.controller.CustomUserDetailsService" level="trace" additivity="false">
+        <Logger name ="com.ffwatl.manage.controller.CustomUserDetailsService" level="trace" additivity="false">
             <AppenderRef ref="loginServiceAppender"/>
         </Logger>
     </Loggers>

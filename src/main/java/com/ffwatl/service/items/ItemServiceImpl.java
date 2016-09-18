@@ -2,12 +2,12 @@ package com.ffwatl.service.items;
 
 
 import com.ffwatl.dao.items.ItemDao;
-import com.ffwatl.domain.items.Item;
-import com.ffwatl.domain.items.clothes.ClothesItem;
-import com.ffwatl.domain.items.clothes.size.Size;
-import com.ffwatl.domain.presenters.ClothesItemPresenter;
-import com.ffwatl.domain.presenters.ItemPresenter;
-import com.ffwatl.domain.update.ItemUpdate;
+import com.ffwatl.manage.entities.items.Item;
+import com.ffwatl.manage.entities.items.clothes.ClothesItem;
+import com.ffwatl.manage.entities.items.clothes.size.Size;
+import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
+import com.ffwatl.manage.presenters.items.ItemPresenter;
+import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.util.Settings;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +73,7 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     @Transactional
-    public void updateSingleItem(ItemUpdate update){
+    public void updateSingleItem(ItemUpdatePresenter update){
         Map<String, String> map = update.getOptions();
         long[] ids = update.getIdentifiers();
         for (long id : ids) {
@@ -90,7 +91,7 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     @Transactional
-    public void updateItems(ItemUpdate update) {
+    public void updateItems(ItemUpdatePresenter update) {
         Map<String, String> map = update.getOptions();
         long[] ids = update.getIdentifiers();
         int priceValue = map.get("priceValue") != null ? Integer.valueOf(map.get("priceValue")) : 0;
@@ -129,6 +130,7 @@ public class ItemServiceImpl implements ItemService{
         if(item instanceof ClothesItem){
             ClothesItemPresenter cPresenter = new ClothesItemPresenter(presenter);
             cPresenter.setBrand(((ClothesItem) item).getBrand());
+            Collections.sort(((ClothesItem) item).getSize());
             cPresenter.setSize(((ClothesItem) item).getSize());
             return cPresenter;
         }

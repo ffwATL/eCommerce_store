@@ -1,9 +1,9 @@
 package com.ffwatl.service.group;
 
 
-import com.ffwatl.domain.group.ItemGroup;
-import com.ffwatl.domain.group.wrap.GroupWrapper;
-import com.ffwatl.domain.items.CommonCategory;
+import com.ffwatl.manage.entities.group.ItemGroup;
+import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.manage.entities.items.CommonCategory;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface ItemGroupService {
 
     ItemGroup findByLvlAndByNameNoLazy(int lvl, String name);
 
-    List<GroupWrapper> findByCatNoChildren(CommonCategory cat);
+    List<ItemGroupPresenter> findByCatNoChildren(CommonCategory cat);
 
     List<ItemGroup> findByLvlLazyWithoutChild(int lvl);
 
@@ -27,8 +27,8 @@ public interface ItemGroupService {
 
     List<ItemGroup> findAllUsed();
 
-    List<GroupWrapper> findGenderGroup();
+    List<ItemGroupPresenter> findGenderGroup();
 
-    List<GroupWrapper> findAllUsedWrapper();
+    List<ItemGroupPresenter> findAllUsedWrapper();
 
 }

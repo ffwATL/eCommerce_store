@@ -1,8 +1,8 @@
 package com.ffwatl.dao.clothes;
 
 
-import com.ffwatl.domain.items.CommonCategory;
-import com.ffwatl.domain.items.clothes.size.EuroSize;
+import com.ffwatl.manage.entities.items.CommonCategory;
+import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
 
 import java.util.List;
 

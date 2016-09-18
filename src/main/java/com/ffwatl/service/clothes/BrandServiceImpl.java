@@ -2,7 +2,7 @@ package com.ffwatl.service.clothes;
 
 
 import com.ffwatl.dao.clothes.BrandDao;
-import com.ffwatl.domain.items.brand.Brand;
+import com.ffwatl.manage.entities.items.brand.Brand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

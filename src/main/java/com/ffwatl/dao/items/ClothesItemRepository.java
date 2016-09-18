@@ -1,7 +1,7 @@
 package com.ffwatl.dao.items;
 
 
-import com.ffwatl.domain.items.clothes.ClothesItem;
+import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

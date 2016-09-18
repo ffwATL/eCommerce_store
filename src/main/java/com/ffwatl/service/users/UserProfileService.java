@@ -1,8 +1,8 @@
 package com.ffwatl.service.users;
 
 
-import com.ffwatl.domain.users.Role;
-import com.ffwatl.domain.users.UserProfile;
+import com.ffwatl.manage.entities.users.Role;
+import com.ffwatl.manage.entities.users.UserProfile;
 
 import java.util.List;
 

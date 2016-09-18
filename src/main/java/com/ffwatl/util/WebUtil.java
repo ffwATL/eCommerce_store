@@ -1,7 +1,7 @@
 package com.ffwatl.util;
 
 
-import com.ffwatl.domain.i18n.I18n;
+import com.ffwatl.manage.entities.i18n.I18n;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sfm.csv.CsvParser;

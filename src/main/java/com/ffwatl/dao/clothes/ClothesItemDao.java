@@ -1,7 +1,7 @@
 package com.ffwatl.dao.clothes;
 
 
-import com.ffwatl.domain.items.clothes.ClothesItem;
+import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 
 public interface ClothesItemDao {
 
