@@ -5,7 +5,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Overview</title>
-    <link href="../../../../resources/img/favicon.gif" th:href="@{/img/favicon.gif}" rel="shortcut icon" type="image/gif">
+    <link href="../../../../resources/img/favicon.gif" th:href="@{/resources/img/favicon.gif}" rel="shortcut icon" type="image/gif">
     <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/resources/css/bootstrap.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/ion.rangeSlider.css" th:href="@{/resources/css/ion.rangeSlider.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/resources/css/custom/main.css}" type="text/css">
@@ -22,7 +22,7 @@
 </head>
 <body>
 <div id="global_edit_popup" class="popup">
-    <div class="popup-header"><h3 th:text="#{label.expressEdit.price}">Price</h3></div>
+    <div class="popup-header"><h3><span th:text="#{label.expressEdit.price}">Price</span></h3></div>
     <div class="global_sale">
         <div class="up">
             <ul class="list-inline">
@@ -37,7 +37,7 @@
         </div>
         <div class="down">
             <ul class="list-inline">
-                <li><h4 th:text="(#{label.discount}+', %')">Discount, %</h4></li>
+                <li><h4 th:text="(#{label.discount})">Discount</h4></li>
                 <li class="discount">
                     <input type="number" min="0" max="100" value="0" disabled>
                 </li>
@@ -52,7 +52,7 @@
     </div>
 </div>
 <div id="edit_popup" class="popup">
-    <div class="popup-header"><h3 th:text="#{label.expressEdit.popup}">Express edit</h3></div>
+    <div class="popup-header"><h3><span th:text="#{label.expressEdit.popup}">Express edit</span></h3></div>
     <div class="left">
         <div class="wrapper">
             <img class="preview">
@@ -85,7 +85,9 @@
             <input id="item-name" type="text" placeholder="Item name" value="Asos Skinny chinos navy">
         </div>
         <div class="prices">
-            <h4 th:text="#{label.expressEdit.price}">Price</h4>
+            <div class="left_info">
+                <h4 th:text="#{label.expressEdit.price}">Price</h4>
+            </div>
             <ul class="list-inline">
                 <li><label for="sale" th:text="#{label.expressEdit.sale}">Sale, ₴</label><input id="sale" class="" type="number" value="719"></li>
                 <li class="discount"><label for="discount" th:text="(#{label.discount}+', %')">Discount, %</label><input id="discount" class="" type="number" value="15"></li>
@@ -93,8 +95,10 @@
             <input hidden class="id" type="number">
         </div>
         <div class="options">
+            <div class="left_info">
+                <h4 id="options" th:text="#{label.options}">Options</h4>
+            </div>
             <ul class="list-inline">
-                <li><h4 id="options" th:text="#{label.options}">Options</h4></li>
                 <li class="currency main-option">
                     <div class="dropdown1">
                         <button class="dropbtn currency" id="currency-select">UAH</button>
@@ -106,9 +110,9 @@
                 </li>
                 <li class="color main-option">
                     <div class="dropdown1">
-                        <button class="dropbtn color" id="color-select"><input hidden type="number"><span id="hex" class="hex"></span></button>
+                        <button class="dropbtn color" id="color-select"><input hidden type="number"><a id="hex" class="hex"></a></button>
                         <div class="dropdown-content">
-                            <a class="color-value" th:remove="all"><input hidden type="number"><span class="hex"></span></a>
+                            <a class="color-value" th:remove="all"><input hidden type="number"><div class="hex"></div></a>
                             <a class="color-value" th:remove="all">light blue</a>
                         </div>
                     </div>
@@ -196,11 +200,11 @@
         </div>
         <div class="col-lg-9 main" id="main" data-sticky_column>
             <div class="info">
-                <h2 class="text-center info_h2">All items</h2>
-                <h5 class="text-center info_h5">
+                <h2 class="info_h2"><span>All items</span></h2>
+                <h5 class="info_h5">
                     Here is all of your items. You can switch between important tabs.
                 </h5>
-                <hr>
+                <!--<hr>-->
             </div>
             <div class="tabs">
                 <ul id="forTabs" class="forTabs">
@@ -247,7 +251,7 @@
                                 <ul class="list-inline left-side">
                                     <li>
                                        <div class="dropdown">
-                                           <button class="dropbtn orderState" th:text="#{label.changeStatus}">Change status</button>
+                                           <button class="dropbtn orderState button-typical" th:text="#{label.changeStatus}">Change status</button>
                                            <div class="dropdown-content">
                                                <a class="status_a" th:text="#{label.active}">Active</a>
                                                <a class="status_b" th:text="#{label.inactive}">Inactive</a>
@@ -345,7 +349,7 @@
                                 <ul class="list-inline left-side">
                                     <li>
                                         <div class="dropdown">
-                                            <button class="dropbtn orderState" th:text="#{label.changeStatus}">Change status</button>
+                                            <button class="dropbtn orderState button-typical" th:text="#{label.changeStatus}">Change status</button>
                                             <div class="dropdown-content">
                                                 <a class="status_a" th:text="#{label.active}">Active</a>
                                                 <a class="status_b" th:text="#{label.inactive}">Inactive</a>
@@ -440,7 +444,7 @@
                                 <ul class="list-inline left-side">
                                     <li>
                                         <div class="dropdown">
-                                            <button class="dropbtn orderState" th:text="#{label.changeStatus}">Change status</button>
+                                            <button class="dropbtn orderState button-typical" th:text="#{label.changeStatus}">Change status</button>
                                             <div class="dropdown-content">
                                                 <a class="status_a" th:text="#{label.active}">Active</a>
                                                 <a class="status_b" th:text="#{label.inactive}">Inactive</a>
@@ -534,7 +538,7 @@
                                 <ul class="list-inline left-side">
                                     <li>
                                         <div class="dropdown">
-                                            <button class="dropbtn orderState" th:text="#{label.changeStatus}">Change status</button>
+                                            <button class="dropbtn orderState button-typical" th:text="#{label.changeStatus}">Change status</button>
                                             <div class="dropdown-content">
                                                 <a class="status_a" th:text="#{label.active}">Active</a>
                                                 <a class="status_b" th:text="#{label.inactive}">Inactive</a>

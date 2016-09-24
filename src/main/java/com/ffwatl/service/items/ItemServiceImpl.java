@@ -5,9 +5,11 @@ import com.ffwatl.dao.items.ItemDao;
 import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.manage.entities.items.clothes.size.Size;
+import com.ffwatl.manage.entities.users.User;
 import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
 import com.ffwatl.manage.presenters.items.ItemPresenter;
 import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
+import com.ffwatl.manage.presenters.users.UserGenPresenter;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.util.Settings;
@@ -112,10 +114,38 @@ public class ItemServiceImpl implements ItemService{
             throw new IllegalArgumentException();
         }
         item.getItemGroup().setChild(null);
+        ItemPresenter presenter = item2Presenter(item);
+
+        if(item instanceof ClothesItem){
+            ClothesItemPresenter cPresenter = new ClothesItemPresenter(presenter);
+            cPresenter.setBrand(((ClothesItem) item).getBrand());
+            Collections.sort(((ClothesItem) item).getSize());
+            cPresenter.setSize(((ClothesItem) item).getSize());
+            return cPresenter;
+        }
+        return presenter;
+    }
+
+    private UserGenPresenter user2Presenter(User u){
+        if(u == null) return null;
+        UserGenPresenter userGenPresenter = new UserGenPresenter();
+        userGenPresenter.setId(u.getId());
+        userGenPresenter.setFirstName(u.getFirstName());
+        userGenPresenter.setEmail(u.getEmail());
+        userGenPresenter.setLastName(u.getLastName());
+        userGenPresenter.setCreateDt(u.getCreateDt());
+        userGenPresenter.setPhotoUrl(u.getPhotoUrl());
+        userGenPresenter.setState(u.getState());
+        return userGenPresenter;
+    }
+
+    private ItemPresenter item2Presenter(Item item){
         String photoDir = settings.getPhotoDir()+"item_"+item.getId();
         String url = settings.getPhotoUrl() +"item_"+item.getId()+"/";
+
         ItemPresenter presenter = new ItemPresenter();
 
+        presenter.setAddedBy(user2Presenter(item.getAddedBy()));
         presenter.setId(item.getId());
         presenter.setDiscount(item.getDiscount());
         presenter.setItemGroup(item.getItemGroup());
@@ -127,13 +157,6 @@ public class ItemServiceImpl implements ItemService{
         presenter.setQuantity(item.getQuantity());
         presenter.setImages(urlImages(photoDir, "xl.jpg", url));
         presenter.setThumbs(urlImages(photoDir, "s.jpg", url));
-        if(item instanceof ClothesItem){
-            ClothesItemPresenter cPresenter = new ClothesItemPresenter(presenter);
-            cPresenter.setBrand(((ClothesItem) item).getBrand());
-            Collections.sort(((ClothesItem) item).getSize());
-            cPresenter.setSize(((ClothesItem) item).getSize());
-            return cPresenter;
-        }
         return presenter;
     }
 

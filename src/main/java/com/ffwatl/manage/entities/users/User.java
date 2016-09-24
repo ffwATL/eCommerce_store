@@ -30,7 +30,7 @@ public class User {
     private String firstName;
     private String lastName;
 
-    private String avatar;
+    private String photoUrl;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Phone phone;
@@ -62,8 +62,8 @@ public class User {
         return state;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
     public String getPassword() {
@@ -150,8 +150,8 @@ public class User {
         this.address = address;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public void setUserProfiles(Set<UserProfile> userProfiles) {
@@ -171,7 +171,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", avatar='" + avatar + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
                 ", phone=" + phone +
                 ", address=" + address +
                 ", skype='" + skype + '\'' +

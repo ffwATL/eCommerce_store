@@ -3,6 +3,7 @@ package com.ffwatl.manage.presenters.items;
 
 import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.entities.items.color.Color;
+import com.ffwatl.manage.presenters.users.UserGenPresenter;
 
 import java.util.List;
 
@@ -30,9 +31,15 @@ public class ItemPresenter {
 
     private List<String> thumbs;
 
+    private UserGenPresenter addedBy;
+
 
     public long getId() {
         return id;
+    }
+
+    public UserGenPresenter getAddedBy() {
+        return addedBy;
     }
 
     public String getItemName() {
@@ -117,6 +124,10 @@ public class ItemPresenter {
 
     public void setThumbs(List<String> thumbs) {
         this.thumbs = thumbs;
+    }
+
+    public void setAddedBy(UserGenPresenter addedBy) {
+        this.addedBy = addedBy;
     }
 
     @Override

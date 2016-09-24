@@ -10,16 +10,17 @@ $(function(){
         token : $("meta[name='_csrf']").attr("content"),
         header : $("meta[name='_csrf_header']").attr("content")
     };
+    $('.lang .dropdown-content a').each(function(){
+        $(this).attr('href',this.href+'&id='+$('#itemId').val())
+    });
 
+    /*Initialization of tabs plugin*/
     $('.tabs').tabslet();
     sizeBlock.find('.dropbtn').click(function(){
         $(this).parent().find('.dropdown-content').toggle();
     });
 
-
-    function getSize(name){
-        return sizeMap[name]
-    }
+    /*Getting item information by requested itemId and managing the whole process on the page*/
     function refreshData(){
         $.ajax({
             url: magic + "../../manage/ajax/get/item/single",
@@ -39,42 +40,60 @@ $(function(){
             }
         });
     }
-
-    function processData(data){
-        var totalQTY = $('#totalQTY');
-        $('.item_title').text(data.itemName);
-        totalQTY.find('.qty').text(data.quantity);
-        $('span.originPrice').text(data.originPrice/100);
-        $('span.salePrice').text(data.salePrice/100);
-        if(data.active)  {
-            totalQTY.removeClass('itemInactive');
-            totalQTY.addClass('itemActive');
-        }
-        var size_ul= $('.size_block').find('.sizeSelect_ul');
-        var sizeBlock = size_ul.find('.dropdown-content');
-        var sizeQty = size_ul.find('.size_qty');
+    /*Filling up size map and drawing size drop-down elements*/
+    function sizeBlockRoutine(data, code){
+        var sizeContent = sizeBlock.find('.dropdown-content');
         for(var i = 0; i< data.size.length; i++){
             var size = resolveLocale(data.size[i].eu_size.name);
-            sizeMap[size] = {name: size, qty: data.size[i].quantity, id: data.size[i].id,
-                measurements: [
-                        {name:data.size[i].measurements[0].name, value: data.size[i].measurements[0].value},
-                        {name:data.size[i].measurements[1].name, value: data.size[i].measurements[1].value},
-                        {name:data.size[i].measurements[2].name, value: data.size[i].measurements[2].value}
-                ]
-            };
-            sizeBlock.append('<a><button value="'+size+'">'+size+'</button><span class="qty">In stock: '+data.size[i].quantity+'</span></a>');
+            sizeMap[size] = {name: size, qty: data.size[i].quantity, id: data.size[i].id, measurements: []};
+            if(code < 10) sizeMap[size].measurements.push(
+                {name:data.size[i].measurements[0].name, value: data.size[i].measurements[0].value},
+                {name:data.size[i].measurements[1].name, value: data.size[i].measurements[1].value},
+                {name:data.size[i].measurements[2].name, value: data.size[i].measurements[2].value});
+            if(code > 5 && code < 10) sizeMap[size].measurements.push({name:data.size[i].measurements[3].name, value: data.size[i].measurements[3].value});
+            sizeContent.append('<a><button value="'+size+'">'+size+'</button><span class="qty">In stock: '+data.size[i].quantity+'</span></a>');
         }
+    }
+    /*Adding an event to the dropdown-content element*/
+    function sizeBlockOnClick(size_ul, sizeQty, code){
+        var k = false;
+        size_ul.find('.dropdown-content a').click(function(){
+            if(!k){
+                $('#inStock').fadeIn(100);
+                k = true;
+            }
+            var val = $(this).find('button').val();
+            processMeasurements(code, sizeMap[val]);
+            size_ul.find('.dropbtn').text(val);
+            sizeQty.text(sizeMap[val].qty)
+        })
+    }
+
+    /*Processing item data from ajax request*/
+    function processData(data){
+        $('#totalQTY').text(data.quantity);
+        $('.item_title').text(data.itemName);
+        $('#originPrice').text(data.originPrice/100);
+        var salePrice =data.salePrice/100;
+        if(data.discount > 0) {
+            $('.sale').css('color','#cc6e81');
+            $('span.prev_price').text(salePrice);
+            $('.prev_price').css('display','inline');
+        }
+        $('span.salePrice').text(Math.round(salePrice-(salePrice*data.discount/100)).toFixed(0));
+        $('.switch-active input').prop('checked', data.active);
+        $('#discount').text(data.discount);
+        $('#addedBy').text(data.addedBy.email);
         $('#color_hex').css('background', data.color.hex);
         $('#color_name').text('('+resolveLocale(data.color.color)+')');
-        var code = resolveGroupCommonCode(resolveLocale(data.itemGroup.groupName));
-
-        sizeBlock.find('a').click(function(){
-            var val = $(this).find('button').val();
-            processMeasurements(code.code, sizeMap[val]);
-            size_ul.find('.dropbtn').text(val);
-            /*sizeQty.text(sizeMap[val].qty)*/
-
-        });
+        $('#tab-2').find('p.info').text(data.brand.name);
+        $('#brand_logo').find('img').attr('src',magic+'../..'+data.brand.imageURL);
+        $('p.aboutBrand').text(resolveLocale(data.brand.description));
+        $('#tab-3').find('p').text(data.extraNotes);
+        $('.productId li:eq(1)').text(data.id);
+        var code = resolveGroupCommonCode(resolveLocale(data.itemGroup.groupName)).code;
+        sizeBlockRoutine(data, code);
+        sizeBlockOnClick($('.size_block').find('.sizeSelect_ul'),$('#inStock'), code);
         var sp = $('.sp-wrap');
         for(i = 0; i<data.images.length; i++){
             var url = magic+'../..'+data.images[i];
@@ -83,9 +102,9 @@ $(function(){
     }
 
     function processMeasurements(code, data){
-        console.log(code);
-        console.log(data);
-        var ms = $('#measurement');
+        var ms = $('#measurements');
+        ms.show();
+        ms = ms.find('#gen_measurements');
         ms.find('ul').remove();
         if(code < 4){
             ms.append('<ul class="list-inline"><li class="first"><label>'+locale.label_waist+'</label>' +
@@ -94,6 +113,22 @@ $(function(){
                 '<input type="text" readonly value="'+data.measurements[1].value+'"></li>' +
                 '<li class="third"><label>'+locale.label_bottom+'</label>' +
                 '<input type="text" readonly value="'+data.measurements[2].value+'"></li></ul>')
+        }else if(code < 10){
+            ms.append('<ul class="list-inline"><li class="first"><label>'+locale.label_shoulders+'</label>' +
+                '<input type="text" readonly value="'+data.measurements[0].value+'"></li>' +
+                '<li class="second"><label>'+locale.label_length+'</label>' +
+                '<input type="text" readonly value="'+data.measurements[1].value+'"></li>' +
+                '<li class="third"><label>'+locale.label_chest+'</label>' +
+                '<input type="text" readonly value="'+data.measurements[2].value+'"></li></ul>');
+            if(code > 5){
+                var top = $('#clothes_top');
+                top.find('ul').remove();
+                top.append('<ul class="list-inline"><li class="fourth"><label>'+locale.label_sleeve+'</label>' +
+                    '<input type="text" readonly value="'+data.measurements[3].value+'"></li></ul>')
+            }
+        }else if(code == 10){
+            ms.append('<ul class="list-inline"><li class="first"><label>'+locale.label_insole+'</label>' +
+                '<input type="text" readonly value="'+data.measurements[0].value+'"></li></ul>');
         }
     }
 
@@ -117,6 +152,7 @@ $(function(){
         }
     }
     refreshData();
-    /*$('.sp-wrap').smoothproducts();*/
+    /*$('.sp-wrap').smoothproducts();
+    $('.sp-thumbs a')[0].click();*/
 });
 /*]]>*/

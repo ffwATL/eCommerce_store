@@ -17,7 +17,6 @@
 
 </head>
 <body>
-
 <div class="content-wrapper">
     <div th:replace="template :: header" class="header col-lg-12">
         <ul class="list-inline" id="logo">
@@ -54,40 +53,69 @@
     <div class="content col-lg-12">
         <div class="col-lg-6 gallery">
             <input id="itemId" hidden th:value="${itemId}">
-            <div class="sp-wrap">
-                <a th:remove="all" href="../../../../resources/img/asos/item_1/image1xl.jpg"><img src="../../../../resources/img/asos/item_1/image1xl.jpg" alt=""></a>
-                <a th:remove="all" href="../../../../resources/img/asos/item_1/image2xl.jpg"><img src="../../../../resources/img/asos/item_1/image2xl.jpg" alt=""></a>
+            <div class="gallery-wrap">
+                <a class="next" ><span style="display: block"></span></a>
+                <a class="prev" ><span style="display: block"></span></a>
+                <div class="sp-wrap">
+                    <a th:remove="all" href="../../../../resources/img/asos/item_1/image1xl.jpg"><img src="../../../../resources/img/asos/item_1/image1s.jpg" alt=""></a>
+                    <a th:remove="all" href="../../../../resources/img/asos/item_1/image2xl.jpg"><img src="../../../../resources/img/asos/item_1/image2s.jpg" alt=""></a>
+                    <a th:remove="all" href="../../../../resources/img/asos/item_1/image3xl.jpg"><img src="../../../../resources/img/asos/item_1/image3s.jpg" alt=""></a>
+                    <a th:remove="all" href="../../../../resources/img/asos/item_1/image4xl.jpg"><img src="../../../../resources/img/asos/item_1/image4s.jpg" alt=""></a>
+                </div>
+                <div class="productId">
+                    <ul class="list-inline">
+                        <li th:text="(#{label.itemCode}+':')">Product code:</li>
+                        <li class="info">j3456</li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col-lg-6 main">
             <div class="col-lg-10 float_right">
-                <h3 class="item_title">ASOS Mens Skinny Jeans navy</h3>
-                <div id="totalQTY" class="itemInactive">
-                    <span class="stock" th:text="(#{label.totalQty}+':')">Total qty.:</span>
-                    <p class="qty">6</p>
-                </div>
+                <h3 class="item_title" th:text="''">ASOS Mens Skinny Jeans navy</h3>
                 <ul class="list-inline price_list">
-                    <li ><span class="currency origin">₴</span></li>
+                    <li><span class="sale">₴</span></li>
                     <li class="noPadding">
-                        <span class="originPrice">319</span>
-                    </li>
-                </ul>
-                <ul class="list-inline price_list">
-                    <li><span class="currency">₴</span></li>
-                    <li class="noPadding">
-                        <span class="salePrice">519</span>
+                        <span class="salePrice sale" th:text="''">519</span>
                     </li>
                     <li class="prev_price"><span class="line-through">₴</span></li>
                     <li class="noPadding prev_price">
-                        <span class="line-through">539</span>
+                        <span class="line-through prev_price">539</span>
                     </li>
                 </ul>
                 <br>
-                <br>
-                <br>
+                <div id="brand_logo"><img src="../../../../resources/img/asos/asos_logo.jpg"></div>
+                <table id="info_table" style="margin-bottom: 10px">
+                    <tr>
+                        <td class="leftInfo" th:text="(#{label.totalQty}+':')">Total quantity:</td>
+                        <td class="rightInfo"><div id="totalQTY">8</div></td>
+                    </tr>
+                    <tr>
+                        <td class="leftInfo" th:text="(#{overview.items.originPrice}+':')">Original price:</td>
+                        <td class="rightInfo">
+                            <span id="originPrice" class="originPrice">319</span>
+                            <span class="currency"> UAH</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="leftInfo" th:text="(#{label.status}+':')">Status:</td>
+                        <td class="rightInfo">
+                            <label class="switch-active"><input type="checkbox"><div class="slider"></div></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="leftInfo" th:text="(#{label.discount}+':')">Discount:</td>
+                        <td class="rightInfo" id="discount"><span th:remove="all">10%</span></td>
+                    </tr>
+                    <tr>
+                        <td class="leftInfo" th:text="(#{label.addedBy}+':')">Added by:</td>
+                        <td class="rightInfo" id="addedBy"><a href="" style="color: black"><span th:remove="all">ffwATL</span></a></td>
+                    </tr>
+                </table>
                 <div class="size_block">
                     <ul class="list-inline sizeSelect_ul">
                         <li><label th:text="#{label.size}">Size:</label>
+                            <div id="inStock">3</div>
                             <div class="dropdown">
                                 <button class="dropbtn button-bordered inline size_choice button-bordered" th:text="#{new.item.choose}">W32 L32</button>
                                 <div class="dropdown-content">
@@ -97,8 +125,6 @@
                                 </div>
                             </div>
                         </li>
-                        <!--<li><div class="size_qty">3</div></li>-->
-
                     </ul>
                     <label th:text="#{new.item.color}">Color:</label>
                     <div class="inline">
@@ -112,8 +138,8 @@
                 </div>
                 <br>
                 <div class="buttons">
-                    <button class="button-typical button" id="edit_button" th:text="#{label.edit}">Edit</button>
                     <button class="button-warn" id="addToBag_button" th:text="#{label.addToBag}">Add to bag</button>
+                    <button class="button-lowPriority button" id="edit_button" th:text="#{label.edit}">Edit</button>
                 </div>
                 <div class="tabs">
                     <ul id="forTabs" class="forTabs">
@@ -122,11 +148,16 @@
                         <li id="extra_info" ><a href="#tab-3" th:text="#{label.extraInfo}">Extra Info</a></li>
                     </ul>
                     <div id="tab-1">
-                        <p>Here is the main information about product: </p>
-                        <div id="measurement">
-
+                        <p class="inline" th:text="#{itemCard.mainInfoAboutProduct}">Here is the main information about product:</p>
+                        <div id="measurements">
+                            <div id="gen_measurements"></div>
+                            <div id="clothes_top"></div>
+                            <ul class="list-inline">
+                                <li><span class="red">*</span></li>
+                                <li th:text="#{itemCard.measurementsMade}">All measurements are in cm.</li>
+                            </ul>
                         </div>
-                        <!--<div id="clothes_bottom">
+                       <!-- <div id="clothes_bottom">
                             <ul class="list-inline">
                                 <li class="first"><label>Waist:</label>
                                     <input type="text" readonly value="82-84">
@@ -138,15 +169,13 @@
                                     <input type="text" readonly value="16-16.5">
                                 </li>
                             </ul>
-                        </div>
-                        <div id="clothes_top"></div>
-
-                        <ul class="list-inline" >
+                        </div>-->
+                        <!--<ul class="list-inline" >
                             <li><label>Sleeve:</label>
                                 <input type="text" readonly value="67-68">
                             </li>
                         </ul>-->
-                        <p class="info"><span style="font-weight: 600">Jeans</span> by <span style="font-weight: 600">ASOS</span></p>
+                        <p class="info"><span style="font-weight: 600" th:text="#{label.features}">Features</span></p>
                         <ul class="list-group-item-text" id="itemDescription">
                             <li>Skinny fit</li>
                             <li>Stretch cotton</li>
@@ -155,15 +184,17 @@
                         </ul>
                     </div>
                     <div id="tab-2">
-                        <p class="info">About Cheap Monday</p>
-                        <p>Known for their skinny jeans and their characteristic skull logo, Stockholm based label Cheap Monday channel their slick Scandinavian style to a range of clothing, with everything from check shirts to selvedge denim.</p>
+                        <ul class="list-inline">
+                            <li><span th:text="#{itemCard.aboutBrand}"></span></li>
+                            <li> <p class="info"> Cheap Monday</p></li>
+                        </ul>
+                        <p class="aboutBrand">Known for their skinny jeans and their characteristic skull logo, Stockholm based label Cheap Monday channel their slick Scandinavian style to a range of clothing, with everything from check shirts to selvedge denim.</p>
                     </div>
                     <div id="tab-3">
                         <p>One of size W34 L32 have W32 L32 measurements. This size marked * on the top of package.
                             And added to the system as W32 L32 size.</p>
                     </div>
                 </div>
-                <!--<label style="font-size: 12px">Product ID: <span>3556</span></label>-->
             </div>
         </div>
     </div>

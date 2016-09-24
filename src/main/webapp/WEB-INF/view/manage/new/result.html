@@ -9,7 +9,13 @@
     <link rel="stylesheet" href="../../../../resources/css/custom/new/result.css" th:href="@{/resources/css/custom/new/result.css}" type="text/css">
     <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
     <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
-
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var magic = /*[[@{context:}]]*/'';
+            $('#itemLink').attr('href',magic+'../../overview/item?id='+$('#itemId').val());
+        });
+    </script>
 </head>
 <body>
 <div class="content-wrapper">
@@ -31,6 +37,7 @@
     <div class="col-lg-12">
         <input hidden type="text" id="isError" th:value="${isError}">
         <div id="info_list">
+            <input hidden id="itemId" th:value="${itemId}">
             <table>
                 <tr>
                     <td class="resp" id="img">

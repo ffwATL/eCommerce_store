@@ -65,7 +65,7 @@ public class Item {
     @Column(nullable = false)
     private Timestamp lastChangeDate;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     private User addedBy;
 
     public User getAddedBy() {

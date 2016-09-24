@@ -105,19 +105,14 @@ button:disabled,button:disabled:hover{
 }
 input.height:focus{
     transition: 0.3s;
-    border-bottom: solid 1px #ccd0d1;
+    border-bottom: solid 2px #ccd0d1;
     background: rgba(251, 248, 255, 0.85);
-    /*background: rgba(205, 223, 249, 0.43);
-    border-bottom: solid 4px #dbdbdb;
-    color: #606f84;*/
 }
 input.height{
-   /* background: rgba(245, 242, 249, 0.43);*/
     border-left:  none;
     border-right: none;
     border-top: none;
-    /*border-bottom: solid 4px #e7e7e7;;*/
-    border-bottom: solid 1px #dadedf;;
+    border-bottom: solid 2px #dadedf;;
     border-radius: 0;
 }
 .height{
@@ -170,12 +165,15 @@ option{
 #group_two span{
     font-size: 13px;
 }
-#section_2 select/*, #section_2 input*/{
+#section_2 select{
     margin: 0;
     width: 155px;
 }
-#brand, #color, #item_group_2 .eu_select{
+#brand, #color{
     padding-left: 20px;
+}
+#item_group_2 .eu_select, #group_two a, #group_two span{
+    padding-left: 15px;
 }
 .block{
     display: block;
@@ -206,10 +204,8 @@ select:disabled, input:disabled{
     width: 130px;
     padding-left: 10px;
     padding-right: 10px;
-    /*border-radius: 2px;*/
 }
 #section_2 li{
-    /*padding-left: 5px;*/
     padding-right: 0;
 }
 .input-form{
@@ -272,22 +268,16 @@ select:disabled, input:disabled{
 }
 #add_size button{
     outline: none;
-    border: solid black 1px;
+    border: solid black 2px;
     color: black;
     margin-left: 65px;
     height: 29px;
-    /*border-radius: 2px;*/
     vertical-align: middle;
     background: white url("../../../img/new/plus-icon.svg") no-repeat 2px;
 }
-/*#add_size button:hover{
-    color: #8b8b8b;
-    border: solid #8b8b8b 1px;
-    background: white url("../../../img/new/plus-icon-hover.svg") no-repeat 2px;
-}*/
 #add_size button:disabled, #add_size button:disabled:hover, #add_size button:hover{
     color: #8b8b8b;
-    border: solid #8b8b8b 1px;
+    border: solid #8b8b8b 2px;
     background: white url("../../../img/new/plus-icon-hover.svg") no-repeat 2px;
 }
 #add_size button:disabled, #add_size button:disabled:hover{
@@ -346,10 +336,6 @@ select:disabled, input:disabled{
     box-shadow: 3px 1px 12px #7a7a7a;
     background: rgba(35, 50, 70, 0.7);
 }
-.red{
-    color: #D80027;
-    margin-left: 0;
-}
 hr.null{
     margin-top: 10px;
     margin-bottom: 10px;
@@ -368,16 +354,15 @@ hr.null{
     font-weight: 200;
 }
 #upload_button{
-    border: solid black 1px;
+    border: solid black 2px;
     color: black;
-   /* border-radius: 2px;*/
     height: 29px;
     padding: 4px 10px 4px 25px;
     background: white url("../../../img/new/photo-camera.svg") no-repeat 6px 3px;
     margin-bottom: 5px;
 }
 #upload_button:hover{
-    border: solid #8b8b8b 1px;
+    border: solid #8b8b8b 2px;
     color: #8b8b8b;
     background: white url("../../../img/new/photo-camera-hover.svg") no-repeat 6px 3px;
     cursor: pointer;
@@ -420,7 +405,6 @@ p.info{
 }
 #group_two a, #group_two span{
     margin-top: 0;
-    padding-left: 15px;
 }
 #section_2_ul label,#clothes_items label, #section_4 label{
     padding-left: 0;
@@ -442,17 +426,16 @@ p.info{
     font-size: 14px;
     height: 29px;
     background: white url("../../../img/down-arrow.svg") no-repeat 133px;
-    border: solid black 1px;
+    border: solid black 2px;
     color: black;
     width: 155px;
-    /*border-radius: 2px 0 0 2px  ;*/
 }
 #brand .dropdown-content, #color .dropdown-content, #eu_waist_select .dropdown-content, #item_group_2 .dropdown-content{
     text-align: center;
     width: 155px;
 }
 #brand .dropbtn:hover, #color .dropbtn:hover, #eu_waist_select .dropbtn:hover, #item_group_2 .dropbtn:hover{
-    border: solid #8b8b8b 1px;
+    border: solid #8b8b8b 2px;
     color: #8b8b8b;
 }
 menu{
@@ -486,6 +469,9 @@ menu li:before{
     box-shadow: 2px -2px 1px 0px #BABABA;
     background: #efefef;
 }
+.popup-header menu{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 .popup-header menu li:nth-child(1){z-index: 4000}
 .popup-header menu li:nth-child(2){z-index: 3000}
 .popup-header menu li:nth-child(3){z-index: 2000}
@@ -502,7 +488,6 @@ li.stage_comp, li.stage_comp:before{
 }
 .lvl li{
     color: rgba(79, 76, 83, 0.75);
-    /*border-radius: 2px;*/
 }
 button#changeGroup{
     margin-left: 15px;
@@ -522,7 +507,6 @@ a.change{
     border: solid 1px #37474f;
     height: 29px;
     color: transparent;
-    /*border-radius: 0 2px 2px 0 ;*/
     background: #37474f url("../../../img/new/square-plus.svg") no-repeat 6px;
 }
 .plus:hover{

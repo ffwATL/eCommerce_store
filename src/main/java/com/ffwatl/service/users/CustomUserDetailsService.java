@@ -25,6 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserService userService;
 
     @Transactional(readOnly = true)
+    @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         logger.info("** inside loadUserByUsername");
         User user = userService.findByEmail(name);
@@ -34,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             System.out.println("User not found");
             throw new UsernameNotFoundException("Username not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                 /*user.getState().name().equals("Active")*/ true, true, true, true, getGrantedAuthorities(user));
     }
 

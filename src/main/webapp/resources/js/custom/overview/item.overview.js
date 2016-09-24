@@ -20,7 +20,7 @@ $(function(){
     var currentTab = allTab;
     var currentItem;
     var filter_list = $('.filter-list');
-    var info ={info_h2: $('.info_h2'), info_h5: $('.info_h5')};
+    var info ={info_h2: $('.info_h2 span'), info_h5: $('.info_h5')};
     var sliders=[
         {
             sliderSale:$('#slider_tab0_1'),
@@ -187,14 +187,15 @@ $(function(){
         for(var i=0; i<arr.length; i++){
             var item = arr[i];
             b.append('<li class="item"><a href="item?id='+item.id+'"><div class="inner"><div class="thumbnail">' +
-                '<img src="'+magic+'../..'+item.thumbnailUrl+'"></div><div class="item-name"><a>'+item.itemName+'</a></div>' +
+                '<img src="'+magic+'../..'+item.thumbnailUrl+'"></div><div class="item-name">'+item.itemName+'</div>' +
                 '<div class="origin-price"><span class="price">'+item.originPrice/100+ '</span>' +
-                '<span class="currency"> '+item.currency+'</span></div>' +
+                '<span class="currency"> ₴</span></div>' +
                 '<div class="sale-price"><span class="price">'+item.salePrice/100+ '</span>' +
-                '<span class="currency"> '+item.currency+'</span></div></div></a></li>')
+                '<span class="currency"> ₴</span></div></div></a></li>')
         }
         if(arr.length == 0 && !notFound){
-            b.append('<li class="notFound"><img class="notFoundImg" src="'+magic+'../../resources/img/sad.jpg">'+locale.no_results_found+'</li>');
+
+            b.append('<li class="notFound" style="text-align: center"><img class="notFoundImg" src="'+magic+'../../resources/img/sad.jpg">'+locale.no_results_found+'</li>');
             notFound = true;
         }else if(arr.length > 0 && notFound) {
             $('.notFound').remove();
@@ -224,10 +225,10 @@ $(function(){
 
     function checkInputTextField (input){
         if(input.val().length < 5){
-            input.css({'border-bottom':'solid 4px #F25D75', background: '#FCE8EC', color: '#cc6e81'});
+            input.css({'border-bottom':'solid .1em #F25D75', background: '#FCE8EC', color: '#cc6e81'});
             return false;
         }else {
-            input.css({'border-bottom':'solid 4px #e7e7e7', background: 'white', color: '#727272'});
+            input.css({'border-bottom':'solid .1em #e7e7e7', background: 'white', color: '#727272'});
         }
         return true;
     }
@@ -247,11 +248,11 @@ $(function(){
             var c="";
             var f='';
             var cl='';
-            var finalPrice = Math.round(((item.salePrice/100) - (item.salePrice/100)*item.discount/100)).toFixed(1);
+            var finalPrice = Math.round(((item.salePrice/100) - (item.salePrice/100)*item.discount/100)).toFixed(0);
             if(item.discount > 0) {
                 c ='<div class="discount-logo"><span class="status"><img src="'+magic+'../../resources/img/offer.png"></span>' +
                     '<span class="last">'+(0-item.discount)+'<span>%</span></span></div>';
-                f='<div class="final"><span class="price">'+finalPrice+'</span><span class="currency"> '+item.currency+'</span></div>'
+                f='<div class="final"><span class="price">'+finalPrice+'</span><span class="currency"> ₴</span></div>';
                 cl='line-through';
             }
             if(item.active) checked = 'checked';
@@ -266,15 +267,15 @@ $(function(){
         '<td class="item-name"><a href="item?id='+item.id+'">'+item.itemName+'</a></td><td><span class="count">'+item.quantity+'</span></td>' +
         '<td><label class="switch-active"><input type="checkbox" '+checked+'><div class="slider"></div></label></td>' +
         '<td  class="date"><span class="import-date">'+format(new Date(item.importDate).toLocaleString(),'dd/MM/yyyy')+'</span></td>' +
-        '<td><div class="origin-price"><span class="price">'+item.originPrice/100+'</span><span class="currency"> '+item.currency+'</span></div></td>' +
-        '<td><div class="sale-price"><div class="sale '+cl+'"><span class="price">'+item.salePrice/100+'</span><span class="currency"> '+item.currency+'</span></div>' +
+        '<td><div class="origin-price"><span class="price">'+item.originPrice/100+'</span><span class="currency"> ₴</span></div></td>' +
+        '<td><div class="sale-price"><div class="sale '+cl+'"><span class="price">'+item.salePrice/100+'</span><span class="currency"> ₴</span></div>' +
         f+'</div>' +
         '<td class="dropdown1"><button class="dropbtn">'+locale.options+'</button><div class="dropdown-content"><a class="expressEdit" href="#">'+locale.expressEdit+'</a>' +
         '<a href="#">'+locale.add_to_group+'</a></div></td></tr>')
     }
     initTableDropdown();
     if(arr.length == 0 && !notFound){
-        b.append('<tr class="notFound"><td colspan="10" ><img class="notFoundImg" src="'+magic+'../../resources/img/sad.jpg">'+locale.no_results_found+'</td></tr>');
+        b.append('<tr class="notFound"><td colspan="10" ><img style="text-align: center" class="notFoundImg" src="'+magic+'../../resources/img/sad.jpg">'+locale.no_results_found+'</td></tr>');
         notFound = true;
     }else if(arr.length > 0 && notFound) {
         $('.notFound').remove();
@@ -809,13 +810,13 @@ function drawItems (result, paginationDiv){
         list.find('a').remove();
         for(var k=0; k< result.length; k++) {
             list.append('<a><input hidden type="number" value="'+result[k].id+'">' +
-                '<span class="hex" style="background: '+result[k].hex+'"></span></a>')
+                '<div class="hex" style="background: '+result[k].hex+'"></div></a>')
         }
         list.find('a').click(function(){
             var btn = list.parent().find('button');
             var ths = $(this);
             btn.find('input').val(ths.find('input').val()); //adding ID
-            btn.find('span').css({'background':ths.find('span').css('background')}); //changing color preview
+            btn.find('a').css({'background':ths.find('.hex').css('background')}); //changing color preview
         });
     }
 
@@ -888,7 +889,7 @@ function drawItems (result, paginationDiv){
                 };
                 itemGroupBtn.append('<input hidden type="number" value="'+tempItemOpt.itemGroupId+'">');
                 var color = editClass.find('button.color');
-                color.find('span#hex').css({'background':tempItemOpt.colorHex});
+                color.find('#hex').css({'background':tempItemOpt.colorHex});
                 color.find('input').val(tempItemOpt.colorId);
                 itemGroupList.find('a').remove();
                 currentItem = i;
@@ -918,7 +919,7 @@ function drawItems (result, paginationDiv){
                     checkInputNumberField(salePrice,0);
                     var price = salePrice.val();
                     if(discount.val() > 0) {
-                        price = Math.round(price-salePrice.val()*discount.val()/100).toFixed(1);
+                        price = Math.round(price-salePrice.val()*discount.val()/100).toFixed(0);
                     }
                     salePriceLeft.text(price);
                 });
@@ -933,7 +934,7 @@ function drawItems (result, paginationDiv){
                         d = 0;
                     }
                     checkInputNumberField(discount, 0, 70);
-                    salePriceLeft.text(Math.round(salePrice.val()-salePrice.val()*d/100).toFixed(1));
+                    salePriceLeft.text(Math.round(salePrice.val()-salePrice.val()*d/100).toFixed(0));
                 });
                 editClass.find('.activate input').prop('checked', status_switch.prop('checked'));
             });

@@ -26,6 +26,7 @@ public class ClothesItemPresenter extends ItemPresenter{
         setId(presenter.getId());
         setImages(presenter.getImages());
         setThumbs(presenter.getThumbs());
+        setAddedBy(presenter.getAddedBy());
     }
 
     public Brand getBrand() {
@@ -46,7 +47,7 @@ public class ClothesItemPresenter extends ItemPresenter{
 
     @Override
     public String toString() {
-        return "ClothesItemPresenter{" +
+        return super.toString()+" ClothesItemPresenter{" +
                 "brand=" + brand +
                 ", size=" + size +
                 '}';

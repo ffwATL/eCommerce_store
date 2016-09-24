@@ -14,28 +14,29 @@
 <body>
 <div class="content-wrapper">
     <div id="login-form">
-        <div class="header login-header">
-            <a th:href="@{/}"><img src="../../../resources/img/logo.png" th:src="@{/resources/img/logo.png}"></a>
-            <h3>Sign in</h3>
+        <div class="login-header">
+            <h3><span>Sign in</span></h3>
         </div>
         <div class="login-form">
             <div class="message">
                 <p></p>
             </div>
-            <ul class="inline zero-top">
-                <li class="block mail">
-                    <img class="visible" src="../../../resources/img/login/email.svg" th:src="@{/resources/img/login/email.svg}">
-                    <img class="invisible" src="../../../resources/img/login/email-danger.svg" th:src="@{/resources/img/login/email-danger.svg}">
-                </li>
+            <div class="block mail">
+                <img class="visible" src="../../../resources/img/login/email.svg" th:src="@{/resources/img/login/email.svg}">
+                <img class="invisible" src="../../../resources/img/login/email-danger.svg" th:src="@{/resources/img/login/email-danger.svg}">
+            </div>
+            <ul class="list-inline top">
                 <li class="inline zero-top">
                     <label>
                         <input id="username" form="login" type="text" name="username" placeholder="example@mail.com">
                     </label>
                 </li>
-                <li class="block lock">
-                    <img class="visible" src="../../../resources/img/login/lock.svg" th:src="@{/resources/img/login/lock.svg}">
-                    <img class="invisible" src="../../../resources/img/login/lock-danger.svg" th:src="@{/resources/img/login/lock-danger.svg}">
-                </li>
+            </ul>
+            <div class="block lock">
+                <img class="visible" src="../../../resources/img/login/lock.svg" th:src="@{/resources/img/login/lock.svg}">
+                <img class="invisible" src="../../../resources/img/login/lock-danger.svg" th:src="@{/resources/img/login/lock-danger.svg}">
+            </div>
+            <ul class="list-inline down">
                 <li class="inline">
                     <label>
                         <input id="password" form="login" type="password" name="password" placeholder="Password">
@@ -52,7 +53,7 @@
                 <div class="login-button">
                     <form id="login" th:action="@{/login}" method="post" hidden>
                     </form>
-                    <button  id="btn" class="button-typical">Login</button>
+                    <button  id="btn" class="button-bordered">Login</button>
                 </div>
             </div>
             <form hidden th:action="@{/}" method="get">

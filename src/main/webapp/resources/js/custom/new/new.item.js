@@ -16,7 +16,6 @@ $(function(){
     var item;
     var item_group_code;
     var item_name_input = $('#item-name');
-    var color_input = $('#color');
     var quantity_input = $('#add_size_panel_qty_li').find('input');
     var origin_price_input = $('#origin_price');
     var sale_price_input = $('#sale_price');
@@ -53,19 +52,12 @@ $(function(){
         }
     ];
 
-    /*******Example images*******/
-    var example_group_1 = $('#example_group_1');
-    var example_group_11 = $('#example_group_11');
-    var example_group_2 = $('#example_group_2');
-    var example_group_3 = $('#example_group_3');
-
     $('#group_two').find('.change').on('click', function(){
         $('#group_two').hide();
         $('#section_2').hide();
         $('#section_3').hide();
         $('#section_4').hide();
         $('.icon-wrapper').remove();
-        color_input.val('');
         $('#brand').find('select option:eq(0)').prop('selected', true);
         if(item_group_code < 0) return;
         else if(item_group_code < 4) {
@@ -81,7 +73,6 @@ $(function(){
     function chooseItemGroup(name){
         var res = resolveGroupCommonCode(name);
         item_group_code = res.code;
-       /* itemGroup = res.item_group;*/
         if(item_group_code < 0) return;
         $('#group_two_text').text(menClothesPattern +' > ' + pattern);
         if(!$.isNumeric(item_group_code) || item_group_code < 0) console.log('some error');
@@ -137,7 +128,6 @@ $(function(){
         if(cat == 'BOTTOM' || cat == 'WAIST') tmp = gr_1_eu_dropDown.parent().find('.dropdown-content');
         else if(cat == 'TOP') tmp = gr2_eu_dropDown.parent().find('.dropdown-content');
         else return;
-        /*tmp.append('<option value="'+locale_en.label_choose+'">'+locale.label_choose+'</option>');*/
         tmp.find('.lazy').remove();
         for(var i = 0; i < data.length; i++){
             var val = resolveLocale(data[i].name);
@@ -153,8 +143,8 @@ $(function(){
     }
     var group_1_bind_init = function(){
         $('#item_group_1').show();
-        if(item_group_code == 3) example_group_11.show();
-        else example_group_1.show();
+        if(item_group_code == 3) $('#example_group_11').show();
+        else $('#example_group_1').show();
         unlock(add_size_button, false);
         item_name_input.bind('input propertychange', function(){
             checkAllFormsGroup();
@@ -193,15 +183,14 @@ $(function(){
     };
     var group_1_clear_forms = function(){
         gr_1_eu_dropDown.text(locale.label_choose);
-       /* $('#eu_li').find('select option:eq(0)').prop('selected', true);*/
         gr_1_waist.val('');
         gr_1_bottom.val('');
         gr_1_length.val('');
     };
     var group_1_unbind = function(){
         $('#item_group_1').hide();
-        if(item_group_code == 3) example_group_11.hide();
-        else example_group_1.hide();
+        if(item_group_code == 3) $('#example_group_11').hide();
+        else $('#example_group_1').hide();
         gr_1_bottom.unbind();
         gr_1_length.unbind();
         gr_1_waist.unbind();
@@ -224,8 +213,8 @@ $(function(){
         $('#item_group_2').show();
         if(item_group_code > 5 && item_group_code < 10) {
             $('#item_group_3').show();
-            example_group_3.show();
-        }else example_group_2.show();
+            $('#example_group_3').show();
+        }else $('#example_group_2').show();
         unlock(add_size_button, false);
         item_name_input.bind('input propertychange', function(){
             checkAllFormsGroup();
@@ -270,7 +259,6 @@ $(function(){
         });
     };
     var group_2_clear_forms = function(){
-        /*$('#item_group_2').find('select option:eq(0)').prop('selected', true);*/
         gr_2_shoulders.val('');
         gr_2_chest.val('');
         gr_2_length.val('');
@@ -278,12 +266,12 @@ $(function(){
     };
     var group_2_unbind = function(){
         $('#item_group_2').hide();
-        example_group_2.hide();
+        $('#example_group_2').hide();
         gr_2_shoulders.unbind();
         gr_2_length.unbind();
         gr_2_chest.unbind();
         if(item_group_code > 5 && item_group_code < 10){
-            example_group_3.hide();
+            $('#example_group_3').hide();
             gr_3_sleeve.unbind();
             $('#item_group_3').hide();
         }
@@ -422,7 +410,6 @@ $(function(){
     };
     var saveClothesItem = function(){
         updateFinalSizes();
-
         item = {
             gender: gender,
             itemName: item_name_input.val(),

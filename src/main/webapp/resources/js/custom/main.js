@@ -3,7 +3,6 @@ $(function(){
     if(lang == undefined || lang.length < 2) lang = 'en';
     $('#locale').find('.lang-dropbtn').text(getLang(lang));
     window.onclick = function(event) {
-        /*console.log(event.target.className);*/
         if (event.target.className.split(' ')[0] != 'dropbtn') {
             $('.dropdown-content').hide();
         }
@@ -11,8 +10,7 @@ $(function(){
 });
 
 /*!
- * jQuery Cookie Plugin v1.4.1
- * https://github.com/carhartl/jquery-cookie
+ * jQuery Cookie Plugin v1.4.1 *
  */
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
@@ -165,7 +163,8 @@ var locale_en = {
     label_bottom: 'Bottom',
     label_shoulders: 'Shoulders',
     label_chest: 'Chest',
-    label_sleeve: 'Sleeve'
+    label_sleeve: 'Sleeve',
+    label_insole: 'Insole'
 };
 
 var locale_ru = {
@@ -225,7 +224,8 @@ var locale_ru = {
     label_bottom: 'Низ',
     label_shoulders: 'Плечи',
     label_chest: 'Грудь',
-    label_sleeve: 'Рукав'
+    label_sleeve: 'Рукав',
+    label_insole: 'Стелька'
 };
 
 var locale_ua = {
@@ -285,7 +285,8 @@ var locale_ua = {
     label_bottom: 'Низ',
     label_shoulders: 'Плечі',
     label_chest: 'Груди',
-    label_sleeve: 'Рукав'
+    label_sleeve: 'Рукав',
+    label_insole: 'Стелька'
 };
 var lang='en';
 function getLocale(locale){
@@ -313,6 +314,7 @@ function escapeRegExp(str) {
     return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "");
 }
 function resolveLocale(obj){
+    if(obj == null || obj == undefined) return '';
     switch (lang){
         case 'en': return obj.locale_en;
         case 'ru': return obj.locale_ru;
@@ -320,4 +322,3 @@ function resolveLocale(obj){
         default:   return obj.locale_en;
     }
 }
-

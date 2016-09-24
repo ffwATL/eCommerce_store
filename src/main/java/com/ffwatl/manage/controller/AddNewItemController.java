@@ -3,15 +3,20 @@ package com.ffwatl.manage.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.manage.entities.items.brand.Brand;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
+import com.ffwatl.manage.entities.users.User;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesItemService;
 import com.ffwatl.service.group.ItemGroupService;
+import com.ffwatl.service.users.UserService;
 import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,13 +40,14 @@ import java.util.List;
 public class AddNewItemController {
 
 
-
     @Autowired
     private ItemGroupService itemGroupService;
     @Autowired
     private BrandService brandService;
     @Autowired
     private ClothesItemService clothesItemService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private Settings settings;
@@ -60,7 +66,6 @@ public class AddNewItemController {
         }
         List<Brand> brandList = brandService.findAll();
         model.addAttribute("brandList", brandList);
-
         model.addAttribute("lang", lang != null ? lang : cookie);
         return "manage/new/newItem";
     }
@@ -76,6 +81,9 @@ public class AddNewItemController {
                 logger.error("NullPointer");
                 throw new NullPointerException();
             }
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User user = userService.findByEmail(auth.getName());
+            clothesItem.setAddedBy(user);
             clothesItemService.save(clothesItem);
             logger.info("clothes item saved: " + clothesItem);
             String dirPath = settings.getPhotoDir() + "item_" + clothesItem.getId();
@@ -93,10 +101,13 @@ public class AddNewItemController {
             /*throw e;*/
             return "manage/new/result";
         }
+        model.addAttribute("itemId",clothesItem.getId());
         model.addAttribute("isError", false);
         model.addAttribute("itemName", clothesItem.getItemName());
         return "manage/new/result";
     }
+
+
 
     private void saveImages(MultipartFile f, String dirPath, int count) throws IOException{
         if (f == null) return;
@@ -113,5 +124,16 @@ public class AddNewItemController {
             logger.error(e.getMessage());
             throw e;
         }
+    }
+
+    private String getPrincipal(){
+        String userName;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails)principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
+        return userName;
     }
 }

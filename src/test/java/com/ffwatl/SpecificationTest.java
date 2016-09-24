@@ -114,7 +114,7 @@ public class SpecificationTest {
 
     @Test
     public void imageReadTest(){
-        System.err.println("********" + euroSizeService.findAllUsed());
+        System.err.println("********" + itemService.findItemPresenterById(5));
     }
 
     @Test

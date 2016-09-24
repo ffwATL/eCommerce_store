@@ -5,12 +5,12 @@ $(function(){
     var login = $('#btn');
     var username = $('#username');
     var password = $('#password');
-    var uInVisible = $('li.mail');
+    var uInVisible = $('.mail');
     var c_danger = 'c-danger';
     var c_info = 'c-info';
     var uVisible = uInVisible.find('.visible');
     uInVisible = uInVisible.find('.invisible');
-    var pInVisible = $('li.lock');
+    var pInVisible = $('.lock');
     var pVisible = pInVisible.find('.visible');
     pInVisible = pInVisible.find('.invisible');
 
@@ -61,12 +61,12 @@ $(function(){
     }
     function paintInput(input, visible, invisible, correct){
         if(correct){
-            input.css({'border-bottom':'solid 4px #e7e7e7', background: 'white', color: '#727272'});
+            input.css({'border-bottom':'solid .1em #e7e7e7', background: 'white', color: '#727272'});
             invisible.hide();
             visible.show();
             return true;
         }else{
-            input.css({'border-bottom':'solid 4px #F25D75', background: '#FCE8EC', color: '#cc6e81'});
+            input.css({'border-bottom':'solid .1em #F25D75', background: '#FCE8EC', color: '#cc6e81'});
             visible.hide();
             invisible.show();
             return false;
