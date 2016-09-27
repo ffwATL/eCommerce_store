@@ -1,5 +1,6 @@
 package com.ffwatl.manage.entities.items;
 
+import com.ffwatl.manage.entities.i18n.I18n;
 import com.ffwatl.manage.entities.items.color.Color;
 import com.ffwatl.manage.entities.currency.Currency;
 import com.ffwatl.manage.entities.group.ItemGroup;
@@ -24,8 +25,8 @@ public class Item {
     @ManyToOne(cascade = CascadeType.MERGE)
     private ItemGroup itemGroup;
 
-    @Column(name = "name", nullable = false)
-    private String itemName;
+    @Embedded
+    private I18n itemName;
 
     private String vendorCode;
 
@@ -108,7 +109,7 @@ public class Item {
         return itemGroup;
     }
 
-    public String getItemName() {
+    public I18n getItemName() {
         return itemName;
     }
 
@@ -160,7 +161,7 @@ public class Item {
         this.itemGroup = itemGroup;
     }
 
-    public void setItemName(String itemName) {
+    public void setItemName(I18n itemName) {
         this.itemName = itemName;
     }
 

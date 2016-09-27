@@ -14,7 +14,7 @@ public class EuroSize implements Comparable<EuroSize>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Embedded
     private I18n name;
 
     private CommonCategory cat;

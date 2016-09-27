@@ -296,9 +296,8 @@ h4#options:hover{
 }
 #category-header{
     background-color: white;
-    padding-top: 0;
+    padding: 0;
     height: 50px;
-    padding-bottom: 0;
     margin-bottom: 0;
 }
 #global_edit_popup{

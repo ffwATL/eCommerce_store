@@ -54,6 +54,8 @@
     <bean id="settings" class="com.ffwatl.util.Settings">
         <constructor-arg index="0" type="java.lang.String" value="/storage/items/images/"/>
         <constructor-arg index="1" type="java.lang.String" value="c:\atl_folder\items\images\"/>
+        <property name="brandImgDir" value="c:\atl_folder\brand\images\"/>
+        <property name="brandImgUrl" value="/storage/brand/images/"/>
     </bean>
 
     <!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

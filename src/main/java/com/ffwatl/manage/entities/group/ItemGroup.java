@@ -1,6 +1,5 @@
 package com.ffwatl.manage.entities.group;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ffwatl.manage.entities.i18n.I18n;
 import com.ffwatl.manage.entities.items.CommonCategory;
 import com.ffwatl.manage.entities.users.User;
@@ -18,7 +17,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "itemsGroup")
-@Inheritance( strategy = InheritanceType.JOINED )
 public class ItemGroup implements Comparable<ItemGroup>, Serializable{
 
     /**
@@ -41,17 +39,13 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
     /**
      * Group name object that contains different language translations.
      */
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @Embedded
     private I18n groupName;
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private User createdBy;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JsonIgnore
-    private ItemGroup parent;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemGroup> child = new LinkedList<>();
 
     @Column(length = 2048)
@@ -72,10 +66,6 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
 
     public int getLevel() {
         return level;
-    }
-
-    public ItemGroup getParent() {
-        return parent;
     }
 
     public List<ItemGroup> getChild() {
@@ -112,11 +102,6 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
         this.description = description;
     }
 
-    public ItemGroup setParent(ItemGroup parent) {
-        this.parent = parent;
-        return this;
-    }
-
     public ItemGroup setChild(List<ItemGroup> child) {
         this.child = child;
         return this;
@@ -136,7 +121,6 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
                 ", cat=" + cat +
                 ", groupName=" + groupName +
                 ", createdBy=" + createdBy +
-                ", parent=" + (parent != null ? parent.groupName : null) +
                 ", child=" + child +
                 '}';
     }

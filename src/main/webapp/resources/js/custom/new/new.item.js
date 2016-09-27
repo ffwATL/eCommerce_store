@@ -15,7 +15,7 @@ $(function(){
     var cat;
     var item;
     var item_group_code;
-    var item_name_input = $('#item-name');
+    var item_name_en = $('#item-name-en');
     var quantity_input = $('#add_size_panel_qty_li').find('input');
     var origin_price_input = $('#origin_price');
     var sale_price_input = $('#sale_price');
@@ -101,7 +101,7 @@ $(function(){
     var conditionForAddSizeButtonGroup_1 = function(){
         return checkDropdown(gr_1_eu_dropDown) &&
                 checkLength(gr_1_waist) && checkLength(gr_1_length) && checkLength(gr_1_bottom)&&
-                checkLength(item_name_input)
+                checkLength(item_name_en)
     };
     function checkDropdown(button){
         return button.text() != locale.label_choose;
@@ -146,7 +146,7 @@ $(function(){
         if(item_group_code == 3) $('#example_group_11').show();
         else $('#example_group_1').show();
         unlock(add_size_button, false);
-        item_name_input.bind('input propertychange', function(){
+        item_name_en.bind('input propertychange', function(){
             checkAllFormsGroup();
         });
         origin_price_input.bind('input propertychange', function(){
@@ -207,7 +207,7 @@ $(function(){
     var conditionForAddSizeButtonGroup_2 = function(){
         return checkDropdown(gr2_eu_dropDown) && checkLength(gr_2_shoulders) &&
             checkLength(gr_2_length) && checkLength(gr_2_chest)&&
-            checkLength(quantity_input) && checkLength(item_name_input)
+            checkLength(quantity_input) && checkLength(item_name_en)
     };
     var group_2_bind_init = function(){
         $('#item_group_2').show();
@@ -216,7 +216,7 @@ $(function(){
             $('#example_group_3').show();
         }else $('#example_group_2').show();
         unlock(add_size_button, false);
-        item_name_input.bind('input propertychange', function(){
+        item_name_en.bind('input propertychange', function(){
             checkAllFormsGroup();
         });
         origin_price_input.bind('input propertychange', function(){
@@ -302,7 +302,7 @@ $(function(){
     };
     var checkForSaveButton = function(){
         return count_size > 0 && checkLength(origin_price_input) &&
-               checkLength(sale_price_input) && checkLength(item_name_input);
+               checkLength(sale_price_input) && checkLength(item_name_en);
     };
     var checkMeasurementInput = function(input){
         var value = input.val();
@@ -412,7 +412,7 @@ $(function(){
         updateFinalSizes();
         item = {
             gender: gender,
-            itemName: item_name_input.val(),
+            itemName: item_name_en.val(),
             currency: parseInt($('#currency').find('select').val()),
             itemGroup: {
                 id: itemGroup_id
@@ -438,7 +438,7 @@ $(function(){
     });
     function closeSession() {
         add_size_button.off('click');
-        item_name_input.unbind();
+        item_name_en.unbind();
         origin_price_input.unbind();
         sale_price_input.unbind();
         quantity_sizes = 0;
@@ -532,58 +532,41 @@ $(function(){
         $('.main-content .dropbtn').click(function(e){
             $(this).parent().find('.dropdown-content').toggle(150);
         });
-        getBrands($('li#brand').find('.dropdown-content'));
         $.ajax({
-            url: magic + "../../manage/ajax/get/itemgroup",
+            url: magic + "../../manage/ajax/get/item/options/clothes",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
             type: "POST",
-            data: {name: 'Clothes', lvl:1},
+            data: {groupName: 'Clothes', groupLvl:1},
             success: function(result){
-                treeData = createTreeData(result.child, 'items');
+                treeData = createTreeData(result.itemGroup.child, 'items');
                 setTimeout(function(){
                     drawCategoryPopup(treeData,$('#level-2').find('ul'),[3,4]);
-                },50)
+                },50);
+                fillColor(result.colorList);
+                drawBrandsDropDown(result.brandList, $('li#brand').find('.dropdown-content'), result.brandImgUrl);
             },
             error: function(result){
                 console.log('Error while getting itemsgroup =/');
                 console.log(result)
             }
         });
-        $.ajax({
-            url: magic + "../../manage/ajax/get/color/all",
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(csrf.header, csrf.token);
-            },
-            type: "POST",
-            success: function(result){
-                fillColor(result);
-            },
-            error: function(result){
-                console.log('Error while getting colors =/');
-                console.log(result)
-            }
-        });
     }
+
     function fillColor(data){
         var content = $('#color');
-        var span = '<span id="hex" class="hex" style="display: none"></span>';
-        content.find('.dropbtn').append(span);
         content = content.find('.dropdown-content');
         for(var i=0; i<data.length; i++){
             var color = data[i].hex;
-            if(color.length < 1) color = 'linear-gradient(45deg, #772d2d 1%,#f7f7f7 40%,#d69351 61%,#ffffff 96%)';
-            content.append('<a class="color-option">'+resolveLocale(data[i].color)+'<span class="hex" style="background: '+color+'"><input hidden value="'+data[i].id+'"></span></a>')
+            content.append('<a class="color-option">'+resolveLocale(data[i].color)+'<div class="hex" style="background: '+color+'"><input hidden value="'+data[i].id+'"></div></a>')
         }
         $('.color-option').click(function(){
             var t = $(this);
-            var parent = $('#hex').parent();
             var text = t.text();
             if(text.length > 15) text = text.substring(0,15) + '.';
-            parent.text(text);
-            parent.append('<span id="hex" class="hex"><input hidden value="'+ t.find('input').val()+'"></span>');
-            $('#hex').css({'background':t.find('span').css('background')});
+            $('#color').find('.dropbtn').text(text);
+            $('#color_sample').css({'background':t.find('.hex').css('background')});
         });
     }
     $('#add-cat-popup').popup({
@@ -592,31 +575,16 @@ $(function(){
         transition: 'all 0.3s'
     });
 
-    function getBrands(brandDropdown){
-        $.ajax({
-            url: magic + "../../manage/ajax/get/brand/all",
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(csrf.header, csrf.token);
-            },
-            type: "POST",
-            success: function(result){
-                drawBrandsDropDown(result, brandDropdown);
-            },
-            error: function(result){
-                console.log('Error while getting brands =/');
-                console.log(result);
-            }
-        });
-    }
-    function drawBrandsDropDown(data, brandDropdown){
+    function drawBrandsDropDown(data, brandDropdown, imageUrl){
         for(var i=0; i< data.length; i++){
-            brandDropdown.append('<a class="brand-option">'+data[i].name+'<input type="number" hidden value="'+data[i].id+'"></a>')
+            brandDropdown.append('<a class="brand-option">' + data[i].name + '<input type="number" hidden value="' + data[i].id + '"></a>')
         }
         $('.brand-option').click(function(){
             var tmp = $(this);
             var dropbtn = tmp.parent().parent().find('.dropbtn');
             dropbtn.text(tmp.text());
             dropbtn.append('<input type="number" hidden value="'+tmp.find('input').val()+'">');
+            $('#brand-logo').find('img').attr('src', magic+"../.." + imageUrl+tmp.text().toLowerCase().replace(/\s/g,"_")+'/logo.jpg').show();
         });
     }
 

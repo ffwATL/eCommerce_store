@@ -72,7 +72,7 @@ $(function(){
     /*Processing item data from ajax request*/
     function processData(data){
         $('#totalQTY').text(data.quantity);
-        $('.item_title').text(data.itemName);
+        $('.item_title').text(resolveLocale(data.itemName));
         $('#originPrice').text(data.originPrice/100);
         var salePrice =data.salePrice/100;
         if(data.discount > 0) {

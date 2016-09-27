@@ -12,7 +12,7 @@ public class Color {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Embedded
     private I18n color;
 
     @Column(length = 8)

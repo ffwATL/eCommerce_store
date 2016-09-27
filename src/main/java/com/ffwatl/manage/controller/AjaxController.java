@@ -16,6 +16,7 @@ import com.ffwatl.manage.presenters.items.ItemCatalogPresenter;
 import com.ffwatl.manage.presenters.items.ItemPresenter;
 import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
 import com.ffwatl.manage.presenters.items.update.ItemsExpressInfoPresenter;
+import com.ffwatl.manage.presenters.options.ClothesOptionsPresenter;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesPaginationService;
 import com.ffwatl.service.group.ItemGroupService;
@@ -142,6 +143,16 @@ public class AjaxController {
     @ResponseBody
     public ResponseEntity<ItemPresenter> ajaxSingleItem(@RequestParam long id){
         return ResponseEntity.ok(itemService.findItemPresenterById(id));
+    }
+
+    @RequestMapping(value = "/manage/ajax/get/item/options/clothes", method = RequestMethod.POST)
+    public ClothesOptionsPresenter ajaxClothesOptions(@RequestParam String groupName, @RequestParam int groupLvl){
+        ClothesOptionsPresenter presenter = new ClothesOptionsPresenter();
+        presenter.setItemGroup(itemGroupService.findByLvlAndByNameNoLazy(groupLvl, groupName));
+        presenter.setBrandList(brandService.findAll());
+        presenter.setColorList(colorService.findAll());
+        presenter.setBrandImgUrl(settings.getBrandImgUrl());
+        return presenter;
     }
 
     private Page<? extends Item> getPage(String cat, Map<String, String> params){

@@ -1,28 +1,20 @@
 package com.ffwatl.manage.entities.i18n;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.beans.Transient;
 
-@Entity
-public final class I18n implements Comparable<I18n> {
+@Embeddable
+public class I18n implements Comparable<I18n> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    @Column(length = 2048)
     private String locale_en;
 
+    @Column(length = 2048)
     private String locale_ru;
 
+    @Column(length = 2048)
     private String locale_ua;
-
-    public long getId() {
-        return id;
-    }
 
     public String getLocale_en() {
         return locale_en;
@@ -34,10 +26,6 @@ public final class I18n implements Comparable<I18n> {
 
     public String getLocale_ua() {
         return locale_ua;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public void setLocale_en(String locale_en) {
@@ -65,7 +53,6 @@ public final class I18n implements Comparable<I18n> {
     @Override
     public String toString() {
         return "I18n{" +
-                "id=" + id +
                 ", locale_en='" + locale_en + '\'' +
                 ", locale_ru='" + locale_ru + '\'' +
                 ", locale_ua='" + locale_ua + '\'' +

@@ -12,7 +12,7 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @Embedded
     private I18n name;
 
     public long getId() {

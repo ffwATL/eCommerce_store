@@ -2,6 +2,7 @@ package com.ffwatl.manage.presenters.items;
 
 import com.ffwatl.manage.entities.currency.Currency;
 import com.ffwatl.manage.entities.group.ItemGroup;
+import com.ffwatl.manage.entities.i18n.I18n;
 import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.manage.entities.items.clothes.size.Size;
@@ -42,7 +43,7 @@ public class ItemCatalog {
         return item.getItemGroup();
     }
 
-    public String getItemName() {
+    public I18n getItemName() {
         return item.getItemName();
     }
 

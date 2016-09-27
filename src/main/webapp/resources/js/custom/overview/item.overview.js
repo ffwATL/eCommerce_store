@@ -187,7 +187,7 @@ $(function(){
         for(var i=0; i<arr.length; i++){
             var item = arr[i];
             b.append('<li class="item"><a href="item?id='+item.id+'"><div class="inner"><div class="thumbnail">' +
-                '<img src="'+magic+'../..'+item.thumbnailUrl+'"></div><div class="item-name">'+item.itemName+'</div>' +
+                '<img src="'+magic+'../..'+item.thumbnailUrl+'"></div><div class="item-name">'+resolveLocale(item.itemName)+'</div>' +
                 '<div class="origin-price"><span class="price">'+item.originPrice/100+ '</span>' +
                 '<span class="currency"> ₴</span></div>' +
                 '<div class="sale-price"><span class="price">'+item.salePrice/100+ '</span>' +
@@ -264,7 +264,7 @@ $(function(){
         '<input hidden class="item-group-val" type="text" value="'+resolveLocale(item.itemGroup.groupName)+'"> ' +
         '<input hidden class="item-group-id" type="number" value="'+item.itemGroup.id+'">' +
         '<input hidden class="item-group-cat" value="'+item.itemGroup.cat+'"> </div></td>' +
-        '<td class="item-name"><a href="item?id='+item.id+'">'+item.itemName+'</a></td><td><span class="count">'+item.quantity+'</span></td>' +
+        '<td class="item-name"><a href="item?id='+item.id+'">'+resolveLocale(item.itemName)+'</a></td><td><span class="count">'+item.quantity+'</span></td>' +
         '<td><label class="switch-active"><input type="checkbox" '+checked+'><div class="slider"></div></label></td>' +
         '<td  class="date"><span class="import-date">'+format(new Date(item.importDate).toLocaleString(),'dd/MM/yyyy')+'</span></td>' +
         '<td><div class="origin-price"><span class="price">'+item.originPrice/100+'</span><span class="currency"> ₴</span></div></td>' +
@@ -1025,7 +1025,10 @@ function drawItems (result, paginationDiv){
         var itemGroupId = editClass.find('button.item-group input').val();
         var options = {
             salePrice: editClass.find('#sale').val()*100,
-            itemName:  editClass.find('#item-name').val(),
+            itemName:  {
+                locale_en: editClass.find('#item-name').val(),
+                locale_ru: '', locale_ua:''
+            },
             discount: editClass.find('#discount').val(),
             isActive: editClass.find('.activate input').prop('checked')
         };

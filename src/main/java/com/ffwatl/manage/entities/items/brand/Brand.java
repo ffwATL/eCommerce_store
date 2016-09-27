@@ -15,11 +15,8 @@ public class Brand {
     @Column(unique = true)
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Embedded
     private I18n description;
-
-    @Column(name = "image_url", unique = true)
-    private String imageURL;
 
     public long getId() {
         return id;
@@ -29,20 +26,12 @@ public class Brand {
         return description;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
 
     public void setDescription(I18n description) {
         this.description = description;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
     }
 
     public String getName() {

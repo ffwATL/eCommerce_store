@@ -17,14 +17,14 @@ public class Temp {
     public void readGson() throws FileNotFoundException {
         JsonReader reader = new JsonReader(new FileReader("item_group_tree.json"));
         ItemGroup i = new Gson().fromJson(reader, ItemGroup.class);
-        fillParent(null, i);
+      /*  fillParent(null, i);*/
         System.err.println(i);
     }
 
-    private void fillParent(ItemGroup parent, ItemGroup child){
+   /* private void fillParent(ItemGroup parent, ItemGroup child){
         if(child == null) return;
         for(ItemGroup i: child.setParent(parent).getChild()){
             fillParent(child, i);
         }
-    }
+    }*/
 }

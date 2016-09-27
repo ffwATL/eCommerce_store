@@ -113,6 +113,7 @@ public class SpecificationTest {
     }*/
 
     @Test
+    @Ignore
     public void imageReadTest(){
         System.err.println("********" + itemService.findItemPresenterById(5));
     }

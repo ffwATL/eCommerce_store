@@ -2,6 +2,7 @@ package com.ffwatl.manage.presenters.items;
 
 
 import com.ffwatl.manage.entities.group.ItemGroup;
+import com.ffwatl.manage.entities.i18n.I18n;
 import com.ffwatl.manage.entities.items.color.Color;
 import com.ffwatl.manage.presenters.users.UserGenPresenter;
 
@@ -11,7 +12,7 @@ public class ItemPresenter {
 
     private long id;
 
-    private String itemName;
+    private I18n itemName;
 
     private int quantity;
 
@@ -42,7 +43,7 @@ public class ItemPresenter {
         return addedBy;
     }
 
-    public String getItemName() {
+    public I18n getItemName() {
         return itemName;
     }
 
@@ -86,7 +87,7 @@ public class ItemPresenter {
         this.id = id;
     }
 
-    public void setItemName(String itemName) {
+    public void setItemName(I18n itemName) {
         this.itemName = itemName;
     }
 

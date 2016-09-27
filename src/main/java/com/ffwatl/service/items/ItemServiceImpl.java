@@ -76,19 +76,22 @@ public class ItemServiceImpl implements ItemService{
     @Override
     @Transactional
     public void updateSingleItem(ItemUpdatePresenter update){
-        Map<String, String> map = update.getOptions();
-        long[] ids = update.getIdentifiers();
-        for (long id : ids) {
-            Item item = findById(id);
-            if (map.get("isActive") != null) item.setIsActive(Boolean.valueOf(map.get("isActive")));
-            if (map.get("itemName") != null) item.setItemName(map.get("itemName"));
-            if (map.get("salePrice") != null) item.setSalePrice(Integer.valueOf(map.get("salePrice")));
-            if (map.get("discount") != null) item.setDiscount(Integer.valueOf(map.get("discount")));
-            if (map.get("color") != null) item.setColor(colorService.findById(Long.valueOf(map.get("color"))));
-            if (map.get("itemGroup") != null)
-                item.setItemGroup(itemGroupService.findById(Long.valueOf(map.get("itemGroup"))));
-            item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
+        Item item;
+        Item freshItem = update.getItem();
+        if (freshItem == null || (item =findById(freshItem.getId())) == null) return;
+
+        if (item.getColor().getId() != freshItem.getColor().getId())  {
+            item.setColor(colorService.findById(freshItem.getColor().getId()));
         }
+        if (item.getItemGroup().getId() != freshItem.getItemGroup().getId()) {
+            item.setItemGroup(itemGroupService.findById(freshItem.getItemGroup().getId()));
+        }
+
+        item.setItemName(freshItem.getItemName());
+        item.setIsActive(freshItem.isActive());
+        item.setSalePrice(freshItem.getSalePrice());
+        item.setDiscount(freshItem.getDiscount());
+        item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
     }
 
     @Override

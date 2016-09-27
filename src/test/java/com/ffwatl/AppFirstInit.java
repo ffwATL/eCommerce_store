@@ -1,3 +1,4 @@
+/*
 package com.ffwatl;
 
 
@@ -26,9 +27,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
@@ -39,7 +40,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-@TransactionConfiguration(defaultRollback = false)
+@Rollback(value = false)
 @ContextConfiguration({"/spring/application-config.xml",  "/spring/spring-security.xml"})
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -76,13 +77,17 @@ public class AppFirstInit {
     public void justTest() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("item_group_tree.json"),"UTF-8");
         ItemGroup i = new Gson().fromJson(reader, ItemGroup.class);
-        fillParent(null, i);
+       */
+/* fillParent(null, i);*//*
+
         System.err.println(i);
     }
 
 
     @Test
-    @Ignore
+   */
+/* @Ignore*//*
+
     public void A_setUserProfile(){
         List<UserProfile> list = new ArrayList<>();
         list.add(new UserProfile().setRole(Role.ADMINISTRATOR));
@@ -93,7 +98,9 @@ public class AppFirstInit {
     }
 
     @Test
-    @Ignore
+    */
+/*@Ignore*//*
+
     public void userCreationTest(){
         User user = new User();
         user.setFirstName("Misha");
@@ -109,7 +116,9 @@ public class AppFirstInit {
     }
 
     @Test
-    @Ignore
+    */
+/*@Ignore*//*
+
     public void fillBrand() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("brand.json"),"UTF-8");
         List<Brand> list = new Gson().fromJson(reader, BRAND_TYPE);
@@ -117,17 +126,23 @@ public class AppFirstInit {
     }
 
     @Test
-    @Ignore
+    */
+/*@Ignore*//*
+
     public void itemGroupInit() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("item_group_tree.json"),"UTF-8");
         ItemGroup i = new Gson().fromJson(reader, ItemGroup.class);
-        fillParent(null, i);
+        */
+/*fillParent(null, i);*//*
+
         itemGroupService.save(i);
 
     }
 
     @Test
-    @Ignore
+    */
+/*@Ignore*//*
+
     public void colorInitTest() throws FileNotFoundException, UnsupportedEncodingException {
         Type colorType = new TypeToken<List<Color>>() {
         }.getType();
@@ -137,7 +152,9 @@ public class AppFirstInit {
     }
 
     @Test
-    @Ignore
+    */
+/*@Ignore*//*
+
     public void euroSizeInit() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("euro_size.json"),"UTF-8");
         List<EuroSize> e = new Gson().fromJson(reader, EURO_SIZE_TYPE);
@@ -145,10 +162,12 @@ public class AppFirstInit {
     }
 
 
-    private void fillParent(ItemGroup parent, ItemGroup child){
+    */
+/*private void fillParent(ItemGroup parent, ItemGroup child){
         if(child == null) return;
         for(ItemGroup i: child.setParent(parent).getChild()){
             fillParent(child, i);
         }
-    }
-}
+    }*//*
+
+}*/
