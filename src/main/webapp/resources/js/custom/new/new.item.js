@@ -309,11 +309,6 @@ $(function(){
         if(value.length == 1 && value =='.' || value =='-') value = '';
         input.val(value.replace(/[^0-9.-]/g,''));
     };
-    /*var checkFloatInput = function(input){
-        var value = input.val();
-        value = parseFloat(value.replace(/[^0-9.]/g,''));
-        input.val(value);
-    };*/
     /**
      * Method for checking that selection is made for required select field.
      * @param select
@@ -622,12 +617,11 @@ $(function(){
                 var li = $(this);
                 li.parent().find('.chosen').removeClass('chosen');
                 var number = li.find('input').val();
-                var level = levels[data[number].level];
                 if(data[number].level == 2){
                     resolveGender(data[number].text)
                 }
                 li.addClass('chosen');
-                resolveActiveDependencies(level, data[number].text,data[number].nodes != undefined);
+                resolveActiveDependencies(levels[data[number].level], data[number].text,data[number].nodes != undefined);
                 if(data[number].nodes == undefined){
                     if(data[number].level == 4){
                         menClothesPattern = data[number].parent;
