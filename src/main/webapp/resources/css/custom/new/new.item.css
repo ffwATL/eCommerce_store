@@ -677,7 +677,7 @@ button.extra_note:hover{
 }
 #extraNotes_popup{
     min-height: 250px;
-    max-height: 250px;
+   /* max-height: 250px;*/
     min-width: 500px;
     max-width: 500px;
 }

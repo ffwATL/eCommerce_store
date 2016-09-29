@@ -74,6 +74,7 @@ public class AddNewItemController {
             proceedImages(settings.getPhotoDir() + "item_" + clothesItem.getId(), file);
             logger.info("clothes item saved: " + clothesItem);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             model.addAttribute("isError", true);
             model.addAttribute("errorMessage", e.getMessage());
             return "manage/new/result";
