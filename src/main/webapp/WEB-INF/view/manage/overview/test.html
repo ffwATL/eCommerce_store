@@ -5,67 +5,42 @@
     <title>Overview</title>
     <link href="../../../../resources/img/favicon.png" th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/png">
     <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/css/bootstrap.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/ion.rangeSlider.skinFlat.css" th:href="@{/resources/css/ion.rangeSlider.skinFlat.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/ion.rangeSlider.css" th:href="@{/css/ion.rangeSlider.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/css/custom/main.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/overview/popup.css" th:href="@{/resources/css/custom/overview/popup.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/custom/overview/item.overview.css" th:href="@{/css/custom/overview/item.overview.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/tabslet.css" th:href="@{/resources/css/custom/tabslet.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/new/new.item.css" th:href="@{/resources/css/custom/new/new.item.css}" type="text/css">
     <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
-    <script rel="script" src="../../../../resources/js/ion.rangeSlider.min.js" th:src="@{/resources/js/ion.rangeSlider.min.js}" ></script>
-    <script rel="script" src="../../../../resources/js/jquery.sticky-kit.min.js" th:src="@{/js/jquery.sticky-kit.min.js}" ></script>
     <script rel="script" src="../../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/js/jquery.popupoverlay.min.js}"></script>
-    <script rel="script" src="../../../../resources/js/custom/locale.js" th:src="@{/js/custom/locale.js}"></script>
     <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
     <script rel="script" src="../../../../resources/js/jquery.tabslet.min.js" th:src="@{/resources/js/jquery.tabslet.min.js}"></script>
     <!--<script rel="script" src="../../../resources/js/custom/overview/item.overview.js" th:src="@{/resources/js/custom/overview/item.overview.js}" ></script>-->
     <script>
         $(function(){
-            var globalEdit = $('#global_edit_popup');
-            globalEdit.popup({
+            var popup = $('#extraNotes_popup');
+            popup.popup({
                 opacity: 0.3,
                 transition: 'all 0.3s',
                 openelement: '.globalEdit',
                 closeelement: '.global_close'
             });
-            globalEdit.popup('show');
+            popup.popup('show');
         })
     </script>
 </head>
 <body>
-<div id="global_edit_popup" class="popup">
-    <div class="popup-header"><h3 th:text="#{label.expressEdit.price}">Price</h3></div>
-    <div class="global_sale">
-        <div class="up">
-            <ul class="list-inline">
-                <li><h4 th:text="#{label.expressEdit.sale}">Sale</h4></li>
-                <li class="sale">
-                    <input type="number">
-                </li>
-            </ul>
-
+<div id="extraNotes_popup" class="popup">
+    <div class="popup-header"><h3><span th:text="#{label.extraNotes.header}">Extra notes</span></h3></div>
+    <div>
+        <div class="popup-info">
+            <h5 th:text="#{label.extraNotes.headInfo}">Enter some important information about the size, condition or product at all. This information available only for administrators.</h5>
         </div>
-        <div class="float_right">
-            <p th:text="#{overview.items.globalEdit.info}">This values WILL BE ADDED to the current sale price</p>
-        </div>
-        <div class="down">
-            <ul class="list-inline">
-                <li><h4 th:text="(#{label.discount}+', %')">Discount, %</h4></li>
-                <li class="discount">
-                    <input type="number" min="0" max="100">
-                </li>
-            </ul>
-        </div>
-        <!--<div class="stat">
-            <ul class="list-inline">
-                <li>Selected:</li>
-                <li>12</li>
-            </ul>
-        </div>-->
+       <div class="input-block">
+           <textarea spellcheck="false"></textarea>
+       </div>
         <div class="buttons">
             <ul class="list-inline">
-                <li><button class="update-button button-typical global_close" th:text="#{label.update}">Update</button></li>
-                <li><button class="cancel-button button-bordered global_close" th:text="#{label.cancel}">Cancel</button></li>
+                <li><button class="update-button button-typical extra_close" th:text="#{label.accept}">Accept</button></li>
+                <li><button class="cancel-button button-bordered extra_close" th:text="#{label.cancel}">Cancel</button></li>
             </ul>
         </div>
     </div>

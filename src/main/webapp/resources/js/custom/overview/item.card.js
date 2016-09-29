@@ -69,12 +69,24 @@ $(function(){
         })
     }
 
+    function resolveItemDescription(desc){
+        console.log(desc);
+        var arr = desc.split('|'), ul = $('#itemDescription');
+        $('.f-li').remove();
+        for(var i = 0; i<arr.length; i++){
+            if(arr[i].length>0) ul.append('<li class="f-li">'+arr[i]+'</li>');
+        }
+    }
+
     /*Processing item data from ajax request*/
     function processData(data){
         $('#totalQTY').text(data.quantity);
-        $('.item_title').text(resolveLocale(data.itemName));
+        document.title = resolveLocale(data.itemName);
+        $('.item_title').text(document.title);
         $('#originPrice').text(data.originPrice/100);
-        var salePrice =data.salePrice/100;
+        var salePrice =data.salePrice/100,
+            code = resolveGroupCommonCode(resolveLocale(data.itemGroup.groupName)).code,
+            sp = $('.sp-wrap');
         if(data.discount > 0) {
             $('.sale').css('color','#cc6e81');
             $('span.prev_price').text(salePrice);
@@ -87,14 +99,14 @@ $(function(){
         $('#color_hex').css('background', data.color.hex);
         $('#color_name').text('('+resolveLocale(data.color.color)+')');
         $('#tab-2').find('p.info').text(data.brand.name);
-        $('#brand_logo').find('img').attr('src',magic+'../..'+data.brand.imageURL);
+        $('#brand_logo').find('img').attr('src',magic+'../..'+data.brandImgUrl+data.brand.name.toLowerCase().replace(/\s/g,"_")+'/logo.jpg');
         $('p.aboutBrand').text(resolveLocale(data.brand.description));
+        console.log(data.extraNotes);
         $('#tab-3').find('p').text(data.extraNotes);
         $('.productId li:eq(1)').text(data.id);
-        var code = resolveGroupCommonCode(resolveLocale(data.itemGroup.groupName)).code;
+        resolveItemDescription(resolveLocale(data.description));
         sizeBlockRoutine(data, code);
         sizeBlockOnClick($('.size_block').find('.sizeSelect_ul'),$('#inStock'), code);
-        var sp = $('.sp-wrap');
         for(i = 0; i<data.images.length; i++){
             var url = magic+'../..'+data.images[i];
             sp.append('<a href="'+url+'"><img src="'+url+'"></a>')
@@ -133,8 +145,7 @@ $(function(){
     }
 
     function resolveGroupCommonCode (name){
-        var pattern = name.trim();
-        var en = locale;
+        var pattern = name.trim(), en = locale;
         switch (pattern){
             case locale.group_jeans:           return {code: 1, item_group: en.group_jeans};
             case locale.group_chinos:          return {code: 2, item_group: en.group_chinos};

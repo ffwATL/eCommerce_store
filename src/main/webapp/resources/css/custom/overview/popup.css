@@ -1,5 +1,6 @@
 .popup{
     display: none;
+    background: white;
 }
 .popup .left img{
     border-left:  solid 1px rgb(204, 204, 204);
@@ -99,7 +100,7 @@
     margin-bottom: 20px;
     padding: 1px 20px 3px;
 }
-/*#edit_popup h3,*/ #global_edit_popup h3{
+/*#edit_popup h3,*/ #global_edit_popup h3, #extraNotes_popup h3{
    /* color: white;*/
     /*padding-bottom: 5px;*/
     margin-bottom: 0;
@@ -114,7 +115,7 @@
 #edit_popup h3,#global_edit_popup h3{
     margin-top: 25px;
 }
-#edit_popup h3 span, #global_edit_popup h3 span{
+#edit_popup h3 span, #global_edit_popup h3 span, #extraNotes_popup h3 span{
     background: #fff;
     padding: 0 15px;
     margin-left: 20.5%;
@@ -316,11 +317,11 @@ h4#options:hover{
 .up ul, .down ul{
     margin-left: 20px;
 }
-.global_sale .buttons ul{
+.global_sale .buttons ul, #extraNotes_popup .buttons ul{
     margin-right: 15px;
     float: right;
 }
-.global_sale .buttons button{
+.global_sale .buttons button, #extraNotes_popup .buttons button{
     width: 100px;
     height: 29px;
 }

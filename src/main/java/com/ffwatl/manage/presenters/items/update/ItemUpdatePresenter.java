@@ -4,6 +4,7 @@ package com.ffwatl.manage.presenters.items.update;
 import com.ffwatl.manage.entities.items.Item;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Map;
 
 public class ItemUpdatePresenter implements Serializable{
@@ -36,5 +37,14 @@ public class ItemUpdatePresenter implements Serializable{
 
     public void setOptions(Map<String, String> options) {
         this.options = options;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemUpdatePresenter{" +
+                "identifiers=" + Arrays.toString(identifiers) +
+                ", options=" + options +
+                ", item=" + item +
+                '}';
     }
 }

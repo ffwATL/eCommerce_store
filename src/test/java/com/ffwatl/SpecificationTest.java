@@ -6,9 +6,10 @@ import com.ffwatl.dao.items.ItemRepository;
 import com.ffwatl.manage.entities.filter.grid_filter.ClothesGridFilter;
 import com.ffwatl.manage.entities.filter.grid_filter.ItemGridFilter;
 import com.ffwatl.manage.entities.group.ItemGroup;
-import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
 import com.ffwatl.manage.entities.items.CommonCategory;
 import com.ffwatl.manage.entities.items.Item;
+import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesPaginationService;
 import com.ffwatl.service.group.ItemGroupService;
@@ -21,9 +22,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@TransactionConfiguration(defaultRollback = true)
+@Rollback(value = false)
 @ContextConfiguration({"/spring/application-config.xml", "/spring/spring-security.xml" })
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -121,10 +122,13 @@ public class SpecificationTest {
     @Test
     @Ignore
     public void test1(){
-        String t = "black|red";
-        for(String s: t.split("\\|")){
-            System.err.println("s: "+ s);
-        }
+        ItemUpdatePresenter update = new ItemUpdatePresenter();
+        Item item = new Item();
+        item.setId(1);
+        item.setIsActive(true);
+        update.setItem(item);
+        itemService.updateSingleItem(update);
+        System.err.println("*****"+itemService.findById(1));
     }
 
     @Test

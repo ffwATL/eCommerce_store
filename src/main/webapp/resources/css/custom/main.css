@@ -154,7 +154,7 @@ label{
     border: solid black .1em;
     color: black;
 }
-.button-bordered:hover{
+.button-bordered:hover, .button-bordered:disabled{
     border: solid #8b8b8b .1em;
     color: #8b8b8b;
 }

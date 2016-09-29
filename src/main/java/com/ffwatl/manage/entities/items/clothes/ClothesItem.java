@@ -51,7 +51,7 @@ public class ClothesItem extends Item {
 
     @Override
     public String toString() {
-        return "ClothesItem{" +
+        return super.toString() +" ClothesItem{" +
                 "id=" + getId() +
                 ", size=" + size +
                 ", brand=" + brand +

@@ -10,6 +10,8 @@ public class ClothesItemPresenter extends ItemPresenter{
 
     private Brand brand;
 
+    private String brandImgUrl;
+
     private List<Size> size;
 
     public ClothesItemPresenter(){}
@@ -27,6 +29,12 @@ public class ClothesItemPresenter extends ItemPresenter{
         setImages(presenter.getImages());
         setThumbs(presenter.getThumbs());
         setAddedBy(presenter.getAddedBy());
+        setDescription(presenter.getDescription());
+        setExtraNotes(presenter.getExtraNotes());
+    }
+
+    public String getBrandImgUrl() {
+        return brandImgUrl;
     }
 
     public Brand getBrand() {
@@ -43,6 +51,10 @@ public class ClothesItemPresenter extends ItemPresenter{
 
     public void setSize(List<Size> size) {
         this.size = size;
+    }
+
+    public void setBrandImgUrl(String brandImgUrl) {
+        this.brandImgUrl = brandImgUrl;
     }
 
     @Override

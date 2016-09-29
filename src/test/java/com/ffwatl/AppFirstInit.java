@@ -2,7 +2,6 @@
 package com.ffwatl;
 
 
-
 import com.ffwatl.dao.items.ColorRepository;
 import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.entities.items.brand.Brand;
@@ -77,17 +76,11 @@ public class AppFirstInit {
     public void justTest() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("item_group_tree.json"),"UTF-8");
         ItemGroup i = new Gson().fromJson(reader, ItemGroup.class);
-       */
-/* fillParent(null, i);*//*
-
         System.err.println(i);
     }
 
 
     @Test
-   */
-/* @Ignore*//*
-
     public void A_setUserProfile(){
         List<UserProfile> list = new ArrayList<>();
         list.add(new UserProfile().setRole(Role.ADMINISTRATOR));
@@ -98,9 +91,6 @@ public class AppFirstInit {
     }
 
     @Test
-    */
-/*@Ignore*//*
-
     public void userCreationTest(){
         User user = new User();
         user.setFirstName("Misha");
@@ -116,9 +106,6 @@ public class AppFirstInit {
     }
 
     @Test
-    */
-/*@Ignore*//*
-
     public void fillBrand() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("brand.json"),"UTF-8");
         List<Brand> list = new Gson().fromJson(reader, BRAND_TYPE);
@@ -126,23 +113,14 @@ public class AppFirstInit {
     }
 
     @Test
-    */
-/*@Ignore*//*
-
     public void itemGroupInit() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("item_group_tree.json"),"UTF-8");
         ItemGroup i = new Gson().fromJson(reader, ItemGroup.class);
-        */
-/*fillParent(null, i);*//*
-
         itemGroupService.save(i);
 
     }
 
     @Test
-    */
-/*@Ignore*//*
-
     public void colorInitTest() throws FileNotFoundException, UnsupportedEncodingException {
         Type colorType = new TypeToken<List<Color>>() {
         }.getType();
@@ -152,9 +130,6 @@ public class AppFirstInit {
     }
 
     @Test
-    */
-/*@Ignore*//*
-
     public void euroSizeInit() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("euro_size.json"),"UTF-8");
         List<EuroSize> e = new Gson().fromJson(reader, EURO_SIZE_TYPE);
@@ -164,10 +139,14 @@ public class AppFirstInit {
 
     */
 /*private void fillParent(ItemGroup parent, ItemGroup child){
-        if(child == null) return;
-        for(ItemGroup i: child.setParent(parent).getChild()){
-            fillParent(child, i);
-        }
-    }*//*
+            if(child == null) return;
+            for(ItemGroup i: child.setParent(parent).getChild()){
+                fillParent(child, i);
+            }
+        }*//*
 
-}*/
+
+
+
+}
+*/

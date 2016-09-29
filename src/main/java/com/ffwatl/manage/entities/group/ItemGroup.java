@@ -51,9 +51,15 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
     @Column(length = 2048)
     private String description;
 
+    private int weight;
+
 
     public User getCreatedBy() {
         return createdBy;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 
     public long getId() {
@@ -112,6 +118,9 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
         return this;
     }
 
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
 
     @Override
     public String toString() {

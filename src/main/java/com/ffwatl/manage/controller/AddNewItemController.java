@@ -5,8 +5,10 @@ import com.ffwatl.manage.entities.items.brand.Brand;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesItemService;
+import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,9 +19,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -29,6 +37,8 @@ public class AddNewItemController {
     private BrandService brandService;
     @Autowired
     private ClothesItemService clothesItemService;
+    @Autowired
+    private Settings settings;
 
 
     private static final Logger logger = LogManager.getLogger("com.ffwatl.manage.controller.AddNewItemController");
@@ -53,7 +63,6 @@ public class AddNewItemController {
     public String addClothesItem(@RequestParam("files[]") List<MultipartFile> file, HttpServletRequest request,
                                                  ModelMap model, @RequestParam String item) throws IOException {
         ClothesItem clothesItem;
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
             clothesItem = new ObjectMapper().readValue(item, ClothesItem.class);
             if(clothesItem == null) {
@@ -61,7 +70,8 @@ public class AddNewItemController {
                 throw new NullPointerException();
             }
             file.remove(file.size() - 1);
-            clothesItemService.save(clothesItem, file, email);
+            clothesItemService.save(clothesItem, SecurityContextHolder.getContext().getAuthentication().getName());
+            proceedImages(settings.getPhotoDir() + "item_" + clothesItem.getId(), file);
             logger.info("clothes item saved: " + clothesItem);
         } catch (Exception e) {
             model.addAttribute("isError", true);
@@ -79,6 +89,30 @@ public class AddNewItemController {
         model.addAttribute("isError", false);
         model.addAttribute("itemName", clothesItem.getItemName().getValue(cookie));
         return "manage/new/result";
+    }
+
+    private void proceedImages(String dirPath, List<MultipartFile> file) throws IOException {
+        Files.createDirectory(Paths.get(dirPath).toAbsolutePath());
+        int count = 1;
+        for(MultipartFile f: file){
+            resizeAndSave(f, dirPath, count++);
+        }
+    }
+
+    private void resizeAndSave(MultipartFile f, String dirPath, int count) throws IOException {
+        if (f == null) return;
+        try(OutputStream os = new FileOutputStream(new File(dirPath + "\\"+"image"+count+"xl.jpg"))) {
+            ImageIO.write(Scalr.resize(ImageIO.read(f.getInputStream()),
+                    115), "jpeg", new File(dirPath + "\\image" + count + "s.jpg"));
+            ImageIO.write(Scalr.resize(ImageIO.read(f.getInputStream()),
+                    230), "jpeg", new File(dirPath + "\\image"+count+"m.jpg"));
+            ImageIO.write(Scalr.resize(ImageIO.read(f.getInputStream()),
+                    370), "jpeg", new File(dirPath + "\\image"+count+"l.jpg"));
+            os.write(f.getBytes());
+        }catch (IOException e){
+            logger.error(e.getMessage());
+            throw e;
+        }
     }
 
 }

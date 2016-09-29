@@ -48,6 +48,23 @@
         <button class="button button-typical close_group" id="accept_group" disabled th:text="#{label.accept}">Accept</button>
     </div>
 </div>
+<div id="extraNotes_popup" class="popup">
+    <div class="popup-header"><h3><span th:text="#{label.extraNotes.header}">Extra notes</span></h3></div>
+    <div>
+        <div class="popup-info">
+            <h5 th:text="#{label.extraNotes.headInfo}">Enter some important information about the size, condition or product at all. This information available only for administrators.</h5>
+        </div>
+        <div class="input-block">
+            <textarea spellcheck="false" id="ex-info"></textarea>
+        </div>
+        <div class="buttons">
+            <ul class="list-inline">
+                <li><button class="accept-button button-typical extra_close" th:text="#{label.accept}">Accept</button></li>
+                <li><button class="cancel-button button-bordered extra_close" th:text="#{label.cancel}">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="content-wrapper">
     <div th:replace="template :: header" class="header col-lg-12 text-center">
         <input type="text" placeholder="Search" class="form-control">
@@ -59,32 +76,31 @@
 
         <div class="input-form center-block">
             <div class="info">
-                <h3 th:text="#{new.item.generalInformation}">Item name</h3>
+                <h3 th:text="#{new.item.itemName}">Item name</h3>
                 <h5>Enter the item name un EN, RU and UA.</h5>
                 <img class="info-pic" src="../../../../resources/img/new/item-name.svg" th:src="@{/resources/img/new/item-name.svg}">
             </div>
             <div id="section_0">
                 <ul class="list-inline">
                     <li> <label class="name" th:utext="#{locale.en}">EN</label></li>
-                    <li><input class="input-name highlight height" id="item-name-en" type="text"></li>
+                    <li><input class="input-name highlight height" id="item-name-en" type="text" spellcheck="false"></li>
                 </ul>
                 <ul class="list-inline">
                     <li> <label class="name" th:utext="#{locale.ru}">RU</label></li>
-                    <li><input class="input-name highlight height" id="item-name-ru" type="text"></li>
+                    <li><input class="input-name highlight height" id="item-name-ru" type="text" spellcheck="false"></li>
                 </ul>
                 <ul class="list-inline">
                     <li> <label class="name" th:utext="#{locale.ua}">UA</label></li>
-                    <li><input class="input-name highlight height" id="item-name-ua" type="text"></li>
+                    <li><input class="input-name highlight height" id="item-name-ua" type="text" spellcheck="false"></li>
                 </ul>
             </div>
             <div class="info">
-                <h3 th:text="#{new.item.generalInformation}">Category</h3>
-                <h5>Choose item category</h5>
+                <h3 th:text="#{new.item.itemGroup}">Category</h3>
+                <h5 th:text="#{new.item.itemGroup.h5}">Choose item category</h5>
                 <img class="info-pic" src="../../../../resources/img/new/category.svg" th:src="@{/resources/img/new/category.svg}">
             </div>
             <div id="section_1">
                 <div id="group_one">
-                    <label class="block" th:utext="|#{new.item.itemGroup}|+#{red}">Item group<span class="red">*</span></label>
                     <button class="button button-bordered changeGroup" id="changeGroup" th:text="#{label.change}">Change</button>
                 </div>
                 <div id="group_two">
@@ -112,7 +128,7 @@
                         </li>
                         <li class="logo">
                             <div id="brand-logo">
-                                <img src="../../../../resources/img/asos/smog_logo.jpg">
+                                <img src="">
                             </div>
                         </li>
                     </ul>
@@ -130,7 +146,7 @@
                             </div>
                         </li>
                     </ul>
-                    <div id="color_sample"></div>
+                    <div id="color_sample"><input hidden type="number"></div>
                 </div>
                 <div class="info">
                     <h3 th:text="#{new.item.photos}">Photos</h3>
@@ -150,7 +166,7 @@
                 <div id="clothes_items">
                     <div class="info">
                         <h3 th:text="#{new.item.clothes.sizeMeasurements}">Size and measurements</h3>
-                        <h5>Enter measurements and add items size.</h5>
+                        <h5 th:text="#{new.item.clothes.sizeMeasurements.h5}">Enter measurements and add items size.</h5>
                         <img class="info-pic" src="../../../../resources/img/new/measuring-tape.svg" th:src="@{/resources/img/new/measuring-tape.svg}">
                     </div>
                     <div id="item_group_1">
@@ -234,33 +250,37 @@
             <div id="section_4">
                 <div id="section_description" >
                     <div class="info">
-                        <h3>Features</h3>
-                        <h5>Describe in short your item. At least one feature needs to be added.</h5>
+                        <h3 th:text="#{label.features}">Features</h3>
+                        <h5 th:text="#{label.features.h5}">Describe in short your item. At least one feature needs to be added.</h5>
                         <img class="info-pic" src="../../../../resources/img/new/features.svg" th:src="@{/resources/img/new/features.svg}">
                     </div>
                     <ul class="list-inline item_description">
                         <li><label class="name" th:utext="#{locale.en}">EN</label>
-                            <textarea class="en" spellcheck="false"></textarea>
+                            <textarea class="en featureBlock" spellcheck="false"></textarea>
                         </li>
                         <li><label class="name" th:utext="#{locale.ru}">RU</label>
-                            <textarea class="ru" spellcheck="false"></textarea>
+                            <textarea class="ru featureBlock" spellcheck="false"></textarea>
                         </li>
                         <li><label class="name" th:utext="#{locale.ua}">UA</label>
-                            <textarea class="ua" spellcheck="false"></textarea>
+                            <textarea class="ua featureBlock" spellcheck="false"></textarea>
                         </li>
                     </ul>
-                    <button class="button-bordered button feature">Add feature</button>
+                    <button class="button-bordered button feature" disabled>Add feature</button>
                     <button class="extra_note"></button>
-                    <ul class="list-inline feature_preview">
-                        <li th:remove="all"><input type="text" class="height" value="100% cotton"></li>
-                        <li th:remove="all" class="marg"><input type="text" class="height" value="100% хлопок"  spellcheck="false"></li>
-                        <li th:remove="all" class="marg"><input type="text" class="height" value="100% бавовна"  spellcheck="false"></li>
-                        <li th:remove="all"><button class="remove_row"></button></li>
-                        <li th:remove="all"><input type="text" class="height" value="Skinny fit"  spellcheck="false"></li>
-                        <li th:remove="all" class="marg"><input type="text" class="height" value="Зауженный фасон" spellcheck="false"></li>
-                        <li th:remove="all" class="marg"><input type="text" class="height" value="Завужений фасон" spellcheck="false"></li>
-                        <li th:remove="all"><button class="remove_row"></button></li>
-                    </ul>
+                    <div class="feature_holder">
+                       <!-- <ul class="list-inline feature_preview">
+                            <li th:remove="all"><input type="text" class="height" value="100% cotton"></li>
+                            <li th:remove="all" class="marg"><input type="text" class="height" value="100% хлопок"  spellcheck="false"></li>
+                            <li th:remove="all" class="marg"><input type="text" class="height" value="100% бавовна"  spellcheck="false"></li>
+                            <li th:remove="all"><button class="remove_row"></button></li>
+                        </ul>
+                        <ul class="list-inline feature_preview">
+                            <li th:remove="all"><input type="text" class="height" value="100% cotton"></li>
+                            <li th:remove="all" class="marg"><input type="text" class="height" value="100% хлопок"  spellcheck="false"></li>
+                            <li th:remove="all" class="marg"><input type="text" class="height" value="100% бавовна"  spellcheck="false"></li>
+                            <li th:remove="all"><button class="remove_row"></button></li>
+                        </ul>-->
+                    </div>
                 </div>
                 <div class="info">
                     <h3 th:text="#{new.item.price}">Price</h3>

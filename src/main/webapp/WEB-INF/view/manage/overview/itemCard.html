@@ -84,7 +84,9 @@
                     </li>
                 </ul>
                 <br>
-                <div id="brand_logo"><img src="../../../../resources/img/asos/asos_logo.jpg"></div>
+                <div id="brand_logo"><!--<img src="../../../../resources/img/asos/asos_logo.jpg">-->
+                    <img src="">
+                </div>
                 <table id="info_table" style="margin-bottom: 10px">
                     <tr>
                         <td class="leftInfo" th:text="(#{label.totalQty}+':')">Total quantity:</td>
@@ -177,10 +179,10 @@
                         </ul>-->
                         <p class="info"><span style="font-weight: 600" th:text="#{label.features}">Features</span></p>
                         <ul class="list-group-item-text" id="itemDescription">
-                            <li>Skinny fit</li>
-                            <li>Stretch cotton</li>
-                            <li>Zip fly</li>
-                            <li>98% cotton, 2% elastan</li>
+                            <li th:remove="all">Skinny fit</li>
+                            <li th:remove="all">Stretch cotton</li>
+                            <li th:remove="all">Zip fly</li>
+                            <li th:remove="all">98% cotton, 2% elastan</li>
                         </ul>
                     </div>
                     <div id="tab-2">
@@ -191,7 +193,7 @@
                         <p class="aboutBrand">Known for their skinny jeans and their characteristic skull logo, Stockholm based label Cheap Monday channel their slick Scandinavian style to a range of clothing, with everything from check shirts to selvedge denim.</p>
                     </div>
                     <div id="tab-3">
-                        <p>One of size W34 L32 have W32 L32 measurements. This size marked * on the top of package.
+                        <p th:text="''">One of size W34 L32 have W32 L32 measurements. This size marked * on the top of package.
                             And added to the system as W32 L32 size.</p>
                     </div>
                 </div>

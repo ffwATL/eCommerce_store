@@ -35,7 +35,7 @@ button.size_choice{
     height: 32px;
     font-size: 16px;
     color: black;
-    border: solid black 2px;
+    border: solid black .1em;
     background: white url("../../../img/down-arrow.svg") no-repeat 255px;
 }
 .leftInfo{

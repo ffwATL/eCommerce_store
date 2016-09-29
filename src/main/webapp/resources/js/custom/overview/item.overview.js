@@ -845,6 +845,7 @@ function drawItems (result, paginationDiv){
             var i = $(this);
             var id = parseInt(i.find('.id').text());
             var name = i.find('.item-name a').text();
+
             var sale = parseInt(i.find('.sale .price').text());
             var origin = parseInt(i.find('.origin-price .price').text());
             var status_switch = i.find('.switch-active input');
@@ -861,7 +862,13 @@ function drawItems (result, paginationDiv){
                 onCheckBoxSelected(false);
                 leftSide.fadeOut(100);
                 staticFilter.updates.id.push(id);
-                var options = {isActive: this.checked};
+                var options = {
+                    item:{
+                        id: id,
+                        isActive: this.checked,
+                        salePrice: sale*100
+                    }
+                };
                 if(this.checked){
                     console.log('activate item with id: '+ id)}
                 else{
@@ -952,11 +959,9 @@ function drawItems (result, paginationDiv){
         },150);
     }
 
-    function sendUpdateSingleItem (options, all){
-        var update = JSON.stringify({
-            options: options,
-            identifiers: staticFilter.updates.id
-        });
+    function sendUpdateSingleItem (options){
+        var update = JSON.stringify(options);
+        console.log(update);
         $.ajax({
             url: magic + "../../manage/ajax/update/item/single",
             beforeSend: function (xhr) {
@@ -971,7 +976,7 @@ function drawItems (result, paginationDiv){
                 displayLeftSide();
                 onCheckBoxSelected(false);
                 if(staticFilter.updates.id.length ==  staticFilter.items.length)  staticFilter.filter.pge = 0;
-                if(all) changeAllCheckInput(options.isActive);
+                /*if(all) changeAllCheckInput(options.isActive);*/
                 staticFilter.updates.id =[];
             },
             error: function(result){
@@ -981,16 +986,11 @@ function drawItems (result, paginationDiv){
         });
     }
 
-    function changeAllCheckInput(condition){
-        if(currentTab == allTab) $('.switch-active').find('input').prop('checked', condition);
-        else refreshItems();
-    }
-
     $('.status_a').click(function(){
-        sendUpdateSingleItem({isActive: true},true)
+        sendUpdateItems({isActive: true},true)
     });
     $('.status_b').click(function(){
-        sendUpdateSingleItem({isActive: false},true)
+        sendUpdateItems({isActive: false},true)
     });
     $('.sort-by').text();
 
@@ -999,13 +999,7 @@ function drawItems (result, paginationDiv){
             $(this).parent().find('.dropdown-content').toggle(150);
         });
     }
-
     initPopupDropDown();
-    /*window.onclick = function(event) {
-        if (event.target.className != 'dropbtn') {
-            $('.dropdown-content').hide();
-        }
-    };*/
     editClass.popup({
         opacity: 0.3,
         transition: 'all 0.3s',
@@ -1023,19 +1017,20 @@ function drawItems (result, paginationDiv){
         staticFilter.updates.id.push(editClass.find('.id').val());
         var colorId = editClass.find('li.color input').val();
         var itemGroupId = editClass.find('button.item-group input').val();
-        var options = {
-            salePrice: editClass.find('#sale').val()*100,
-            itemName:  {
-                locale_en: editClass.find('#item-name').val(),
-                locale_ru: '', locale_ua:''
-            },
-            discount: editClass.find('#discount').val(),
-            isActive: editClass.find('.activate input').prop('checked')
-        };
-        if(tempItemOpt.colorId !=  colorId) options.color = colorId;
-        if(tempItemOpt.itemGroupId != itemGroupId) options.itemGroup = itemGroupId;
-        console.log(options);
-        $.when(sendUpdateSingleItem(options, false)).then(function(){
+        var options = {item:{
+                        salePrice: editClass.find('#sale').val()*100,
+                        itemName:  {
+                            locale_en: editClass.find('#item-name').val(),
+                            locale_ru: '', locale_ua:''
+                        },
+                        discount: editClass.find('#discount').val(),
+                        isActive: editClass.find('.activate input').prop('checked'),
+                        color: {},
+                        itemGroup:{}
+        }};
+        if(tempItemOpt.colorId !=  colorId) options.item.color.id = colorId;
+        if(tempItemOpt.itemGroupId != itemGroupId) options.itemGroup.id = itemGroupId;
+        $.when(sendUpdateSingleItem(options)).then(function(){
             setTimeout(function(){
                 refreshItems();
             },250);
@@ -1076,6 +1071,7 @@ function drawItems (result, paginationDiv){
         var inp = globalEdit.find('.discount input');
         inp.prop('disabled', !inp.prop('disabled'));
     });
+
     function sendUpdateItems(options){
         var update = JSON.stringify({
             options: options,

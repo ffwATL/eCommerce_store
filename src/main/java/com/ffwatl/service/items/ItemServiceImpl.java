@@ -78,16 +78,15 @@ public class ItemServiceImpl implements ItemService{
     public void updateSingleItem(ItemUpdatePresenter update){
         Item item;
         Item freshItem = update.getItem();
-        if (freshItem == null || (item =findById(freshItem.getId())) == null) return;
+        if (freshItem == null || (item = findById(freshItem.getId())) == null) return;
 
-        if (item.getColor().getId() != freshItem.getColor().getId())  {
+        if (freshItem.getColor() != null && item.getColor().getId() != freshItem.getColor().getId())  {
             item.setColor(colorService.findById(freshItem.getColor().getId()));
         }
-        if (item.getItemGroup().getId() != freshItem.getItemGroup().getId()) {
+        if (freshItem.getItemGroup() != null && item.getItemGroup().getId() != freshItem.getItemGroup().getId()) {
             item.setItemGroup(itemGroupService.findById(freshItem.getItemGroup().getId()));
         }
-
-        item.setItemName(freshItem.getItemName());
+        if(freshItem.getItemName() != null) item.setItemName(freshItem.getItemName());
         item.setIsActive(freshItem.isActive());
         item.setSalePrice(freshItem.getSalePrice());
         item.setDiscount(freshItem.getDiscount());
@@ -105,6 +104,7 @@ public class ItemServiceImpl implements ItemService{
             Item item = findById(id);
             item.setSalePrice(item.getSalePrice() + priceValue);
             if(discount > -1) item.setDiscount(discount);
+            if(map.get("isActive") != null) item.setIsActive(Boolean.valueOf(map.get("isActive")));
             item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
         }
     }
@@ -124,6 +124,7 @@ public class ItemServiceImpl implements ItemService{
             cPresenter.setBrand(((ClothesItem) item).getBrand());
             Collections.sort(((ClothesItem) item).getSize());
             cPresenter.setSize(((ClothesItem) item).getSize());
+            cPresenter.setBrandImgUrl(settings.getBrandImgUrl());
             return cPresenter;
         }
         return presenter;
@@ -160,6 +161,8 @@ public class ItemServiceImpl implements ItemService{
         presenter.setQuantity(item.getQuantity());
         presenter.setImages(urlImages(photoDir, "xl.jpg", url));
         presenter.setThumbs(urlImages(photoDir, "s.jpg", url));
+        presenter.setDescription(item.getDescription());
+        presenter.setExtraNotes(item.getExtraNotes());
         return presenter;
     }
 

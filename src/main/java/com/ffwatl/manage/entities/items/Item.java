@@ -26,6 +26,11 @@ public class Item {
     private ItemGroup itemGroup;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "locale_en", column = @Column(name = "locale_en_1")),
+            @AttributeOverride(name = "locale_ru", column = @Column(name = "locale_ru_1")),
+            @AttributeOverride(name = "locale_ua", column = @Column(name = "locale_ua_1"))
+    })
     private I18n itemName;
 
     private String vendorCode;
@@ -39,8 +44,13 @@ public class Item {
     @Column(length = 2)
     private int discount = 0;
 
-    @Column(length = 2048)
-    private String description;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "locale_en", column = @Column(name = "locale_en_2")),
+            @AttributeOverride(name = "locale_ru", column = @Column(name = "locale_ru_2")),
+            @AttributeOverride(name = "locale_ua", column = @Column(name = "locale_ua_2"))
+    })
+    private I18n description;
 
     @Column(length = 2048)
     private String extraNotes;
@@ -85,7 +95,7 @@ public class Item {
         return isUsed;
     }
 
-    public String getDescription() {
+    public I18n getDescription() {
         return description;
     }
 
@@ -149,7 +159,7 @@ public class Item {
         this.id = id;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(I18n description) {
         this.description = description;
     }
 
@@ -225,7 +235,7 @@ public class Item {
     public String toString() {
         return "Item{" +
                 "id=" + id +
-                ", itemGroup=" + itemGroup.getGroupName() +
+                ", itemGroup=" + itemGroup +
                 ", itemName='" + itemName + '\'' +
                 ", quantity=" + quantity +
                 ", color='" + color + '\'' +

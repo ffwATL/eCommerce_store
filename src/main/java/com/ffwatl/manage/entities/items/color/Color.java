@@ -18,18 +18,12 @@ public class Color {
     @Column(length = 8)
     private String hex;
 
-    private boolean print = false;
-
     public long getId() {
         return id;
     }
 
     public String getHex() {
         return hex;
-    }
-
-    public boolean isPrint() {
-        return print;
     }
 
     public I18n getColor() {
@@ -49,18 +43,12 @@ public class Color {
         return this;
     }
 
-    public Color setPrint(boolean print) {
-        this.print = print;
-        return this;
-    }
-
     @Override
     public String toString() {
         return "Color{" +
                 "id=" + id +
                 ", color=" + color +
                 ", hex='" + hex + '\'' +
-                ", print=" + print +
                 '}';
     }
 }

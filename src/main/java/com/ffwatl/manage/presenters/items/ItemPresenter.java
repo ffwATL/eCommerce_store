@@ -34,9 +34,21 @@ public class ItemPresenter {
 
     private UserGenPresenter addedBy;
 
+    private I18n description;
+
+    private String extraNotes;
+
 
     public long getId() {
         return id;
+    }
+
+    public String getExtraNotes() {
+        return extraNotes;
+    }
+
+    public I18n getDescription() {
+        return description;
     }
 
     public UserGenPresenter getAddedBy() {
@@ -131,20 +143,31 @@ public class ItemPresenter {
         this.addedBy = addedBy;
     }
 
+    public void setDescription(I18n description) {
+        this.description = description;
+    }
+
+    public void setExtraNotes(String extraNotes) {
+        this.extraNotes = extraNotes;
+    }
+
     @Override
     public String toString() {
         return "ItemPresenter{" +
                 "id=" + id +
-                ", itemName='" + itemName + '\'' +
+                ", itemName=" + itemName +
                 ", quantity=" + quantity +
                 ", originPrice=" + originPrice +
                 ", salePrice=" + salePrice +
                 ", discount=" + discount +
                 ", active=" + active +
                 ", color=" + color +
-                ", itemGroup=" + itemGroup.getGroupName() +
+                ", itemGroup=" + itemGroup +
                 ", images=" + images +
                 ", thumbs=" + thumbs +
+                ", addedBy=" + addedBy +
+                ", description=" + description +
+                ", extraNotes='" + extraNotes + '\'' +
                 '}';
     }
 }

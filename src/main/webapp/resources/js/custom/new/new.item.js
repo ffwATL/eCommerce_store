@@ -1,33 +1,23 @@
 /*<![CDATA[*/
 $(function(){
-    var magic =/*[[@{context:}]]*/'';
-    var lang = $.cookie("app");
+    var magic =/*[[@{context:}]]*/'',
+        lang = $.cookie("app");
     if(lang == undefined || lang.length < 2) lang = 'en';
-    var locale = getLocale(lang);
-    var menClothesPattern = '';
-    var pattern;
-    var count = 0;
-    var count_size = 0;
-    var deleted = [];
-    var all_sizes = [];
-    var final_sizes = [];
-    var quantity_sizes = 0;
-    var cat;
-    var item;
-    var item_group_code;
-    var item_name_en = $('#item-name-en');
-    var quantity_input = $('#add_size_panel_qty_li').find('input');
-    var origin_price_input = $('#origin_price');
-    var sale_price_input = $('#sale_price');
-    var add_size_button = $('#add_size_panel_btn_li').find('button');
-    var save_button = $('#save');
-    var itemGroup_id;
-    var gender = 0;
-    var csrf = {
-        token : $("meta[name='_csrf']").attr("content"),
-        header : $("meta[name='_csrf_header']").attr("content")
-    };
-    var levels = [{},{},
+    var locale = getLocale(lang), menClothesPattern = '',
+        final_sizes = [], deleted = [], all_sizes = [],treeData = [], temporaryGroup = {},
+        quantity_sizes = 0, count = 0, count_size = 0, gender = 0, x_buff='',
+        cat, item, item_group_code, itemGroup_id, pattern, featuresOk = true,
+        item_name_en = $('#item-name-en'), item_name_ru = $('#item-name-ru'), item_name_ua =$('#item-name-ua'),
+        quantity_input = $('#add_size_panel_qty_li').find('input'),
+        origin_price_input = $('#origin_price'),
+        sale_price_input = $('#sale_price'),
+        add_size_button = $('#add_size_panel_btn_li').find('button'),
+        save_button = $('#save'),
+        csrf = {
+            token : $("meta[name='_csrf']").attr("content"),
+            header : $("meta[name='_csrf_header']").attr("content")
+        },
+        levels = [{},{},
         {
             header_li: $('.s2'),
             level_div: $('#level-2'),
@@ -91,18 +81,17 @@ $(function(){
     /************************************************************/
 
     /* (group 1) jeans, shorts, chinos measurement fields*/
-    var gr_1_eu_dropDown = $('#eu_waist_select').find('button.dropbtn');
-    var gr_1_waist = $('#group_1_waist_li').find('input');
-    var gr_1_length = $('#group_1_length_li').find('input');
-    var gr_1_bottom = $('#group_1_bottom_li').find('input');
+    var gr_1_eu_dropDown = $('#eu_waist_select').find('button.dropbtn'),
+        gr_1_waist = $('#group_1_waist_li').find('input'),
+        gr_1_length = $('#group_1_length_li').find('input'),
+        gr_1_bottom = $('#group_1_bottom_li').find('input');
     /*******************************************/
 
     /*Check methods and binding/unbinding for Group 1*/
-    var conditionForAddSizeButtonGroup_1 = function(){
+    function conditionForAddSizeButtonGroup_1 (){
         return checkDropdown(gr_1_eu_dropDown) &&
-                checkLength(gr_1_waist) && checkLength(gr_1_length) && checkLength(gr_1_bottom)&&
-                checkLength(item_name_en)
-    };
+                checkLength(gr_1_waist) && checkLength(gr_1_length) && checkLength(gr_1_bottom)
+    }
     function checkDropdown(button){
         return button.text() != locale.label_choose;
     }
@@ -134,21 +123,29 @@ $(function(){
             tmp.append('<a class="lazy">'+val+'<input type="number" hidden value="'+data[i].id+'"></a>');
         }
         tmp.find('.lazy').click(function (){
-            var t = $(this);
-            var dropbtn = tmp.parent().find('.dropbtn');
+            var t = $(this), dropbtn = tmp.parent().find('.dropbtn');
             dropbtn.text(t.text());
             dropbtn.append('<input type="number" hidden value="'+t.find('input').val()+'">');
             checkAllFormsGroup();
         })
     }
-    var group_1_bind_init = function(){
+    function bindInputName(){
+        item_name_en.bind('input propertychange', function(){
+            checkAllFormsGroup();
+        });
+        item_name_ua.bind('input propertychange', function(){
+            checkAllFormsGroup();
+        });
+        item_name_ru.bind('input propertychange', function(){
+            checkAllFormsGroup();
+        });
+    }
+    function group_1_bind_init (){
         $('#item_group_1').show();
         if(item_group_code == 3) $('#example_group_11').show();
         else $('#example_group_1').show();
         unlock(add_size_button, false);
-        item_name_en.bind('input propertychange', function(){
-            checkAllFormsGroup();
-        });
+        bindInputName();
         origin_price_input.bind('input propertychange', function(){
             unlock(save_button, (checkForSaveButton()));
         });
@@ -168,57 +165,54 @@ $(function(){
             checkMeasurementInput(gr_1_bottom);
         });
         add_size_button.on('click', function(){
-            var eu_waist_val = gr_1_eu_dropDown.text();
-            var qty = addSizePreview(eu_waist_val);
-            var fields = [
-                {name: 'Waist', value: gr_1_waist.val()},
-                {name: 'Length', value: gr_1_length.val()},
-                {name: 'Bottom', value: gr_1_bottom.val()}
-            ];
-            var size = {
+            var eu_waist_val = gr_1_eu_dropDown.text(),
+                qty = addSizePreview(eu_waist_val),
+                fields = [
+                    {name: 'Waist', value: gr_1_waist.val()},
+                    {name: 'Length', value: gr_1_length.val()},
+                    {name: 'Bottom', value: gr_1_bottom.val()}
+                ],
+                size = {
                 quantity: parseInt(qty), measurements: fields, eu_size: {id: gr_1_eu_dropDown.find('input').val()}};
             group_1_clear_forms();
             processNewSize(size, qty);
         });
-    };
-    var group_1_clear_forms = function(){
+    }
+    function group_1_clear_forms (){
         gr_1_eu_dropDown.text(locale.label_choose);
         gr_1_waist.val('');
         gr_1_bottom.val('');
         gr_1_length.val('');
-    };
-    var group_1_unbind = function(){
+    }
+    function group_1_unbind (){
         $('#item_group_1').hide();
         if(item_group_code == 3) $('#example_group_11').hide();
         else $('#example_group_1').hide();
         gr_1_bottom.unbind();
         gr_1_length.unbind();
         gr_1_waist.unbind();
-    };
+    }
     /*****************************************/
 
     /* (group 2) T-Shirts, Vests measurement fields*/
-    var gr2_eu_dropDown=$('#item_group_2').find('.eu_select').find('.dropbtn');
-    var gr_2_shoulders = $('#group_2_shoulders_li').find('input');
-    var gr_2_length = $('#group_2_length_li').find('input');
-    var gr_2_chest = $('#group_2_chest_li').find('input');
+    var gr2_eu_dropDown=$('#item_group_2').find('.eu_select').find('.dropbtn'),
+        gr_2_shoulders = $('#group_2_shoulders_li').find('input'),
+        gr_2_length = $('#group_2_length_li').find('input'),
+        gr_2_chest = $('#group_2_chest_li').find('input');
 
     /*Check methods and binding/unbinding for Group 2*/
-    var conditionForAddSizeButtonGroup_2 = function(){
+    function conditionForAddSizeButtonGroup_2 (){
         return checkDropdown(gr2_eu_dropDown) && checkLength(gr_2_shoulders) &&
-            checkLength(gr_2_length) && checkLength(gr_2_chest)&&
-            checkLength(quantity_input) && checkLength(item_name_en)
-    };
-    var group_2_bind_init = function(){
+            checkLength(gr_2_length) && checkLength(gr_2_chest)&& checkLength(quantity_input)
+    }
+    function group_2_bind_init (){
         $('#item_group_2').show();
         if(item_group_code > 5 && item_group_code < 10) {
             $('#item_group_3').show();
             $('#example_group_3').show();
         }else $('#example_group_2').show();
         unlock(add_size_button, false);
-        item_name_en.bind('input propertychange', function(){
-            checkAllFormsGroup();
-        });
+        bindInputName();
         origin_price_input.bind('input propertychange', function(){
             unlock(save_button, (checkForSaveButton()));
         });
@@ -244,8 +238,8 @@ $(function(){
             });
         }
         add_size_button.on('click', function(){
-            var qty = addSizePreview(gr2_eu_dropDown.text());
-            var fields = [
+            var qty = addSizePreview(gr2_eu_dropDown.text()),
+            fields = [
                 {name: 'Shoulders', value: gr_2_shoulders.val()},
                 {name: 'Length', value: gr_2_length.val()},
                 {name: 'Chest', value: gr_2_chest.val()}
@@ -257,14 +251,14 @@ $(function(){
             group_2_clear_forms();
             processNewSize(size, qty);
         });
-    };
-    var group_2_clear_forms = function(){
+    }
+    function group_2_clear_forms (){
         gr_2_shoulders.val('');
         gr_2_chest.val('');
         gr_2_length.val('');
         if(item_group_code > 5 && item_group_code < 10) gr_3_sleeve.val('');
-    };
-    var group_2_unbind = function(){
+    }
+    function group_2_unbind (){
         $('#item_group_2').hide();
         $('#example_group_2').hide();
         gr_2_shoulders.unbind();
@@ -275,61 +269,53 @@ $(function(){
             gr_3_sleeve.unbind();
             $('#item_group_3').hide();
         }
-    };
+    }
 
     /*small stuff for group_3*/
     var gr_3_sleeve = $('#group_3_sleeve_li').find('input');
 
     /*Check methods for Group 3*/
-    var conditionForAddSizeButtonGroup_3 = function(){
+    function conditionForAddSizeButtonGroup_3 (){
         return conditionForAddSizeButtonGroup_2() && checkLength(gr_3_sleeve);
-    };
-    var group_4_bind_init = function(){
-
-    };
-    var group_5_bind_init = function(){
-
-    };
+    }
+    function group_4_bind_init (){
+    }
+    function group_5_bind_init (){
+    }
 
     /*Common methods*/
-    var checkAllFormsGroup = function(){
+    function checkAllFormsGroup (){
         var condition;
         if(item_group_code < 4) condition = conditionForAddSizeButtonGroup_1();
         else if(item_group_code < 6) condition = conditionForAddSizeButtonGroup_2();
         else if(item_group_code < 10) condition = conditionForAddSizeButtonGroup_3();
         unlock(add_size_button, condition);
         unlock(save_button, checkForSaveButton());
-    };
-    var checkForSaveButton = function(){
+    }
+    function checkForSaveButton (){
         return count_size > 0 && checkLength(origin_price_input) &&
-               checkLength(sale_price_input) && checkLength(item_name_en);
-    };
-    var checkMeasurementInput = function(input){
+               checkLength(sale_price_input) && checkLength(item_name_en) && checkLength(item_name_ru) &&
+               checkLength(item_name_ua) && featuresOk;
+    }
+    function checkMeasurementInput (input){
         var value = input.val();
         if(value.length == 1 && value =='.' || value =='-') value = '';
         input.val(value.replace(/[^0-9.-]/g,''));
-    };
-    /**
-     * Method for checking that selection is made for required select field.
-     * @param select
-     * @returns {boolean}
-     */
-    var checkSelect = function(select){
-        return select != undefined && select.val() != 'choose';
-    };
-    var checkLength = function(form){
+    }
+
+    function checkLength (form){
         return form != undefined && !form.val().length <= 0
-    };
-    var unlock = function(button, enable){
+    }
+    function unlock (button, enable){
         button.prop('disabled', !enable)
-    };
-    var quantityInputBind = function(){
+    }
+    function quantityInputBind (){
         quantity_input.bind('input propertychange', function(){
             var val = quantity_input.val().replace(/[^0-9]/g,'');
             if(val < 1) val = 1;
             quantity_input.val(val);
         });
-    };
+    }
     function resolveGroupCommonCode (name){
         pattern = name.trim();
         var en = getLocale('en');
@@ -349,7 +335,7 @@ $(function(){
             default:                           return -1;
         }
     }
-    var addSizePreview = function(eu){
+    function addSizePreview (eu){
         var qty = parseInt(quantity_input.val());
         quantity_input.val(1);
         $('#size_preview').append('<table class="icon-wrapper" id="table'+count+'">'+
@@ -357,13 +343,12 @@ $(function(){
             '<tr><td class="td_del"><div class="del"></div></td></tr>'+
             '<tr><td><button class="size_quantity">x'+qty+'</button></td></tr></table></div>');
         return qty;
-    };
-    var processNewSize = function(size, qty){
+    }
+    function processNewSize (size, qty){
         all_sizes.push(size);
-        var selector = '#table' + count;
-        var table = $(selector);
-        var size_icon = table.find('.size_icon');
-        var del_button = table.find('.del');
+        var selector = '#table' + count, table = $(selector),
+            size_icon = table.find('.size_icon'),
+            del_button = table.find('.del');
         table.mouseover(function(){
             del_button.show();
         });
@@ -389,8 +374,8 @@ $(function(){
         count+=1;
         count_size+=1;
         checkAllFormsGroup();
-    };
-    var updateFinalSizes = function(){
+    }
+    function updateFinalSizes (){
         final_sizes = [];
         for(var i=0; i < count; i++){
             var rm = false;
@@ -402,18 +387,39 @@ $(function(){
                 final_sizes.push(all_sizes[i]);
             }
         }
-    };
-    var saveClothesItem = function(){
+    }
+    function featuresJoin(inputs){
+        var result='';
+        inputs.each(function(){
+            var split = '';
+            if(result.length > 0) split = '|';
+            result = result+split+$(this).val();
+        });
+        return result;
+    }
+
+    function saveClothesItem (){
         updateFinalSizes();
         item = {
             gender: gender,
-            itemName: item_name_en.val(),
+            itemName: {
+                locale_en: item_name_en.val(),
+                locale_ru: item_name_ru.val(),
+                locale_ua: item_name_ua.val()
+            },
+            description:{
+                locale_en: featuresJoin($('.f-en')),
+                locale_ru: featuresJoin($('.f-ru')),
+                locale_ua: featuresJoin($('.f-ua'))
+            },
+            extraNotes: $('#extraNotes_popup').find('textarea').val(),
             currency: parseInt($('#currency').find('select').val()),
             itemGroup: {
                 id: itemGroup_id
             },
+            discount: $('input#discount').val(),
             quantity: quantity_sizes,
-            color: {id: $('#color').find('.dropbtn').find('input').val()},
+            color: {id: $('#color_sample').find('input').val()},
             originPrice: parseInt(origin_price_input.val()*100),
             salePrice: parseInt(sale_price_input.val()*100),
             brand: {
@@ -424,7 +430,7 @@ $(function(){
         console.log(JSON.stringify(item));
         $('#item').val(JSON.stringify(item));
         $('#sub').click();
-    };
+    }
     /********************************************/
     save_button.on('click', function(){
         unlock(save_button, false);
@@ -434,6 +440,8 @@ $(function(){
     function closeSession() {
         add_size_button.off('click');
         item_name_en.unbind();
+        item_name_ru.unbind();
+        item_name_ua.unbind();
         origin_price_input.unbind();
         sale_price_input.unbind();
         quantity_sizes = 0;
@@ -550,23 +558,28 @@ $(function(){
     }
 
     function fillColor(data){
-        var content = $('#color');
-        content = content.find('.dropdown-content');
+        var content = $('#color').find('.dropdown-content');
         for(var i=0; i<data.length; i++){
             var color = data[i].hex;
             content.append('<a class="color-option">'+resolveLocale(data[i].color)+'<div class="hex" style="background: '+color+'"><input hidden value="'+data[i].id+'"></div></a>')
         }
         $('.color-option').click(function(){
-            var t = $(this);
-            var text = t.text();
+            var t = $(this), text = t.text(), hex = t.find('.hex');
             if(text.length > 15) text = text.substring(0,15) + '.';
             $('#color').find('.dropbtn').text(text);
-            $('#color_sample').css({'background':t.find('.hex').css('background')});
+            text =  $('#color_sample');
+            text.css({'background':hex.css('background')});
+            text.find('input').val(hex.find('input').val())
         });
     }
     $('#add-cat-popup').popup({
         openelement:'.changeGroup',
         closeelement:'.close_group',
+        transition: 'all 0.3s'
+    });
+    $('#extraNotes_popup').popup({
+        openelement:'.extra_note',
+        closeelement:'.extra_close',
         transition: 'all 0.3s'
     });
 
@@ -582,9 +595,6 @@ $(function(){
             $('#brand-logo').find('img').attr('src', magic+"../.." + imageUrl+tmp.text().toLowerCase().replace(/\s/g,"_")+'/logo.jpg').show();
         });
     }
-
-    var treeData = [];
-    var temporaryGroup = {};
 
     function createTreeData(data, parent){
         var result = [];
@@ -680,6 +690,77 @@ $(function(){
             }
         }
     }
+    $('.featureBlock').bind('input propertychange', function(){
+        var ul = $('.item_description');
+        ul.parent().find('button.feature').prop('disabled',!(checkLength(ul.find('.ru'))&&checkLength(ul.find('.en'))&&checkLength(ul.find('.ua'))));
+    });
+
+    function removeVal(form){
+        var val = form.val();
+        form.val('');
+        return val;
+    }
+
+    /**
+     * Adding an action on button click for removing row of features;
+     * @param button - .remove_row button from current ul.
+     */
+    function removeRowClick(button){
+        button.click(function(){
+            var list = $(this).parent().parent();
+            list.fadeOut(150);
+            $.when(function(){
+                setTimeout(function(){
+                    list.remove();
+                }, 200);
+            }).then(function(){
+                checkAllFeaturesInputs($('input.val'));
+
+            });
+        })
+    }
+
+    function checkAllFeaturesInputs(input){
+        var cond = true;
+        input.each(function(){
+            if($(this).val().length < 1) cond = false;
+        });
+        featuresOk = cond;
+        unlock(save_button, checkForSaveButton());
+    }
+
+    function checkFeatureInputLength(input){
+        featuresOk = true;
+        input.each(function(){
+            $(this).bind('input propertychange', function(){
+                var currentInput = $(this), cond = currentInput.val().length > 0;
+                if(cond) currentInput.removeClass('broken');
+                else currentInput.addClass('broken');
+                checkAllFeaturesInputs(input);
+            })
+        });
+    }
+
+    $('button.feature').click(function(){
+        var ul = $('.item_description'),
+            holder = ul.parent().find('.feature_holder'),
+            lastEq = holder.find('ul').length;
+        holder.append('<ul class="list-inline feature_preview">' +
+            '<li><input type="text" class="height val f-en" value="'+removeVal(ul.find('.en'))+'" spellcheck="false"></li>' +
+            '<li class="marg"><input type="text" class="height val f-ru" value="'+removeVal(ul.find('.ru'))+'" spellcheck="false"></li>' +
+            '<li class="marg"><input type="text" class="height val f-ua" value="'+removeVal(ul.find('.ua'))+'" spellcheck="false"></li>' +
+            '<li><button class="remove_row"></button></li></ul>');
+        ul.parent().find('button.feature').prop('disabled', true);
+        checkFeatureInputLength(holder.find('input.val'));
+        ul = holder.find('ul:eq('+lastEq+')');
+        removeRowClick(ul.find('button.remove_row'));
+    });
+    $('.accept-button').click(function(){
+        x_buff = $('#ex-info').val();
+    });
+    $('#extraNotes_popup').find('.cancel-button').click(function(){
+        $('#ex-info').val(x_buff);
+    });
     init();
 });
 /*]]>*/
