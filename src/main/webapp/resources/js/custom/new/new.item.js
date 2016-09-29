@@ -98,6 +98,7 @@ $(function(){
     function getEuroSize(cat){
         $.ajax({
             url: magic + "../../manage/ajax/get/eurosize/cat",
+            dataType: "",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
@@ -537,11 +538,12 @@ $(function(){
         });
         $.ajax({
             url: magic + "../../manage/ajax/get/item/options/clothes",
+            contentType: 'application/json',
+            mimeType: 'application/json',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
             type: "POST",
-            data: {groupName: 'Clothes', groupLvl:1},
             success: function(result){
                 treeData = createTreeData(result.itemGroup.child, 'items');
                 setTimeout(function(){

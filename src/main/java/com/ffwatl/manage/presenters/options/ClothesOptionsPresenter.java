@@ -1,7 +1,7 @@
 package com.ffwatl.manage.presenters.options;
 
 
-import com.ffwatl.manage.entities.group.ItemGroup;
+import com.ffwatl.manage.dto.ItemGroupDto;
 import com.ffwatl.manage.entities.items.brand.Brand;
 import com.ffwatl.manage.entities.items.color.Color;
 
@@ -14,7 +14,7 @@ public class ClothesOptionsPresenter {
 
     private List<Brand> brandList;
     private List<Color> colorList;
-    private ItemGroup itemGroup;
+    private ItemGroupDto itemGroup;
     private String brandImgUrl;
 
     public String getBrandImgUrl() {
@@ -29,7 +29,7 @@ public class ClothesOptionsPresenter {
         return colorList;
     }
 
-    public ItemGroup getItemGroup() {
+    public ItemGroupDto getItemGroup() {
         return itemGroup;
     }
 
@@ -45,7 +45,7 @@ public class ClothesOptionsPresenter {
         this.colorList = colorList;
     }
 
-    public void setItemGroup(ItemGroup itemGroup) {
+    public void setItemGroup(ItemGroupDto itemGroup) {
         this.itemGroup = itemGroup;
     }
 

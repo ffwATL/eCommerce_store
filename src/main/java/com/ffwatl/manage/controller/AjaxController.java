@@ -1,16 +1,18 @@
 package com.ffwatl.manage.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ffwatl.manage.dto.ItemGroupDto;
 import com.ffwatl.manage.entities.filter.grid_filter.ClothesGridFilter;
 import com.ffwatl.manage.entities.filter.grid_filter.GridFilter;
 import com.ffwatl.manage.entities.filter.grid_filter.ItemGridFilter;
-import com.ffwatl.manage.presenters.filter.ClothesFilterPresenter;
-import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.entities.items.CommonCategory;
 import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.entities.items.brand.Brand;
 import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
 import com.ffwatl.manage.entities.items.color.Color;
+import com.ffwatl.manage.presenters.filter.ClothesFilterPresenter;
 import com.ffwatl.manage.presenters.items.ItemCatalog;
 import com.ffwatl.manage.presenters.items.ItemCatalogPresenter;
 import com.ffwatl.manage.presenters.items.ItemPresenter;
@@ -62,8 +64,8 @@ public class AjaxController {
 
     @RequestMapping(value = "/manage/ajax/get/itemgroup", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<ItemGroup> ajaxAllItemGroupByParentName(@RequestParam String name){
-        ItemGroup result = itemGroupService.findByLvlAndByNameNoLazy(1, name);
+    public ResponseEntity<ItemGroupDto> ajaxAllItemGroupByParentName(@RequestParam String name){
+        ItemGroupDto result = itemGroupService.findByLvlAndByNameFetchCollection(1, name);
         return ResponseEntity.ok(result);
     }
 
@@ -146,13 +148,15 @@ public class AjaxController {
     }
 
     @RequestMapping(value = "/manage/ajax/get/item/options/clothes", method = RequestMethod.POST)
-    public ClothesOptionsPresenter ajaxClothesOptions(@RequestParam String groupName, @RequestParam int groupLvl){
+    @ResponseBody
+    public ResponseEntity<String> ajaxClothesOptions() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
         ClothesOptionsPresenter presenter = new ClothesOptionsPresenter();
-        presenter.setItemGroup(itemGroupService.findByLvlAndByNameNoLazy(groupLvl, groupName));
+        presenter.setItemGroup(itemGroupService.findByLvlAndByNameFetchCollection(1, "Clothes"));
         presenter.setBrandList(brandService.findAll());
         presenter.setColorList(colorService.findAll());
         presenter.setBrandImgUrl(settings.getBrandImgUrl());
-        return presenter;
+        return ResponseEntity.ok(mapper.writeValueAsString(presenter));
     }
 
     private Page<? extends Item> getPage(String cat, Map<String, String> params){

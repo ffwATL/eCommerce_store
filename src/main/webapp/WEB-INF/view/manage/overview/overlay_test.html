@@ -75,12 +75,12 @@
         ], $('#level-2').find('ul'), [3,4]);
 
 
-        function drawCategoryPopup(data, lvl, id){
+        function drawCategoryPopup(data, level, id){
             for(var i=0; i< data.length; i++){
                 var child = '<input hidden type="number" value="'+i+'">';
                 if(data[i].nodes != undefined && data[i].nodes.length > 0) child= child+'<span class="glyphicon glyphicon-menu-right"></span>';
-                lvl.append('<li id="lvl-'+data[i].level+i+'">'+data[i].text+child+'</li>');
-                child = '#lvl-'+data[i].level+i;
+                level.append('<li id="level-'+data[i].level+i+'">'+data[i].text+child+'</li>');
+                child = '#level-'+data[i].level+i;
                 $(child).click(function(){
                     var li = $(this);
                     li.parent().find('.chosen').removeClass('chosen');
@@ -148,15 +148,15 @@
     </div>
     <div class="content">
         <div class="cat-list">
-            <div id="level-2" class="inline lvl">
+            <div id="level-2" class="inline level">
                 <ul class="list-unstyled">
                 </ul>
             </div>
-            <div id="level-3" class="inline lvl level-d">
+            <div id="level-3" class="inline level level-d">
                 <ul class="list-unstyled">
                 </ul>
             </div>
-            <div id="level-4" class="inline lvl d">
+            <div id="level-4" class="inline level d">
                 <ul class="list-unstyled">
                 </ul>
             </div>

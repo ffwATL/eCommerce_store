@@ -69,4 +69,13 @@ public class ItemGroupDaoImpl implements ItemGroupDao{
         return em.createQuery("SELECT DISTINCT i.itemGroup FROM Item i", ItemGroup.class).getResultList();
     }
 
+    @Override
+    public ItemGroup findByLvlAndNameFetched(int lvl, String name){
+        return em.createQuery("SELECT i FROM ItemGroup i LEFT JOIN FETCH i.child WHERE i.level=:lvl " +
+                "AND i.groupName.locale_en=:name", ItemGroup.class)
+                .setParameter("lvl",lvl)
+                .setParameter("name",name)
+                .getSingleResult();
+    }
+
 }

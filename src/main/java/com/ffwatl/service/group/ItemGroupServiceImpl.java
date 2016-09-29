@@ -2,9 +2,10 @@ package com.ffwatl.service.group;
 
 
 import com.ffwatl.dao.group.ItemGroupDao;
+import com.ffwatl.manage.dto.ItemGroupDto;
 import com.ffwatl.manage.entities.group.ItemGroup;
-import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
 import com.ffwatl.manage.entities.items.CommonCategory;
+import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,12 +79,11 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      * @return ItemGroup object if it present in the DB or null if it not.
      */
     @Override
-    public ItemGroup findByLvlAndByNameNoLazy(int lvl, String name) {
-        List<ItemGroup> list = itemGroupDao.findByLvlAndByName(lvl, name);
-        System.out.println(list);
-        if(list.size() > 0) return list.get(0);
-        return null;
+    public ItemGroupDto findByLvlAndByNameFetchCollection(int lvl, String name) {
+        return new ItemGroupDto(itemGroupDao.findByLvlAndNameFetched(lvl, name));
     }
+
+
 
     @Override
     public List<ItemGroupPresenter> findByCatNoChildren(CommonCategory cat) {

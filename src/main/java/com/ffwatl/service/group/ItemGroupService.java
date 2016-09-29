@@ -1,6 +1,7 @@
 package com.ffwatl.service.group;
 
 
+import com.ffwatl.manage.dto.ItemGroupDto;
 import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
 import com.ffwatl.manage.entities.items.CommonCategory;
@@ -17,7 +18,7 @@ public interface ItemGroupService {
 
     ItemGroup findByName(String name);
 
-    ItemGroup findByLvlAndByNameNoLazy(int lvl, String name);
+    ItemGroupDto findByLvlAndByNameFetchCollection(int lvl, String name);
 
     List<ItemGroupPresenter> findByCatNoChildren(CommonCategory cat);
 

@@ -1,6 +1,8 @@
 package com.ffwatl;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.dao.items.ClothesItemRepository;
 import com.ffwatl.dao.items.ItemRepository;
 import com.ffwatl.manage.entities.filter.grid_filter.ClothesGridFilter;
@@ -9,13 +11,15 @@ import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.entities.items.CommonCategory;
 import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
-import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
+import com.ffwatl.manage.presenters.options.ClothesOptionsPresenter;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesPaginationService;
 import com.ffwatl.service.group.ItemGroupService;
+import com.ffwatl.service.items.ColorService;
 import com.ffwatl.service.items.EuroSizeService;
 import com.ffwatl.service.items.ItemPaginationServiceImpl;
 import com.ffwatl.service.items.ItemService;
+import com.ffwatl.util.Settings;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@Rollback(value = false)
+@Rollback(value = true)
 @ContextConfiguration({"/spring/application-config.xml", "/spring/spring-security.xml" })
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -57,6 +61,10 @@ public class SpecificationTest {
 
     @Autowired
     private ClothesPaginationService clothesPaginationService;
+    @Autowired
+    private ColorService colorService;
+    @Autowired
+    private Settings settings;
 
     private Map<String, String> params;
 
@@ -104,7 +112,7 @@ public class SpecificationTest {
 
    /* @Test
     public void lazyInitTest(){
-        ItemGroup itemGroup = itemGroupService.findByLvlAndByNameNoLazy(1, "Clothes");
+        ItemGroup itemGroup = itemGroupService.findByLvlAndByNameFetchCollection(1, "Clothes");
         List<ItemGroupPresenter> gender = new ArrayList<>();
         List<ItemGroupPresenter> list = new ArrayList<>();
         resolveItemGroup(itemGroup, list, gender);
@@ -121,14 +129,14 @@ public class SpecificationTest {
 
     @Test
     @Ignore
-    public void test1(){
-        ItemUpdatePresenter update = new ItemUpdatePresenter();
-        Item item = new Item();
-        item.setId(1);
-        item.setIsActive(true);
-        update.setItem(item);
-        itemService.updateSingleItem(update);
-        System.err.println("*****"+itemService.findById(1));
+    public void test1() throws JsonProcessingException {
+        ClothesOptionsPresenter presenter = new ClothesOptionsPresenter();
+        ObjectMapper mapper = new ObjectMapper();
+        presenter.setItemGroup(itemGroupService.findByLvlAndByNameFetchCollection(1, "Clothes"));
+        presenter.setBrandList(brandService.findAll());
+        presenter.setColorList(colorService.findAll());
+        presenter.setBrandImgUrl(settings.getBrandImgUrl());
+        System.err.println("*****"+mapper.writeValueAsString(presenter));
     }
 
     @Test

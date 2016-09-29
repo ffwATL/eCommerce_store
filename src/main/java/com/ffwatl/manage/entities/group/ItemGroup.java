@@ -129,7 +129,10 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
                 ", level=" + level +
                 ", cat=" + cat +
                 ", groupName=" + groupName +
-                ", createdBy=" + createdBy +'}';
+                ", createdBy=" + createdBy +
+                ", description='" + description + '\'' +
+                ", weight=" + weight +
+                '}';
     }
 
     @Override

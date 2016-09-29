@@ -261,7 +261,7 @@ h4#options:hover{
     width: 300px;
  }
 
-#add-cat-popup .content .cat-list .lvl{
+/*#add-cat-popup */.content .cat-list .level{
     font-size: 12px;
     padding: 30px 10px;
     float: left;
@@ -274,10 +274,10 @@ h4#options:hover{
 #add-cat-popup .content .completed{
     background: rgba(237, 236, 236, 0.31);
 }
-#add-cat-popup .content .cat-list .lvl li{
+#add-cat-popup .content .cat-list .level li{
     padding: 3px;
 }
-#add-cat-popup .lvl li{
+#add-cat-popup .level li{
     text-decoration: none;
     cursor: pointer;
     padding: 3px 6px;
@@ -292,7 +292,7 @@ h4#options:hover{
     margin-top: 5px;
     width: 200px;
 }
-#add-cat-popup li.chosen, #add-cat-popup .lvl li:hover{
+#add-cat-popup li.chosen, #add-cat-popup .level li:hover{
     background: rgba(216, 218, 218, 0.42);
 }
 #category-header{
