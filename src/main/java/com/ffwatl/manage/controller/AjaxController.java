@@ -2,7 +2,6 @@ package com.ffwatl.manage.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.manage.dto.ItemGroupDto;
 import com.ffwatl.manage.entities.filter.grid_filter.ClothesGridFilter;
 import com.ffwatl.manage.entities.filter.grid_filter.GridFilter;
@@ -149,14 +148,13 @@ public class AjaxController {
 
     @RequestMapping(value = "/manage/ajax/get/item/options/clothes", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> ajaxClothesOptions() throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+    public ResponseEntity<ClothesOptionsPresenter> ajaxClothesOptions() throws JsonProcessingException {
         ClothesOptionsPresenter presenter = new ClothesOptionsPresenter();
         presenter.setItemGroup(itemGroupService.findByLvlAndByNameFetchCollection(1, "Clothes"));
         presenter.setBrandList(brandService.findAll());
         presenter.setColorList(colorService.findAll());
         presenter.setBrandImgUrl(settings.getBrandImgUrl());
-        return ResponseEntity.ok(mapper.writeValueAsString(presenter));
+        return ResponseEntity.ok(presenter);
     }
 
     private Page<? extends Item> getPage(String cat, Map<String, String> params){
