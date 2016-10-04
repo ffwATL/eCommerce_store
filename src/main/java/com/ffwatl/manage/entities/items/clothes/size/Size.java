@@ -13,6 +13,7 @@ import java.util.List;
  * - reference to measurement fields objects where main measurement information is placed.
  */
 @Entity
+@Table(name = "size")
 public class Size implements Comparable<Size>{
 
     @Id

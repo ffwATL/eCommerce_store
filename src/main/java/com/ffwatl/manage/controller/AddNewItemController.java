@@ -69,7 +69,6 @@ public class AddNewItemController {
                 logger.error("NullPointer");
                 throw new NullPointerException();
             }
-            file.remove(file.size() - 1);
             clothesItemService.save(clothesItem, SecurityContextHolder.getContext().getAuthentication().getName());
             proceedImages(settings.getPhotoDir() + "item_" + clothesItem.getId(), file);
             logger.info("clothes item saved: " + clothesItem);

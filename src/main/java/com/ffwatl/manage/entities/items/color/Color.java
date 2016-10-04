@@ -15,7 +15,7 @@ public class Color {
     @Embedded
     private I18n color;
 
-    @Column(length = 8)
+    @Column(length = 30)
     private String hex;
 
     public long getId() {

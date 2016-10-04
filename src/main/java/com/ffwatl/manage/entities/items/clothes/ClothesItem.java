@@ -13,6 +13,7 @@ import java.util.List;
 
 @Entity
 @PrimaryKeyJoinColumn(referencedColumnName="id")
+@Table(name = "clothes_items")
 public class ClothesItem extends Item {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

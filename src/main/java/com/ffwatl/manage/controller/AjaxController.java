@@ -3,9 +3,9 @@ package com.ffwatl.manage.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ffwatl.manage.dto.ItemGroupDto;
-import com.ffwatl.manage.entities.filter.grid_filter.ClothesGridFilter;
-import com.ffwatl.manage.entities.filter.grid_filter.GridFilter;
-import com.ffwatl.manage.entities.filter.grid_filter.ItemGridFilter;
+import com.ffwatl.manage.filter.grid_filter.ClothesGridFilter;
+import com.ffwatl.manage.filter.grid_filter.GridFilter;
+import com.ffwatl.manage.filter.grid_filter.ItemGridFilter;
 import com.ffwatl.manage.entities.items.CommonCategory;
 import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.entities.items.brand.Brand;
@@ -155,6 +155,13 @@ public class AjaxController {
         presenter.setColorList(colorService.findAll());
         presenter.setBrandImgUrl(settings.getBrandImgUrl());
         return ResponseEntity.ok(presenter);
+    }
+
+    @RequestMapping(value = "/manage/ajax/save/color", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<List<Color>> ajaxSaveNewColor(@RequestBody Color color){
+        colorService.save(color);
+        return ResponseEntity.ok(colorService.findAll());
     }
 
     private Page<? extends Item> getPage(String cat, Map<String, String> params){

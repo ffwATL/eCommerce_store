@@ -9,13 +9,15 @@
     <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/resources/css/bootstrap.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/resources/css/custom/main.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/filer/jquery.filer.css" th:href="@{/resources/css/filer/jquery.filer.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/filer/jquery.filer-dragdropbox-theme.css" th:href="@{/resources/css/filer/jquery.filer-dragdropbox-theme.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/overview/popup.css" th:href="@{/resources/css/custom/overview/popup.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/new/new.item.css" th:href="@{/resources/css/custom/new/new.item.css}" type="text/css">
     <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
     <script rel="script" src="../../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/resources/js/jquery.popupoverlay.min.js}"></script>
     <script rel="script" src="../../../../resources/js/filer/jquery.filer.js" th:src="@{/resources/js/filer/jquery.filer.js}" ></script>
     <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
+    <script rel="script" src="../../../../resources/js/spectrum.min.js" th:src="@{/resources/js/spectrum.min.js}"></script>
+    <script rel="script" src="../../../../resources/js/jquery.tabslet.min.js" th:src="@{/resources/js/jquery.tabslet.min.js}"></script>
     <script rel="script" src="../../../../resources/js/custom/new/new.item.js" th:inline="javascript" th:src="@{/resources/js/custom/new/new.item.js}" ></script>
 
 </head>
@@ -65,6 +67,47 @@
         </div>
     </div>
 </div>
+<div id="color_popup" class="popup">
+    <div class="popup-header"><h3><span th:text="#{label.color.header}">New color</span></h3></div>
+    <div class="popup-content">
+        <div class="popup-info">
+            <h5 th:text="#{label.color.headerInfo}">Enter some important information about the size, condition or product at all. This information available only for administrators.</h5>
+        </div>
+        <div class="color-left">
+            <ul class="list-unstyled">
+                <li><input id="color-sample" type="text"></li>
+                <li><label id="color-value">#fff</label></li>
+            </ul>
+        </div>
+        <div class="color-right">
+            <div class="tabs color-tabs">
+                <ul id="color-forTabs" class="forTabs">
+                    <li class="active" ><a href="#c-tab-1" th:text="#{locale.en}">EN</a></li>
+                    <li><a href="#c-tab-2" th:text="#{locale.ru}">RU</a></li>
+                    <li><a href="#c-tab-3" th:text="#{locale.ua}">UA</a></li>
+                </ul>
+                <div id="c-tab-1">
+                    <label th:text="#{label.color.name}">Name</label>
+                    <input class="height c-name" id="c-name-en">
+                </div>
+                <div id="c-tab-2">
+                    <label th:text="#{label.color.name}">Name</label>
+                    <input class="height c-name" id="c-name-ru" >
+                </div>
+                <div id="c-tab-3">
+                    <label th:text="#{label.color.name}">Name</label>
+                    <input class="height c-name" id="c-name-ua" >
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <ul class="list-inline">
+                <li><button class="update-button button-typical color_close" th:text="#{new.item.save}" disabled>Save</button></li>
+                <li><button class="cancel-button button-bordered color_close" th:text="#{label.cancel}">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="content-wrapper">
     <div th:replace="template :: header" class="header col-lg-12 text-center">
         <input type="text" placeholder="Search" class="form-control">
@@ -75,12 +118,13 @@
     <div class="col-lg-12 main-content">
 
         <div class="input-form center-block">
-            <div class="info">
+
+            <div class="info not_completed" id="name-block">
                 <h3 th:text="#{new.item.itemName}">Item name</h3>
                 <h5>Enter the item name un EN, RU and UA.</h5>
                 <img class="info-pic" src="../../../../resources/img/new/item-name.svg" th:src="@{/resources/img/new/item-name.svg}">
             </div>
-            <div id="section_0">
+            <div id="section_0" class="bottom_line">
                 <ul class="list-inline">
                     <li> <label class="name" th:utext="#{locale.en}">EN</label></li>
                     <li><input class="input-name highlight height" id="item-name-en" type="text" spellcheck="false"></li>
@@ -94,12 +138,12 @@
                     <li><input class="input-name highlight height" id="item-name-ua" type="text" spellcheck="false"></li>
                 </ul>
             </div>
-            <div class="info">
+            <div class="info not_completed" id="cat-block">
                 <h3 th:text="#{new.item.itemGroup}">Category</h3>
                 <h5 th:text="#{new.item.itemGroup.h5}">Choose item category</h5>
                 <img class="info-pic" src="../../../../resources/img/new/category.svg" th:src="@{/resources/img/new/category.svg}">
             </div>
-            <div id="section_1">
+            <div id="section_1" class="bottom_line">
                 <div id="group_one">
                     <button class="button button-bordered changeGroup" id="changeGroup" th:text="#{label.change}">Change</button>
                 </div>
@@ -109,8 +153,8 @@
                     <a class="change changeGroup" th:text="#{new.item.change}">change</a>
                 </div>
             </div>
-            <div id="section_2">
-                <div class="info">
+            <div id="section_2" class="bottom_line">
+                <div class="info not_completed" id="cb-block">
                     <h3 th:text="#{new.item.colorBrand}">Color & brand</h3>
                     <h5>Choose item color and brand. If you can't find the color or brand you can add manually by pressing the 'plus' button.</h5>
                     <img class="info-pic" src="../../../../resources/img/new/art-palette.svg" th:src="@{/resources/img/new/art-palette.svg}">
@@ -118,23 +162,24 @@
                 <div class="brand-list">
                     <ul class="list-inline">
                         <li id="brand">
-                            <label class="block" th:text="#{new.item.brand}">Brand</label>
-                            <div class="dropdown">
-                                <button class="dropbtn button-bordered inline" th:text="#{new.item.choose}">choose</button>
-                                <button class="inline plus" id="brand-plus">+</button>
-                                <div class="dropdown-content">
-                                </div>
-                            </div>
+                           <div id="brnd">
+                               <label class="block" th:text="#{new.item.brand}">Brand</label>
+                               <div class="dropdown">
+                                   <button class="dropbtn button-bordered inline" th:text="#{new.item.choose}">choose</button>
+                                   <button class="inline plus" id="brand-plus">+</button>
+                                   <div class="dropdown-content">
+                                   </div>
+                               </div>
+                           </div>
                         </li>
                         <li class="logo">
                             <div id="brand-logo">
-                                <img src="">
+                                <img th:src="@{/storage/brand/images/default.png}">
                             </div>
                         </li>
                     </ul>
-
                 </div>
-                <div class="color-list">
+                <div class="color-list bottom_line">
                     <ul class="list-inline">
                         <li id="color">
                             <label class="block" th:text="#{new.item.color}">Color</label>
@@ -146,9 +191,9 @@
                             </div>
                         </li>
                     </ul>
-                    <div id="color_sample"><input hidden type="number"></div>
+                    <div id="color_sample" data-color="false"><input hidden type="number"></div>
                 </div>
-                <div class="info">
+                <div class="info not_completed" id="ph-block">
                     <h3 th:text="#{new.item.photos}">Photos</h3>
                     <h5 th:text="#{new.item.photosTip}">You can choose up to 8 photos, but you should upload at least one.</h5>
                     <img class="info-pic" src="../../../../resources/img/new/photos.svg" th:src="@{/resources/img/new/photos.svg}">
@@ -162,9 +207,9 @@
                     <div id="upload_wrapper"></div>
                 </div>
             </div>
-            <div id="section_3">
+            <div id="section_3" class="bottom_line">
                 <div id="clothes_items">
-                    <div class="info">
+                    <div class="info not_completed" id="sz-block">
                         <h3 th:text="#{new.item.clothes.sizeMeasurements}">Size and measurements</h3>
                         <h5 th:text="#{new.item.clothes.sizeMeasurements.h5}">Enter measurements and add items size.</h5>
                         <img class="info-pic" src="../../../../resources/img/new/measuring-tape.svg" th:src="@{/resources/img/new/measuring-tape.svg}">
@@ -249,7 +294,7 @@
             </div>
             <div id="section_4">
                 <div id="section_description" >
-                    <div class="info">
+                    <div class="info not_completed" id="ds-block">
                         <h3 th:text="#{label.features}">Features</h3>
                         <h5 th:text="#{label.features.h5}">Describe in short your item. At least one feature needs to be added.</h5>
                         <img class="info-pic" src="../../../../resources/img/new/features.svg" th:src="@{/resources/img/new/features.svg}">
@@ -265,9 +310,12 @@
                             <textarea class="ua featureBlock" spellcheck="false"></textarea>
                         </li>
                     </ul>
-                    <button class="button-bordered button feature" disabled>Add feature</button>
-                    <button class="extra_note"></button>
-                    <div class="feature_holder">
+                    <div class="bottom_line">
+                        <button class="button-bordered button feature" disabled>Add feature</button>
+                        <button class="extra_note extra_note_not_filled"></button>
+                    </div>
+
+                    <div class="feature_holder bottom_line">
                        <!-- <ul class="list-inline feature_preview">
                             <li th:remove="all"><input type="text" class="height" value="100% cotton"></li>
                             <li th:remove="all" class="marg"><input type="text" class="height" value="100% хлопок"  spellcheck="false"></li>
@@ -282,18 +330,18 @@
                         </ul>-->
                     </div>
                 </div>
-                <div class="info">
+                <div class="info not_completed" id="pr-block">
                     <h3 th:text="#{new.item.price}">Price</h3>
                     <h5>Provide price information about product. Chose another currency to bind prices to the actual currency rate.
                         Add discount value to make special offer to this item.</h5>
                     <img class="info-pic" src="../../../../resources/img/new/price.svg" th:src="@{/resources/img/new/price.svg}">
                 </div>
-                <ul class="list-inline price_list">
+                <ul class="list-inline price_list bottom_line">
                     <li id="origin_li"><label class="block" th:utext="|#{new.item.originPrice}| + #{red}">Origin price<span class="red">*</span></label>
-                        <input type="number" step="0.1" min="1" value="1" id="origin_price" class="highlight block height">
+                        <input type="number" step="0.1" min="0" value="0" id="origin_price" class="highlight block height">
                     </li>
                     <li id="sale_li"><label class="block" th:utext="|#{new.item.salePrice}| + #{red}">Sale price<span class="red">*</span></label>
-                        <input type="number" step="0.1" min="1" value="1" id="sale_price" class="highlight block height">
+                        <input type="number" step="0.1" min="0" value="0" id="sale_price" class="highlight block height">
                     </li>
                     <li id="discount_li">
                         <label class="block">Discount, %</label>

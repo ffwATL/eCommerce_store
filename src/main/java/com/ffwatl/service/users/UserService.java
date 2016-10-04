@@ -1,7 +1,7 @@
 package com.ffwatl.service.users;
 
 
-import com.ffwatl.manage.entities.filter.grid_filter.GridFilter;
+import com.ffwatl.manage.filter.grid_filter.GridFilter;
 import com.ffwatl.manage.entities.users.User;
 import org.springframework.data.domain.Page;
 

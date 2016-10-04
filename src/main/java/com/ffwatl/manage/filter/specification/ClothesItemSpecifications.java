@@ -1,9 +1,9 @@
-package com.ffwatl.manage.entities.filter.specification;
+package com.ffwatl.manage.filter.specification;
 
 
 import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
 import com.ffwatl.manage.entities.items.color.Color;
-import com.ffwatl.manage.entities.filter.grid_filter.GridFilterRule;
+import com.ffwatl.manage.filter.grid_filter.GridFilterRule;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.manage.entities.items.brand.Brand;
 import com.ffwatl.manage.entities.items.clothes.size.Size;

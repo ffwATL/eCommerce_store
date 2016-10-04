@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "promo_groups")
 public class PromoGroup {
 
     @Id

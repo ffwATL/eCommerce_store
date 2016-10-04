@@ -3,6 +3,7 @@ package com.ffwatl.manage.entities.users.address;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "address")
 public class Address {
 
     @Id

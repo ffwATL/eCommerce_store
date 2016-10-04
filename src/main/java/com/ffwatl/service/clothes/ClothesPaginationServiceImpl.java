@@ -2,9 +2,9 @@ package com.ffwatl.service.clothes;
 
 
 import com.ffwatl.dao.items.ClothesItemRepository;
-import com.ffwatl.manage.entities.filter.specification.ClothesItemSpecifications;
-import com.ffwatl.manage.entities.filter.grid_filter.GridFilter;
-import com.ffwatl.manage.entities.filter.grid_filter.GridFilterRule;
+import com.ffwatl.manage.filter.specification.ClothesItemSpecifications;
+import com.ffwatl.manage.filter.grid_filter.GridFilter;
+import com.ffwatl.manage.filter.grid_filter.GridFilterRule;
 import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.service.PaginationService;

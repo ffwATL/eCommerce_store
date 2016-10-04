@@ -6,6 +6,7 @@ import com.ffwatl.manage.entities.i18n.I18n;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "brand")
 public class Brand {
 
     @Id

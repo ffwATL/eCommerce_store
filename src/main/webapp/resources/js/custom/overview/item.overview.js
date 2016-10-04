@@ -160,6 +160,7 @@ $(function(){
     /******Method for refreshing items and drawing grid******/
     function refreshItems (){
         onCheckBoxSelected(false);
+        recalcTabsWidth();
         fillTempFilter(staticFilter.refineFilter.cat);
         $.ajax({
             url: magic + "../../manage/ajax/get/item/all",

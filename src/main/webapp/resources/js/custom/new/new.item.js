@@ -1,3 +1,9 @@
+function checkLength (form){
+    return form != undefined && !form.val().length <= 0
+}
+function unlock (b, enable){
+    b.prop('disabled', !enable)
+}
 /*<![CDATA[*/
 $(function(){
     var magic =/*[[@{context:}]]*/'',
@@ -6,7 +12,7 @@ $(function(){
     var locale = getLocale(lang), menClothesPattern = '',
         final_sizes = [], deleted = [], all_sizes = [],treeData = [], temporaryGroup = {},
         quantity_sizes = 0, count = 0, count_size = 0, gender = 0, x_buff='',
-        cat, item, item_group_code, itemGroup_id, pattern, featuresOk = true,
+        cat, item, item_group_code = -1, itemGroup_id, pattern, featuresOk = false, files=false,
         item_name_en = $('#item-name-en'), item_name_ru = $('#item-name-ru'), item_name_ua =$('#item-name-ua'),
         quantity_input = $('#add_size_panel_qty_li').find('input'),
         origin_price_input = $('#origin_price'),
@@ -48,7 +54,6 @@ $(function(){
         $('#section_3').hide();
         $('#section_4').hide();
         $('.icon-wrapper').remove();
-        $('#brand').find('select option:eq(0)').prop('selected', true);
         if(item_group_code < 0) return;
         else if(item_group_code < 4) {
             group_1_clear_forms();
@@ -73,7 +78,6 @@ $(function(){
         $('#section_2').show();
         $('#section_3').show();
         $('#section_4').show();
-        /*group selection stuff*/
         $('#group_one').hide();
         $('#group_two').show();
     }
@@ -146,13 +150,6 @@ $(function(){
         if(item_group_code == 3) $('#example_group_11').show();
         else $('#example_group_1').show();
         unlock(add_size_button, false);
-        bindInputName();
-        origin_price_input.bind('input propertychange', function(){
-            unlock(save_button, (checkForSaveButton()));
-        });
-        sale_price_input.bind('input propertychange', function(){
-            unlock(save_button, (checkForSaveButton()));
-        });
         gr_1_waist.bind('input propertychange', function(){
             checkAllFormsGroup();
             checkMeasurementInput(gr_1_waist);
@@ -213,13 +210,6 @@ $(function(){
             $('#example_group_3').show();
         }else $('#example_group_2').show();
         unlock(add_size_button, false);
-        bindInputName();
-        origin_price_input.bind('input propertychange', function(){
-            unlock(save_button, (checkForSaveButton()));
-        });
-        sale_price_input.bind('input propertychange', function(){
-            unlock(save_button, (checkForSaveButton()));
-        });
         gr_2_shoulders.bind('input propertychange', function(){
             checkAllFormsGroup();
             checkMeasurementInput(gr_2_shoulders);
@@ -240,17 +230,18 @@ $(function(){
         }
         add_size_button.on('click', function(){
             var qty = addSizePreview(gr2_eu_dropDown.text()),
-            fields = [
+                fields = [
                 {name: 'Shoulders', value: gr_2_shoulders.val()},
                 {name: 'Length', value: gr_2_length.val()},
                 {name: 'Chest', value: gr_2_chest.val()}
-            ];
+                ],
+                size = {
+                    quantity: qty, measurements: fields, eu_size: {id: gr2_eu_dropDown.find('input').val()}
+                };
             if(item_group_code > 5) fields.push({name: 'Sleeve', value: gr_3_sleeve.val()});
-            var size = {
-                quantity: qty, measurements: fields, eu_size: {id: gr2_eu_dropDown.find('input').val()}
-            };
             group_2_clear_forms();
             processNewSize(size, qty);
+
         });
     }
     function group_2_clear_forms (){
@@ -287,28 +278,48 @@ $(function(){
     /*Common methods*/
     function checkAllFormsGroup (){
         var condition;
-        if(item_group_code < 4) condition = conditionForAddSizeButtonGroup_1();
+        if(item_group_code < 0) condition = false;
+        else if(item_group_code < 4) condition = conditionForAddSizeButtonGroup_1();
         else if(item_group_code < 6) condition = conditionForAddSizeButtonGroup_2();
         else if(item_group_code < 10) condition = conditionForAddSizeButtonGroup_3();
         unlock(add_size_button, condition);
         unlock(save_button, checkForSaveButton());
     }
     function checkForSaveButton (){
-        return count_size > 0 && checkLength(origin_price_input) &&
-               checkLength(sale_price_input) && checkLength(item_name_en) && checkLength(item_name_ru) &&
-               checkLength(item_name_ua) && featuresOk;
+        var name = checkItemNameBlock(), size = count_size > 0, cb = checkColorBrandBlock();
+        return name && size && checkPriceInput() && featuresOk && cb && files;
+    }
+
+    function checkItemNameBlock(){
+        var cond = checkLength(item_name_en) && checkLength(item_name_ru) && checkLength(item_name_ua);
+        changeBlockStatus($('#name-block'), cond);
+        return cond;
+    }
+    function checkColorBrandBlock(){
+        var brand = $('#brand-logo').find('img').attr('src') != '/atl/storage/brand/images/default.png',
+            color = $('#color_sample').data('color'),
+            cond = brand && color;
+        changeBlockStatus($('#cb-block'), cond);
+        return cond;
+    }
+
+    function changeBlockStatus(block, cond){
+        if(cond) {
+            if(block.hasClass('not_completed')){
+                block.removeClass('not_completed');
+                block.addClass('completed')
+            }
+        }else{
+            if(block.hasClass('completed')){
+                block.removeClass('completed');
+                block.addClass('not_completed');
+            }
+        }
     }
     function checkMeasurementInput (input){
         var value = input.val();
         if(value.length == 1 && value =='.' || value =='-') value = '';
         input.val(value.replace(/[^0-9.-]/g,''));
-    }
-
-    function checkLength (form){
-        return form != undefined && !form.val().length <= 0
-    }
-    function unlock (button, enable){
-        button.prop('disabled', !enable)
     }
     function quantityInputBind (){
         quantity_input.bind('input propertychange', function(){
@@ -369,11 +380,13 @@ $(function(){
             deleted.push(c);
             quantity_sizes -= all_sizes[c].quantity;
             count_size--;
+            changeBlockStatus($('#sz-block'), count_size > 0);
             checkAllFormsGroup();
         });
         quantity_sizes += qty;
         count+=1;
         count_size+=1;
+        changeBlockStatus($('#sz-block'), count_size > 0);
         checkAllFormsGroup();
     }
     function updateFinalSizes (){
@@ -438,17 +451,31 @@ $(function(){
         if(!$.isNumeric(item_group_code) || item_group_code < 0) console.log('some error');
         saveClothesItem();
     });
+    function resetColorBrand(){
+        var elem = $('#color_sample');
+        elem.data('color', false);
+        elem.css('background', 'white');
+        elem = $('#brand');
+        elem.find('.dropbtn').text(locale.label_choose);
+        elem.parent().find('img').attr('src','/atl/storage/brand/images/default.png');
+    }
     function closeSession() {
+        changeBlockStatus($('#cat-block'), false);
+        changeBlockStatus($('#cb-block'), false);
+        changeBlockStatus($('#sz-block'), false);
+        changeBlockStatus($('#ds-block'), false);
+        changeBlockStatus($('#pr-block'), false);
+        $('ul.feature_preview').remove();
+        resetColorBrand();
+        $('#filer_input').prop("jFiler").reset();
         add_size_button.off('click');
-        item_name_en.unbind();
-        item_name_ru.unbind();
-        item_name_ua.unbind();
-        origin_price_input.unbind();
-        sale_price_input.unbind();
+        $('#discount').val(0);
+        item_group_code = -1;
         quantity_sizes = 0;
+        temporaryGroup = {};
         quantity_input.val(1);
-        origin_price_input.val(1);
-        sale_price_input.val(1);
+        origin_price_input.val(0);
+        sale_price_input.val(0);
         count_size = 0;
         deleted = [];
         for(var i = 0; i < count; i++){
@@ -461,7 +488,7 @@ $(function(){
 
     $('#filer_input').filer({
         showThumbs: true,
-        limit: 8,
+        limit: 6,
         appendTo: $('#upload_wrapper'),
         templates: {
             box: '<ul id="list" class="jFiler-items-list jFiler-items-grid"></ul>',
@@ -528,11 +555,38 @@ $(function(){
                 filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
             }
         },
+        afterShow: function(){
+            changePhotoBlockStatus(true)
+        },
+        onEmpty: function(){
+            changePhotoBlockStatus(false)
+        },
         addMore: true
     });
 
+    function changePhotoBlockStatus(cond){
+        files = cond;
+        changeBlockStatus($('#ph-block'), files);
+        checkForSaveButton();
+    }
+    function checkPriceInput(){
+        return (sale_price_input.val() > 0) && (origin_price_input.val() > 0)
+    }
+    function bindPriceInput(){
+        var block = $('#pr-block');
+        origin_price_input.bind('input propertychange', function(){
+            unlock(save_button, checkForSaveButton());
+            changeBlockStatus(block, checkPriceInput())
+        });
+        sale_price_input.bind('input propertychange', function(){
+            unlock(save_button, checkForSaveButton());
+            changeBlockStatus(block, checkPriceInput())
+        });
+    }
+
     /*Items group tree stuff*/
     function init(){
+        bindPriceInput();
         $('.main-content .dropbtn').click(function(e){
             $(this).parent().find('.dropdown-content').toggle(150);
         });
@@ -561,6 +615,7 @@ $(function(){
 
     function fillColor(data){
         var content = $('#color').find('.dropdown-content');
+        content.find('a.color-option').remove();
         for(var i=0; i<data.length; i++){
             var color = data[i].hex;
             content.append('<a class="color-option">'+resolveLocale(data[i].color)+'<div class="hex" style="background: '+color+'"><input hidden value="'+data[i].id+'"></div></a>')
@@ -571,7 +626,9 @@ $(function(){
             $('#color').find('.dropbtn').text(text);
             text =  $('#color_sample');
             text.css({'background':hex.css('background')});
-            text.find('input').val(hex.find('input').val())
+            text.find('input').val(hex.find('input').val());
+            text.data('color', true);
+            checkAllFormsGroup ();
         });
     }
     $('#add-cat-popup').popup({
@@ -579,10 +636,21 @@ $(function(){
         closeelement:'.close_group',
         transition: 'all 0.3s'
     });
-    $('#extraNotes_popup').popup({
+    var extra_popup = $('#extraNotes_popup');
+    extra_popup.popup({
         openelement:'.extra_note',
         closeelement:'.extra_close',
-        transition: 'all 0.3s'
+        transition: 'all 0.3s',
+        onclose: function(){
+            var b = $('.extra_note'), info = $('#ex-info');
+            if(info.val().length > 0 && !b.hasClass('extra_note_filled')){
+                b.removeClass('extra_note_not_filled');
+                b.addClass('extra_note_filled');
+            }else if (info.val().length < 1 && !b.hasClass('extra_note_not_filled')){
+                b.removeClass('extra_note_filled');
+                b.addClass('extra_note_not_filled');
+            }
+        }
     });
 
     function drawBrandsDropDown(data, brandDropdown, imageUrl){
@@ -590,11 +658,11 @@ $(function(){
             brandDropdown.append('<a class="brand-option">' + data[i].name + '<input type="number" hidden value="' + data[i].id + '"></a>')
         }
         $('.brand-option').click(function(){
-            var tmp = $(this);
-            var dropbtn = tmp.parent().parent().find('.dropbtn');
+            var tmp = $(this), dropbtn = tmp.parent().parent().find('.dropbtn');
             dropbtn.text(tmp.text());
             dropbtn.append('<input type="number" hidden value="'+tmp.find('input').val()+'">');
             $('#brand-logo').find('img').attr('src', magic+"../.." + imageUrl+tmp.text().toLowerCase().replace(/\s/g,"_")+'/logo.jpg').show();
+            checkAllFormsGroup ();
         });
     }
 
@@ -626,9 +694,8 @@ $(function(){
             lvl.append('<li id="lvl-'+data[i].level+i+'">'+data[i].text+child+'</li>');
             child = '#lvl-'+data[i].level+i;
             $(child).click(function(){
-                var li = $(this);
+                var li = $(this), number = li.find('input').val();
                 li.parent().find('.chosen').removeClass('chosen');
-                var number = li.find('input').val();
                 if(data[number].level == 2){
                     resolveGender(data[number].text)
                 }
@@ -648,6 +715,7 @@ $(function(){
         }
     }
     $('#accept_group').click(function(){
+        changeBlockStatus($('#cat-block'), true);
         chooseItemGroup(temporaryGroup.text);
         getEuroSize(temporaryGroup.cat);
     });
@@ -707,44 +775,41 @@ $(function(){
      * Adding an action on button click for removing row of features;
      * @param button - .remove_row button from current ul.
      */
-    function removeRowClick(button){
+    function removeRowClick(button, block){
         button.click(function(){
             var list = $(this).parent().parent();
             list.fadeOut(150);
-            $.when(function(){
-                setTimeout(function(){
-                    list.remove();
-                }, 200);
-            }).then(function(){
-                checkAllFeaturesInputs($('input.val'));
-
-            });
+            setTimeout(function(){
+                list.remove();
+                checkAllFeaturesInputs($('input.val'), block);
+            }, 200);
         })
     }
 
-    function checkAllFeaturesInputs(input){
-        var cond = true;
+    function checkAllFeaturesInputs(input, block){
+        var cond = input.length > 0;
         input.each(function(){
             if($(this).val().length < 1) cond = false;
         });
         featuresOk = cond;
+        changeBlockStatus(block, featuresOk);
         unlock(save_button, checkForSaveButton());
     }
 
-    function checkFeatureInputLength(input){
+    function checkFeatureInputLength(input, block){
         featuresOk = true;
         input.each(function(){
             $(this).bind('input propertychange', function(){
                 var currentInput = $(this), cond = currentInput.val().length > 0;
                 if(cond) currentInput.removeClass('broken');
                 else currentInput.addClass('broken');
-                checkAllFeaturesInputs(input);
+                checkAllFeaturesInputs(input, block);
             })
         });
     }
 
     $('button.feature').click(function(){
-        var ul = $('.item_description'),
+        var ul = $('.item_description'), block = $('#ds-block'),
             holder = ul.parent().find('.feature_holder'),
             lastEq = holder.find('ul').length;
         holder.append('<ul class="list-inline feature_preview">' +
@@ -753,16 +818,80 @@ $(function(){
             '<li class="marg"><input type="text" class="height val f-ua" value="'+removeVal(ul.find('.ua'))+'" spellcheck="false"></li>' +
             '<li><button class="remove_row"></button></li></ul>');
         ul.parent().find('button.feature').prop('disabled', true);
-        checkFeatureInputLength(holder.find('input.val'));
+        checkFeatureInputLength(holder.find('input.val'), block);
         ul = holder.find('ul:eq('+lastEq+')');
-        removeRowClick(ul.find('button.remove_row'));
+        removeRowClick(ul.find('button.remove_row'), block);
+        changeBlockStatus(block, featuresOk);
+        unlock(save_button, checkForSaveButton());
     });
-    $('.accept-button').click(function(){
+    extra_popup.find('.accept-button').click(function(){
         x_buff = $('#ex-info').val();
     });
-    $('#extraNotes_popup').find('.cancel-button').click(function(){
+    extra_popup.find('.cancel-button').click(function(){
         $('#ex-info').val(x_buff);
     });
+
+    $('.color-tabs').tabslet();
+    $("#color-sample").spectrum({
+        color: "#fff",
+        showAlpha: true,
+        clickoutFiresChange: false,
+        showInitial: true,
+        showInput: true,
+        preferredFormat: "hex"
+    });
+    $('.sp-choose').click(function () {
+        $('#color-value').text($('.sp-input').val());
+    });
+    function newColorInputBind(){
+        var color_popup = $('#color_popup'),
+            en = color_popup.find('#c-name-en'),
+            ru = color_popup.find('#c-name-ru'),
+            ua = color_popup.find('#c-name-ua'),
+            saveButton = color_popup.find('.update-button');
+        color_popup.popup({
+            opacity: 0.3,
+            transition: 'all 0.3s',
+            openelement: '#color-plus',
+            closeelement: '.color_close',
+            blur:false,
+            scrolllock: true
+
+        });
+        en.bind('input propertychange', function(){unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua))});
+        ru.bind('input propertychange', function(){unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua))});
+        ua.bind('input propertychange', function(){unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua))});
+        saveButton.click(function(){
+            updateColor(JSON.stringify({
+                color: {
+                    locale_en: en.val(),
+                    locale_ru: ru.val(),
+                    locale_ua: ua.val()
+                },
+                hex: color_popup.find('#color-value').text()
+            }))
+        });
+    }
+    function updateColor(color){
+        $.ajax({
+            url: magic + "../../manage/ajax/save/color",
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf.header, csrf.token);
+            },
+            data: color,
+            type: "POST",
+            success: function(result){
+                fillColor(result);
+            },
+            error: function(result){
+                console.log('Error while getting colors =/');
+                console.log(result)
+            }
+        });
+    }
+    bindInputName();
+    newColorInputBind();
     init();
 });
 /*]]>*/

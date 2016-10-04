@@ -5,11 +5,11 @@
     background: white;
     height: 100%;
     margin-top: 0;
-   /* border: solid 1px #d3d3d3;*/
 }
 #item_group_2, #item_group_1{
     min-height: 170px;
 }
+
 @media screen and (max-width: 767px){
     #upload_button, #filer_input{
         width: 100%;
@@ -118,21 +118,18 @@ button:disabled,button:disabled:hover{
 input:focus{
     transition: 0.3s;
     border-bottom: solid .12em  #ccd0d1;
-    /*background: rgba(251, 248, 255, 0.85);*/
     background: rgba(241, 244, 251, 0.47);;
 }
 input.height{
     border-left:  none;
     border-right: none;
     border-top: none;
-
     border-radius: 0;
 }
 input{
     border-bottom: solid .13em #dadedf;
 }
 .height{
-    color: #727272;
     padding: 6px;
 }
 #section_1{
@@ -156,9 +153,6 @@ select.height:disabled, select.height:disabled:hover{
     line-height: 1.42857143;
     height: 29px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    /*margin-left: auto;
-    margin-right: auto;*/
-    margin-left: 15px;
     display: inline;
 }
 label{
@@ -171,12 +165,13 @@ label{
 #section_0 ul{
     margin-bottom: 5px;
 }
-#section_0, #section_1, #section_2, #section_3, .color-list{
-    padding-bottom: 15px;
+.bottom_line{
+    margin-bottom: 20px;
+}
+label.name,#measurement_example, menu li:before, menu li:after,#color_sample, .info-pic, button.remove_row, button.extra_note{
+    position: absolute;
 }
 label.name{
-    font-size: 13px;
-    position: absolute;
     margin-left: -15px;
     margin-top: 2px;
     text-align: center;
@@ -187,14 +182,14 @@ label.name{
     padding: 5px 0 0;
     margin-bottom: 0;
 }
-option, #size_preview .del, #size_preview .size_quantity{
+option, #size_preview .del, #size_preview .size_quantity, button.extra_note, button.remove_row{
     border: none;
 }
 #input-group,#group_two span,.input-name,#group_two a,#section_2 select, #section_2 input, #section_3 select,
 #section_3 input{
     font-weight: 200;
 }
-#group_two span{
+#group_two span, label.name, p.warn{
     font-size: 13px;
 }
 #section_2 select{
@@ -261,7 +256,6 @@ select:disabled, input:disabled{
     width: 87px;
 }
 #measurement_example{
-    position: absolute;
     width: 300px;
     margin-left: 410px;
     margin-top: -200px;
@@ -368,9 +362,6 @@ hr.null{
     padding: 0;
     margin: 0;
 }
-ul.price_list{
-    margin-bottom: 0;
-}
 #section_4 input{
     font-weight: 200;
 }
@@ -407,9 +398,6 @@ ul.price_list{
     z-index: 1;
     background: #a6a9b0;
 }
-p.warn{
-    font-size: 13px;
-}
 .inline{
     display: inline;
     padding-right: 0;
@@ -429,13 +417,10 @@ p.warn{
 #section_2_ul, #clothes_items ul, ul.price_list{
     margin-left: 10px;
 }
-#section_4 li{
-    padding-bottom: 15px;
-}
 #clothes_items li, ul.price_list li{
     padding-right: 35px;
 }
-#group_one select, #item_group_2 select{
+#group_one select, #item_group_2 select, button#changeGroup, ul.item_description textarea, .input-name{
     margin-left: 15px;
 }
 #brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn{
@@ -463,7 +448,6 @@ menu{
     overflow: hidden;
     box-shadow: inset 0px 0px 2px #333, 0 0 1px #333;
 }
-
 menu li{
     color: transparent;
     height: 50px;
@@ -477,7 +461,6 @@ menu li{
 }
 menu li:before, menu li:after{
     content: '';
-    position: absolute;
 }
 menu li:before{
     top: 7px;
@@ -508,10 +491,7 @@ li.stage_comp, li.stage_comp:before{
 .lvl li{
     color: rgba(79, 76, 83, 0.75);
 }
-button#changeGroup{
-    margin-left: 15px;
-}
-a.change, #advice, select.height{
+a.change, #advice, select.height, ul.feature_preview input{
     font-size: 12px;
 }
 #brand label, #color label{
@@ -523,13 +503,16 @@ a.change, #advice, select.height{
     outline: none;
     margin-left: 2px;
     width: 29px;
-    border: solid .1em #a6a9b0;
     color: transparent;
-    background: #a6a9b0 url("../../../img/new/square-plus.svg") no-repeat 6px;
+    background-image: url("../../../img/new/square-plus.svg");
+    background-position: 6px;
+    background-repeat: no-repeat;
+
 }
 .plus:hover{
-    background: #000000 url("../../../img/new/square-plus.svg") no-repeat 6px;
-    border: solid .1em #000000;
+    background-image: url("../../../img/new/square-plus.svg");
+    background-position: 6px;
+    background-repeat: no-repeat;
 }
 #hex{
     margin-right: 5px;
@@ -540,11 +523,10 @@ li.logo{
 #brand-logo{
     text-align: center;
     margin-left: 287px;
-    width: 200px;
-    height: 60px;
+    min-width: 200px;
 }
-#color_sample/*, #brand-logo img*/{
-    position: absolute;
+#brnd, #brand-logo{
+    min-height: 60px;
 }
 #color_sample{
     margin-top: -48px;
@@ -555,17 +537,11 @@ li.logo{
     margin-left: 580px;
 }
 #brand-logo img{
-   /* margin-top: -53px;*/
     max-width: 200px;
     max-height: 60px;
-    /*display: none;*/
-
 }
-
 .brand-list{
-    margin-top: 50px;
-    vertical-align: middle;
-    height: 100px;
+    min-height: 90px;
 }
 #color .dropbtn{
     padding-left: 10px;
@@ -574,20 +550,30 @@ li.logo{
 #section_description{
     margin: 0;
     padding: 0;
-
 }
 .list-select{
     margin-bottom: 25px;
 }
+.not_completed{
+    background: rgba(241, 244, 251, 0.47);
+    border: solid 1px rgba(166, 169, 176, 0.21);
+}
+.not_completed h5{
+    color: #a6a9b0;
+}
+.completed{
+    background: rgba(221, 251, 212, 0.26);
+    border: solid 1px rgba(119, 176, 118, 0.21);
+}
+.completed h5{
+    color: #9ab094;
+}
 .info{
     height: 110px;
     margin-bottom: 25px;
-    background: rgba(241, 244, 251, 0.47);
     padding: 10px 0;
-    border: solid 1px rgba(166, 169, 176, 0.21);
 }
 .info h5{
-    color: #a6a9b0;
     max-width: 510px;
     text-align: justify;
     font-family: Tahoma, Geneva, sans-serif;
@@ -607,19 +593,15 @@ ul.item_description textarea, .input-block textarea{
     overflow: hidden;
     resize: none;
     padding: 10px;
-    color: #a6a9b0;
     border: dotted 2px rgba(166, 169, 176, 0.21);
 }
 ul.item_description textarea{
     width: 213px;
-    margin-left: 15px;
 }
 .input-block textarea{
     width: 460px;
     height: 100px;
     margin-bottom: 10px;
-    /*margin-left: auto;
-    margin-right: auto;*/
 }
 .input-block{
     text-align: center;
@@ -628,25 +610,20 @@ button.feature{
     margin-left: 20px;
 }
 .info-pic{
-    position: absolute;
-   margin-left: 630px;
+    margin-left: 630px;
     margin-top: -70px;
 }
 ul.feature_preview{
-    margin-bottom: 15px;
-    margin-top: 30px;
+    margin-bottom: 30px;
      margin-left: 35px;
 }
-ul.feature_preview li.marg/*, ul.feature_preview li:nth-child(3)*/{
+ul.feature_preview li.marg{
     margin-left: 60px;
 }
 ul.feature_preview input{
-    font-size: 12px;
     width: 173px;
 }
 button.remove_row{
-    border: none;
-    position: absolute;
     height: 22px;
     width: 22px;
     background: url("../../../img/new/backspace.svg") no-repeat;
@@ -655,44 +632,96 @@ button.remove_row:hover{
     background: url("../../../img/new/backspace-arrow.svg") no-repeat;
 }
 button.extra_note{
-    border: none;
     width: 29px;
     height: 29px;
-    background: url("../../../img/new/xtra_notes.svg") no-repeat;
-    position: absolute;
     margin-left: 80px;
 }
-button.remove_row:hover, button.extra_note:hover{
-    transition: 0.2s;
+.extra_note_not_filled{
+    background: url("../../../img/new/xtra_notes.svg") no-repeat;
 }
-button.extra_note:hover{
+.extra_note_not_filled:hover{
     background: url("../../../img/new/xtra_notes_hover.svg") no-repeat;
 }
+.extra_note_filled{
+    background: url("../../../img/new/xtra_notes_filled.svg") no-repeat;
+}
+.extra_note_filled:hover{
+    background: url("../../../img/new/xtra_notes_filled_hover.svg") no-repeat;
+}
+button.remove_row:hover, button.extra_note:hover,.extra_note_filled:hover{
+    transition: 0.2s;
+}
 .add_size_panel{
-    margin-bottom: 30px;
+    margin-top: 30px;
+    margin-bottom: 55px;
 }
 .broken, .broken:focus{
     border-bottom: solid .13em #F25D75;
     background: #FCE8EC;
 }
-#extraNotes_popup{
+#extraNotes_popup, #color_popup{
     min-height: 250px;
-   /* max-height: 250px;*/
+    max-height: 300px;
     min-width: 500px;
     max-width: 500px;
 }
-#extraNotes_popup h3{
+#extraNotes_popup h3, #color_popup h3{
     margin-top: 25px;
     border-bottom: 0.08em solid #000;
     line-height:0.1em;
     text-align: left;
 }
-#extraNotes_popup h3 span{
-    text-transform: uppercase;
-    background: #fff;
-    padding: 0 15px;
-}
 .popup-info h5{
     color: #a6a9b0;
-    padding: 0 20px;
+}
+ul#color-forTabs{
+    margin-bottom: 10px;
+   padding-left: 0px;
+}
+#color-forTabs li{
+    text-align: center;
+    min-width: 95px;
+}
+#color-forTabs li a{
+    font-size: 12px;
+}
+#color_popup label{
+    padding: 0;
+}
+.color-tabs{
+    margin-right: -2px;
+    margin-bottom: 15px;
+}
+#color-sample{
+    margin-top: 15px;
+    width: 100px;
+    height: 100px;
+    border: solid black .09em;
+    outline: none;
+}
+.color-right{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 90px;
+    margin-right: 23px;
+}
+#color_popup .buttons{
+    margin-top: -20px;
+    margin-right: -5px;
+}
+#color-value{
+    font-size: 12px;
+    font-weight: 300;
+    margin-top: 10px;
+    /*text-align: center;
+    max-width: 100px;*/
+    margin-right: 20px;
+}
+#color_popup .popup-info h5{
+    margin-top: 0;
+}
+input.c-name{
+    min-width: 280px;
+    max-width: 280px;
 }

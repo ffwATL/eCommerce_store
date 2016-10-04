@@ -2,7 +2,7 @@ package com.ffwatl.service.users;
 
 
 import com.ffwatl.dao.users.UserRepository;
-import com.ffwatl.manage.entities.filter.grid_filter.GridFilter;
+import com.ffwatl.manage.filter.grid_filter.GridFilter;
 import com.ffwatl.manage.entities.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

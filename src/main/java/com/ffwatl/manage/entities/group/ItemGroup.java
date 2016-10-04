@@ -16,7 +16,7 @@ import java.util.List;
  * only once. But if needed you can manually add new group through console.
  */
 @Entity
-@Table(name = "itemsGroup")
+@Table(name = "items_group")
 public class ItemGroup implements Comparable<ItemGroup>, Serializable{
 
     /**

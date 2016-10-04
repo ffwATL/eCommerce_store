@@ -6,41 +6,94 @@
     <link href="../../../../resources/img/favicon.png" th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/png">
     <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/css/bootstrap.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/css/custom/main.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/overview/popup.css" th:href="@{/resources/css/custom/overview/popup.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/tabslet.css" th:href="@{/resources/css/custom/tabslet.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/new/new.item.css" th:href="@{/resources/css/custom/new/new.item.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
     <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
     <script rel="script" src="../../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/js/jquery.popupoverlay.min.js}"></script>
     <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
     <script rel="script" src="../../../../resources/js/jquery.tabslet.min.js" th:src="@{/resources/js/jquery.tabslet.min.js}"></script>
-    <!--<script rel="script" src="../../../resources/js/custom/overview/item.overview.js" th:src="@{/resources/js/custom/overview/item.overview.js}" ></script>-->
+    <script rel="script" src="../../../../resources/js/spectrum.min.js" th:src="@{/resources/js/spectrum.min.js}"></script>
+    <script rel="script" src="../../../../resources/js/custom/new/new.item.js" th:src="@{/resources/js/custom/new/new.item.js}" ></script>
     <script>
         $(function(){
-            var popup = $('#extraNotes_popup');
-            popup.popup({
+            var color_popup = $('#color_popup');
+            color_popup.popup({
                 opacity: 0.3,
                 transition: 'all 0.3s',
-                openelement: '.globalEdit',
-                closeelement: '.global_close'
+                openelement: '#color-plus',
+                closeelement: '.color_close',
+                blur:false
             });
-            popup.popup('show');
+            color_popup.popup('show');
+            $('.color-tabs').tabslet();
+            $("#color-sample").spectrum({
+                color: "#fff",
+                showAlpha: true,
+                clickoutFiresChange: false,
+                showInitial: true,
+                showInput: true,
+                preferredFormat: "hex"
+            });
+            $('.sp-choose').click(function () {
+                $('#color-value').text($('.sp-input').val());
+            });
+            function newColorInputBind(){
+                var en = color_popup.find('#c-name-en'),
+                    ru = color_popup.find('#c-name-ru'),
+                    ua = color_popup.find('#c-name-ua'),
+                    saveButton = color_popup.find('.update-button');
+                function checkAllInputs(){
+                    unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua));
+                }
+                en.bind('input propertychange', checkAllInputs());
+                ru.bind('input propertychange', checkAllInputs());
+                ua.bind('input propertychange', checkAllInputs());
+            }
         })
     </script>
 </head>
 <body>
-<div id="extraNotes_popup" class="popup">
-    <div class="popup-header"><h3><span th:text="#{label.extraNotes.header}">Extra notes</span></h3></div>
-    <div>
+<div id="color_popup" class="popup">
+    <div class="popup-header"><h3><span th:text="#{label.extraNotes.header}">New color</span></h3></div>
+    <div class="popup-content">
         <div class="popup-info">
             <h5 th:text="#{label.extraNotes.headInfo}">Enter some important information about the size, condition or product at all. This information available only for administrators.</h5>
         </div>
-       <div class="input-block">
-           <textarea spellcheck="false"></textarea>
+       <div class="color-left">
+           <ul class="list-unstyled">
+               <li><input id="color-sample" type="text"></li>
+               <li><label id="color-value">#fff</label></li>
+           </ul>
        </div>
+        <div class="color-right">
+            <div class="tabs color-tabs">
+                <ul id="color-forTabs" class="forTabs">
+                    <li class="active" ><a href="#c-tab-1" th:text="#{label.mainInfo}">EN</a></li>
+                    <li><a href="#c-tab-2" th:text="#{new.item.brand}">RU</a></li>
+                    <li><a href="#c-tab-3" th:text="#{label.extraInfo}">UA</a></li>
+                </ul>
+                <div id="c-tab-1">
+                    <label>Name</label>
+                    <input class="height c-name" id="c-name-en">
+                </div>
+                <div id="c-tab-2">
+                    <label>Name</label>
+                    <input class="height c-name" id="c-name-ru" >
+                </div>
+                <div id="c-tab-3">
+                    <label>Name</label>
+                    <input class="height c-name" id="c-name-ua" >
+                </div>
+
+            </div>
+        </div>
         <div class="buttons">
             <ul class="list-inline">
-                <li><button class="update-button button-typical extra_close" th:text="#{label.accept}">Accept</button></li>
-                <li><button class="cancel-button button-bordered extra_close" th:text="#{label.cancel}">Cancel</button></li>
+                <li><button class="update-button button-typical color_close" th:text="#{label.accept}" disabled>Accept</button></li>
+                <li><button class="cancel-button button-bordered color_close" th:text="#{label.cancel}">Cancel</button></li>
             </ul>
         </div>
     </div>

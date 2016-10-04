@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "promo_code")
+@Table(name = "promo_codes")
 public class PromoCode {
 
     @Id

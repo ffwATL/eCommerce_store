@@ -4,7 +4,7 @@ package com.ffwatl.manage.entities.users;
 import javax.persistence.*;
 
 @Entity
-@Table(name="USER_PROFILE")
+@Table(name="user_profile")
 public class UserProfile {
 
     @Id

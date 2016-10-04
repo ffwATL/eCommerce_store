@@ -2,19 +2,30 @@ package com.ffwatl.manage.entities.orders;
 
 
 import com.ffwatl.manage.entities.currency.Currency;
-import com.ffwatl.manage.entities.items.Item;
+import com.ffwatl.manage.entities.group.ItemGroup;
+import com.ffwatl.manage.entities.i18n.I18n;
+import com.ffwatl.manage.entities.items.clothes.size.Size;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "order_items")
 public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    private Item item;
+    private long itemId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    private ItemGroup itemGroup;
+
+    @Embedded
+    private I18n name;
+
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private Size size;
 
     @Column(nullable = false)
     private String shortName;
@@ -33,8 +44,16 @@ public class OrderItem {
         return id;
     }
 
-    public Item getItem() {
-        return item;
+    public long getItemId() {
+        return itemId;
+    }
+
+    public I18n getName() {
+        return name;
+    }
+
+    public Size getSize() {
+        return size;
     }
 
     public String getShortName() {
@@ -65,10 +84,6 @@ public class OrderItem {
         this.id = id;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
@@ -93,11 +108,25 @@ public class OrderItem {
         this.currency = currency;
     }
 
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setName(I18n name) {
+        this.name = name;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
+    }
+
     @Override
     public String toString() {
         return "OrderItem{" +
                 "id=" + id +
-                ", item=" + item.getItemName() +
+                ", itemId=" + itemId +
+                ", name=" + name +
+                ", size=" + size +
                 ", shortName='" + shortName + '\'' +
                 ", qty=" + qty +
                 ", originPrice=" + originPrice +

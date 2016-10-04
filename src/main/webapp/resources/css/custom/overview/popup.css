@@ -13,14 +13,11 @@
     padding-left: 20px;
     float: left;
 }
-.popup .right, .popup .right .prices,.popup .right .buttons,.popup .options,.popup .name{
+.popup .right, .popup .right .prices,.popup .right .buttons,.popup .options,.popup .name, .popup-content .buttons{
     float: right;
 }
 .popup .right {
     width: 500px;
-}
-.popup .right input, #edit_popup, .popup .right .buttons button{
-    /*border-radius: 2px;*/
 }
 .popup .right input, .popup .global_sale input{
     color: #727272;
@@ -95,14 +92,12 @@
     width: 650px;
     height: 290px;
 }
-.popup .popup-header{
+.popup .popup-header, .popup-content, #extraNotes_popup .popup-info h5{
     background: #fff;
     margin-bottom: 20px;
     padding: 1px 20px 3px;
 }
-/*#edit_popup h3,*/ #global_edit_popup h3, #extraNotes_popup h3{
-   /* color: white;*/
-    /*padding-bottom: 5px;*/
+#global_edit_popup h3, #extraNotes_popup h3, #color_popup h3{
     margin-bottom: 0;
     margin-top: 13px;
 }
@@ -115,7 +110,7 @@
 #edit_popup h3,#global_edit_popup h3{
     margin-top: 25px;
 }
-#edit_popup h3 span, #global_edit_popup h3 span, #extraNotes_popup h3 span{
+#edit_popup h3 span, #global_edit_popup h3 span, #extraNotes_popup h3 span, #color_popup h3 span{
     background: #fff;
     padding: 0 15px;
     margin-left: 20.5%;
@@ -321,7 +316,7 @@ h4#options:hover{
     margin-right: 15px;
     float: right;
 }
-.global_sale .buttons button, #extraNotes_popup .buttons button{
+.global_sale .buttons button, #extraNotes_popup .buttons button, .popup-content .buttons button{
     width: 100px;
     height: 29px;
 }

@@ -1,4 +1,4 @@
-package com.ffwatl.manage.entities.filter.grid_filter;
+package com.ffwatl.manage.filter.grid_filter;
 
 
 import java.util.HashMap;
