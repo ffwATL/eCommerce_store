@@ -856,7 +856,6 @@ $(function(){
             closeelement: '.color_close',
             blur:false,
             scrolllock: true
-
         });
         en.bind('input propertychange', function(){unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua))});
         ru.bind('input propertychange', function(){unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua))});
