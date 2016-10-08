@@ -26,7 +26,7 @@
                     },
                     _bindInput: function() {
                         if (n.changeInput && o.length > 0) {
-							o.find('#upload_button').on("click", f._clickHandler);
+							o.find('.upload_button').on("click", f._clickHandler);
                         }
                         s.on({
                             "focus": function() {
@@ -53,7 +53,7 @@
                     },
                     _unbindInput: function(all) {
                         if (n.changeInput && o.length > 0) {
-                            o.find('#upload_button').off("click", f._clickHandler);
+                            o.find('.upload_button').off("click", f._clickHandler);
                         }
                         if (all) {
                             s.off("change", f._onChange);
@@ -141,7 +141,7 @@
                             if (n.changeInput) {
                                 switch (typeof n.changeInput) {
                                     case "boolean":
-                                        o = $('<div class="col-lg-12"><div class="jFiler-input-caption"></div><div class="jFiler-input-button" id="upload_button">' + n.captions.button + '</div></div>"');
+                                        o = $('<div><div class="jFiler-input-caption"></div><div class="jFiler-input-button upload_button">' + n.captions.button + '</div></div>"');
                                         break;
                                     case "string":
                                     case "object":

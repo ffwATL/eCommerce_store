@@ -19,5 +19,7 @@ public interface BrandService {
 
     void removeByName(String name);
 
-    public List<Brand> findAllUsed();
+    void removeById(long id);
+
+    List<Brand> findAllUsed();
 }

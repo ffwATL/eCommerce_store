@@ -24,6 +24,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public void save(Brand brand) {
         if(brand == null) throw new IllegalArgumentException("Brand can't be null");
+        if(findByName(brand.getName()) != null) throw new IllegalArgumentException("Brand with same name is already exist");
         brandDao.save(brand);
     }
 
@@ -52,6 +53,12 @@ public class BrandServiceImpl implements BrandService {
         Brand b = findByName(name);
         if(b == null) throw new IllegalArgumentException("Such element not present in DB");
         brandDao.remove(b);
+    }
+
+    @Override
+    @Transactional
+    public void removeById(long id) {
+        brandDao.remove(findById(id));
     }
 
     @Override

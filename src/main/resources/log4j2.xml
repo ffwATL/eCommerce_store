@@ -10,6 +10,14 @@
             </Policies>
             <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} [%t] %-5p %c{2} - %m%n"/>
         </RollingFile>
+        <RollingFile name="ajaxControllerAppender" fileName="LOGS\ajax.log" filePattern="LOGS\ajax-%d{MM-dd-yyyy}-%i.log">
+            <DefaultRolloverStrategy fileIndex="max" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 KB"/>
+                <TimeBasedTriggeringPolicy interval="2"/>
+            </Policies>
+            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} [%t] %-5p %c{2} - %m%n"/>
+        </RollingFile>
         <RollingFile name="addItemAppender" fileName="LOGS\addItem.log" filePattern="LOGS\addItem-%d{MM-dd-yyyy}-%i.log">
             <DefaultRolloverStrategy fileIndex="max" />
             <Policies>
@@ -47,6 +55,9 @@
         </Logger>
         <Logger name ="com.ffwatl.manage.controller.AddNewItemController" level="trace" additivity="false">
             <AppenderRef ref="addItemAppender"/>
+        </Logger>
+        <Logger name ="com.ffwatl.manage.controller.AjaxController" level="trace" additivity="false">
+            <AppenderRef ref="ajaxControllerAppender"/>
         </Logger>
         <Logger name ="com.ffwatl.manage.controller.CustomUserDetailsService" level="trace" additivity="false">
             <AppenderRef ref="loginServiceAppender"/>

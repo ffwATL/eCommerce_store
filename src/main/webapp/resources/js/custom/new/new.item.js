@@ -134,7 +134,7 @@ $(function(){
             checkAllFormsGroup();
         })
     }
-    function bindInputName(){
+    function bindItemNameInput(){
         item_name_en.bind('input propertychange', function(){
             checkAllFormsGroup();
         });
@@ -491,49 +491,9 @@ $(function(){
         limit: 6,
         appendTo: $('#upload_wrapper'),
         templates: {
-            box: '<ul id="list" class="jFiler-items-list jFiler-items-grid"></ul>',
-            item: '<li class="jFiler-item">\
-                    <div class="jFiler-item-container">\
-                        <div class="jFiler-item-inner">\
-                            <div class="jFiler-item-thumb">\
-                                <div class="jFiler-item-status"></div>\
-                                <div class="jFiler-item-info">\
-                                    <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
-                                    <span class="jFiler-item-others">{{fi-size2}}</span>\
-                                </div>\
-                                {{fi-image}}\
-                            </div>\
-                            <div class="jFiler-item-assets jFiler-row">\
-                                <ul class="list-inline pull-left"></ul>\
-                                <ul class="list-inline pull-right">\
-                                    <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
-                                </ul>\
-                            </div>\
-                        </div>\
-                    </div>\
-                </li>',
-            itemAppend: '<li class="jFiler-item">\
-                        <div class="jFiler-item-container">\
-                            <div class="jFiler-item-inner">\
-                                <div class="jFiler-item-thumb">\
-                                    <div class="jFiler-item-status"></div>\
-                                    <div class="jFiler-item-info">\
-                                        <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
-                                        <span class="jFiler-item-others">{{fi-size2}}</span>\
-                                    </div>\
-                                    {{fi-image}}\
-                                </div>\
-                                <div class="jFiler-item-assets jFiler-row">\
-                                    <ul class="list-inline pull-left">\
-                                        <li><span class="jFiler-item-others">{{fi-icon}}</span></li>\
-                                    </ul>\
-                                    <ul class="list-inline pull-right">\
-                                        <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
-                                    </ul>\
-                                </div>\
-                            </div>\
-                        </div>\
-                    </li>',
+            box: filer.box,
+            item: filer.item,
+            itemAppend: filer.itemAppend,
             itemAppendToEnd: true,
             removeConfirmation: true,
             _selectors: {
@@ -604,7 +564,7 @@ $(function(){
                     drawCategoryPopup(treeData,$('#level-2').find('ul'),[3,4]);
                 },50);
                 fillColor(result.colorList);
-                drawBrandsDropDown(result.brandList, $('li#brand').find('.dropdown-content'), result.brandImgUrl);
+                fillBrand(result.brandList, result.brandImgUrl);
             },
             error: function(result){
                 console.log('Error while getting itemsgroup =/');
@@ -653,7 +613,9 @@ $(function(){
         }
     });
 
-    function drawBrandsDropDown(data, brandDropdown, imageUrl){
+    function fillBrand(data, imageUrl){
+        var brandDropdown = $('li#brand').find('.dropdown-content');
+        brandDropdown.find('.brand-option').remove();
         for(var i=0; i< data.length; i++){
             brandDropdown.append('<a class="brand-option">' + data[i].name + '<input type="number" hidden value="' + data[i].id + '"></a>')
         }
@@ -843,31 +805,38 @@ $(function(){
     $('.sp-choose').click(function () {
         $('#color-value').text($('.sp-input').val());
     });
-    function newColorInputBind(){
-        var color_popup = $('#color_popup'),
-            en = color_popup.find('#c-name-en'),
-            ru = color_popup.find('#c-name-ru'),
-            ua = color_popup.find('#c-name-ua'),
-            saveButton = color_popup.find('.update-button');
-        color_popup.popup({
+    function bindUpdate(popup){
+        var cond = popup.name != undefined && popup.files != undefined;
+        popup.p.popup({
             opacity: 0.3,
             transition: 'all 0.3s',
-            openelement: '#color-plus',
-            closeelement: '.color_close',
-            blur:false,
-            scrolllock: true
+            openelement: popup.openelement,
+            closeelement: popup.closeelement,
+            blur: popup.blur,
+            scrolllock: popup.scrollock
         });
-        en.bind('input propertychange', function(){unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua))});
-        ru.bind('input propertychange', function(){unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua))});
-        ua.bind('input propertychange', function(){unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua))});
-        saveButton.click(function(){
+        popup.en.bind('input propertychange', function(){unlock(popup.saveButton, checkLength(popup.en) &&
+            checkLength(popup.ru) && checkLength(popup.ua) && (cond ? checkLength(popup.name) && popup.files.files_list.length > 0 : true))});
+        popup.ru.bind('input propertychange', function(){unlock(popup.saveButton, checkLength(popup.en) &&
+            checkLength(popup.ru) && checkLength(popup.ua) && (cond ? checkLength(popup.name) && popup.files.files_list.length > 0 : true))});
+        popup.ua.bind('input propertychange', function(){unlock(popup.saveButton, checkLength(popup.en) &&
+            checkLength(popup.ru) && checkLength(popup.ua) && (cond ? checkLength(popup.name) && popup.files.files_list.length > 0 : true))});
+        if(cond) popup.name.bind('input propertychange', function(){unlock(popup.saveButton, checkLength(popup.en) &&
+            checkLength(popup.ru) && checkLength(popup.ua) && checkLength(popup.name) && popup.files.files_list.length > 0)});
+    }
+    function bindNewColorInput(){
+        var p = $('#color_popup'), popup = {p: p, en: p.find('#c-name-en'), ru: p.find('#c-name-ru'), ua: p.find('#c-name-ua'),
+            saveButton: p.find('.update-button'), openelement: '#color-plus',  closeelement: '.color_close',
+            blur:false, scrolllock: true};
+        bindUpdate(popup);
+        popup.saveButton.click(function(){
             updateColor(JSON.stringify({
                 color: {
-                    locale_en: en.val(),
-                    locale_ru: ru.val(),
-                    locale_ua: ua.val()
+                    locale_en: popup.en.val(),
+                    locale_ru: popup.ru.val(),
+                    locale_ua: popup.ua.val()
                 },
-                hex: color_popup.find('#color-value').text()
+                hex: popup.p.find('#color-value').text()
             }))
         });
     }
@@ -889,8 +858,90 @@ $(function(){
             }
         });
     }
-    bindInputName();
-    newColorInputBind();
+
+    $('.brand-tabs').tabslet();
+
+    $('#brand_input').filer({
+        showThumbs: true,
+        limit: 1,
+        appendTo: $('#b-file-holder'),
+        templates: {
+            box: filer.box,
+            item: filer.item,
+            itemAppend: filer.itemAppend,
+            itemAppendToEnd: true,
+            removeConfirmation: true,
+            _selectors: {
+                list: '.jFiler-items-list',
+                item: '.jFiler-item',
+                remove: '.jFiler-item-trash-action'
+            }
+        },
+        captions: {
+            button: locale.label_addPhotos,
+            feedback: "Choose files To Upload",
+            feedback2: "files were chosen",
+            drop: "Drop file here to Upload",
+            removeConfirmation: "Are you sure you want to remove this file?",
+            errors: {
+                filesLimit: "Only {{fi-limit}} files are allowed to be uploaded.",
+                filesType: "Only Images are allowed to be uploaded.",
+                filesSize: "{{fi-name}} is too large! Please upload file up to {{fi-maxSize}} MB.",
+                filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
+            }
+        },
+        afterShow: function(){
+            var popup = $('#brand_popup');
+            unlock(popup.find('.update-button'), checkLength(popup.find('#b-dsc-en')) && checkLength(popup.find('#b-dsc-ru')) &&
+                checkLength(popup.find('#b-dsc-ua')) && checkLength(popup.find('#b-name')))
+        },
+        onEmpty: function(){
+            unlock($('#brand_popup').find('.update-button'), false)
+        },
+        addMore: false
+    });
+    function uploadBrand(popup, data){
+        var formData = new FormData();
+        formData.append('file', popup.find('#brand_input')[0].files[0]);
+        formData.append('b', JSON.stringify(data));
+        $.ajax({
+            url: magic + "../../manage/ajax/save/brand",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf.header, csrf.token);
+            },
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: formData,
+            type: "POST",
+            success: function(result){
+                fillBrand(result.brandList, result.brandImgUrl)
+            },
+            error: function(result){
+                console.log('Error while updating brand =/');
+                console.log(result)
+            }
+        })
+    }
+    function bindNewBrandInput(){
+        var p = $('#brand_popup');
+        var popup = {p: p, en: p.find('#b-dsc-en'), ru: p.find('#b-dsc-ru'),ua: p.find('#b-dsc-ua'), blur: true, saveButton: p.find('.update-button'),
+            name: p.find('#b-name'), openelement: '#brand-plus', closeelement: '.brand_close',scrolllock: false, files: $('#brand_input').prop("jFiler")};
+        bindUpdate(popup);
+        popup.saveButton.click(function(){
+            uploadBrand(p, {
+                name: popup.name.val(),
+                description: {
+                    locale_en: popup.en.val(),
+                    locale_ru: popup.ru.val(),
+                    locale_ua: popup.ua.val()
+                }
+            });
+        })
+    }
+    bindItemNameInput();
+    bindNewColorInput();
+    bindNewBrandInput();
     init();
 });
 /*]]>*/

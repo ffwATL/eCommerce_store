@@ -6,6 +6,7 @@ import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesItemService;
 import com.ffwatl.util.Settings;
+import com.ffwatl.util.WebUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.imgscalr.Scalr;
@@ -26,8 +27,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -92,7 +91,7 @@ public class AddNewItemController {
     }
 
     private void proceedImages(String dirPath, List<MultipartFile> file) throws IOException {
-        Files.createDirectory(Paths.get(dirPath).toAbsolutePath());
+        WebUtil.createFolder(dirPath);
         int count = 1;
         for(MultipartFile f: file){
             resizeAndSave(f, dirPath, count++);

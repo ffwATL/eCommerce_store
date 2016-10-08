@@ -2,6 +2,7 @@ package com.ffwatl.util;
 
 
 import com.ffwatl.manage.entities.i18n.I18n;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sfm.csv.CsvParser;
@@ -11,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,4 +79,10 @@ public final class WebUtil {
         return list;
     }
 
+    public static void createFolder(String dirPath) throws IOException {
+        File file = new File(dirPath);
+        if(file.exists()){
+            FileUtils.cleanDirectory(file);
+        } else Files.createDirectory(Paths.get(dirPath).toAbsolutePath());
+    }
 }

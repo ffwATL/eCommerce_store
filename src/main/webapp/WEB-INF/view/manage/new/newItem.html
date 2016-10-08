@@ -84,19 +84,16 @@
                 <ul id="color-forTabs" class="forTabs">
                     <li class="active" ><a href="#c-tab-1" th:text="#{locale.en}">EN</a></li>
                     <li><a href="#c-tab-2" th:text="#{locale.ru}">RU</a></li>
-                    <li><a href="#c-tab-3" th:text="#{locale.ua}">UA</a></li>
+                    <li class="last-li"><a href="#c-tab-3" th:text="#{locale.ua}">UA</a></li>
                 </ul>
                 <div id="c-tab-1">
-                    <label th:text="#{label.color.name}">Name</label>
-                    <input class="height c-name" id="c-name-en">
+                    <input class="height c-name" id="c-name-en"  spellcheck="false" th:placeholder="#{label.color.placeHolder.name}">
                 </div>
                 <div id="c-tab-2">
-                    <label th:text="#{label.color.name}">Name</label>
-                    <input class="height c-name" id="c-name-ru" >
+                    <input class="height c-name" id="c-name-ru"  spellcheck="false" th:placeholder="#{label.color.placeHolder.name}">
                 </div>
                 <div id="c-tab-3">
-                    <label th:text="#{label.color.name}">Name</label>
-                    <input class="height c-name" id="c-name-ua" >
+                    <input class="height c-name" id="c-name-ua"  spellcheck="false" th:placeholder="#{label.color.placeHolder.name}">
                 </div>
             </div>
         </div>
@@ -104,6 +101,54 @@
             <ul class="list-inline">
                 <li><button class="update-button button-typical color_close" th:text="#{new.item.save}" disabled>Save</button></li>
                 <li><button class="cancel-button button-bordered color_close" th:text="#{label.cancel}">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="brand_popup" class="popup">
+    <div class="popup-header"><h3><span th:text="#{label.brand.header}">New brand</span></h3></div>
+    <div class="popup-content">
+        <div class="popup-info">
+            <h5 th:text="#{label.brand.headerInfo}">Enter the brand name then choose a brand logo and write a few words about new brand in the right block.</h5>
+        </div>
+        <div class="brand-left">
+            <ul class="list-unstyled">
+                <li>
+                    <div id="brand_upload">
+                        <div id="b-file-holder"></div>
+                        <form id="brand_form" action="/manage/ajax/save/brand" th:action="@{/manage/ajax/save/brand(${_csrf.parameterName}=${_csrf.token})}"
+                              method="post" enctype="multipart/form-data">
+                            <input type="file" name="files[]" id="brand_input">
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="brand-right">
+            <div class="b-name">
+                <input id="b-name" class="height" spellcheck="false" placeholder="Brand name" th:placeholder="#{label.brand.placeHolder.name}">
+            </div>
+            <div class="tabs brand-tabs">
+                <ul id="brand-forTabs" class="forTabs">
+                    <li class="active" ><a href="#b-tab-1" th:text="#{locale.en}">EN</a></li>
+                    <li><a href="#b-tab-2" th:text="#{locale.ru}">RU</a></li>
+                    <li class="last-li"><a href="#b-tab-3" th:text="#{locale.ua}">UA</a></li>
+                </ul>
+                <div id="b-tab-1" class="b-tab-inner">
+                    <textarea class="b-dsc" id="b-dsc-en" spellcheck="false" placeholder="Enter a few words about brand" th:placeholder="#{label.brand.placeHolder.about}"></textarea>
+                </div>
+                <div id="b-tab-2" class="b-tab-inner">
+                    <textarea class="b-dsc" id="b-dsc-ru" spellcheck="false" th:placeholder="#{label.brand.placeHolder.about}"></textarea>
+                </div>
+                <div id="b-tab-3" class="b-tab-inner">
+                    <textarea class="b-dsc" id="b-dsc-ua" spellcheck="false" th:placeholder="#{label.brand.placeHolder.about}"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <ul class="list-inline">
+                <li><button class="update-button button-typical brand_close" th:text="#{label.accept}" disabled>Accept</button></li>
+                <li><button class="cancel-button button-bordered brand_close" th:text="#{label.cancel}">Cancel</button></li>
             </ul>
         </div>
     </div>
@@ -121,7 +166,7 @@
 
             <div class="info not_completed" id="name-block">
                 <h3 th:text="#{new.item.itemName}">Item name</h3>
-                <h5>Enter the item name un EN, RU and UA.</h5>
+                <h5>Enter the item name in EN, RU and UA.</h5>
                 <img class="info-pic" src="../../../../resources/img/new/item-name.svg" th:src="@{/resources/img/new/item-name.svg}">
             </div>
             <div id="section_0" class="bottom_line">

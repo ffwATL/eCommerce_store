@@ -2,15 +2,16 @@ package com.ffwatl.manage.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.manage.dto.ItemGroupDto;
-import com.ffwatl.manage.filter.grid_filter.ClothesGridFilter;
-import com.ffwatl.manage.filter.grid_filter.GridFilter;
-import com.ffwatl.manage.filter.grid_filter.ItemGridFilter;
 import com.ffwatl.manage.entities.items.CommonCategory;
 import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.entities.items.brand.Brand;
 import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
 import com.ffwatl.manage.entities.items.color.Color;
+import com.ffwatl.manage.filter.grid_filter.ClothesGridFilter;
+import com.ffwatl.manage.filter.grid_filter.GridFilter;
+import com.ffwatl.manage.filter.grid_filter.ItemGridFilter;
 import com.ffwatl.manage.presenters.filter.ClothesFilterPresenter;
 import com.ffwatl.manage.presenters.items.ItemCatalog;
 import com.ffwatl.manage.presenters.items.ItemCatalogPresenter;
@@ -26,15 +27,21 @@ import com.ffwatl.service.items.EuroSizeService;
 import com.ffwatl.service.items.ItemPaginationServiceImpl;
 import com.ffwatl.service.items.ItemService;
 import com.ffwatl.util.Settings;
+import com.ffwatl.util.WebUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +126,7 @@ public class AjaxController {
     public ResponseEntity<ItemCatalogPresenter> ajaxAllItems(@RequestParam Map<String, String> params){
         Page<? extends Item> page = getPage(params.get("cat"), params);
         try {
-            ItemCatalogPresenter holder = new ItemCatalogPresenter(fillWrapper((List<Item>) page.getContent()));
+            ItemCatalogPresenter holder = new ItemCatalogPresenter(fillItemCatalog((List<Item>) page.getContent()));
             holder.setPge(page.getNumber());
             holder.setPgeSize(page.getNumberOfElements());
             holder.setTotalPages(page.getTotalPages());
@@ -161,8 +168,43 @@ public class AjaxController {
     @ResponseBody
     public ResponseEntity<List<Color>> ajaxSaveNewColor(@RequestBody Color color){
         colorService.save(color);
+        logger.trace("'Color' object with id="+ color.getId()+" were saved");
         return ResponseEntity.ok(colorService.findAll());
     }
+    @RequestMapping(value = "/manage/ajax/save/brand", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<ClothesOptionsPresenter> ajaxSaveNewBrand(@RequestParam("file") MultipartFile file, @RequestParam String b){
+        Brand brand;
+        try {
+            brand = new ObjectMapper().readValue(b, Brand.class);
+        } catch (Exception e) {
+            logger.error("error on mapping: "+ e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        try {
+            brandService.save(brand);
+            saveBrandImg(settings.getBrandImgDir() + brand.getName().replace(" ", "_"), file);
+        }catch (IOException e){
+            logger.error("Exception while saving brand img. " + e.getMessage());
+            logger.debug("Removing 'Brand' with id=" + brand.getId());
+            brandService.removeById(brand.getId());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }catch (Exception e){
+            logger.error("Exception while saving 'Brand' into DB or something else: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        ClothesOptionsPresenter presenter = new ClothesOptionsPresenter();
+        presenter.setBrandImgUrl(settings.getBrandImgUrl());
+        presenter.setBrandList(brandService.findAll());
+        return ResponseEntity.ok(presenter);
+    }
+
+    private void saveBrandImg(String dirPath, MultipartFile file) throws IOException {
+        WebUtil.createFolder(dirPath);
+        ImageIO.write(Scalr.resize(ImageIO.read(file.getInputStream()),
+                250), "jpeg", new File(dirPath + "\\logo.jpg"));
+    }
+
 
     private Page<? extends Item> getPage(String cat, Map<String, String> params){
         GridFilter filter;
@@ -175,12 +217,12 @@ public class AjaxController {
         return itemPaginationService.findAll(filter);
     }
 
-    private List<ItemCatalog> fillWrapper(List<Item> items){
-        List<ItemCatalog> wrapperList = new ArrayList<>(items.size());
+    private List<ItemCatalog> fillItemCatalog(List<Item> items){
+        List<ItemCatalog> itemCatalogList = new ArrayList<>(items.size());
         for(Item i: items){
             ItemCatalog wrapper = new ItemCatalog(i, settings.getPhotoUrl());
-            wrapperList.add(wrapper);
+            itemCatalogList.add(wrapper);
         }
-        return wrapperList;
+        return itemCatalogList;
     }
 }

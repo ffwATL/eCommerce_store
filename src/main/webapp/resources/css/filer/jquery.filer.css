@@ -338,7 +338,7 @@ span.jFiler-icon-file.f-audio:after {
     }
 }
 @media screen and (min-width: 767px){
-    .jFiler-items-grid .jFiler-item .jFiler-item-container {
+    #image_upload .jFiler-items-grid .jFiler-item .jFiler-item-container {
         /*margin: 0 21px 30px 14px;*/
         margin: 10px 11px 30px 33px;
 
@@ -370,7 +370,8 @@ span.jFiler-icon-file.f-audio:after {
 }
 
 .jFiler-item .jFiler-item-container .jFiler-item-thumb img {
-    max-width: none;
+    vertical-align: middle;
+    max-width: 100%;
     max-height: 100%;
 }
 
@@ -452,4 +453,13 @@ span.jFiler-icon-file.f-audio:after {
     cursor: pointer;
     /*color: #d9534f;*/
     color: white;
+}
+
+
+.jFiler-items-grid .jFiler-item .jFiler-item-container .jFiler-item-thumb .jFiler-item-thumb-image:before,
+.frame_before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
 }

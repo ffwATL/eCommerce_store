@@ -11,7 +11,7 @@
 }
 
 @media screen and (max-width: 767px){
-    #upload_button, #filer_input{
+    #image_upload .upload_button, #filer_input{
         width: 100%;
     }
     .input-name{
@@ -78,7 +78,7 @@ button:disabled,button:disabled:hover{
     }
 }
 @media screen and (min-width: 767px){
-    #upload_button, #filer_input, #image_upload input{
+    #image_upload .upload_button, #filer_input, #image_upload input{
         width: 155px;
     }
     .price_list input{
@@ -135,7 +135,7 @@ input{
 #section_1{
     margin-top: 10px;
 }
-#add_size button, .height, #upload_button, #brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn,
+#add_size button, .height, #image_upload .upload_button, #brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn,
 .plus{
     height: 29px;
 }
@@ -365,12 +365,12 @@ hr.null{
 #section_4 input{
     font-weight: 200;
 }
-#upload_button{
+#image_upload .upload_button{
     padding: 4px 10px 4px 25px;
     background: white url("../../../img/new/photo-camera.svg") no-repeat 6px 3px;
     margin-bottom: 5px;
 }
-#upload_button:hover{
+#image_upload .upload_button:hover{
     background: white url("../../../img/new/photo-camera-hover.svg") no-repeat 6px 3px;
     cursor: pointer;
 }
@@ -428,7 +428,7 @@ hr.null{
     background: white url("../../../img/down-arrow.svg") no-repeat 133px;
     width: 155px;
 }
-#brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn, #upload_button, #add_size button,
+#brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn, #image_upload .upload_button, #add_size button,
 select.height{
     color: black;
     border: solid black .12em;
@@ -437,15 +437,17 @@ select.height{
     text-align: center;
     width: 155px;
 }
-#brand .dropbtn:hover, #color .dropbtn:hover, #eu_waist_select .dropbtn:hover, #item_group_2 .dropbtn:hover, #upload_button:hover,
+#brand .dropbtn:hover, #color .dropbtn:hover, #eu_waist_select .dropbtn:hover, #item_group_2 .dropbtn:hover, #image_upload .upload_button:hover,
 #add_size button:disabled, #add_size button:disabled:hover, #add_size button:hover, select.height:hover{
     border: solid #8b8b8b .12em;
     color: #8b8b8b;
 }
+menu, ul.item_description textarea, .input-block textarea{
+    overflow: hidden;
+}
 menu{
     background:  linear-gradient(#fff, #ccc);
     box-sizing: border-box; padding: 0; margin: 0;
-    overflow: hidden;
     box-shadow: inset 0px 0px 2px #333, 0 0 1px #333;
 }
 menu li{
@@ -589,11 +591,12 @@ ul.item_description{
 ul.item_description label.name{
    margin-top: -30px;
 }
-ul.item_description textarea, .input-block textarea{
-    overflow: hidden;
+ul.item_description textarea, .input-block textarea, textarea.b-dsc{
     resize: none;
     padding: 10px;
-    border: dotted 2px rgba(166, 169, 176, 0.21);
+}
+ul.item_description textarea, .input-block textarea,{
+    border: dotted 2px rgba(166, 169, 176, 0.33);
 }
 ul.item_description textarea{
     width: 213px;
@@ -665,7 +668,7 @@ button.remove_row:hover, button.extra_note:hover,.extra_note_filled:hover{
     min-width: 500px;
     max-width: 500px;
 }
-#extraNotes_popup h3, #color_popup h3{
+#extraNotes_popup h3, #color_popup h3, #brand_popup h3{
     margin-top: 25px;
     border-bottom: 0.08em solid #000;
     line-height:0.1em;
@@ -674,21 +677,26 @@ button.remove_row:hover, button.extra_note:hover,.extra_note_filled:hover{
 .popup-info h5{
     color: #a6a9b0;
 }
-ul#color-forTabs{
-    margin-bottom: 10px;
-   padding-left: 0px;
+ul#color-forTabs, ul#brand-forTabs{
+    padding-left: 0px;
+    margin-bottom: 0px;
 }
 #color-forTabs li{
-    text-align: center;
-    min-width: 95px;
+    min-width: 6.73em
 }
-#color-forTabs li a{
+#color-forTabs li, #brand-forTabs li{
+    text-align: center;
+}
+#brand-forTabs li{
+    min-width: 110px;
+}
+#color-forTabs li a, #brand-forTabs li a{
     font-size: 12px;
 }
 #color_popup label{
     padding: 0;
 }
-.color-tabs{
+.color-tabs, .brand-tabs{
     margin-right: -2px;
     margin-bottom: 15px;
 }
@@ -699,7 +707,7 @@ ul#color-forTabs{
     border: solid black .09em;
     outline: none;
 }
-.color-right{
+.color-right, .brand-right{
     position: absolute;
     top: 0;
     right: 0;
@@ -718,10 +726,75 @@ ul#color-forTabs{
     max-width: 100px;*/
     margin-right: 20px;
 }
-#color_popup .popup-info h5{
+#color_popup .popup-info h5, #brand_popup .popup-info h5{
     margin-top: 0;
 }
 input.c-name{
-    min-width: 280px;
-    max-width: 280px;
+    min-width: 250px;
+    max-width: 250px;
+}
+#brand_popup{
+    max-width: 550px;
+}
+#brand_popup .upload_button{
+    padding-top: 3px;
+    width: 128px;
+    height: 24px;
+    border: solid .12em black;
+    font-size: 12px;
+    cursor: pointer;
+
+}
+#brand_upload{
+    text-align: center;
+    min-height: 135px;
+    width: 128px;
+}
+#b-file-holder{
+    border: dotted .09em black;
+    min-height: 104px;
+    margin-bottom: 3px;
+    width: 128px;
+}
+#b-file-holder .ljFiler-items-list{
+    text-align: center;
+}
+textarea.b-dsc{
+    border: dotted .15em rgba(166, 169, 176, 0.33);
+    min-height: 108px;
+    width: 310px;
+    margin-bottom: 5px;
+}
+.brand-tabs > DIV, .color-tabs > DIV{
+    border: solid .09em black;
+    border-top: none;
+    margin-top: -1px;
+    margin-left: -2px;
+    padding-top: 20px;
+    max-width: 329px;
+
+}
+li.last-li{
+    margin-right: 0;
+}
+#brand_popup .buttons{
+    margin-right: -5px;
+    margin-top: 30px;
+}
+.b-tab-inner{
+    text-align: center;
+}
+input#b-name{
+    letter-spacing: .1em;
+    font-size: 16px;
+    width: 325px;
+}
+.brand-left{
+    margin-top: 58px;
+}
+.color-tabs > DIV{
+    padding-left: 5px;
+    padding-bottom: 25px;
+    padding-right: 5px;
+    text-align: center;
 }
