@@ -153,6 +153,55 @@
         </div>
     </div>
 </div>
+<div id="size_popup" class="popup">
+    <div class="popup-header"><h3 class="headH3"><span class="headSpan" th:text="#{label.extraNotes.header}">Size edit</span></h3></div>
+    <div class="popup-content">
+        <div class="popup-info">
+            <h5 class="popup-h5" th:text="#{label.extraNotes.headInfo}">Enter the brand name then choose a brand logo and write a few words about new brand in the right block. </h5>
+        </div>
+        <div class="sz-e-container">
+            <ul class="sz-e-major list-inline">
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn button-bordered inline">W32 L32</button>
+                        <input hidden id="sz-eu-id">
+                        <div class="dropdown-content">
+                        </div>
+                    </div>
+                </li>
+                <li><div class="sz-e-label"><label>Qty</label></div>
+                    <input class="height" id="sz-e-qty" type="text" value="2">
+                </li>
+            </ul>
+            <ul class="sz-e-fields list-inline">
+                <li>
+                    <div class="sz-e-label"><label>Waist</label></div>
+                    <input class="height first" type="text" value="82-84">
+                </li>
+                <li>
+                    <div class="sz-e-label"><label>Length</label></div>
+                    <input class="height second" type="text" value="103-104">
+                </li>
+                <li>
+                    <div class="sz-e-label"><label>Bottom</label></div>
+                    <input class="height third" type="text" value="16-16.5">
+                </li>
+            </ul>
+            <ul class="sz-e-fields-ex list-inline">
+                <li>
+                    <div class="sz-e-label"><label>Sleeve</label></div>
+                    <input class="height fourth" type="text" value="67-68">
+                </li>
+            </ul>
+        </div>
+        <div class="buttons">
+            <ul class="list-inline">
+                <li><button class="update-button button-typical size_close" th:text="#{label.accept}">Accept</button></li>
+                <li><button class="cancel-button button-bordered size_close" th:text="#{label.cancel}">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="content-wrapper">
     <div th:replace="template :: header" class="header col-lg-12 text-center">
         <input type="text" placeholder="Search" class="form-control">
@@ -259,81 +308,103 @@
                         <h5 th:text="#{new.item.clothes.sizeMeasurements.h5}">Enter measurements and add items size.</h5>
                         <img class="info-pic" src="../../../../resources/img/new/measuring-tape.svg" th:src="@{/resources/img/new/measuring-tape.svg}">
                     </div>
-                    <div id="item_group_1">
-                        <ul class="list-inline list-select">
-                            <li id="eu_waist_select">
-                                <label class="block" th:utext="|#{new.item.clothes.eu_waist}| + #{red}">EU Waist<span class="red">*</span></label>
+                    <div id="mr-10">
+                        <div id="item_group_1">
+                            <ul class="list-inline list-select">
+                                <li id="eu_waist_select">
+                                    <label class="block" th:utext="|#{new.item.clothes.eu_waist}| + #{red}">EU Waist<span class="red">*</span></label>
+                                    <div class="dropdown">
+                                        <button class="dropbtn button-bordered inline" th:text="#{new.item.choose}">choose</button>
+                                        <div class="dropdown-content">
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="list-inline">
+                                <li id="group_1_waist_li">
+                                    <label class="block" th:utext="|#{new.item.clothes.waist}| + #{red}">Waist<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height measurements">
+                                </li>
+                                <li id="group_1_length_li">
+                                    <label class="block" th:utext="|#{new.item.clothes.length}| + #{red}">Length<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height measurements">
+                                </li>
+                                <li id="group_1_bottom_li">
+                                    <label class="block" th:utext="|#{new.item.clothes.bottom}| + #{red}">Bottom<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height measurements">
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="item_group_2">
+                            <div class="eu_select list-select">
+                                <label class="block">EU<span class="red">*</span></label>
                                 <div class="dropdown">
                                     <button class="dropbtn button-bordered inline" th:text="#{new.item.choose}">choose</button>
                                     <div class="dropdown-content">
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
-                        <ul class="list-inline">
-                            <li id="group_1_waist_li">
-                                <label class="block" th:utext="|#{new.item.clothes.waist}| + #{red}">Waist<span class="red">*</span></label>
-                                <input type="text" class="highlight block height measurements">
-                            </li>
-                            <li id="group_1_length_li">
-                                <label class="block" th:utext="|#{new.item.clothes.length}| + #{red}">Length<span class="red">*</span></label>
-                                <input type="text" class="highlight block height measurements">
-                            </li>
-                            <li id="group_1_bottom_li">
-                                <label class="block" th:utext="|#{new.item.clothes.bottom}| + #{red}">Bottom<span class="red">*</span></label>
-                                <input type="text" class="highlight block height measurements">
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="item_group_2">
-                        <div class="eu_select list-select">
-                            <label class="block">EU<span class="red">*</span></label>
-                            <div class="dropdown">
-                                <button class="dropbtn button-bordered inline" th:text="#{new.item.choose}">choose</button>
-                                <div class="dropdown-content">
+                            </div>
+                            <ul class="list-inline">
+                                <li id="group_2_shoulders_li">
+                                    <label class="block" th:utext="|#{new.item.clothes.shoulders}| + #{red}">Shoulders<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height measurements">
+                                </li>
+                                <li id="group_2_length_li">
+                                    <label class="block" th:utext="|#{new.item.clothes.length}| + #{red}">Length<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height measurements">
+                                </li>
+                                <li id="group_2_chest_li">
+                                    <label class="block" th:utext="|#{new.item.clothes.chest}| + #{red}">Chest<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height measurements">
+                                </li>
+                            </ul>
+                            <ul class="list-inline" id="item_group_3">
+                                <li id="group_3_sleeve_li">
+                                    <label class="block" th:utext="|#{new.item.clothes.sleeve}| + #{red}">Sleeve<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height measurements">
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="item_group_4">
+                            <div class="eu_select list-select">
+                                <label class="block">EU<span class="red">*</span></label>
+                                <div class="dropdown">
+                                    <button class="dropbtn button-bordered inline" th:text="#{new.item.choose}">choose</button>
+                                    <div class="dropdown-content">
+                                    </div>
                                 </div>
                             </div>
+                            <ul class="list-inline group-4-m">
+                                <li id="group_4_sole_li">
+                                    <label class="block" th:utext="|#{label.measurement.insole}| + #{red}">Insole<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height measurements">
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="list-inline">
-                            <li id="group_2_shoulders_li">
-                                <label class="block" th:utext="|#{new.item.clothes.shoulders}| + #{red}">Shoulders<span class="red">*</span></label>
-                                <input type="text" class="highlight block height measurements">
-                            </li>
-                            <li id="group_2_length_li">
-                                <label class="block" th:utext="|#{new.item.clothes.length}| + #{red}">Length<span class="red">*</span></label>
-                                <input type="text" class="highlight block height measurements">
-                            </li>
-                            <li id="group_2_chest_li">
-                                <label class="block" th:utext="|#{new.item.clothes.chest}| + #{red}">Chest<span class="red">*</span></label>
-                                <input type="text" class="highlight block height measurements">
-                            </li>
-                        </ul>
-                        <ul class="list-inline" id="item_group_3">
-                            <li id="group_3_sleeve_li">
-                                <label class="block" th:utext="|#{new.item.clothes.sleeve}| + #{red}">Sleeve<span class="red">*</span></label>
-                                <input type="text" class="highlight block height measurements">
-                            </li>
-                        </ul>
+                        <div id="measurement_example" class="col-lg-5">
+                            <img id="example_group_1" src="../../../../resources/img/new/examples/jeans_size.png" th:src="@{/resources/img/new/examples/jeans_size.png}">
+                            <img id="example_group_11" src="../../../../resources/img/new/examples/shorts_size.png" th:src="@{/resources/img/new/examples/shorts_size.png}">
+                            <img id="example_group_2" src="../../../../resources/img/new/examples/t-shirt_size.png" th:src="@{/resources/img/new/examples/t-shirt_size.png}">
+                            <img id="example_group_3" src="../../../../resources/img/new/examples/shirt_size_rus.png" th:src="@{/resources/img/new/examples/shirt_size_rus.png}">
+                            <img id="example_group_4" src="../../../../resources/img/new/examples/shoe_size_ru.png" th:src="@{/resources/img/new/examples/shoe_size_ru.png}">
+                            <p id="advice" th:text="#{new.item.advice}">*Follow this example above to make a right measurements.</p>
+                        </div>
+                        <div class="add_size_panel" id="add_size">
+                            <ul class="list-inline">
+                                <li id="add_size_panel_qty_li">
+                                    <label th:utext="|#{new.item.quantity}| + #{red}">Quantity<span class="red">*</span></label>
+                                    <input type="text" class="highlight block height" value="1" id="qty">
+                                </li>
+                                <li id="add_size_panel_btn_li">
+                                    <button disabled id="add_size_input" th:text="#{new.item.clothes.addSize}">Add size</button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div id="measurement_example" class="col-lg-5">
-                        <img id="example_group_1" src="../../../../resources/img/new/examples/jeans_size.png" th:src="@{/resources/img/new/examples/jeans_size.png}">
-                        <img id="example_group_11" src="../../../../resources/img/new/examples/shorts_size.png" th:src="@{/resources/img/new/examples/shorts_size.png}">
-                        <img id="example_group_2" src="../../../../resources/img/new/examples/t-shirt_size.png" th:src="@{/resources/img/new/examples/t-shirt_size.png}">
-                        <img id="example_group_3" src="../../../../resources/img/new/examples/shirt_size_rus.png" th:src="@{/resources/img/new/examples/shirt_size_rus.png}">
-                        <p id="advice" th:text="#{new.item.advice}">*Follow this example above to make a right measurements.</p>
-                    </div>
-                    <div class="add_size_panel" id="add_size">
-                        <ul class="list-inline">
-                            <li id="add_size_panel_qty_li">
-                                <label th:utext="|#{new.item.quantity}| + #{red}">Quantity<span class="red">*</span></label>
-                                <input type="text" class="highlight block height" value="1" id="qty">
-                            </li>
-                            <li id="add_size_panel_btn_li">
-                                <button disabled id="add_size_input" th:text="#{new.item.clothes.addSize}">Add size</button>
-                            </li>
-                        </ul>
-                    </div>
+
                     <div id="size_preview">
+                        <ul class="list-inline sz-main">
+                        </ul>
                     </div>
                 </div>
             </div>

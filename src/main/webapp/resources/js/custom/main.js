@@ -8,21 +8,13 @@ $(function(){
         }
     };
 });
-
 /*!
  * jQuery Cookie Plugin v1.4.1 *
  */
 (function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD (Register as an anonymous module)
-        define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // Node/CommonJS
-        module.exports = factory(require('jquery'));
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
+    if (typeof define === 'function' && define.amd) define(['jquery'], factory);
+    else if (typeof exports === 'object') module.exports = factory(require('jquery'));
+    else factory(jQuery);
 }(function ($) {
     var pluses = /\+/g;
     function encode(s) {
@@ -36,13 +28,9 @@ $(function(){
     }
     function parseCookieValue(s) {
         if (s.indexOf('"') === 0) {
-            // This is a quoted cookie as according to RFC2068, unescape...
             s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
         }
         try {
-            // Replace server-side written pluses with spaces.
-            // If we can't decode the cookie, ignore it, it's unusable.
-            // If we can't parse the cookie, ignore it, it's unusable.
             s = decodeURIComponent(s.replace(pluses, ' '));
             return config.json ? JSON.parse(s) : s;
         } catch(e) {}
@@ -52,7 +40,6 @@ $(function(){
         return $.isFunction(converter) ? converter(value) : value;
     }
     var config = $.cookie = function (key, value, options) {
-        // Write
         if (arguments.length > 1 && !$.isFunction(value)) {
             options = $.extend({}, config.defaults, options);
             if (typeof options.expires === 'number') {
@@ -69,9 +56,6 @@ $(function(){
         }
         // Read
         var result = key ? undefined : {},
-        // To prevent the for loop in the first place assign an empty array
-        // in case there are no cookies at all. Also prevents odd result when
-        // calling $.cookie().
             cookies = document.cookie ? document.cookie.split('; ') : [],
             i = 0,
             l = cookies.length;
@@ -81,11 +65,9 @@ $(function(){
                 name = decode(parts.shift()),
                 cookie = parts.join('=');
             if (key === name) {
-                // If second argument (value) is a function it's a converter...
                 result = read(cookie, value);
                 break;
             }
-            // Prevent storing a cookie that we couldn't decode.
             if (!key && (cookie = read(cookie)) !== undefined) {
                 result[name] = cookie;
             }
@@ -94,7 +76,6 @@ $(function(){
     };
     config.defaults = {};
     $.removeCookie = function (key, options) {
-        // Must not alter options, thus extending a fresh object...
         $.cookie(key, '', $.extend({}, options, { expires: -1 }));
         return !$.cookie(key);
     };
@@ -310,9 +291,6 @@ function format (time) {
     var arr = time.substring(0,time.indexOf(" ")).split('/');
     return arr[1]+'.'+arr[0]+'.'+arr[2].replace(',','');
 }
-function escapeRegExp(str) {
-    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "");
-}
 function resolveLocale(obj){
     if(obj == null || obj == undefined) return '';
     switch (lang){
@@ -368,3 +346,9 @@ var filer ={
                         </div>\
                     </li>'
 };
+function checkLength (form){
+    return form != undefined && !form.val().length <= 0
+}
+function unlock (b, enable){
+    b.prop('disabled', !enable)
+}

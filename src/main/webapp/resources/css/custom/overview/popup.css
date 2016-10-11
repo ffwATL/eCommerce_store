@@ -97,7 +97,7 @@
     margin-bottom: 20px;
     padding: 1px 20px 3px;
 }
-#global_edit_popup h3, #extraNotes_popup h3, #color_popup h3,#brand_popup h3{
+#global_edit_popup h3, #extraNotes_popup h3, #color_popup h3,#brand_popup h3, .headH3{
     margin-bottom: 0;
     margin-top: 13px;
 }
@@ -110,7 +110,7 @@
 #edit_popup h3,#global_edit_popup h3{
     margin-top: 25px;
 }
-#edit_popup h3 span, #global_edit_popup h3 span, #extraNotes_popup h3 span, #color_popup h3 span, #brand_popup h3 span{
+#edit_popup h3 span, #global_edit_popup h3 span, #extraNotes_popup h3 span, #color_popup h3 span, #brand_popup h3 span, .headSpan{
     background: #fff;
     padding: 0 15px;
     margin-left: 20.5%;

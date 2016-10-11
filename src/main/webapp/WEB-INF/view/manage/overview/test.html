@@ -23,128 +23,94 @@
             var lang = $.cookie("app");
             if(lang == undefined || lang.length < 2) lang = 'en';
             var locale = getLocale(lang);
-            var brand_popup = $('#brand_popup');
-            brand_popup.popup({
+            var sz_e_popup = $('#size_popup');
+            sz_e_popup.popup({
                 opacity: 0.3,
                 transition: 'all 0.3s',
                 openelement: '#brand-plus',
                 closeelement: '.brand_close'
             });
-            brand_popup.popup('show');
+            sz_e_popup.popup('show');
             $('.brand-tabs').tabslet();
-            $("#color-sample").spectrum({
-                color: "#fff",
-                showAlpha: true,
-                clickoutFiresChange: false,
-                showInitial: true,
-                showInput: true,
-                preferredFormat: "hex"
-            });
+
             $('.sp-choose').click(function () {
                 $('#color-value').text($('.sp-input').val());
             });
-            function newColorInputBind(){
-                var en = brand_popup.find('#c-name-en'),
-                    ru = brand_popup.find('#c-name-ru'),
-                    ua = brand_popup.find('#c-name-ua'),
-                    saveButton = brand_popup.find('.update-button');
-                function checkAllInputs(){
-                    unlock(saveButton, checkLength(en) && checkLength(ru) && checkLength(ua));
-                }
-                en.bind('input propertychange', checkAllInputs());
-                ru.bind('input propertychange', checkAllInputs());
-                ua.bind('input propertychange', checkAllInputs());
-            }
-            $('#brand_input').filer({
-                showThumbs: true,
-                limit: 1,
-                appendTo: $('#b-file-holder'),
-                templates: {
-                    box: filer.box,
-                    item: filer.item,
-                    itemAppend: filer.itemAppend,
-                    itemAppendToEnd: true,
-                    removeConfirmation: true,
-                    _selectors: {
-                        list: '.jFiler-items-list',
-                        item: '.jFiler-item',
-                        remove: '.jFiler-item-trash-action'
-                    }
-                },
-                captions: {
-                    button: locale.label_addPhotos,
-                    feedback: "Choose files To Upload",
-                    feedback2: "files were chosen",
-                    drop: "Drop file here to Upload",
-                    removeConfirmation: "Are you sure you want to remove this file?",
-                    errors: {
-                        filesLimit: "Only {{fi-limit}} files are allowed to be uploaded.",
-                        filesType: "Only Images are allowed to be uploaded.",
-                        filesSize: "{{fi-name}} is too large! Please upload file up to {{fi-maxSize}} MB.",
-                        filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
-                    }
-                },
-                afterShow: function(){
-                    /*changePhotoBlockStatus(true)*/
-                },
-                onEmpty: function(){
-                    /*changePhotoBlockStatus(false)*/
-                },
-                addMore: false
+            $('.sz-preview-list').mouseenter(function(){
+                var inv = $(this).find('.sz-invisible');
+                inv.removeClass('sz-invisible');
+                inv.addClass('sz-visible')
+            });
+            $('.sz-preview-list').mouseleave(function(){
+                var inv = $(this).find('.sz-visible');
+                inv.removeClass('sz-visible');
+                inv.addClass('sz-invisible')
             });
         })
     </script>
 </head>
 <body>
-<div id="brand_popup" class="popup">
-    <div class="popup-header"><h3><span th:text="#{label.extraNotes.header}">New brand</span></h3></div>
+<div id="size_popup" class="popup">
+    <div class="popup-header"><h3 class="headH3"><span class="headSpan" th:text="#{label.extraNotes.header}">Size edit</span></h3></div>
     <div class="popup-content">
         <div class="popup-info">
-            <h5 th:text="#{label.extraNotes.headInfo}">Enter the brand name then choose a brand logo and write a few words about new brand in the right block. </h5>
+            <h5 class="popup-h5" th:text="#{label.extraNotes.headInfo}">Enter the brand name then choose a brand logo and write a few words about new brand in the right block. </h5>
         </div>
-       <div class="brand-left">
-           <ul class="list-unstyled">
-               <li>
-                   <div id="brand_upload">
-                       <div id="b-file-holder"></div>
-                       <form action="/manage/new/item/clothes" th:action="@{/manage/new/item/clothes(${_csrf.parameterName}=${_csrf.token})}" method="post" enctype="multipart/form-data" id="img">
-                           <input type="file" name="files[]" id="brand_input">
-                       </form>
-                   </div>
-               </li>
-           </ul>
-       </div>
-        <div class="brand-right">
-            <div class="b-name">
-                <input id="b-name" class="height" placeholder="Brand name">
-            </div>
-            <div class="tabs brand-tabs">
-                <ul id="brand-forTabs" class="forTabs">
-                    <li class="active" ><a href="#b-tab-1" th:text="#{label.mainInfo}">EN</a></li>
-                    <li><a href="#b-tab-2" th:text="#{new.item.brand}">RU</a></li>
-                    <li class="last-li"><a href="#b-tab-3" th:text="#{label.extraInfo}">UA</a></li>
-                </ul>
-                <div id="b-tab-1" class="b-tab-inner">
-                    <textarea class="b-dsc" id="b-dsc-en" placeholder="Enter a few words about brand"></textarea>
-                </div>
-                <div id="b-tab-2" class="b-tab-inner">
-                    <textarea class="b-dsc" id="b-dsc-ru"></textarea>
-                </div>
-                <div id="b-tab-3" class="b-tab-inner">
-                    <textarea class="b-dsc" id="b-dsc-ua"></textarea>
-                </div>
-
-            </div>
+        <div class="sz-e-container">
+            <ul class="sz-e-major list-inline">
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn button-bordered inline">W32 L32</button>
+                        <div class="dropdown-content">
+                        </div>
+                    </div>
+                </li>
+                <li><div class="sz-e-label"><label>Qty</label></div>
+                    <input class="height" id="sz-e-qty" type="text" value="2">
+                </li>
+            </ul>
+            <ul class="sz-e-fields list-inline">
+                <li>
+                    <div class="sz-e-label"><label>Waist</label></div>
+                    <input type="text" class="height" value="82-84">
+                </li>
+                <li>
+                    <div class="sz-e-label"><label>Length</label></div>
+                    <input type="text" class="height" value="103-104">
+                </li>
+                <li>
+                    <div class="sz-e-label"><label>Bottom</label></div>
+                    <input type="text" class="height" value="16-16.5">
+                </li>
+            </ul>
+            <ul class="sz-e-fields-ex list-inline">
+                <li>
+                    <div class="sz-e-label"><label>Sleeve</label></div>
+                    <input type="text" class="height" value="67-68">
+                </li>
+            </ul>
         </div>
         <div class="buttons">
             <ul class="list-inline">
-                <li><button class="update-button button-typical brand_close" th:text="#{label.accept}" disabled>Accept</button></li>
-                <li><button class="cancel-button button-bordered brand_close" th:text="#{label.cancel}">Cancel</button></li>
+                <li><button class="update-button button-typical size_close" th:text="#{label.accept}" disabled>Accept</button></li>
+                <li><button class="cancel-button button-bordered size_close" th:text="#{label.cancel}">Cancel</button></li>
             </ul>
         </div>
     </div>
 </div>
-
+<ul class="list-inline sz-main">
+    <li class="sz-preview-list">
+        <div class="sz-container">
+            <ul class="list-inline sz-ul">
+                <li class="sz-eu"><span>M</span></li>
+                <li class="sz-ms"><label class="sz-invisible">43-45 / 71-72 / 106-111 / 66-67</label> </li>
+            </ul>
+        </div>
+        <div class="sz-qty-tag">1</div>
+        <div class="sz-remove sz-invisible"></div>
+        <button class="sz-remove-btn sz-invisible"></button>
+    </li>
+</ul>
 
 </body>
 </html>

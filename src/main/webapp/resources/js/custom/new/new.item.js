@@ -1,24 +1,15 @@
-function checkLength (form){
-    return form != undefined && !form.val().length <= 0
-}
-function unlock (b, enable){
-    b.prop('disabled', !enable)
-}
+
 /*<![CDATA[*/
 $(function(){
     var magic =/*[[@{context:}]]*/'',
         lang = $.cookie("app");
     if(lang == undefined || lang.length < 2) lang = 'en';
     var locale = getLocale(lang), menClothesPattern = '',
-        final_sizes = [], deleted = [], all_sizes = [],treeData = [], temporaryGroup = {},
-        quantity_sizes = 0, count = 0, count_size = 0, gender = 0, x_buff='',
-        cat, item, item_group_code = -1, itemGroup_id, pattern, featuresOk = false, files=false,
-        item_name_en = $('#item-name-en'), item_name_ru = $('#item-name-ru'), item_name_ua =$('#item-name-ua'),
-        quantity_input = $('#add_size_panel_qty_li').find('input'),
-        origin_price_input = $('#origin_price'),
-        sale_price_input = $('#sale_price'),
-        add_size_button = $('#add_size_panel_btn_li').find('button'),
-        save_button = $('#save'),
+        treeData = [], temporaryGroup = {}, gender = 0, x_buff='', cat, item, group_code = -1, itemGroup_id, sz_edit,
+        pattern, featuresOk = false, files=false,item_name_en = $('#item-name-en'), item_name_ru = $('#item-name-ru'),
+        item_name_ua =$('#item-name-ua'), quantity_input = $('#add_size_panel_qty_li').find('input'),
+        origin_price_input = $('#origin_price'), sale_price_input = $('#sale_price'),
+        add_size_button = $('#add_size_panel_btn_li').find('button'), save_button = $('#save'),
         csrf = {
             token : $("meta[name='_csrf']").attr("content"),
             header : $("meta[name='_csrf_header']").attr("content")
@@ -54,35 +45,36 @@ $(function(){
         $('#section_3').hide();
         $('#section_4').hide();
         $('.icon-wrapper').remove();
-        if(item_group_code < 0) return;
-        else if(item_group_code < 4) {
+        if(group_code < 0) return;
+        else if(group_code < 4) {
             group_1_clear_forms();
             group_1_unbind();
-        }else if(item_group_code < 10){
+        }else if(group_code < 10){
             group_2_unbind();
             group_2_clear_forms();
+        }else if(group_code < 12){
+            group_4_clear_forms();
+            group_4_unbind();
         }
         closeSession();
         $('#group_one').show();
     });
     function chooseItemGroup(name){
+        console.log(name);
         var res = resolveGroupCommonCode(name);
-        item_group_code = res.code;
-        if(item_group_code < 0) return;
+        group_code = res.code;
+        if(group_code < 0) return;
         $('#group_two_text').text(menClothesPattern +' > ' + pattern);
-        if(!$.isNumeric(item_group_code) || item_group_code < 0) console.log('some error');
-        else if(item_group_code < 4) group_1_bind_init();
-        else if(item_group_code < 10) group_2_bind_init();
-        else if(item_group_code == 10) group_4_bind_init();
-        else if(item_group_code == 11) group_5_bind_init();
+        if(!$.isNumeric(group_code) || group_code < 0) console.log('some error');
+        else if(group_code < 4) group_1_bind_init();
+        else if(group_code < 10) group_2_bind_init();
+        else if(group_code < 13) group_4_bind_init();
         $('#section_2').show();
         $('#section_3').show();
         $('#section_4').show();
         $('#group_one').hide();
         $('#group_two').show();
     }
-
-    /************************************************************/
 
     /* (group 1) jeans, shorts, chinos measurement fields*/
     var gr_1_eu_dropDown = $('#eu_waist_select').find('button.dropbtn'),
@@ -100,6 +92,7 @@ $(function(){
         return button.text() != locale.label_choose;
     }
     function getEuroSize(cat){
+        console.log(cat);
         $.ajax({
             url: magic + "../../manage/ajax/get/eurosize/cat",
             dataType: "",
@@ -118,19 +111,22 @@ $(function(){
         });
     }
     function drawEuroSize(data, cat){
+        console.log(data);
         var tmp;
         if(cat == 'BOTTOM' || cat == 'WAIST') tmp = gr_1_eu_dropDown.parent().find('.dropdown-content');
         else if(cat == 'TOP') tmp = gr2_eu_dropDown.parent().find('.dropdown-content');
+        else if(cat == 'SHOES' || cat == 'ONESIZE') tmp = gr_4_eu_dropDown.parent().find('.dropdown-content');
         else return;
         tmp.find('.lazy').remove();
         for(var i = 0; i < data.length; i++){
             var val = resolveLocale(data[i].name);
-            tmp.append('<a class="lazy">'+val+'<input type="number" hidden value="'+data[i].id+'"></a>');
+            tmp.append('<a class="lazy '+transliterate(val.replace(/\s/g, ''))+'">'+val+'<input type="number" hidden value="'+data[i].id+'"></a>');
         }
         tmp.find('.lazy').click(function (){
             var t = $(this), dropbtn = tmp.parent().find('.dropbtn');
             dropbtn.text(t.text());
             dropbtn.append('<input type="number" hidden value="'+t.find('input').val()+'">');
+            t.hide();
             checkAllFormsGroup();
         })
     }
@@ -147,7 +143,7 @@ $(function(){
     }
     function group_1_bind_init (){
         $('#item_group_1').show();
-        if(item_group_code == 3) $('#example_group_11').show();
+        if(group_code == 3) $('#example_group_11').show();
         else $('#example_group_1').show();
         unlock(add_size_button, false);
         gr_1_waist.bind('input propertychange', function(){
@@ -163,17 +159,17 @@ $(function(){
             checkMeasurementInput(gr_1_bottom);
         });
         add_size_button.on('click', function(){
-            var eu_waist_val = gr_1_eu_dropDown.text(),
-                qty = addSizePreview(eu_waist_val),
+            var eu = gr_1_eu_dropDown.text(),
                 fields = [
                     {name: 'Waist', value: gr_1_waist.val()},
                     {name: 'Length', value: gr_1_length.val()},
                     {name: 'Bottom', value: gr_1_bottom.val()}
                 ],
                 size = {
-                quantity: parseInt(qty), measurements: fields, eu_size: {id: gr_1_eu_dropDown.find('input').val()}};
+                quantity: parseInt(quantity_input.val()), measurements: fields, eu_size: {id: gr_1_eu_dropDown.find('input').val()}};
             group_1_clear_forms();
-            processNewSize(size, qty);
+            addSizePreview(size, eu, makeFieldString(fields));
+            processNewSize(size, eu);
         });
     }
     function group_1_clear_forms (){
@@ -181,10 +177,11 @@ $(function(){
         gr_1_waist.val('');
         gr_1_bottom.val('');
         gr_1_length.val('');
+        quantity_input.val(1);
     }
     function group_1_unbind (){
         $('#item_group_1').hide();
-        if(item_group_code == 3) $('#example_group_11').hide();
+        if(group_code == 3) $('#example_group_11').hide();
         else $('#example_group_1').hide();
         gr_1_bottom.unbind();
         gr_1_length.unbind();
@@ -205,7 +202,7 @@ $(function(){
     }
     function group_2_bind_init (){
         $('#item_group_2').show();
-        if(item_group_code > 5 && item_group_code < 10) {
+        if(group_code > 5 && group_code < 10) {
             $('#item_group_3').show();
             $('#example_group_3').show();
         }else $('#example_group_2').show();
@@ -222,14 +219,14 @@ $(function(){
             checkAllFormsGroup();
             checkMeasurementInput(gr_2_chest);
         });
-        if(item_group_code > 5 && item_group_code < 10){
+        if(group_code > 5 && group_code < 10){
             gr_3_sleeve.bind('input propertychange', function(){
                 checkAllFormsGroup();
                 checkMeasurementInput(gr_3_sleeve);
             });
         }
         add_size_button.on('click', function(){
-            var qty = addSizePreview(gr2_eu_dropDown.text()),
+            var qty = parseInt(quantity_input.val()), eu = gr2_eu_dropDown.text(),
                 fields = [
                 {name: 'Shoulders', value: gr_2_shoulders.val()},
                 {name: 'Length', value: gr_2_length.val()},
@@ -238,17 +235,27 @@ $(function(){
                 size = {
                     quantity: qty, measurements: fields, eu_size: {id: gr2_eu_dropDown.find('input').val()}
                 };
-            if(item_group_code > 5) fields.push({name: 'Sleeve', value: gr_3_sleeve.val()});
+            if(group_code > 5) fields.push({name: 'Sleeve', value: gr_3_sleeve.val()});
             group_2_clear_forms();
-            processNewSize(size, qty);
-
+            addSizePreview(size, eu, makeFieldString(fields));
+            processNewSize(size, eu);
         });
     }
+    function makeFieldString(fields){
+        var r='';
+        for(var i = 0; i< fields.length; i++){
+            r+=fields[i].value;
+            if(i<fields.length-1) r+=' / '
+        }
+        return r;
+    }
     function group_2_clear_forms (){
+        quantity_input.val(1);
+        gr2_eu_dropDown.text(locale.label_choose);
         gr_2_shoulders.val('');
         gr_2_chest.val('');
         gr_2_length.val('');
-        if(item_group_code > 5 && item_group_code < 10) gr_3_sleeve.val('');
+        if(group_code > 5 && group_code < 10) gr_3_sleeve.val('');
     }
     function group_2_unbind (){
         $('#item_group_2').hide();
@@ -256,13 +263,12 @@ $(function(){
         gr_2_shoulders.unbind();
         gr_2_length.unbind();
         gr_2_chest.unbind();
-        if(item_group_code > 5 && item_group_code < 10){
+        if(group_code > 5 && group_code < 10){
             $('#example_group_3').hide();
             gr_3_sleeve.unbind();
             $('#item_group_3').hide();
         }
     }
-
     /*small stuff for group_3*/
     var gr_3_sleeve = $('#group_3_sleeve_li').find('input');
 
@@ -270,23 +276,69 @@ $(function(){
     function conditionForAddSizeButtonGroup_3 (){
         return conditionForAddSizeButtonGroup_2() && checkLength(gr_3_sleeve);
     }
-    function group_4_bind_init (){
+    /*Check methods for Group 4*/
+    function conditionForAddSizeButtonGroup_4(){
+        return conditionForAddSizeButtonGroup_5() && checkLength(gr_4_inSole);
     }
-    function group_5_bind_init (){
+    function conditionForAddSizeButtonGroup_5(){
+        return checkLength(quantity_input) && checkDropdown(gr_4_eu_dropDown);
+    }
+    /* (group 4 and 5) Shoes measurement fields*/
+    var gr_4_eu_dropDown=$('#item_group_4').find('.eu_select').find('.dropbtn'),
+        gr_4_inSole = $('#group_4_sole_li').find('input');
+
+    function group_4_bind_init (){
+        var t = $('#item_group_4'), cond = (group_code == 10);
+        t.show();
+        console.log('FUUUUCKK!!!!');
+        if(cond) {
+            $('#example_group_4').show();
+            t.find('.group-4-m').show();
+            gr_4_inSole.bind('input propertychange', function(){
+                checkMeasurementInput(gr_4_inSole);
+                checkAllFormsGroup();
+            });
+            unlock(add_size_button, false);
+        }
+        add_size_button.on('click', function(){
+            var eu = gr_4_eu_dropDown.text(),
+                fields = [];
+            if(cond) fields.push({name: "Insole", value: gr_4_inSole.val()});
+            var size = {
+                    quantity: parseInt(quantity_input.val()), measurements: fields, eu_size: {id: gr_4_eu_dropDown.find('input').val()}};
+            group_4_clear_forms(cond);
+            addSizePreview(size, eu, makeFieldString(fields));
+            processNewSize(size, eu);
+        });
+    }
+    function group_4_clear_forms (){
+        gr_4_eu_dropDown.text(locale.label_choose);
+        gr_4_inSole.val('');
+        quantity_input.val(1);
+    }
+    function group_4_unbind (){
+        var t = $('#item_group_4');
+        t.hide();
+        t.find('.group-4-m').hide();
+        $('#example_group_4').hide();
+        gr_4_inSole.unbind();
+        add_size_button.off('click');
     }
 
     /*Common methods*/
     function checkAllFormsGroup (){
-        var condition;
-        if(item_group_code < 0) condition = false;
-        else if(item_group_code < 4) condition = conditionForAddSizeButtonGroup_1();
-        else if(item_group_code < 6) condition = conditionForAddSizeButtonGroup_2();
-        else if(item_group_code < 10) condition = conditionForAddSizeButtonGroup_3();
-        unlock(add_size_button, condition);
+        var cond;
+        if(group_code < 0) cond = false;
+        else if(group_code < 4) cond = conditionForAddSizeButtonGroup_1();
+        else if(group_code < 6) cond = conditionForAddSizeButtonGroup_2();
+        else if(group_code < 10) cond = conditionForAddSizeButtonGroup_3();
+        else if(group_code == 10) cond = conditionForAddSizeButtonGroup_4();
+        else if(group_code < 13) cond = conditionForAddSizeButtonGroup_5();
+        unlock(add_size_button, cond);
         unlock(save_button, checkForSaveButton());
     }
     function checkForSaveButton (){
-        var name = checkItemNameBlock(), size = count_size > 0, cb = checkColorBrandBlock();
+        var name = checkItemNameBlock(), size = Object.keys(sizeMap).length > 0, cb = checkColorBrandBlock();
         return name && size && checkPriceInput() && featuresOk && cb && files;
     }
 
@@ -321,12 +373,10 @@ $(function(){
         if(value.length == 1 && value =='.' || value =='-') value = '';
         input.val(value.replace(/[^0-9.-]/g,''));
     }
-    function quantityInputBind (){
-        quantity_input.bind('input propertychange', function(){
-            var val = quantity_input.val().replace(/[^0-9]/g,'');
-            if(val < 1) val = 1;
-            quantity_input.val(val);
-        });
+    function checkIntegerInput (input){
+        var val = quantity_input.val().replace(/[^0-9]/g,'');
+        if(val < 1) val = 1;
+        input.val(val);
     }
     function resolveGroupCommonCode (name){
         pattern = name.trim();
@@ -347,60 +397,66 @@ $(function(){
             default:                           return -1;
         }
     }
-    function addSizePreview (eu){
-        var qty = parseInt(quantity_input.val());
-        quantity_input.val(1);
-        $('#size_preview').append('<table class="icon-wrapper" id="table'+count+'">'+
-            '<tr><td rowspan="4"><div class="size_icon">'+eu+'</div></td>'+
-            '<tr><td class="td_del"><div class="del"></div></td></tr>'+
-            '<tr><td><button class="size_quantity">x'+qty+'</button></td></tr></table></div>');
-        return qty;
+    var sizeMap = [];
+    function syncSizeInfo(eu){
+        var sz_popup= $('#size_popup');
+        sz_popup.find('.dropbtn').text(eu);
+        sz_popup.find('#sz-eu-id').val(sizeMap[eu].eu_size.id);
+        sz_popup.find('#sz-e-qty').val(sizeMap[eu].quantity);
+        for(var i = 0; i< sizeMap[eu].measurements.length; i++ ){
+            var t;
+            if(i < 3) t = sz_popup.find('.sz-e-fields li:eq('+i+')');
+            else if(i < 5) {
+                t = sz_popup.find('.sz-e-fields-ex li:eq(0)');
+                t.show();
+            } else  break;
+            t.find('label').text(sizeMap[eu].measurements[i].name);
+            t.find('input').val(sizeMap[eu].measurements[i].value);
+        }
+        sz_popup.popup('show');
     }
-    function processNewSize (size, qty){
-        all_sizes.push(size);
-        var selector = '#table' + count, table = $(selector),
-            size_icon = table.find('.size_icon'),
-            del_button = table.find('.del');
-        table.mouseover(function(){
-            del_button.show();
+    function addSizePreview (size, eu, fieldsString){
+        $('#size_preview').find('ul.sz-main').append(
+            '<li class="sz-preview-list">\
+                <div class="sz-container">\
+                    <ul class="list-inline sz-ul">\
+                        <li class="sz-eu"><span>'+eu+'</span></li>\
+                        <li class="sz-ms"><label class="sz-invisible">'+fieldsString+'</label> </li>\
+                    </ul>\
+                </div>\
+                <div class="sz-qty-tag">'+size.quantity+'</div>\
+                <div class="sz-remove sz-invisible"></div>\
+                <button class="sz-remove-btn sz-invisible"></button>\
+            </li>');
+        var thumb = $('.sz-preview-list:last');
+        thumb.click(function(){
+            sz_edit = $(this);
+            syncSizeInfo(eu);
         });
-        table.mouseleave(function(){
-            del_button.hide();
+        thumb.mouseenter(function(){
+            var inv = $(this).find('.sz-invisible');
+            inv.removeClass('sz-invisible');
+            inv.addClass('sz-visible')
         });
-        var c = count;
-        table.on('click', function(){
-            console.log(c);
+        thumb.mouseleave(function(){
+            var inv = $(this).find('.sz-visible');
+            inv.removeClass('sz-visible');
+            inv.addClass('sz-invisible')
         });
-        del_button.on('click', function(){
-            $.when(table.fadeOut()).then(function(){
-                setTimeout(function(){
-                    table.remove()
-                },500)
-            });
-            deleted.push(c);
-            quantity_sizes -= all_sizes[c].quantity;
-            count_size--;
-            changeBlockStatus($('#sz-block'), count_size > 0);
+        thumb.find('.sz-remove-btn').click(function(){
+            delete sizeMap[eu];
+            thumb.remove();
+            var s = '.'+transliterate(eu.replace(/\s/g, ''));
+            $(s).show();
+            changeBlockStatus($('#sz-block'), Object.keys(sizeMap).length > 0);
             checkAllFormsGroup();
         });
-        quantity_sizes += qty;
-        count+=1;
-        count_size+=1;
-        changeBlockStatus($('#sz-block'), count_size > 0);
-        checkAllFormsGroup();
     }
-    function updateFinalSizes (){
-        final_sizes = [];
-        for(var i=0; i < count; i++){
-            var rm = false;
-            for(var k=0; k < deleted.length; k++){
-                rm = (i== deleted[k]);
-                if(rm) break;
-            }
-            if(!rm) {
-                final_sizes.push(all_sizes[i]);
-            }
-        }
+    function processNewSize (size, eu){
+        sizeMap[eu] = size;
+        console.log(sizeMap[eu]);
+        changeBlockStatus($('#sz-block'), true);
+        checkAllFormsGroup();
     }
     function featuresJoin(inputs){
         var result='';
@@ -413,7 +469,12 @@ $(function(){
     }
 
     function saveClothesItem (){
-        updateFinalSizes();
+        var size = [];
+        for(var key in sizeMap){
+            if(sizeMap.hasOwnProperty(key)){
+                size.push(sizeMap[key]);
+            }
+        }
         item = {
             gender: gender,
             itemName: {
@@ -432,14 +493,14 @@ $(function(){
                 id: itemGroup_id
             },
             discount: $('input#discount').val(),
-            quantity: quantity_sizes,
+            quantity: Object.keys(sizeMap).length,
             color: {id: $('#color_sample').find('input').val()},
             originPrice: parseInt(origin_price_input.val()*100),
             salePrice: parseInt(sale_price_input.val()*100),
             brand: {
                 id: $('li#brand').find('.dropbtn').find('input').val()
             },
-            size: final_sizes
+            size: size
         };
         console.log(JSON.stringify(item));
         $('#item').val(JSON.stringify(item));
@@ -448,7 +509,7 @@ $(function(){
     /********************************************/
     save_button.on('click', function(){
         unlock(save_button, false);
-        if(!$.isNumeric(item_group_code) || item_group_code < 0) console.log('some error');
+        if(!$.isNumeric(group_code) || group_code < 0) console.log('some error');
         saveClothesItem();
     });
     function resetColorBrand(){
@@ -465,27 +526,19 @@ $(function(){
         changeBlockStatus($('#sz-block'), false);
         changeBlockStatus($('#ds-block'), false);
         changeBlockStatus($('#pr-block'), false);
+        $('.sz-preview-list').remove();
         $('ul.feature_preview').remove();
         resetColorBrand();
         $('#filer_input').prop("jFiler").reset();
         add_size_button.off('click');
         $('#discount').val(0);
-        item_group_code = -1;
-        quantity_sizes = 0;
+        group_code = -1;
         temporaryGroup = {};
         quantity_input.val(1);
         origin_price_input.val(0);
         sale_price_input.val(0);
-        count_size = 0;
-        deleted = [];
-        for(var i = 0; i < count; i++){
-            deleted.push(i);
-        }
+        sizeMap = [];
     }
-    quantityInputBind();
-
-    /*******************image upload section**************/
-
     $('#filer_input').filer({
         showThumbs: true,
         limit: 6,
@@ -544,9 +597,18 @@ $(function(){
         });
     }
 
-    /*Items group tree stuff*/
-    function init(){
+    /*Entry point main method*/
+    function init_0(){
+        $('.brand-tabs').tabslet();
+        $('.color-tabs').tabslet();
         bindPriceInput();
+        bindItemNameInput();
+        bindNewColorInput();
+        bindNewBrandInput();
+        quantity_input.bind('input propertychange', function(){
+            checkIntegerInput(quantity_input);
+        });
+
         $('.main-content .dropbtn').click(function(e){
             $(this).parent().find('.dropdown-content').toggle(150);
         });
@@ -732,7 +794,6 @@ $(function(){
         form.val('');
         return val;
     }
-
     /**
      * Adding an action on button click for removing row of features;
      * @param button - .remove_row button from current ul.
@@ -792,8 +853,6 @@ $(function(){
     extra_popup.find('.cancel-button').click(function(){
         $('#ex-info').val(x_buff);
     });
-
-    $('.color-tabs').tabslet();
     $("#color-sample").spectrum({
         color: "#fff",
         showAlpha: true,
@@ -813,7 +872,19 @@ $(function(){
             openelement: popup.openelement,
             closeelement: popup.closeelement,
             blur: popup.blur,
-            scrolllock: popup.scrollock
+            scrolllock: popup.scrollock,
+            onclose: function(){
+                popup.en.val('');
+                popup.ru.val('');
+                popup.ua.val('');
+                if(cond){
+                    popup.name.val('');
+                    popup.files.reset();
+                }else{
+                    popup.p.find('.sp-preview-inner').css('background','#ffffff')
+                    popup.p.find('#color-value').text('#ffffff')
+                }
+            }
         });
         popup.en.bind('input propertychange', function(){unlock(popup.saveButton, checkLength(popup.en) &&
             checkLength(popup.ru) && checkLength(popup.ua) && (cond ? checkLength(popup.name) && popup.files.files_list.length > 0 : true))});
@@ -826,8 +897,7 @@ $(function(){
     }
     function bindNewColorInput(){
         var p = $('#color_popup'), popup = {p: p, en: p.find('#c-name-en'), ru: p.find('#c-name-ru'), ua: p.find('#c-name-ua'),
-            saveButton: p.find('.update-button'), openelement: '#color-plus',  closeelement: '.color_close',
-            blur:false, scrolllock: true};
+            saveButton: p.find('.update-button'), openelement: '#color-plus',  closeelement: '.color_close', blur:false, scrollock: true};
         bindUpdate(popup);
         popup.saveButton.click(function(){
             updateColor(JSON.stringify({
@@ -858,9 +928,6 @@ $(function(){
             }
         });
     }
-
-    $('.brand-tabs').tabslet();
-
     $('#brand_input').filer({
         showThumbs: true,
         limit: 1,
@@ -902,7 +969,7 @@ $(function(){
     });
     function uploadBrand(popup, data){
         var formData = new FormData();
-        formData.append('file', popup.find('#brand_input')[0].files[0]);
+        formData.append('file', popup.p.find('#brand_input')[0].files[0]);
         formData.append('b', JSON.stringify(data));
         $.ajax({
             url: magic + "../../manage/ajax/save/brand",
@@ -926,10 +993,10 @@ $(function(){
     function bindNewBrandInput(){
         var p = $('#brand_popup');
         var popup = {p: p, en: p.find('#b-dsc-en'), ru: p.find('#b-dsc-ru'),ua: p.find('#b-dsc-ua'), blur: true, saveButton: p.find('.update-button'),
-            name: p.find('#b-name'), openelement: '#brand-plus', closeelement: '.brand_close',scrolllock: false, files: $('#brand_input').prop("jFiler")};
+            name: p.find('#b-name'), openelement: '#brand-plus', closeelement: '.brand_close',scrollock: false, files: $('#brand_input').prop("jFiler")};
         bindUpdate(popup);
         popup.saveButton.click(function(){
-            uploadBrand(p, {
+            uploadBrand(popup, {
                 name: popup.name.val(),
                 description: {
                     locale_en: popup.en.val(),
@@ -939,9 +1006,96 @@ $(function(){
             });
         })
     }
-    bindItemNameInput();
-    bindNewColorInput();
-    bindNewBrandInput();
-    init();
+    function checkForSizeEdit(block,eu, itself){
+        for(var i = 0; i< sizeMap[eu].measurements.length; i++){
+            var t;
+            if(i < 3) t = block.find('.sz-e-fields li:eq('+i+')');
+            else if(i < 5) {
+                t = block.find('.sz-e-fields-ex li:eq(0)');
+            }
+            else break;
+            t = t.find('input');
+            checkMeasurementInput(t);
+            if(!checkLength(t)) return false;
+        }
+        return true;
+    }
+    $('#size_popup').popup({
+        opacity: 0.3,
+        transition: 'all 0.3s',
+        closeelement: '.size_close',
+        onopen:function(){
+            var sz_e_popup = $('#size_popup'), sz_e_btn = sz_e_popup.find('.update-button'),
+                eu = sz_e_popup.find('.dropbtn').text(), first =  sz_e_popup.find('.first'),
+                second = sz_e_popup.find('.second'), third = sz_e_popup.find('.third'),
+                fourth = sz_e_popup.find('.fourth'), qty = sz_e_popup.find('#sz-e-qty'), cond = group_code > 5 && group_code < 11;
+            qty.bind('input propertychange', function(){
+                unlock(sz_e_btn, checkForSizeEdit(sz_e_popup, eu));
+            });
+            first.bind('input propertychange', function(){
+                unlock(sz_e_btn, checkForSizeEdit(sz_e_popup, eu));
+            });
+            if(group_code < 6){
+                second.bind('input propertychange', function(){
+                    unlock(sz_e_btn, checkForSizeEdit(sz_e_popup, eu));
+                });
+                third.bind('input propertychange', function(){
+                    unlock(sz_e_btn, checkForSizeEdit(sz_e_popup, eu));
+                });
+            }
+            if(cond){
+                if(group_code == 10)  {
+                    second.parent().hide();
+                    third.parent().hide();
+                }
+                first.bind('input propertychange', function(){
+                    unlock(sz_e_btn, checkForSizeEdit(sz_e_popup, eu));
+                });
+            }
+            else if(!cond && group_code > 10) {
+                sz_e_popup.find('.sz-e-fields').hide();
+            }
+            sz_e_btn.click(function(){
+                sizeMap[eu] = {
+                    quantity: qty.val(),
+                    measurements: [],
+                    eu_size:{id: sz_e_popup.find('#sz-eu-id').val()}
+                };
+                if(group_code < 11)sizeMap[eu].measurements=[{name: first.parent().find('label').text(), value: first.val()}];
+                if(group_code < 10) sizeMap[eu].measurements.push(
+                    {name: second.parent().find('label').text(),value: second.val()},
+                    {name: third.parent().find('label').text(), value: third.val()});
+                if(cond && group_code != 10) sizeMap[eu].measurements.push({name: fourth.parent().find('label').text(), value: fourth.val()});
+                console.log(sizeMap);
+                sz_edit.find('.sz-ms label').text(makeFieldString(sizeMap[eu].measurements));
+                sz_edit.find('.sz-eu span').text(eu);
+                sz_edit.find('.sz-qty-tag').text(sizeMap[eu].quantity);
+            });
+        },
+        onclose:function(){
+            var sz_e_popup = $('#size_popup');
+            sz_e_popup.find('#sz-e-qty').unbind();
+            sz_e_popup.find('.sz-e-fields').show();
+            sz_e_popup.find('.update-button').off('click');
+            if(group_code < 11){
+                var t =sz_e_popup.find('.first');
+                t.unbind();
+                t.val('');
+                t = sz_e_popup.find('.second');
+                t.unbind();
+                t.val('');
+                t.parent().show();
+                t = sz_e_popup.find('.third');
+                t.unbind();
+                t.val('');
+                t.parent().show();
+            }
+            if(group_code > 5 && group_code < 11){
+                sz_e_popup.find('.fourth').unbind();
+            }
+            sz_e_popup.find('.sz-e-fields-ex li:eq(0)').hide();
+        }
+    });
+    init_0();
 });
 /*]]>*/

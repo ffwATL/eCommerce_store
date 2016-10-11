@@ -136,7 +136,7 @@ input{
     margin-top: 10px;
 }
 #add_size button, .height, #image_upload .upload_button, #brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn,
-.plus{
+.plus, #item_group_4 .dropbtn{
     height: 29px;
 }
 select.height:disabled, select.height:disabled:hover{
@@ -182,7 +182,7 @@ label.name{
     padding: 5px 0 0;
     margin-bottom: 0;
 }
-option, #size_preview .del, #size_preview .size_quantity, button.extra_note, button.remove_row{
+option, button.extra_note, button.remove_row{
     border: none;
 }
 #input-group,#group_two span,.input-name,#group_two a,#section_2 select, #section_2 input, #section_3 select,
@@ -199,8 +199,8 @@ option, #size_preview .del, #size_preview .size_quantity, button.extra_note, but
 #brand, #color{
     padding-left: 20px;
 }
-#item_group_2 .eu_select, #group_two a, #group_two span{
-    padding-left: 15px;
+#item_group_2 .eu_select, #group_two a, #group_two span,#item_group_4 .eu_select{
+    margin-left: 15px;
 }
 .block, #input-group,.input-name, label{
     display: block;
@@ -212,7 +212,7 @@ select:disabled, input:disabled{
 #group_two a:hover,#add_size button:hover,.icon-wrapper:hover{
     cursor: pointer;
 }
-#advice,.size_icon{
+#advice{
     text-align: center;
 }
 .section_end{
@@ -239,7 +239,7 @@ select:disabled, input:disabled{
 #section_3,#item_group_1,#add_size, #item_group_2, .section_end{
     padding: 0;
 }
-#item_group_1,  #group_two ,#item_group_2, #item_group_3, #section_4, #section_3,#section_2{
+#item_group_1,  #group_two ,#item_group_2, #item_group_3, #section_4, #section_3,#section_2, .group-4-m, #item_group_4{
     display: none;
 }
 #add_size_panel_qty_li{
@@ -266,6 +266,9 @@ select:disabled, input:disabled{
     float: left;
     margin: 0;
 }
+#example_group_4{
+    width: 100%;
+}
 #example_group_3{
     width: 110%;
     margin-left: 10px;
@@ -274,24 +277,20 @@ select:disabled, input:disabled{
     width: 90%;
     margin-left: 10px;
 }
-#example_group_1, #example_group_11, #example_group_2,#example_group_3{
+#example_group_1, #example_group_11, #example_group_2,#example_group_3, #example_group_4{
     display: none;
     height: auto;
     padding: 0;
 }
 #size_preview{
-    min-height: 130px;
+    border: dashed #a6a9b0 .12em;
+    min-height: 155px;
     padding: 20px 0 30px;
     margin-top: 15px;
-    border-radius: 3px;
-}
-#size_preview .del{
-    width: 9px;
-    height: 9px;
 }
 #add_size button{
     outline: none;
-    margin-left: 65px;
+    margin-left: 77px;
     vertical-align: middle;
     background: white url("../../../img/new/plus-icon.svg") no-repeat 2px;
 }
@@ -301,33 +300,9 @@ select:disabled, input:disabled{
 #add_size button:disabled, #add_size button:disabled:hover{
     cursor: not-allowed;
 }
-.del{
-    background: url("../../../img/new/delete-icon.svg") no-repeat;
-}
-.del:hover{
-    background: url("../../../img/new/delete-icon-hover.svg") no-repeat;
-}
 #advice{
     padding: 0;
     margin: 0;
-}
-#size_preview .del{
-    margin: 0 0 0 3px;
-    display: none;
-}
-.size_icon{
-    width: 85px;
-    height: 65px;
-    padding: 23px 10px;
-    font-weight: 600;
-    font-size: 16px;
-    border-radius: 3px 3px 0 3px;
-    box-shadow: 0 0 18px #7a7a7a;
-    background-color: rgba(232, 220, 224, 0.23);
-}
-.td_del{
-    height: 13px;
-    min-height: 13px;
 }
 .icon-wrapper{
     margin-right: 34px;
@@ -338,18 +313,6 @@ select:disabled, input:disabled{
 }
 .wrapMe{
     display: none;
-}
-#size_preview .size_quantity{
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    outline: none;
-    border-radius: 0 3px 3px 0;
-    margin-top: 24px;
-    font-weight: bold;
-    color: white;
-    box-shadow: 3px 1px 12px #7a7a7a;
-    background: rgba(35, 50, 70, 0.7);
 }
 hr.null{
     margin-top: 10px;
@@ -414,22 +377,26 @@ hr.null{
     padding-left: 0;
     padding-right: 0;
 }
-#section_2_ul, #clothes_items ul, ul.price_list{
+#section_2_ul, #mr-10 ul, ul.price_list{
     margin-left: 10px;
 }
-#clothes_items li, ul.price_list li{
-    padding-right: 35px;
+#mr-10 li, ul.price_list li{
+    margin-right: 35px;
 }
-#group_one select, #item_group_2 select, button#changeGroup, ul.item_description textarea, .input-name{
+#group_one select, #item_group_2 select, button#changeGroup, ul.item_description textarea, .input-name, #image_upload .upload_button{
     margin-left: 15px;
 }
-#brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn{
+#brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn,#item_group_4 .dropbtn{
     font-size: 14px;
-    background: white url("../../../img/down-arrow.svg") no-repeat 133px;
     width: 155px;
+    background: white url("../../../img/down-arrow.svg") no-repeat 133px;
+}
+#size_popup .dropbtn{
+    font-size: 14px;
+    background: white url("../../../img/down-arrow.svg") no-repeat 179px;
 }
 #brand .dropbtn, #color .dropbtn, #eu_waist_select .dropbtn, #item_group_2 .dropbtn, #image_upload .upload_button, #add_size button,
-select.height{
+select.height, #size_popup .dropbtn,#item_group_4 .dropbtn{
     color: black;
     border: solid black .12em;
 }
@@ -438,7 +405,7 @@ select.height{
     width: 155px;
 }
 #brand .dropbtn:hover, #color .dropbtn:hover, #eu_waist_select .dropbtn:hover, #item_group_2 .dropbtn:hover, #image_upload .upload_button:hover,
-#add_size button:disabled, #add_size button:disabled:hover, #add_size button:hover, select.height:hover{
+#add_size button:disabled, #add_size button:disabled:hover, #add_size button:hover, select.height:hover, #item_group_4 .dropbtn:hover{
     border: solid #8b8b8b .12em;
     color: #8b8b8b;
 }
@@ -496,7 +463,7 @@ li.stage_comp, li.stage_comp:before{
 a.change, #advice, select.height, ul.feature_preview input{
     font-size: 12px;
 }
-#brand label, #color label{
+#brand label, #color label, #size_popup label{
     padding-left: 0;
     padding-bottom: 0;
     margin-bottom: 0;
@@ -668,7 +635,7 @@ button.remove_row:hover, button.extra_note:hover,.extra_note_filled:hover{
     min-width: 500px;
     max-width: 500px;
 }
-#extraNotes_popup h3, #color_popup h3, #brand_popup h3{
+#extraNotes_popup h3, #color_popup h3, #brand_popup h3, #size_popup h3{
     margin-top: 25px;
     border-bottom: 0.08em solid #000;
     line-height:0.1em;
@@ -722,11 +689,9 @@ ul#color-forTabs, ul#brand-forTabs{
     font-size: 12px;
     font-weight: 300;
     margin-top: 10px;
-    /*text-align: center;
-    max-width: 100px;*/
     margin-right: 20px;
 }
-#color_popup .popup-info h5, #brand_popup .popup-info h5{
+#color_popup .popup-info h5, #brand_popup .popup-info h5, .popup-h5{
     margin-top: 0;
 }
 input.c-name{
@@ -796,5 +761,126 @@ input#b-name{
     padding-left: 5px;
     padding-bottom: 25px;
     padding-right: 5px;
+    text-align: center;
+}
+.sz-container{
+    border: solid .09em black;
+    min-height: 65px;
+    max-height: 65px;
+    padding-top: 0;
+}
+.sz-container ul .sz-eu{
+    background: black;
+    color: white;
+    padding: 4px 0;
+    min-width: 100%;
+}
+.sz-container ul li{
+    text-align: center;
+}
+.sz-ms label{
+    padding: 0;
+    font-size: 9px;
+    font-weight: 200;
+}
+li.sz-ms,.sz-container{
+    max-width: 85px;
+    min-width: 85px;
+}
+li.sz-ms{
+    margin-top: 10px;
+}
+ul.sz-ul{
+    margin-left: 0;
+}
+.sz-preview-list{
+    margin: 15px;
+}
+.sz-remove{
+    border-radius: 36px;
+    background: #fff;
+}
+.sz-remove, .sz-qty-tag, .sz-remove-btn,li.sz-ms{
+    position: absolute;
+}
+.sz-qty-tag{
+    font-size: 12px;
+    width: 38px;
+    height: 38px;
+    background: transparent url("../../../../resources/img/new/tags.svg") no-repeat;
+    margin-top: -20px;
+    margin-left: 75px;
+    color: white;
+    padding-top: 11px;
+    padding-left: 10px;
+    padding-right: 17px;
+    text-align: center;
+}
+.sz-remove, .sz-remove-btn{
+    margin-top: -70px;
+    margin-left: 77px;
+    width: 14px;
+    height: 14px;
+}
+.sz-remove-btn{
+    border: none;
+    background: transparent url("../../../../resources/img/new/sz-remove-icon.svg") no-repeat;
+}
+.sz-remove-btn:hover{
+    background: transparent url("../../../../resources/img/new/sz-remove-icon-hover.svg") no-repeat;
+}
+.sz-invisible{
+    display: none;
+}
+ul.sz-main{
+    margin-bottom: 0;
+}
+.sz-e-major li:nth-child(2){
+    margin-left: 122px;
+}
+.sz-e-fields li:nth-child(2){
+    margin-left: 77px;
+    margin-right: 77px;
+}
+.sz-e-major .dropbtn{
+    width: 200px;
+}
+.sz-e-container input{
+    font-size: 15px;
+    max-width: 82px;
+    /*    text-align: center;*/
+}
+.sz-e-container li{
+    padding-right: 0;
+    padding-left: 0;
+}
+#size_popup .sz-e-container ul{
+    margin-bottom: 15px;
+    margin-left: 0;
+}
+#size_popup .buttons li:nth-child(2){
+    margin-right: 0;
+    padding-right: 0;
+}
+#size_popup{
+    max-width: 450px;
+}
+.sz-e-label label{
+    color: #969aa1;
+    padding: 0;
+    font-size: 12px;
+
+}
+.sz-e-fields-ex li:nth-child(1){
+    display: none;
+}
+/*.sz-e-label{
+    text-align: center;
+    min-width: 82px;
+    position: absolute;
+    margin-top: 30px;
+}*/
+#item_group_4 .dropdown-content{
+    width: 155px;
     text-align: center;
 }
