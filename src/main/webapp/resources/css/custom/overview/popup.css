@@ -8,6 +8,7 @@
     border-top:  solid 1px rgb(204, 204, 204);
     border-radius: 2px 2px 0 0;
     height: 160px;
+    width: 127px;
 }
 .popup .left{
     padding-left: 20px;
@@ -64,9 +65,6 @@
 .popup .right .cancel-button, #edit_popup, .popup #discount:disabled, #add-cat-popup{
     background: white;
 }
-.popup input#item-name{
-    width: 415px;
-}
 .popup .right input, .popup .options button{
     outline: none;
 }
@@ -90,7 +88,7 @@
 #edit_popup{
     border: solid #d3d3d3 1px;
     width: 650px;
-    height: 290px;
+    height: 320px;
 }
 .popup .popup-header, .popup-content, #extraNotes_popup .popup-info h5{
     background: #fff;
@@ -158,10 +156,9 @@
 }
 .popup .left ul{
     margin-left: 0;
-    /*border-top: solid #272B30 5px;*/
 }
 .popup .left .final .origin-price, .popup .left .final .sale-price{
-    width: 65px;
+    width: 70px;
 }
 .popup button.color{
     width: auto;
@@ -172,7 +169,7 @@
 }
 .left ul li:nth-child(2){
     padding-right: 0;
-    padding-left: 17px ;
+    margin-left: 6px ;
 }
 .wrapper {
     position: relative;

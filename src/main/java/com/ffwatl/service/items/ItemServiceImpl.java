@@ -75,18 +75,22 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     @Transactional
-    public void updateSingleItem(ItemUpdatePresenter update){
-        Item item;
-        Item freshItem = update.getItem();
-        if (freshItem == null || (item = findById(freshItem.getId())) == null) return;
+    public void changeItemStatus(Item item){
+        Item item_1 = findById(item.getId());
+        item_1.setIsActive(item.isActive());
+    }
 
-        if (freshItem.getColor() != null && item.getColor().getId() != freshItem.getColor().getId())  {
-            item.setColor(colorService.findById(freshItem.getColor().getId()));
+    @Override
+    @Transactional
+    public void updateSingleItem(ItemUpdatePresenter update){
+        Item freshItem = update.getItem();
+        Item item = findById(freshItem.getId());
+        if(item == null) {
+            throw new IllegalArgumentException("Probably wrong Item id. Item not found :( [id]="+freshItem.getId() );
         }
-        if (freshItem.getItemGroup() != null && item.getItemGroup().getId() != freshItem.getItemGroup().getId()) {
-            item.setItemGroup(itemGroupService.findById(freshItem.getItemGroup().getId()));
-        }
-        if(freshItem.getItemName() != null) item.setItemName(freshItem.getItemName());
+        item.setItemGroup(itemGroupService.findById(freshItem.getItemGroup().getId()));
+        item.setColor(colorService.findById(freshItem.getColor().getId()));
+        item.setItemName(freshItem.getItemName());
         item.setIsActive(freshItem.isActive());
         item.setSalePrice(freshItem.getSalePrice());
         item.setDiscount(freshItem.getDiscount());

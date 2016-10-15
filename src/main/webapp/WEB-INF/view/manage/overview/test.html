@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/css/custom/main.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/overview/popup.css" th:href="@{/resources/css/custom/overview/popup.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/filer/jquery.filer.css" th:href="@{/resources/css/filer/jquery.filer.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/custom/new/new.item.css" th:href="@{/resources/css/custom/new/new.item.css}" type="text/css">
+
+
     <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
+    <link rel="stylesheet" href="../../../../resources/css/custom/overview/item.overview.css" th:href="@{/resources/css/custom/overview/item.overview.css}" type="text/css">
     <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
     <script rel="script" src="../../../../resources/js/filer/jquery.filer.js" th:src="@{/resources/js/filer/jquery.filer.js}" ></script>
     <script rel="script" src="../../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/js/jquery.popupoverlay.min.js}"></script>
@@ -23,29 +24,17 @@
             var lang = $.cookie("app");
             if(lang == undefined || lang.length < 2) lang = 'en';
             var locale = getLocale(lang);
-            var sz_e_popup = $('#size_popup');
-            sz_e_popup.popup({
+            var ed_popup = $('#edit_popup');
+            ed_popup.popup({
                 opacity: 0.3,
                 transition: 'all 0.3s',
                 openelement: '#brand-plus',
-                closeelement: '.brand_close'
+                closeelement: '.edit_close'
             });
-            sz_e_popup.popup('show');
-            $('.brand-tabs').tabslet();
+            ed_popup.popup('show');
+            $('.ex-tabs').tabslet();
 
-            $('.sp-choose').click(function () {
-                $('#color-value').text($('.sp-input').val());
-            });
-            $('.sz-preview-list').mouseenter(function(){
-                var inv = $(this).find('.sz-invisible');
-                inv.removeClass('sz-invisible');
-                inv.addClass('sz-visible')
-            });
-            $('.sz-preview-list').mouseleave(function(){
-                var inv = $(this).find('.sz-visible');
-                inv.removeClass('sz-visible');
-                inv.addClass('sz-invisible')
-            });
+
         })
     </script>
 </head>
@@ -94,6 +83,108 @@
             <ul class="list-inline">
                 <li><button class="update-button button-typical size_close" th:text="#{label.accept}" disabled>Accept</button></li>
                 <li><button class="cancel-button button-bordered size_close" th:text="#{label.cancel}">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="edit_popup" class="popup">
+    <div class="popup-header"><h3><span th:text="#{label.expressEdit.popup}">Express edit</span></h3></div>
+    <div class="left">
+        <div class="wrapper">
+            <img class="preview">
+            <span class="status offer"><img src="../../../../resources/img/offer.png" th:src="@{/resources/img/offer.png}"></span>
+            <span class="last offer">-55%</span>
+        </div>
+        <ul class="list-inline" id="ex-pr-panel">
+            <li>
+                <div class="final">
+                    <div class="origin-price">
+                        <span class="price">350</span>
+                        <span class="currency">UAH</span>
+                    </div>
+                    <div class="sale-price">
+                        <span class="price">1200</span>
+                        <span class="currency">UAH</span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="activate">
+                    <label class="switch-active"><input type="checkbox"><div class="slider"></div></label>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="right">
+        <div class="ex-tabs">
+            <ul id="ex-forTabs" class="forTabs">
+                <li class="active" ><a href="#ex-tab-1" th:text="#{locale.en}">EN</a></li>
+                <li><a href="#ex-tab-2" th:text="#{locale.ru}">RU</a></li>
+                <li class="last-li"><a href="#ex-tab-3" th:text="#{locale.ua}">UA</a></li>
+            </ul>
+            <div id="ex-tab-1">
+                <div class="name">
+                    <input id="item-name" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
+                </div>
+            </div>
+            <div id="ex-tab-2">
+                <div class="name">
+                    <input id="item-name-ru" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
+                </div>
+            </div>
+            <div id="ex-tab-3">
+                <div class="name">
+                    <input id="item-name-ua" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
+                </div>
+            </div>
+        </div>
+        <div class="prices">
+            <div class="left_info">
+                <h4 th:text="#{label.expressEdit.price}">Price</h4>
+            </div>
+            <ul class="list-inline">
+                <li><label for="sale" th:text="#{label.expressEdit.sale}">Sale, ₴</label><input id="sale" class="" type="number" value="719"></li>
+                <li class="discount"><label for="discount" th:text="(#{label.discount}+', %')">Discount, %</label><input id="discount" class="" type="number" value="15"></li>
+            </ul>
+            <input hidden class="id" type="number">
+        </div>
+        <div class="options">
+            <div class="left_info">
+                <h4 id="options" th:text="#{label.options}">Options</h4>
+            </div>
+            <ul class="list-inline">
+                <li class="currency main-option">
+                    <div class="dropdown1">
+                        <button class="dropbtn currency" id="currency-select">UAH</button>
+                        <div class="dropdown-content">
+                            <a class="currency-value">UAH</a>
+                            <a class="currency-value">USD</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="color main-option">
+                    <div class="dropdown1">
+                        <button class="dropbtn color" id="color-select"><input hidden type="number"><a id="hex" class="hex"></a></button>
+                        <div class="dropdown-content">
+                            <a class="color-value" th:remove="all"><input hidden type="number"><div class="hex"></div></a>
+                            <a class="color-value" th:remove="all">light blue</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="second-option">
+                    <div class="item-group">
+                        <div class="dropdown">
+                            <button class="dropbtn item-group button-bordered">Chinos</button>
+                            <div class="dropdown-content group-content"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="buttons">
+            <ul class="list-inline">
+                <li><button class="update-button button-typical edit_close" th:text="#{label.update}">Update</button></li>
+                <li><button class="cancel-button button-bordered edit_close" th:text="#{label.cancel}">Cancel</button></li>
             </ul>
         </div>
     </div>

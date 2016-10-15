@@ -3,10 +3,9 @@
     padding-left: 0;
     padding-right: 0;
 }
-.content .sidebar {
-    float: left;
-}
 .content .main {
+    width: 70%;
+    margin-right: 30px;
     float: right;
     overflow: hidden;
 }
@@ -44,6 +43,7 @@
     margin-top: 40px;
 }
 #forTabs{
+    margin-right: -1px;
     text-align: center;
     margin-bottom: 25px;
     padding-left: 0;
@@ -54,17 +54,17 @@
 }
 .forTabs LI {
     margin-right: -2px;
-    margin-left: -2px;
+    margin-left: -3px;
     /*background: #f1f4fb;*/
-    border-bottom: solid #e6e8ef 1px;
+    border-bottom: solid #e6e8ef .09em;
     /*border-left: solid #e6e8ef 1px;*/
     border-top: solid transparent 2px;
-    min-width: 306px;
+   /* min-width: 306px;*/
     display: inline-block;
 }
 .forTabs li.active{
-    border-left: solid #e6e8ef 1px;
-    border-right: solid #e6e8ef 1px;
+    border-left: solid #e6e8ef .09em;
+    border-right: solid #e6e8ef .09em;
 }
 .forTabs li#onSale{
     /*border-right: solid #e6e8ef 1px;*/
@@ -79,16 +79,11 @@
 .forTabs .active a{
     color: #272B30;
 }
-.forTabs LI:hover {
-    border-top: solid #dee0e7 2px;
-}
 .forTabs LI:hover A, .forTabs LI:hover {
-    /*transition: 0.3s;*/
     color: black;
 }
 .forTabs .active, .forTabs LI.active:hover {
-    border-bottom: none;
-    border-top: solid #272B30 2px;
+    border-bottom: white solid 0.09em;
 }
 .tabs{
     height: auto;
@@ -145,24 +140,28 @@
         font-size: 16px;
     }
     .items .thumbnail{
+        width: 180px;
         min-height: 159px;
     }
     .items li{
-        width: 145px;
+        width: 180px;
         height: auto;
-        padding: 10px;
-        margin: 10px;
     }
 }
 @media screen and (min-width: 1270px){
     .items .thumbnail{
-        min-height: 229px;
+        min-height: 230px;
+    }
+    .items li:nth-child(5n), .items li:nth-child(1){
+        margin-left:0;
     }
     .items li{
-        width: 200px;
+        width: 180px;
         height: auto;
-        padding: 10px;
-        margin: 10px;
+        padding-left: 0px;
+        padding-right: 0;
+        margin-right: 0px;
+        margin-left: 30px;
     }
 }
 .currency{
@@ -170,20 +169,19 @@
 }
 #sidebar {
     height: auto;
-    float: left;
-    width: 270px;
-    padding-left: 26px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    width: 250px;
+    padding: 10px 0 10px 26px;
 }
 #sidebar hr{
     background-color: #272B30;
 }
 #sidebar label{
-   margin-top: 5px;
+    color: #666;
+    margin-top: 5px;
     margin-left: 2px;
     font-weight: 200;
-    font-size: 11px;
+    font-size: 0.77em;
+    font-family: Tahoma,Arial,sans-serif;
 }
 #sidebar h4, #sidebar h5{
     text-transform: uppercase;
@@ -233,12 +231,12 @@ ul.items .inner{
     text-align: left;
 }
 .items li{
-    height: 307px;
-    min-height: 307px;
+    height: 320px;
+    min-height: 320px;
     display: inline;
 }
 .items{
-    width: 95.5%;
+   /* width: 95.5%;*/
    /* min-height: 82px;*/
     margin-left: auto;
     margin-right: auto;
@@ -312,10 +310,11 @@ ul.items .inner{
 .sort-bar select, .sort-bar label{
     float: right;
 }
-.sort-bar select{
+.sort-bar select, button.thumbnail-view, button.list-view{
     margin-left: 5px;
 }
 .bottom-bar{
+    margin-top: 20px;
     text-align: left;
     margin-bottom: 10px;
     overflow: auto;
@@ -373,7 +372,7 @@ button.active, button.active:hover{
     /*background-color: hsla(43,55%,93%,1);*/
 }
 input.check{
-    width: 5px;
+   /* width: 5px;*/
 }
 #sidebar ul span{
     /*padding: 3px;*/
@@ -457,23 +456,20 @@ td .notFoundImg{
     height: 17px;
     width: 17px;
 }
-button.list-view{
+button.list-view, button.thumbnail-view{
     height: 20px;
     width: 20px;
     border: none;
     outline: none;
+}
+button.list-view{
     background: url("../../../img/list-button.svg") no-repeat;
 }
 button.thumbnail-view{
-
-    height: 20px;
-    width: 20px;
-    border: none;
-    outline: none;
     background: url("../../../img/thumbnails-list.svg") no-repeat;
 }
 .list-items .thumb img.icon{
-    height: 110px;
+    height: 80px;
 }
 .list-items{
     width: 100%;
@@ -503,7 +499,7 @@ thead{
     background-color: #37474f;
 }
 .list-items .dropbtn{
-    margin-top: 40px;
+    margin-top: 25px;
 }
 .content .dropbtn, .right-side button{
     outline: none;
@@ -570,10 +566,7 @@ thead{
     color: white;
 }
 td.id{
-    padding-top: 9px;
-}
-input.main-check{
-    width: 5px;
+    padding-top: 0px;
 }
 #hex{
     margin-top: 0;
@@ -637,3 +630,35 @@ li.color a{
     font-size: 1em;
     color: #a6a9b0;
 }
+ul#ex-forTabs{
+    padding-left: 0;
+    margin-left: 67px;
+    margin-bottom: 25px;
+}
+ul#ex-forTabs li:nth-child(1), ul#ex-forTabs li:nth-child(2){
+    margin-left: -3px;
+}
+ul#ex-forTabs li{
+    width: 139px;
+    text-align: center;
+}
+ul#ex-forTabs li a{
+    font-size: 12px;
+}
+ul#ex-pr-panel{
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+.ex-tabs input{
+    width: 415px;
+}
+.item .thumbnail > img{
+    width: 179px;
+    height: 228px;
+    margin-left: 0;
+    margin-right: 0;
+}
+ul.items{
+   /* display: inline-block;*/
+}
+a:hover,a:active,a:link, input:active, input:hover, input:link{outline: 0px none;}

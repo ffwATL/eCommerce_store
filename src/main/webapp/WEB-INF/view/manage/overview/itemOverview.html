@@ -59,7 +59,7 @@
             <span class="status offer"><img src="../../../../resources/img/offer.png" th:src="@{/resources/img/offer.png}"></span>
             <span class="last offer">-55%</span>
         </div>
-        <ul class="list-inline">
+        <ul class="list-inline" id="ex-pr-panel">
             <li>
                 <div class="final">
                     <div class="origin-price">
@@ -80,9 +80,27 @@
         </ul>
     </div>
     <div class="right">
-        <div class="name">
-            <label for="item-name" th:text="#{label.itemName}">Item name</label>
-            <input id="item-name" type="text" placeholder="Item name" value="Asos Skinny chinos navy">
+        <div class="ex-tabs">
+            <ul id="ex-forTabs" class="forTabs">
+                <li class="active" ><a href="#ex-tab-1" th:text="#{locale.en}">EN</a></li>
+                <li><a href="#ex-tab-2" th:text="#{locale.ru}">RU</a></li>
+                <li class="last-li"><a href="#ex-tab-3" th:text="#{locale.ua}">UA</a></li>
+            </ul>
+            <div id="ex-tab-1">
+                <div class="name">
+                    <input id="item-name" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
+                </div>
+            </div>
+            <div id="ex-tab-2">
+                <div class="name">
+                    <input id="item-name-ru" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
+                </div>
+            </div>
+            <div id="ex-tab-3">
+                <div class="name">
+                    <input id="item-name-ua" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
+                </div>
+            </div>
         </div>
         <div class="prices">
             <div class="left_info">
@@ -168,7 +186,7 @@
     <div class="custom_jumbo col-lg-12 text-center">
         <p class="head-text"></p>
     </div>
-    <div class="content col-lg-12" data-sticky_parent>
+    <div class="content col-lg-12 sticky-parent" data-sticky_parent>
         <div class="col-lg-2 sidebar medium" id="sidebar" data-sticky_column>
             <h4 th:text="#{overview.items.refine}">Refine by</h4>
             <hr>

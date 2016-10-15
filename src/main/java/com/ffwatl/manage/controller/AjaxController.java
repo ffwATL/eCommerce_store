@@ -46,6 +46,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Rest controller class that handles all the ajax requests in manage mode.
+ * All the methods should handle only (!!!) POST requests.
+ */
 @RestController
 public class AjaxController {
 
@@ -66,34 +70,83 @@ public class AjaxController {
     @Autowired
     private ColorService colorService;
     @Autowired
-    private Settings settings;
+    private Settings settings; //contains url for images and directories to save images
 
+    /**
+     * Returns ItemGroupDto object with all children by given group name. It's only looking for
+     * a result from level 1 of ItemGroup hierarchy;
+     * @param name - name of the ItemGroup from level 1 of ItemGroup hierarchy;
+     * @return ItemGroupDto object with all children.
+     */
     @RequestMapping(value = "/manage/ajax/get/itemgroup", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<ItemGroupDto> ajaxAllItemGroupByParentName(@RequestParam String name){
+    public ResponseEntity<ItemGroupDto> ajaxAllItemGroupByName(@RequestParam String name){
         ItemGroupDto result = itemGroupService.findByLvlAndByNameFetchCollection(1, name);
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * Returns List of all EuroSize objects that corresponds given CommonCategory 'cat' parameter.
+     * If parameter 'cat' is empty, method returns status 400;
+     * @param cat CommonCategory 'cat' parameter. Shouldn't be null;
+     * @return List of all EuroSize objects that corresponds given CommonCategory 'cat' parameter.
+     */
     @RequestMapping(value = "/manage/ajax/get/eurosize/cat", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<List<EuroSize>> ajaxEuroSizeByCat(@RequestParam String cat){
-        if(cat == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        return ResponseEntity.ok(euroSizeService.findByCat(CommonCategory.valueOf(cat)));
+        try {
+            return ResponseEntity.ok(euroSizeService.findByCat(CommonCategory.valueOf(cat)));
+        }catch (Exception e){
+            logger.error("Error on getting EuroSize by cat. " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
+    /**
+     * Method for update information about one single Item;
+     * @param update UpdatePresenter object that contains all the Item fields to change;
+     * @return status 200 if everything is ok.
+     */
     @RequestMapping(value = "/manage/ajax/update/item/single", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> updateSingleItem(@RequestBody ItemUpdatePresenter update){
-        itemService.updateSingleItem(update);
+        try {
+            itemService.updateSingleItem(update);
+        }catch (Exception e){
+            logger.error("Error on single Item update. " + update.getItem());
+            logger.error(e.getMessage());
+            throw e;
+        }
         return ResponseEntity.ok("Ok");
     }
 
+    @RequestMapping(value = "/manage/ajax/update/item/status", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> changeItemStatus(@RequestBody Item item){
+        try {
+            itemService.changeItemStatus(item);
+        }catch (Exception e){
+            logger.error("Error while changing item status. id = "+item.getId()+", isActive = "+item.isActive());
+            logger.error(e.getMessage());
+        }
+        return ResponseEntity.ok("Ok");
+    }
+
+    /**
+     * Method for update information about more than one Item objects;
+     * @param update UpdatePresenter object that contains all the Item's IDs and fields to change;
+     * @return status 200 if everything is ok.
+     */
     @RequestMapping(value = "/manage/ajax/update/item/multi", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> updateItems(@RequestBody ItemUpdatePresenter update){
-        itemService.updateItems(update);
+        try{
+            itemService.updateItems(update);
+        }catch (Exception e){
+            logger.error("Error on multi items update. " + update);
+            logger.error(e.getMessage());
+        }
         return ResponseEntity.ok("ok");
     }
 
@@ -126,12 +179,12 @@ public class AjaxController {
     public ResponseEntity<ItemCatalogPresenter> ajaxAllItems(@RequestParam Map<String, String> params){
         Page<? extends Item> page = getPage(params.get("cat"), params);
         try {
-            ItemCatalogPresenter holder = new ItemCatalogPresenter(fillItemCatalog((List<Item>) page.getContent()));
-            holder.setPge(page.getNumber());
-            holder.setPgeSize(page.getNumberOfElements());
-            holder.setTotalPages(page.getTotalPages());
-            holder.setTotalItems(page.getTotalElements());
-            return ResponseEntity.ok(holder);
+            ItemCatalogPresenter presenter = new ItemCatalogPresenter(fillItemCatalog((List<Item>) page.getContent()));
+            presenter.setPge(page.getNumber());
+            presenter.setPgeSize(page.getNumberOfElements());
+            presenter.setTotalPages(page.getTotalPages());
+            presenter.setTotalItems(page.getTotalElements());
+            return ResponseEntity.ok(presenter);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

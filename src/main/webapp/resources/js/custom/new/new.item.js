@@ -392,6 +392,8 @@ $(function(){
             case locale.group_jumpers:         return {code: 8, item_group: en.group_jumpers};
             case locale.group_jackets:         return {code: 9, item_group: en.group_jackets};
             case locale.group_shoes:           return {code: 10, item_group: en.group_shoes};
+            case locale.group_boots:           return {code: 10, item_group: en.group_boots};
+            case locale.group_trainers:        return {code: 10, item_group: en.group_trainers};
             case locale.group_accessories:     return {code: 11, item_group: en.group_accessories};
             case locale.group_beanies:         return {code: 12, item_group: en.group_beanies};
             default:                           return -1;

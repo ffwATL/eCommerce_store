@@ -13,6 +13,7 @@ public interface ItemService {
     List<Item> findAll();
     void save(Item item);
     void remove(Item item);
+    void changeItemStatus(Item item);
     void updateSingleItem(ItemUpdatePresenter update);
     void updateItems(ItemUpdatePresenter update);
     ItemPresenter findItemPresenterById(long id);

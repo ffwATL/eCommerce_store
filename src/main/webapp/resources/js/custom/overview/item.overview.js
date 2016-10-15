@@ -1,72 +1,32 @@
 /*<![CDATA[*/
 $(function(){
-    var lang = $.cookie("app");
+    var lang = $.cookie("app"), c = 1;
     if(lang == undefined || lang.length < 2) lang = 'en';
-    var editClass = $('#edit_popup');
-    var locale = getLocale(lang);
-    var magic =/*[[@{context:}]]*/'';
-    var pgnt = $('#pgnt1');
-    var minPriceSale=0, maxPriceSale=1000;
-    var filterDiv = $('.filter-block0');
-    var blockWrapper = $('.block-wrapper');
-    var sidebar = $('#sidebar');
-    var filterGlobal =  $('#filter-global0');
-    var firstFilter = false;
-    var tabs = $('.tabs');
-    var allTab = $('.all');
-    var inactiveTab = $('.inactive');
-    var isActiveTab = $('.isActive');
-    var saleTab = $('.sale');
-    var currentTab = allTab;
-    var currentItem;
-    var filter_list = $('.filter-list');
-    var info ={info_h2: $('.info_h2 span'), info_h5: $('.info_h5')};
-    var sliders=[
-        {
-            sliderSale:$('#slider_tab0_1'),
-            sliderOrigin: $('#slider_tab0_2')
-        }
-    ];
-    var tabsLi = tabs.find('#forTabs').find('li');
-    var activeTab = 0;
-    var allGridDiv = $('#grid-all');
-    var inactiveGridDiv = $('#grid-inactive');
-    var isActiveGridDiv = $('#grid-isActive');
-    var saleGridDiv = $('#grid-sale');
-    var itemGridDiv = allGridDiv;
-    var identifiers=[];
-    var staticFilter ={
-        refineFilter: {itemGroup:[], color: [], gender: [], brand:[], size:[], cat:''},
-        displayAsList: true,
-        updates: {id:[],expressInfo:{}},
-        filter: {pge: 0, pgeSize: 8, totalItems: 0, isActive: '', isSale: '', salePrice:'', originPrice:''}
-    };
-    var tempItemOpt ={
-        itemGroupId: undefined,
-        itemGroupCat: undefined,
-        colorId: undefined,
-        colorHex: undefined
-    };
-    var notFound = false;
-    var filter = staticFilter.filter; /*default filter settings*/
-    var firstTabFilter = $('.firstTabFilter');
-    var secondTabFilter = $('.secondTabFilter');
-    var thirdTabFilter = $('.thirdTabFilter');
-    var fourthTabFilter = $('.fourthTabFilter');
-    var csrf = {
+    var locale = getLocale(lang),magic =/*[[@{context:}]]*/'',minPriceSale=0, maxPriceSale=1000,activeTab = 0,identifiers=[],
+        itemGridDiv =  $('#grid-all'),filterDiv = $('.filter-block0'),blockWrapper = $('.block-wrapper'),
+        pgnt = $('#pgnt1'),sidebar = $('#sidebar'),filterGlobal =  $('#filter-global0'),
+        tabs = $('.tabs'),currentTab = $('.all'),currentItem,info ={info_h2: $('.info_h2 span'), info_h5: $('.info_h5')},
+        notFound = false,inactive = false,onSale = false,isActive = false,firstFilter = false,
+        sliders=[
+            {
+                sliderSale:$('#slider_tab0_1'),
+                sliderOrigin: $('#slider_tab0_2')
+            }
+        ],
+        staticFilter ={
+            refineFilter: {itemGroup:[], color: [], gender: [], brand:[], size:[], cat:''},
+            displayAsList: true,
+            updates: {id:[],expressInfo:{}},
+            filter: {pge: 0, pgeSize: 8, totalItems: 0, isActive: '', isSale: '', salePrice:'', originPrice:''}
+        },filter = staticFilter.filter,
+        csrf = {
         token : $("meta[name='_csrf']").attr("content"),
         header : $("meta[name='_csrf_header']").attr("content")
     };
-    var inactive = false;
-    var onSale = false;
-    var isActive = false;
-    var globalEdit = $('#global_edit_popup');
-
-    tabs.tabslet();
 
     function tabClick (active, grid, tab, h2, h5){
         staticFilter.filter.pge = 0;
-        var routine = function(){
+        function routine(){
             activeTab = active;
             itemGridDiv = grid;
             info.info_h2.text(h2);
@@ -77,7 +37,7 @@ $(function(){
             pgnt = $(selector);
             currentTab= tab;
             return {pgnt: pgnt};
-        };
+        }
         $.when(routine()).then(function (result){
             refreshItems();
         });
@@ -92,17 +52,16 @@ $(function(){
     $('#all').click(function(){
         staticFilter.filter.isActive = '';
         staticFilter.filter.isSale = '';
-        tabClick(0, allGridDiv, allTab, locale.grid_tabs_info_all_h2, locale.grid_tabs_info_all_h5);
+        tabClick(0,  $('#grid-all'), $('.all'), locale.grid_tabs_info_all_h2, locale.grid_tabs_info_all_h5);
         displayLeftSide();
     });
 
     $('#inactive').click(function(){
         staticFilter.filter.isActive = false;
         staticFilter.filter.isSale = '';
-        tabClick(1, inactiveGridDiv, inactiveTab, locale.grid_tabs_info_inactive_h2, locale.grid_tabs_info_inactive_h5);
+        tabClick(1, $('#grid-inactive'), $('.inactive'), locale.grid_tabs_info_inactive_h2, locale.grid_tabs_info_inactive_h5);
         if(!inactive){
             activateLeftSide();
-           /* initActionPanel(inactiveTab);*/
             init(currentTab.find('select.sort-by'));
             inactive = true;
         } else displayLeftSide();
@@ -111,10 +70,9 @@ $(function(){
     $('#isActive').click(function () {
         staticFilter.filter.isActive = true;
         staticFilter.filter.isSale = '';
-        tabClick(2, isActiveGridDiv, isActiveTab,locale.grid_tabs_info_active_h2, locale.grid_tabs_info_active_h5);
+        tabClick(2, $('#grid-isActive'), $('.isActive'),locale.grid_tabs_info_active_h2, locale.grid_tabs_info_active_h5);
         if(!isActive){
             activateLeftSide();
-           /* initActionPanel(isActiveTab);*/
             init(currentTab.find('select.sort-by'));
             isActive = true;
         } else displayLeftSide();
@@ -123,10 +81,9 @@ $(function(){
     $('#onSale').click(function(){
         staticFilter.filter.isActive = true;
         staticFilter.filter.isSale = true;
-        tabClick(3, saleGridDiv, saleTab, locale.grid_tabs_info_sale_h2, locale.grid_tabs_info_issale_h5);
+        tabClick(3, $('#grid-sale'), $('.sale'), locale.grid_tabs_info_sale_h2, locale.grid_tabs_info_issale_h5);
         if(!onSale){
             activateLeftSide();
-           /* initActionPanel(saleTab);*/
             init(currentTab.find('select.sort-by'));
             onSale = true;
         }else displayLeftSide();
@@ -176,13 +133,15 @@ $(function(){
                 $('.next').remove();
                 $('.previous').remove();
                 drawItems(result, pgnt);
+                setTimeout(function(){
+                    dropdownInTableInit();
+                },300)
             },
             error: function(result){
                 console.log(result)
             }
         });
     }
-
 
     function drawGrid (arr, b){
         for(var i=0; i<arr.length; i++){
@@ -195,13 +154,13 @@ $(function(){
                 '<span class="currency"> ₴</span></div></div></a></li>')
         }
         if(arr.length == 0 && !notFound){
-
             b.append('<li class="notFound" style="text-align: center"><img class="notFoundImg" src="'+magic+'../../resources/img/sad.jpg">'+locale.no_results_found+'</li>');
             notFound = true;
         }else if(arr.length > 0 && notFound) {
             $('.notFound').remove();
             notFound = false;
         }
+        recalcItemThumbMargin();
     }
 
     function activateLeftSide(){
@@ -244,12 +203,8 @@ $(function(){
     function drawList (arr, b){
         console.log(arr);
         for(var i=0; i<arr.length; i++){
-            var item = arr[i];
-            var checked = '';
-            var c="";
-            var f='';
-            var cl='';
-            var finalPrice = Math.round(((item.salePrice/100) - (item.salePrice/100)*item.discount/100)).toFixed(0);
+            var item = arr[i],checked = '',c="",f='',cl='',
+                finalPrice = Math.round(((item.salePrice/100) - (item.salePrice/100)*item.discount/100)).toFixed(0);
             if(item.discount > 0) {
                 c ='<div class="discount-logo"><span class="status"><img src="'+magic+'../../resources/img/offer.png"></span>' +
                     '<span class="last">'+(0-item.discount)+'<span>%</span></span></div>';
@@ -257,7 +212,8 @@ $(function(){
                 cl='line-through';
             }
             if(item.active) checked = 'checked';
-            b.append('<tr class="item"><td><input class="check" type="checkbox"></td><td class="id">'+item.id+'</td>' +
+            b.append('<tr class="item"><td><input class="check" type="checkbox"></td><td class="id">'+item.id+'' +
+                '<input hidden value="'+i+'"></td>' +
                 '<td><div class="thumb wrapper"><img class="icon" src="'+magic+'../..'+item.thumbnailUrl+'">' + c+
                 '<input hidden class="color" type="text" value="'+resolveLocale(item.color.color)+'">' +
                 '<input hidden class="color-id" type="number" value="'+item.color.id+'">'+
@@ -273,42 +229,41 @@ $(function(){
         f+'</div>' +
         '<td class="dropdown1"><button class="dropbtn">'+locale.options+'</button><div class="dropdown-content"><a class="expressEdit" href="#">'+locale.expressEdit+'</a>' +
         '<a href="#">'+locale.add_to_group+'</a></div></td></tr>')
-    }
-    initTableDropdown();
-    if(arr.length == 0 && !notFound){
+        }
+        if(arr.length == 0 && !notFound){
         b.append('<tr class="notFound"><td colspan="10" ><img style="text-align: center" class="notFoundImg" src="'+magic+'../../resources/img/sad.jpg">'+locale.no_results_found+'</td></tr>');
         notFound = true;
-    }else if(arr.length > 0 && notFound) {
+        }else if(arr.length > 0 && notFound) {
         $('.notFound').remove();
         notFound = false;
+        }
     }
-}
 
-/*******Method for drawing items grid*****/
-function drawItems (result, paginationDiv){
-    staticFilter.items = result.items;
-    if(!staticFilter.displayAsList) drawGrid(staticFilter.items, itemGridDiv);
-    else drawList(staticFilter.items, currentTab.find('table.list-items'));
-        var pge = parseInt(result.pge);
-        var totalPages = result.totalPages;
-        staticFilter.filter.totalItems = result.totalItems;
-        resolvePagination(pge, totalPages, paginationDiv);
-        $('.next').click(function(){
-            staticFilter.filter.pge=pge+1;
-            refreshItems();
-        });
-        $('.previous').click(function(){
-            staticFilter.filter.pge=pge-1;
-            refreshItems();
-        });
-        $('.pg').each(function(){
-            var t = $(this);
-            t.on('click', function(){
-                staticFilter.filter.pge= parseInt(t.text()) -1;
+    /*******Method for drawing items grid*****/
+    function drawItems (result, paginationDiv){
+        staticFilter.items = result.items;
+        if(!staticFilter.displayAsList) drawGrid(staticFilter.items, itemGridDiv);
+        else drawList(staticFilter.items, currentTab.find('table.list-items'));
+            var pge = parseInt(result.pge),
+                totalPages = result.totalPages;
+            staticFilter.filter.totalItems = result.totalItems;
+            resolvePagination(pge, totalPages, paginationDiv);
+            $('.next').click(function(){
+                staticFilter.filter.pge=pge+1;
                 refreshItems();
-            })
-        });
-        resolveI18n();
+            });
+            $('.previous').click(function(){
+                staticFilter.filter.pge=pge-1;
+                refreshItems();
+            });
+            $('.pg').each(function(){
+                var t = $(this);
+                t.on('click', function(){
+                    staticFilter.filter.pge= parseInt(t.text()) -1;
+                    refreshItems();
+                })
+            });
+            resolveI18n();
     }
 
     /*****Pagination section**************/
@@ -371,11 +326,11 @@ function drawItems (result, paginationDiv){
             if(currentPage > 0) addPrevious(currentPage, paginationDiv);
             firstCase(currentPage, totalPages, paginationDiv);
         }
-        else if(totalPages > 6 && currentPage <= 4){
+        else if(totalPages >= 6 && currentPage <= 3){
             if(currentPage > 0) addPrevious(currentPage, paginationDiv);
             secondCase(currentPage, totalPages, paginationDiv);
         }
-        else if(totalPages > 6 && currentPage > 4) thirdCase(currentPage, totalPages, paginationDiv);
+        else if(totalPages >= 5 && currentPage >=4) thirdCase(currentPage, totalPages, paginationDiv);
     }
     /***************Pagination END**************/
 
@@ -389,8 +344,6 @@ function drawItems (result, paginationDiv){
             return res;
         }else return '';
     }
-
-    refreshItems();
 
     function refineByPrice (data, sale){
         if(sale) staticFilter.filter.salePrice=data.from*100+'|'+data.to*100;
@@ -431,22 +384,19 @@ function drawItems (result, paginationDiv){
         changeSideBarHeight(sidebar);
     }
 
-    sidebar.css('height',sidebar.height() + 30);
     function makeSticky (){
-        activateLeftSide(); //FIXME: move it from here for heavens sake please
-        initActionPanel(allTab);
+        activateLeftSide();
+        initActionPanel($('.all'));
         setTimeout(function(){
             $(function() {
-                return $("#sidebar").stick_in_parent({
-                    parent: $('.content'),
-                    spacer: false
+                $("#sidebar").stick_in_parent({
+                    /*parent: $('.sticky-parent'),*/
+                    spacer: false,
+                    tick: 0.001
                 });
             });
         }, 500);
     }
-
-    makeSticky();
-    blockWrapper.css('min-height', sidebar.height());
 
     function hideGlobalFilter (){
         var ul = filterGlobal.find('ul');
@@ -457,10 +407,6 @@ function drawItems (result, paginationDiv){
         ul.toggle(100);
     }
 
-    filterGlobal.find('h5').click(function(){
-        hideGlobalFilter();
-    });
-
     function changeSideBarHeight (sidebar){
         sidebar.css('height', 'auto');
         setTimeout(function(){
@@ -468,9 +414,9 @@ function drawItems (result, paginationDiv){
             main.css('min-height', sidebar.height()+10);
             main.css('height','auto');
         },100);
-        setTimeout(function(){
+        /*setTimeout(function(){
             $(document.body).trigger("sticky_kit:recalc");
-        },150);
+        },150);*/
     }
 
     $('.sort-bar').find('ul').find('a').click(function(){
@@ -481,14 +427,14 @@ function drawItems (result, paginationDiv){
     });
 
     function linkCheckedGlobalFilter (panelFilter){
-        var parent = panelFilter.parent();
-        var name = parent.find('label').text().trim();
-        var listSelector = name.replace(new RegExp(escapeRegExp(' '), 'g'),'');
+        var parent = panelFilter.parent(),
+            name = parent.find('label').text().trim(),
+            listSelector = name.replace(new RegExp(escapeRegExp(' '), 'g'),'');
         panelFilter.change(function(){
             if(this.checked){
                 var transl = lang != 'en' ? transliterate(listSelector) : listSelector;
                 console.log(transl);
-                filter_list.append('<li class="checked filter '+transl+'">'+name+'<button></button></li>');
+                $('.filter-list').append('<li class="checked filter '+transl+'">'+name+'<button></button></li>');
                 linkFilterListToFilterPanel('.'+transl, panelFilter,undefined,undefined)
             }
             globalFilterRoutine(name, this.checked, parent,'.'+transl);
@@ -507,10 +453,10 @@ function drawItems (result, paginationDiv){
                     refreshItems();
                 }, 100);
             }else{
-                var selector = '#filter-clothes';
+                var selector = '#filter-clothes',clth;
                 $(selector).remove();
                 selector = '.filter';
-                var clth = $(selector);
+                clth = $(selector);
                 clth.fadeOut(500);
                 parent.removeClass('checked');
                 staticFilter.refineFilter.cat = "";
@@ -553,8 +499,8 @@ function drawItems (result, paginationDiv){
         $(selector).append('<div id="filter-gender" class="line"><h5>'+locale.grid_filter_gender+'</h5>' +
             '<ul class="list-inline twoRows"></ul></div></div>');
         selector = '#filter-gender';
-        var filterGender = $(selector);
-        var ul =filterGender.find('ul');
+        var filterGender = $(selector),
+            ul =filterGender.find('ul');
         for(var i=0; i< r.length; i++){
             var name = resolveLocale(r[i].groupName);
             ul.append('<li><span>' +
@@ -572,8 +518,8 @@ function drawItems (result, paginationDiv){
      */
     function addClothesCategoryFilter (r){
         r = r.usedCat;
-        console.log(r);
-        var filterClothes = filterDiv.find('#filter-clothes');
+        var filterClothes = filterDiv.find('#filter-clothes'),
+            selector = '.cat_filter';
         filterClothes.append('<hr><div class="category" id="category">' +
             '<h5>'+locale.grid_filter_category+'</h5><ul class="list-unstyled"></ul></div>');
         filterClothes = filterClothes.find('.category').find('ul');
@@ -583,18 +529,17 @@ function drawItems (result, paginationDiv){
                 '<input hidden class="id" value="'+r[i].id+'"></span></li>')
         }
         addToggleToH5(filterClothes.parent(), false, filterClothes);
-        var selector = '.cat_filter';
         linkCheckedFilter(selector, staticFilter.refineFilter.itemGroup,'clothes');
     }
 
     function addClothesBrandFilter (r){
-        var list = r.brandList;
-        var selector = '#filter-clothes';
+        var list = r.brandList, filterBrand,ul,
+            selector = '#filter-clothes';
         $(selector).append('<hr><div id="filter-brand" class="line"><h5>'+locale.grid_filter_brand+'</h5>' +
             '<ul class="list-inline twoRows"></ul></div></div>');
         selector = '#filter-brand';
-        var filterBrand = $(selector);
-        var ul =filterBrand.find('ul');
+        filterBrand = $(selector);
+        ul =filterBrand.find('ul');
         for(var i=0; i< list.length; i++){
             ul.append('<li><span><input type="checkbox" class="brand_filter"><label>'+list[i].name+'</label>' +
                 '<input hidden class="id" value="'+list[i].id+'"></span></li>')
@@ -609,9 +554,9 @@ function drawItems (result, paginationDiv){
         $(selector).append(('<hr><div id="size_filter" class="line"><h5>'+locale.grid_filter_size+'</h5>' +
         '<ul class="list-inline twoRows"></ul></div></div>'));
         selector = '#size_filter';
-        var sizeFilter = $(selector);
-        var ul = sizeFilter.find('ul');
-        var s = r.size;
+        var sizeFilter = $(selector),
+            ul = sizeFilter.find('ul'),
+            s = r.size;
         for(var i=0; i< s.length; i++){
             ul.append('<li><span><input type="checkbox" class="clth_size_filter"><label>'+resolveLocale(s[i].name)+'</label>' +
                 '<input hidden class="id" value="'+s[i].id+'"></span></li>')
@@ -627,8 +572,8 @@ function drawItems (result, paginationDiv){
         $(selector).append(('<hr><div id="color_filter" class="line"><h5>'+locale.label_color+'</h5>' +
         '<ul class="list-inline twoRows"></ul></div></div>'));
         selector = '#color_filter';
-        var colorFilter = $(selector);
-        var ul = colorFilter.find('ul');
+        var colorFilter = $(selector),
+            ul = colorFilter.find('ul');
         for(var i=0; i< r.length; i++){
             ul.append('<li><span><input type="checkbox" class="color_filter"><label>'+resolveLocale(r[i].color)+'</label>' +
                 '<input hidden class="id" value="'+r[i].id+'"></span></li>')
@@ -683,19 +628,17 @@ function drawItems (result, paginationDiv){
     }
 
     /*****Link checking filter check box to add or to remove from filter array******/
-    var c = 1;
-    function linkCheckedFilter (selector, array, cat){
+    function linkCheckedFilter (selector, array){
         $(selector).each(function(){
-            var el = $(this);
-            var listElem;
-            var parent= el.parent();
-            var name = parent.find('label').text().trim();
-            var id = parent.find('.id').val();
-            var listSelector = 'c_'+c+transliterate(name.replace(new RegExp(escapeRegExp(' '), 'g'),''));
+            var el = $(this), listElem,
+                parent= el.parent(),
+                name = parent.find('label').text().trim(),
+                id = parent.find('.id').val(),
+                listSelector = 'c_'+c+transliterate(name.replace(new RegExp(escapeRegExp(' '), 'g'),''));
             el.change(function(){
                 var s;
                 if(this.checked) {
-                    filter_list.append('<li class="checked filter '+listSelector+'">'+name+'<button></button></li>');
+                    $('.filter-list').append('<li class="checked filter '+listSelector+'">'+name+'<button></button></li>');
                     s = '.'+listSelector;
                     linkFilterListToFilterPanel(s, el, id, array);
                     array.push(id);
@@ -724,10 +667,10 @@ function drawItems (result, paginationDiv){
     function resolveI18n (){
         var total = staticFilter.filter.totalItems;
         $('.view_per_page').each(function(){
-            var r = staticFilter.filter.pgeSize;
+            var r = staticFilter.filter.pgeSize,
+                result='';
             if(r == 4) r = 8;
             else r = 4;
-            var result='';
             if(total <= staticFilter.filter.pgeSize || total == 0) result = "";
             else if (total < r && total > 0) result = locale.view_all;
             else result = locale.grid_view_items_per_page.replace('{0}',''+r);
@@ -744,23 +687,27 @@ function drawItems (result, paginationDiv){
     $(window).on("resize", (function(_this) {
         return function(e) {
             recalcTabsWidth();
+            recalcItemThumbMargin();
         };
     })(this));
+    function recalcItemThumbMargin(){
+        var items = currentTab.find('.items'), thumbWidth=items.find('.thumbnail').first().width(),
+            marg= (items.width() - thumbWidth*4)/3 - 2.5;
+        if(marg > 0) {
+            items.find('li').css('margin-left',parseInt(marg)+'px');
+            items.find('li:nth-child(1)').css('margin-left','0px');
+        }
+    }
     function recalcTabsWidth(){
-        var tabsWidth = tabs.width();
+        var tabsWidth = tabs.width(), tabsLi = tabs.find('#forTabs').find('li');
         tabsLi.css('min-width',tabsWidth/4);
         tabsLi.css('width',tabsWidth/4);
     }
-    linkCheckedGlobalFilter($('#global_0'));
-    recalcTabsWidth();
-    sliderInit();
 
     function changeViews (toRegister, show, action) {
             toRegister.click(function(){
-                var t = $(this);
-                toRegister.hide();
-                var switchDiv = t.parent();
                 var panel = $('.action-panel');
+                toRegister.hide();
                 $(show).show();
                 staticFilter.displayAsList = action;
                 $('.item').remove();
@@ -773,6 +720,9 @@ function drawItems (result, paginationDiv){
                     panel.find('.left-side').hide();
                     drawGrid(staticFilter.items, itemGridDiv)
                 }
+                setTimeout(function(){
+                    dropdownInTableInit();
+                })
             });
     }
 
@@ -783,25 +733,14 @@ function drawItems (result, paginationDiv){
         }));
     }
 
-    setTimeout(function(){
-        $('.main-check').change(function(){
-            onCheckBoxSelected(this.checked);
-            displayLeftSide(this.checked, true);
-            console.log(staticFilter.updates.id)
-        });
-        init(currentTab.find('select.sort-by'));
-    }, 100);
-    changeViews($('.thumbnail-view'), '.list-view', false);
-    changeViews($('.list-view'), '.thumbnail-view', true);
-
     function fillExpressEditItemGroup (list, result){
         for(var k=0; k< result.length; k++) {
             list.append('<a>' + resolveLocale(result[k].groupName) +
                 '<input hidden type="number" value="'+result[k].id+'"></a>')
         }
         list.find('a').click(function(){
-            var btn = list.parent().find('button');
-            var ths = $(this);
+            var btn = list.parent().find('button'),
+                ths = $(this);
             btn.text(ths.text());
             btn.append('<input hidden type="number" value="'+ths.find('input').val()+'">');
         });
@@ -814,8 +753,8 @@ function drawItems (result, paginationDiv){
                 '<div class="hex" style="background: '+result[k].hex+'"></div></a>')
         }
         list.find('a').click(function(){
-            var btn = list.parent().find('button');
-            var ths = $(this);
+            var btn = list.parent().find('button'),
+                ths = $(this);
             btn.find('input').val(ths.find('input').val()); //adding ID
             btn.find('a').css({'background':ths.find('.hex').css('background')}); //changing color preview
         });
@@ -840,16 +779,16 @@ function drawItems (result, paginationDiv){
     }
 
     function linkExpressEdit (items){
-        var leftSide = currentTab.find('.left-side');
-        var itemGroupList = editClass.find('.group-content');
+        var leftSide = currentTab.find('.left-side'),editClass = $('#edit_popup'),
+            itemGroupList = editClass.find('.group-content');
+        staticFilter.updates.id = [];
+        identifiers = [];
         items.each(function(){
-            var i = $(this);
-            var id = parseInt(i.find('.id').text());
-            var name = i.find('.item-name a').text();
-
-            var sale = parseInt(i.find('.sale .price').text());
-            var origin = parseInt(i.find('.origin-price .price').text());
-            var status_switch = i.find('.switch-active input');
+            var i = $(this),
+                id = parseInt(i.find('.id').text()),
+                sale = parseInt(i.find('.sale .price').text()),
+                origin = parseInt(i.find('.origin-price .price').text()),
+                status_switch = i.find('.switch-active input');
             identifiers.push(id);
             i.find('.check').change(function(){
                 if(this.checked) staticFilter.updates.id.push(id);
@@ -864,20 +803,14 @@ function drawItems (result, paginationDiv){
                 leftSide.fadeOut(100);
                 staticFilter.updates.id.push(id);
                 var options = {
-                    item:{
-                        id: id,
-                        isActive: this.checked,
-                        salePrice: sale*100
-                    }
+                    id: id,
+                    isActive: this.checked
                 };
-                if(this.checked){
-                    console.log('activate item with id: '+ id)}
-                else{
-                    console.log('DE activate item with id: '+ id);
-                }
-                $.when(sendUpdateSingleItem(options, false)).then(function(result){
+                if(this.checked) console.log('activate item with id: '+ id);
+                else console.log('DE activate item with id: '+ id);
+                $.when(sendUpdateSingleItem(options, '../../manage/ajax/update/item/status'), true).then(function(result){
                     setTimeout(function(){
-                        if(currentTab != allTab) {
+                        if(currentTab != $('.all')) {
                             console.log('total: ' + staticFilter.filter.totalItems);
                             if (staticFilter.items.length == 1) staticFilter.filter.pge=0;
                             refreshItems();
@@ -887,29 +820,27 @@ function drawItems (result, paginationDiv){
                 staticFilter.updates.id =[];
             });
             i.find('.expressEdit').click(function(){
-                var itemGroupBtn = itemGroupList.parent().find('button');
+                var itemGroupBtn = itemGroupList.parent().find('button'),color,
+                    name_en = editClass.find('#item-name'),
+                    name_ru = editClass.find('#item-name-ru'),
+                    name_ua = editClass.find('#item-name-ua'),
+                    item = staticFilter.items[i.find('.id input').val()];
                 itemGroupBtn.text(i.find('.item-group-val').val());
-                tempItemOpt ={
-                    itemGroupId: i.find('.item-group-id').val(),
-                    itemGroupCat: i.find('.item-group-cat').val(),
-                    colorId: i.find('.color-id').val(),
-                    colorHex: i.find('.color-hex').val()
-                };
-                itemGroupBtn.append('<input hidden type="number" value="'+tempItemOpt.itemGroupId+'">');
-                var color = editClass.find('button.color');
-                color.find('#hex').css({'background':tempItemOpt.colorHex});
-                color.find('input').val(tempItemOpt.colorId);
+                itemGroupBtn.append('<input hidden type="number" value="'+item.itemGroup.id+'">');
+                color = editClass.find('button.color');
+                color.find('#hex').css({'background':item.color.hex});
+                color.find('input').val(item.color.id);
                 itemGroupList.find('a').remove();
                 currentItem = i;
-                getExpressEditInfo({cat:tempItemOpt.itemGroupCat}, "../../manage/ajax/get/expressEditInfo", [itemGroupList,editClass.find('li.color').find('.dropdown-content')]);
+                getExpressEditInfo({cat:item.itemGroup.cat}, "../../manage/ajax/get/expressEditInfo", [itemGroupList,editClass.find('li.color').find('.dropdown-content')]);
                 editClass.find('.id').val(id);
                 editClass.find('img.preview').attr('src',i.find('.thumb img').attr('src'));
                 editClass.find('.origin-price').find('.price').text(origin);
-                var salePriceLeft = editClass.find('.sale-price').find('.price');
-                var salePrice = editClass.find('#sale');
-                var discount = editClass.find('#discount');
-                var offer = editClass.find('.offer');
-                var tmp = -1*parseInt(i.find('.discount-logo .last').text());
+                var salePriceLeft = editClass.find('.sale-price').find('.price'),
+                    salePrice = editClass.find('#sale'),
+                    discount = editClass.find('#discount'),
+                    offer = editClass.find('.offer'),
+                    tmp = -1*parseInt(i.find('.discount-logo .last').text());
                 if(isNaN(tmp)) tmp = 0;
                 discount.val(tmp);
                 if(discount.val() > 0){
@@ -918,10 +849,17 @@ function drawItems (result, paginationDiv){
                 }else offer.fadeOut(100);
                 salePriceLeft.text(sale - sale*discount.val()/100);
                 salePrice.val(sale);
-                var itemName = editClass.find('#item-name');
-                itemName.val(name);
-                itemName.bind('input propertychange', function(){
-                    editClass.find('.update-button').prop('disabled', !checkInputTextField(itemName));
+                name_en.val(item.itemName.locale_en);
+                name_ru.val(item.itemName.locale_ru);
+                name_ua.val(item.itemName.locale_ua);
+                name_en.bind('input propertychange', function(){
+                    editClass.find('.update-button').prop('disabled', !checkInputTextField(name_en));
+                });
+                name_ru.bind('input propertychange', function(){
+                    editClass.find('.update-button').prop('disabled', !checkInputTextField(name_ru));
+                });
+                name_ua.bind('input propertychange', function(){
+                    editClass.find('.update-button').prop('disabled', !checkInputTextField(name_ua));
                 });
                 salePrice.bind('input propertychange', function(){
                     checkInputNumberField(salePrice,0);
@@ -949,7 +887,7 @@ function drawItems (result, paginationDiv){
         });
     }
 
-    function initTableDropdown (){
+    function dropdownInTableInit (){
         setTimeout(function(){
             currentTab.find('.list-items').find('.dropbtn').click(function(e){
                 $(this).parent().find('.dropdown-content').toggle(150);
@@ -960,11 +898,12 @@ function drawItems (result, paginationDiv){
         },150);
     }
 
-    function sendUpdateSingleItem (options){
-        var update = JSON.stringify(options);
+    function sendUpdateSingleItem (options, url, status){
+        var update = options;
+        if(!status) update = JSON.stringify(update);
         console.log(update);
         $.ajax({
-            url: magic + "../../manage/ajax/update/item/single",
+            url: magic + url,
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
@@ -977,7 +916,6 @@ function drawItems (result, paginationDiv){
                 displayLeftSide();
                 onCheckBoxSelected(false);
                 if(staticFilter.updates.id.length ==  staticFilter.items.length)  staticFilter.filter.pge = 0;
-                /*if(all) changeAllCheckInput(options.isActive);*/
                 staticFilter.updates.id =[];
             },
             error: function(result){
@@ -987,91 +925,91 @@ function drawItems (result, paginationDiv){
         });
     }
 
-    $('.status_a').click(function(){
-        sendUpdateItems({isActive: true},true)
-    });
-    $('.status_b').click(function(){
-        sendUpdateItems({isActive: false},true)
-    });
-    $('.sort-by').text();
+    function itemStatusSwitchInit(){
+        $('.status_a').click(function(){
+            sendUpdateItems({isActive: true},true)
+        });
+        $('.status_b').click(function(){
+            sendUpdateItems({isActive: false},true)
+        });
+    }
 
     function initPopupDropDown (){
         $('.right').find('.dropbtn').click(function(e){
             $(this).parent().find('.dropdown-content').toggle(150);
         });
     }
-    initPopupDropDown();
-    editClass.popup({
-        opacity: 0.3,
-        transition: 'all 0.3s',
-        openelement: '.expressEdit',
-        closeelement: '.edit_close'
-    });
-    $('.currency-value').click(function(){
-        $('#currency-select').text($(this).text());
-    });
-    $('.color-value').click(function(){
-        $('#color-select').text($(this).text());
-    });
-    editClass.find('button.update-button').click(function(){
-        staticFilter.updates.id = [];
-        staticFilter.updates.id.push(editClass.find('.id').val());
-        var colorId = editClass.find('li.color input').val();
-        var itemGroupId = editClass.find('button.item-group input').val();
-        var options = {item:{
-                        salePrice: editClass.find('#sale').val()*100,
-                        itemName:  {
-                            locale_en: editClass.find('#item-name').val(),
-                            locale_ru: '', locale_ua:''
-                        },
-                        discount: editClass.find('#discount').val(),
-                        isActive: editClass.find('.activate input').prop('checked'),
-                        color: {},
-                        itemGroup:{}
-        }};
-        if(tempItemOpt.colorId !=  colorId) options.item.color.id = colorId;
-        if(tempItemOpt.itemGroupId != itemGroupId) options.itemGroup.id = itemGroupId;
-        $.when(sendUpdateSingleItem(options)).then(function(){
-            setTimeout(function(){
-                refreshItems();
-            },250);
+
+    function expressEditInit(){
+        var editClass = $('#edit_popup');
+        editClass.popup({
+            opacity: 0.3,
+            transition: 'all 0.3s',
+            openelement: '.expressEdit',
+            closeelement: '.edit_close'
         });
-    });
-    $('h4#options').click(function(){
-        var parent = $(this).parent().parent();
-        parent.find('.main-option').toggle();
-        parent.find('.item-group').toggle();
-    });
+        editClass.find('.currency-value').click(function(){
+            $('#currency-select').text($(this).text());
+        });
+        editClass.find('.color-value').click(function(){
+            $('#color-select').text($(this).text());
+        });
+        editClass.find('button.update-button').click(function(){
+            staticFilter.updates.id = [];
+            staticFilter.updates.id.push(editClass.find('.id').val());
+            var options = {item:{
+                    id: editClass.find('.id').val(),
+                    salePrice: editClass.find('#sale').val()*100,
+                    itemName:  {
+                        locale_en: editClass.find('#item-name').val(),
+                        locale_ru: editClass.find('#item-name-ru').val(),
+                        locale_ua:editClass.find('#item-name-ua').val()
+                    },
+                    discount: editClass.find('#discount').val(),
+                    isActive: editClass.find('.activate input').prop('checked'),
+                    color: {id:editClass.find('li.color input').val()},
+                    itemGroup:{id:editClass.find('button.item-group input').val()}
+                }};
+            $.when(sendUpdateSingleItem(options, '../../manage/ajax/update/item/single')).then(function(){
+                setTimeout(function(){
+                    refreshItems();
+                },250);
+            });
+        });
+    }
 
     function resolveGender(text){
         if(text == 'Men' || text =='Мужское' || text == 'Чоловіче') return 0;
         else if(text == 'Women' || text == 'Женское' || text =='Жіноче') return 1;
     }
 
-    globalEdit.popup({
-        opacity: 0.3,
-        transition: 'all 0.3s',
-        openelement: '.globalEdit',
-        closeelement: '.global_close'
-    });
-    globalEdit.find('.update-button').click(function(){
-        var price = globalEdit.find('.sale input');
-        var inp = globalEdit.find('.discount input');
-        var options = {
-            priceValue: price.val()*100
-        };
-        if(!inp.prop('disabled')) {
-            options.discount = inp.val();
-            inp.val(0);
-            inp.prop('disabled',true);
-        }
-        price.val(0);
-        sendUpdateItems(options)
-    });
-    globalEdit.find('.down h4').click(function(){
-        var inp = globalEdit.find('.discount input');
-        inp.prop('disabled', !inp.prop('disabled'));
-    });
+    function globalEditInit(){
+        var globalEdit = $('#global_edit_popup'),
+            inp = globalEdit.find('.discount input');
+        globalEdit.popup({
+            opacity: 0.3,
+            transition: 'all 0.3s',
+            openelement: '.globalEdit',
+            closeelement: '.global_close'
+        });
+        globalEdit.find('.update-button').click(function(){
+            var price = globalEdit.find('.sale input'),
+                inp = globalEdit.find('.discount input'),
+                options = {
+                    priceValue: price.val()*100
+                };
+            if(!inp.prop('disabled')) {
+                options.discount = inp.val();
+                inp.val(0);
+                inp.prop('disabled',true);
+            }
+            price.val(0);
+            sendUpdateItems(options)
+        });
+        globalEdit.find('.down h4').click(function(){
+            inp.prop('disabled', !inp.prop('disabled'));
+        });
+    }
 
     function sendUpdateItems(options){
         var update = JSON.stringify({
@@ -1092,7 +1030,7 @@ function drawItems (result, paginationDiv){
             success: function(result){
                 displayLeftSide();
                 if(staticFilter.updates.id.length ==  staticFilter.items.length)  staticFilter.filter.pge = 0;
-                if(saleTab) refreshItems();
+                refreshItems();
                 staticFilter.updates.id =[];
             },
             error: function(result){
@@ -1101,5 +1039,44 @@ function drawItems (result, paginationDiv){
             }
         });
     }
+
+    function init_0(){
+        refreshItems();
+        sidebar.css('height',sidebar.height() + 30);
+        globalEditInit();
+        expressEditInit();
+        makeSticky();
+        blockWrapper.css('min-height', sidebar.height());
+        itemStatusSwitchInit();
+        initPopupDropDown();
+        linkCheckedGlobalFilter($('#global_0'));
+        recalcTabsWidth();
+        sliderInit();
+
+        filterGlobal.find('h5').click(function(){
+            hideGlobalFilter();
+        });
+
+        tabs.tabslet();
+        $('.ex-tabs').tabslet();
+
+        setTimeout(function(){
+            $('.main-check').change(function(){
+                onCheckBoxSelected(this.checked);
+                displayLeftSide(this.checked, true);
+                console.log(staticFilter.updates.id)
+            });
+            init(currentTab.find('select.sort-by'));
+        }, 100);
+
+        changeViews($('.thumbnail-view'), '.list-view', false);
+        changeViews($('.list-view'), '.thumbnail-view', true);
+        $('h4#options').click(function(){
+            var parent = $(this).parent().parent();
+            parent.find('.main-option').toggle();
+            parent.find('.item-group').toggle();
+        });
+    }
+    init_0();
 });
 /*]]>*/
