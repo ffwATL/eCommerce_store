@@ -147,7 +147,9 @@ var locale_en = {
     label_shoulders: 'Shoulders',
     label_chest: 'Chest',
     label_sleeve: 'Sleeve',
-    label_insole: 'Insole'
+    label_insole: 'Insole',
+    label_cat_men: 'Men',
+    label_cat_women: 'Women'
 };
 
 var locale_ru = {
@@ -210,7 +212,9 @@ var locale_ru = {
     label_shoulders: 'Плечи',
     label_chest: 'Грудь',
     label_sleeve: 'Рукав',
-    label_insole: 'Стелька'
+    label_insole: 'Стелька',
+    label_cat_men: 'Мужское',
+    label_cat_women: 'Женское'
 };
 
 var locale_ua = {
@@ -271,7 +275,9 @@ var locale_ua = {
     label_shoulders: 'Плечі',
     label_chest: 'Груди',
     label_sleeve: 'Рукав',
-    label_insole: 'Стелька'
+    label_insole: 'Стелька',
+    label_cat_men: 'Чоловіче',
+    label_cat_women: 'Жіноче'
 };
 var lang='en';
 function getLocale(locale){
@@ -355,4 +361,14 @@ function checkLength (form){
 }
 function unlock (b, enable){
     b.prop('disabled', !enable)
+}
+function resolveGenderToValue(text){
+    if(text == 'Men' || text =='Мужское' || text == 'Чоловіче') return 0;
+    else if(text == 'Women' || text == 'Женское' || text =='Жіноче') return 1;
+}
+function resolveGenderToText(value, locale){
+    switch (value) {
+        case 'MEN': return locale.label_cat_men;
+        case 'WOMEN': return locale.label_cat_women;
+    }
 }

@@ -506,7 +506,7 @@ $(function(){
             var name = resolveLocale(r[i].groupName);
             ul.append('<li><span>' +
                 '<input type="checkbox" class="gender_filter"><label>'+name+'</label>' +
-                '<input hidden class="id" value="'+resolveGender(name)+'"></span></li>')
+                '<input hidden class="id" value="'+resolveGenderToValue(name)+'"></span></li>')
         }
         addToggleToH5(filterGender,false, ul);
         selector = '.gender_filter';
@@ -977,11 +977,6 @@ $(function(){
                 },250);
             });
         });
-    }
-
-    function resolveGender(text){
-        if(text == 'Men' || text =='Мужское' || text == 'Чоловіче') return 0;
-        else if(text == 'Women' || text == 'Женское' || text =='Жіноче') return 1;
     }
 
     function globalEditInit(){

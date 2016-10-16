@@ -525,14 +525,14 @@ li.logo{
 }
 .not_completed{
     background: rgba(241, 244, 251, 0.47);
-    border: solid 1px rgba(166, 169, 176, 0.21);
+    border: solid 1px rgba(166, 169, 176, 0.32);
 }
 .not_completed h5{
     color: #a6a9b0;
 }
 .completed{
     background: rgba(221, 251, 212, 0.26);
-    border: solid 1px rgba(119, 176, 118, 0.21);
+    border: solid 1px rgba(119, 176, 118, 0.24);
 }
 .completed h5{
     color: #9ab094;

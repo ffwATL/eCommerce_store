@@ -136,4 +136,5 @@ public class AppFirstInit {
         euroSizeService.save(e);
     }
 
-}*/
+}
+*/

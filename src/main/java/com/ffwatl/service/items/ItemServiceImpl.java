@@ -167,6 +167,7 @@ public class ItemServiceImpl implements ItemService{
         presenter.setThumbs(urlImages(photoDir, "s.jpg", url));
         presenter.setDescription(item.getDescription());
         presenter.setExtraNotes(item.getExtraNotes());
+        presenter.setGender(item.getGender());
         return presenter;
     }
 

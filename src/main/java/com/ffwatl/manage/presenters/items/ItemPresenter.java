@@ -1,6 +1,7 @@
 package com.ffwatl.manage.presenters.items;
 
 
+import com.ffwatl.manage.entities.group.Gender;
 import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.entities.i18n.I18n;
 import com.ffwatl.manage.entities.items.color.Color;
@@ -26,6 +27,8 @@ public class ItemPresenter {
 
     private Color color;
 
+    private Gender gender;
+
     private ItemGroup itemGroup;
 
     private List<String> images;
@@ -41,6 +44,10 @@ public class ItemPresenter {
 
     public long getId() {
         return id;
+    }
+
+    public Gender getGender() {
+        return gender;
     }
 
     public String getExtraNotes() {
@@ -149,6 +156,10 @@ public class ItemPresenter {
 
     public void setExtraNotes(String extraNotes) {
         this.extraNotes = extraNotes;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     @Override

@@ -621,7 +621,7 @@ li.color a{
 #main .info{
     background: rgba(241, 244, 251, 0.47);
     text-align: left;
-    border: solid 1px rgba(166, 169, 176, 0.21);
+    border: solid 0.09em rgba(166, 169, 176, 0.32);
     padding: 10px 25px;
     min-height: 135px;
 }

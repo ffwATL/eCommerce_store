@@ -1,5 +1,6 @@
 package com.ffwatl.manage.entities.items;
 
+import com.ffwatl.manage.entities.group.Gender;
 import com.ffwatl.manage.entities.i18n.I18n;
 import com.ffwatl.manage.entities.items.color.Color;
 import com.ffwatl.manage.entities.currency.Currency;
@@ -66,6 +67,8 @@ public class Item {
 
     private Currency currency;
 
+    private Gender gender;
+
     private boolean isActive;
 
     private boolean isUsed;
@@ -81,6 +84,10 @@ public class Item {
 
     public User getAddedBy() {
         return addedBy;
+    }
+
+    public Gender getGender() {
+        return gender;
     }
 
     public String getExtraNotes() {
@@ -231,21 +238,33 @@ public class Item {
         this.vendorCode = vendorCode;
     }
 
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
                 ", itemGroup=" + itemGroup +
-                ", itemName='" + itemName + '\'' +
+                ", itemName=" + itemName +
+                ", vendorCode='" + vendorCode + '\'' +
                 ", quantity=" + quantity +
-                ", color='" + color + '\'' +
+                ", color=" + color +
                 ", discount=" + discount +
+                ", description=" + description +
+                ", extraNotes='" + extraNotes + '\'' +
+                ", metaInfo='" + metaInfo + '\'' +
+                ", metaKeys='" + metaKeys + '\'' +
                 ", originPrice=" + originPrice +
                 ", salePrice=" + salePrice +
+                ", currency=" + currency +
+                ", gender=" + gender +
                 ", isActive=" + isActive +
+                ", isUsed=" + isUsed +
                 ", importDate=" + importDate +
                 ", lastChangeDate=" + lastChangeDate +
-                ", currency=" + currency +
+                ", addedBy=" + addedBy +
                 '}';
     }
 }

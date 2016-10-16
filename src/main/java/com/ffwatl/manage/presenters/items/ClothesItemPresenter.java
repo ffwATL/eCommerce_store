@@ -31,6 +31,7 @@ public class ClothesItemPresenter extends ItemPresenter{
         setAddedBy(presenter.getAddedBy());
         setDescription(presenter.getDescription());
         setExtraNotes(presenter.getExtraNotes());
+        setGender(presenter.getGender());
     }
 
     public String getBrandImgUrl() {

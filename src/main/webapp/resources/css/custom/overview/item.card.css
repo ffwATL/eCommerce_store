@@ -214,7 +214,7 @@ ul.sizeSelect_ul{
     margin-top: 5px;
 }
 li#main_info{
-    margin-left: -1px;
+    margin-left: -.01em;
 }
 #tab-1 li input{
     background: rgba(245, 243, 238, 0.45);
@@ -497,8 +497,9 @@ a.next:hover, a.prev:hover{
     letter-spacing: .1em;
 }
 #info_table{
-    border: solid 0.09em rgba(166, 169, 176, 0.21);
+    border: solid 0.09em rgba(166, 169, 176, 0.32);
     background: rgba(241, 244, 251, 0.47);
+    /*display: none*/
 }
 .float_right .buttons{
     margin-bottom: 50px;
@@ -528,20 +529,15 @@ a.next:hover, a.prev:hover{
     background: #fff;
     margin-left: -20px;
 }
-.cat-tree li:nth-child(3){
-    margin-left: -3px;
-}
 .cat-tree li{
     font-size: 12px;
-    /*color: transparent;*/
-    /*width: 80px;*/
     height: 26px;
     position: relative;
     list-style: none;
     display: inline-block;
     background: #fff;
     margin: 0;
-    padding: 3px 20px;
+    padding: 3px 14px 3px 22px;
 }
 .cat-tree li:hover{
     text-decoration: underline;

@@ -1,10 +1,9 @@
 package com.ffwatl.manage.entities.items.clothes;
 
 
-import com.ffwatl.manage.entities.group.Gender;
+import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.entities.items.brand.Brand;
 import com.ffwatl.manage.entities.items.clothes.size.Size;
-import com.ffwatl.manage.entities.items.Item;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -24,12 +23,6 @@ public class ClothesItem extends Item {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Brand brand;
 
-    private Gender gender;
-
-    public Gender getGender() {
-        return gender;
-    }
-
     public List<Size> getSize() {
         return size;
     }
@@ -44,10 +37,6 @@ public class ClothesItem extends Item {
 
     public void setBrand(Brand brand) {
         this.brand = brand;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
     }
 
     @Override
