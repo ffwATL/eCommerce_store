@@ -20,7 +20,6 @@
 <div class="content-wrapper">
     <div th:replace="template :: header" class="header col-lg-12">
         <ul class="list-inline" id="logo">
-            
             <li><a th:href="@{/}"><img src="../../../../resources/img/logo.png" th:src="@{/resources/img/logo.png}"></a></li>
         </ul>
         <ul class="list-inline" id="search">
@@ -48,8 +47,15 @@
             </li>
         </ul>
     </div>
-    <div class="custom_jumbo col-lg-12 text-center">
-        <p class="head-text"></p>
+    <div class="custom_jumbo col-lg-12">
+        <div>
+            <a class="all" th:src="@{/manage/overview/all}">All</a>
+            <menu class="cat-tree">
+                <li>Mens</li>
+                <li>Chinos</li>
+                <li>ASOS Mens Skinny Jeans navy</li>
+            </menu>
+        </div>
     </div>
     <div class="content col-lg-12">
         <div class="col-lg-6 gallery">
@@ -88,7 +94,7 @@
                 <div id="brand_logo"><!--<img src="../../../../resources/img/asos/asos_logo.jpg">-->
                     <img src="">
                 </div>
-                <table id="info_table" style="margin-bottom: 10px">
+                <table id="info_table">
                     <tr>
                         <td class="leftInfo" th:text="(#{label.totalQty}+':')">Total quantity:</td>
                         <td class="rightInfo"><div id="totalQTY">8</div></td>

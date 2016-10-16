@@ -1,7 +1,4 @@
-.main{
-    min-height: 500px;
-}
-.gallery{
+.main, .gallery{
     min-height: 500px;
 }
 .float_right, .sp-wrap, .gallery-wrap{
@@ -15,29 +12,21 @@
 }
 .originPrice, .salePrice{
     max-width: 60px;
-    border: none;
-    border-radius: 2px;
 }
 .price_list li{
     margin: 0;
     padding-right: 0;
 }
-span.originPrice, .sale{
-    padding: 0;
-}
-li.noPadding{
+span.originPrice, .sale, li.noPadding,li.noPadding{
     padding: 0;
 }
 .content .dropbtn{
-    border-radius: 0px;
-    outline: none;
+    outline: none !important;
     padding: 3px;
-    cursor: pointer;
 }
 button.size_choice{
     height: 32px;
     font-size: 16px;
-    color: black;
     border: solid black .1em;
     background: white url("../../../img/down-arrow.svg") no-repeat 255px;
 }
@@ -46,10 +35,9 @@ button.size_choice{
     max-width: 30px;
     min-width: 30px;
     text-align: left;
-    font-size: 12px;
     padding: 3px 6px;
 }
-.rightInfo{
+.rightInfo, .leftInfo, #inStock, .tabs label,.sp-loading{
     font-size: 12px;
 }
 .rightInfo, #inStock, .size_qty, #forTabs, #tab-1 li input, .size_block .dropdown-content, .sp-loading, .sp-wrap, .productId {
@@ -62,7 +50,7 @@ button.size_choice{
     color: #cc6e81;
 }
 #inStock, #color_name, .size_block .dropdown-content .qty, .sp-zoom, .sp-lightbox img, #sp-prev, #sp-next, #sp-prev:before,
-#sp-next:before, .rightInfo .slider, .rightInfo .slider:before, a.prev, a.next{
+#sp-next:before, .rightInfo .slider, .rightInfo .slider:before, a.prev, a.next, .sp-thumbs{
     position: absolute;
 }
 #inStock {
@@ -73,10 +61,9 @@ button.size_choice{
     padding-top: 7px;
     color: white;
     background-image: url("../../../img/itemCard/instock.svg");
-    font-size: 12px;
 }
 .size_qty{
-    border-top: solid 1px rgba(80, 33, 46, 0.52);
+    border-top: solid .1em rgba(80, 33, 46, 0.52);
     margin-left: 15px;
     padding: 3px 2px;
     height: 30px;
@@ -89,7 +76,7 @@ button.size_choice{
     width: 40px;
     min-height: 40px;
     min-width: 40px;
-    border: solid 1px black;
+    border: solid .1em black;
     background: #000034;
 }
 #color_name{
@@ -97,7 +84,6 @@ button.size_choice{
     margin-left: 100px;
 }
 label, .productId, .leftInfo{
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
     color: #000000;
 }
 label{
@@ -109,7 +95,6 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
     font-size: 14px;
 }
 #addToBag_button{
-    margin-bottom: 15px;
     font-weight: 200;
     text-transform: uppercase;
     height: 38px;
@@ -137,7 +122,6 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
     max-width: 70px;
     margin: 20px auto;
 }
-
 
 /********TABSLET*********/
 @media screen and (max-width: 767px){
@@ -198,7 +182,7 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
 .forTabs .active a{
     color: #272B30;
 }
-.forTabs LI:hover A, .forTabs LI:hover {
+button.size_choice,.forTabs LI:hover A, .forTabs LI:hover {
     color: black;
 }
 .forTabs .active, .forTabs LI.active:hover {
@@ -216,21 +200,21 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
 #edit_button, #addToBag_button, button.size_choice, .size_block .dropdown-content,#brand_logo, #info_table{
     width: 280px;
 }
-.content button{
+.content button, .content .dropbtn{
     border-radius: 0;
 }
 #edit_button, #addToBag_button{
     margin-bottom: 10px;
 }
-ul.sizeSelect_ul{
+ul.sizeSelect_ul, #addToBag_button, #info_table{
     margin-bottom: 15px;
+}
+ul.sizeSelect_ul{
+
     margin-top: 5px;
 }
 li#main_info{
     margin-left: -1px;
-}
-.tabs label{
-    font-size: 12px;
 }
 #tab-1 li input{
     background: rgba(245, 243, 238, 0.45);
@@ -252,7 +236,7 @@ li.third{
 .size_block .dropdown-content{
     max-height: none;
 }
-.size_block .dropdown-content button{
+.size_block .dropdown-content button, .originPrice, .salePrice{
     border: none;
     background: transparent;
 }
@@ -276,7 +260,6 @@ li.third{
     padding: 15px;
     border: 5px solid #eee;
     border-radius: 3px;
-    font-size: 12px;
     color: #888;
 }
 
@@ -297,7 +280,6 @@ li.third{
     margin-top: 5px;
     text-align: left;
     display: inline-block;
-    position: absolute;
     top: 15%;
     left: -25%;
 }
@@ -378,7 +360,6 @@ li.third{
     background: rgb(0, 0, 0);
     background: rgba(0, 0, 0, .9);
     z-index: 500;
-    cursor: pointer;
 }
 .sp-lightbox img {
     margin: auto;
@@ -456,7 +437,6 @@ li.third{
 }
 
 .rightInfo .slider {
-    cursor: pointer;
     top: 0;
     left: 0;
     right: 0;
@@ -508,7 +488,6 @@ a.next{
 }
 a.next:hover, a.prev:hover{
     opacity: .8;
-    cursor: pointer;
 }
 .gallery-wrap {
     max-width: 375px;
@@ -526,4 +505,72 @@ a.next:hover, a.prev:hover{
 }
 #extra_info{
     margin-right: 0;
+}
+.cat-tree li:nth-child(1) {
+    z-index: 3000;
+}
+.cat-tree li:nth-child(2){
+    z-index: 2000;
+}
+.cat-tree li:nth-child(3){
+    z-index: 1000;
+}
+.cat-tree li:nth-child(4){
+    z-index: 999;
+}
+.cat-tree li:nth-child(1):before, .cat-tree li:nth-child(2):before{
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    transform: rotate(45deg);
+    right: -8px;
+    box-shadow: 1px -1px 1px 0px #BABABA;
+    background: #fff;
+    margin-left: -20px;
+}
+.cat-tree li:nth-child(3){
+    margin-left: -3px;
+}
+.cat-tree li{
+    font-size: 12px;
+    /*color: transparent;*/
+    /*width: 80px;*/
+    height: 26px;
+    position: relative;
+    list-style: none;
+    display: inline-block;
+    background: #fff;
+    margin: 0;
+    padding: 3px 20px;
+}
+.cat-tree li:hover{
+    text-decoration: underline;
+}
+.cat-tree{
+    padding-left: 0px;
+}
+.cat-tree, a.all{
+    margin-left: 20px;
+    overflow: hidden;
+}
+menu li:before, menu li:after{
+    content: '';
+}
+a.all:hover, .cat-tree li:hover,a.next:hover, a.prev:hover, .rightInfo .slider, .sp-lightbox, .content .dropbtn {
+    cursor: pointer;
+}
+a.all:hover{
+    text-decoration: none;
+    background: #3e4248;
+}
+a.all{
+    color: white;
+    background-color: #272B30;
+    border: solid .1em #272B30;
+    text-align: center;
+    height: 26px;
+    width: 26px;
+    padding: 3px;
+    float: left;
+    font-size: 12px;
 }
