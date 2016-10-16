@@ -7,6 +7,9 @@
 .float_right, .sp-wrap, .gallery-wrap{
     float: right;
 }
+.float_right .tabs{
+    min-height: 300px;
+}
 .sale{
     font-size: 18px;
 }
@@ -39,9 +42,15 @@ button.size_choice{
     background: white url("../../../img/down-arrow.svg") no-repeat 255px;
 }
 .leftInfo{
-    font-weight: 500;
-    padding-right: 20px;
+    font-weight: 200;
+    max-width: 30px;
+    min-width: 30px;
     text-align: left;
+    font-size: 12px;
+    padding: 3px 6px;
+}
+.rightInfo{
+    font-size: 12px;
 }
 .rightInfo, #inStock, .size_qty, #forTabs, #tab-1 li input, .size_block .dropdown-content, .sp-loading, .sp-wrap, .productId {
   text-align: center;
@@ -76,23 +85,23 @@ button.size_choice{
     background: rgba(246, 187, 177, 0.25);
 }
 #color_hex{
-    height: 25px;
-    width: 80px;
-    min-height: 25px;
-    min-width: 80px;
-
+    height: 40px;
+    width: 40px;
+    min-height: 40px;
+    min-width: 40px;
     border: solid 1px black;
     background: #000034;
 }
 #color_name{
-    margin-top: -38px;
+    margin-top: -45px;
     margin-left: 100px;
 }
 label, .productId, .leftInfo{
-    color: #7f7f7f;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #000000;
 }
 label{
-    font-weight: 200;
+    font-weight: 600;
     padding: 0px;
     margin-bottom: 1px;
 }
@@ -100,6 +109,7 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
     font-size: 14px;
 }
 #addToBag_button{
+    margin-bottom: 15px;
     font-weight: 200;
     text-transform: uppercase;
     height: 38px;
@@ -107,13 +117,7 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
 #edit_button{
     text-transform: uppercase;
     height: 30px;
-    border: none;
-    color: black;
-    background-image: -webkit-linear-gradient(top,#e7e7e7 0,#ddd 100%);
 }
-#edit_button:hover{
-    background-image: -webkit-linear-gradient(top,#e7e7e7 0,#e7e7e7 100%);
- }
 #status{
     width: 12px;
     height: 12px;
@@ -124,15 +128,16 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
 .bad{
     background-image: url("../../../img/itemCard/status_bad.svg");
 }
-#totalQTY, #brand_logo img, #status{
+#totalQTY, #status{
     margin-left: auto;
     margin-right: auto;
 }
 #brand_logo img{
     width: 70px;
     max-width: 70px;
-    margin-bottom: 20px;
+    margin: 20px auto;
 }
+
 
 /********TABSLET*********/
 @media screen and (max-width: 767px){
@@ -147,8 +152,12 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
 }
 
 .tabs > DIV {
+    border: solid 0.09em rgba(166, 169, 176, 0.21);
     -webkit-font-smoothing: antialiased;
     background: white !important;
+    margin-top: -11px;
+    padding: 20px 8px;
+    border-top: none;
 }
 .tabs{
     max-width: 279px;
@@ -169,18 +178,16 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
 }
 .forTabs LI {
     margin-right: -2px;
-    margin-left: -2px;
-   /* background: #f1f4fb;*/
-    border-bottom: solid #e6e8ef 1px;
-
-    border-top: solid transparent 2px;
+    margin-left: -3px;
+    border-bottom: solid #e6e8ef .09em;
+    border-top: solid transparent .18em;
     min-width: 93px;
     max-width: 93px;
     display: inline-block;
 }
 .forTabs li.active{
-    border-left: solid #e6e8ef 1px;
-    border-right: solid #e6e8ef 1px;
+    border-left: solid #e6e8ef .09em;
+    border-right: solid #e6e8ef .09em;
  }
 .forTabs A {
     color: #a6a9b0;
@@ -191,15 +198,12 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
 .forTabs .active a{
     color: #272B30;
 }
-.forTabs LI:hover {
-    border-top: solid #dee0e7 2px;
-}
 .forTabs LI:hover A, .forTabs LI:hover {
     color: black;
 }
 .forTabs .active, .forTabs LI.active:hover {
     border-bottom: none;
-    border-top: solid #272B30 2px;
+    border-top: solid #272B30 .18em;
 }
 .tabs{
     height: auto;
@@ -209,7 +213,7 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
     border-radius: 0px;
 }
 /****************/
-#edit_button, #addToBag_button, button.size_choice, .size_block .dropdown-content,#brand_logo{
+#edit_button, #addToBag_button, button.size_choice, .size_block .dropdown-content,#brand_logo, #info_table{
     width: 280px;
 }
 .content button{
@@ -219,10 +223,11 @@ ul.list-group-item-text, #tab-1 li input, #addToBag_button, #edit_button, .tabs 
     margin-bottom: 10px;
 }
 ul.sizeSelect_ul{
-    margin-bottom: 3px;
+    margin-bottom: 15px;
+    margin-top: 5px;
 }
 li#main_info{
-    margin-left: 0;
+    margin-left: -1px;
 }
 .tabs label{
     font-size: 12px;
@@ -236,8 +241,7 @@ li#main_info{
     max-width: 58px;
 }
 li.second{
-    margin-left: 45px;
-    margin-right: 45px;
+    margin: 0 35px;
 }
 li.third{
     padding: 0;
@@ -512,4 +516,14 @@ a.next:hover, a.prev:hover{
 }
 .productId li:nth-child(1){
     letter-spacing: .1em;
+}
+#info_table{
+    border: solid 0.09em rgba(166, 169, 176, 0.21);
+    background: rgba(241, 244, 251, 0.47);
+}
+.float_right .buttons{
+    margin-bottom: 50px;
+}
+#extra_info{
+    margin-right: 0;
 }

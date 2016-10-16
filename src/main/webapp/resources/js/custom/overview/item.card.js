@@ -1,15 +1,12 @@
 /*<![CDATA[*/
 $(function(){
-    var magic =/*[[@{context:}]]*/'';
-    var sizeMap = {};
-    var sizeBlock = $('.size_block');
-    var lang = $.cookie("app");
+    var magic =/*[[@{context:}]]*/'',sizeMap = {},sizeBlock = $('.size_block'),lang = $.cookie("app"),locale,
+        csrf = {
+            token : $("meta[name='_csrf']").attr("content"),
+            header : $("meta[name='_csrf_header']").attr("content")
+        };
     if(lang == undefined || lang.length < 2) lang = 'en';
-    var locale = getLocale(lang);
-    var csrf = {
-        token : $("meta[name='_csrf']").attr("content"),
-        header : $("meta[name='_csrf_header']").attr("content")
-    };
+    locale = getLocale(lang);
     $('.lang .dropdown-content a').each(function(){
         $(this).attr('href',this.href+'&id='+$('#itemId').val())
     });
@@ -162,8 +159,8 @@ $(function(){
             default:                           return -1;
         }
     }
-    refreshData();
-    /*$('.sp-wrap').smoothproducts();
-    $('.sp-thumbs a')[0].click();*/
+    /*refreshData();*/
+    $('.sp-wrap').smoothproducts();
+    $('.sp-thumbs a')[0].click();
 });
 /*]]>*/

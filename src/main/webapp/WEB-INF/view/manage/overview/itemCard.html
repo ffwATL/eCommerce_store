@@ -116,7 +116,7 @@
                 </table>
                 <div class="size_block">
                     <ul class="list-inline sizeSelect_ul">
-                        <li><label th:text="#{label.size}">Size:</label>
+                        <li>
                             <div id="inStock">3</div>
                             <div class="dropdown">
                                 <button class="dropbtn button-bordered inline size_choice button-bordered" th:text="#{new.item.choose}">W32 L32</button>
@@ -128,7 +128,6 @@
                             </div>
                         </li>
                     </ul>
-                    <label th:text="#{new.item.color}">Color:</label>
                     <div class="inline">
                         <ul class="list-inline">
                             <li>
@@ -140,8 +139,8 @@
                 </div>
                 <br>
                 <div class="buttons">
-                    <button class="button-warn" id="addToBag_button" th:text="#{label.addToBag}">Add to bag</button>
-                    <button class="button-lowPriority button" id="edit_button" th:text="#{label.edit}">Edit</button>
+                    <button class="button-typical" id="addToBag_button" th:text="#{label.addToBag}">Add to bag</button>
+                    <button class="button-bordered" id="edit_button" th:text="#{label.edit}">Edit</button>
                 </div>
                 <div class="tabs">
                     <ul id="forTabs" class="forTabs">

@@ -1,13 +1,13 @@
 /*<![CDATA[*/
 $(function(){
-    var lang = $.cookie("app"), c = 1;
+    var lang = $.cookie("app"), c = 1,magic =/*[[@{context:}]]*/'',currentItem;
     if(lang == undefined || lang.length < 2) lang = 'en';
-    var locale = getLocale(lang),magic =/*[[@{context:}]]*/'',minPriceSale=0, maxPriceSale=1000,activeTab = 0,identifiers=[],
+    var locale = getLocale(lang),minPriceSale=0, maxPriceSale=1000,activeTab = 0,identifiers=[],
         itemGridDiv =  $('#grid-all'),filterDiv = $('.filter-block0'),blockWrapper = $('.block-wrapper'),
-        pgnt = $('#pgnt1'),sidebar = $('#sidebar'),filterGlobal =  $('#filter-global0'),
-        tabs = $('.tabs'),currentTab = $('.all'),currentItem,info ={info_h2: $('.info_h2 span'), info_h5: $('.info_h5')},
+        pgnt = $('#pgnt1'),sidebar = $('#sidebar'),filterGlobal =  $('#filter-global0'),tabs = $('.tabs'),currentTab = $('.all'),
+        info ={info_h2: $('.info_h2 span'), info_h5: $('.info_h5')},
         notFound = false,inactive = false,onSale = false,isActive = false,firstFilter = false,
-        sliders=[
+        sliders = [
             {
                 sliderSale:$('#slider_tab0_1'),
                 sliderOrigin: $('#slider_tab0_2')
@@ -132,6 +132,7 @@ $(function(){
                 $('.pg').remove();
                 $('.next').remove();
                 $('.previous').remove();
+                $('.main-check').prop('checked', false);
                 drawItems(result, pgnt);
                 setTimeout(function(){
                     dropdownInTableInit();
@@ -1064,7 +1065,6 @@ $(function(){
             $('.main-check').change(function(){
                 onCheckBoxSelected(this.checked);
                 displayLeftSide(this.checked, true);
-                console.log(staticFilter.updates.id)
             });
             init(currentTab.find('select.sort-by'));
         }, 100);

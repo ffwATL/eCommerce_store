@@ -129,27 +129,20 @@ label{
 .button-lowPriority:hover{
     background-image: -webkit-linear-gradient(top,#e7e7e7 0,#e7e7e7 100%);
 }
-.plus, .button-typical ,button.sp-choose{
-    background-color: #37474f;
-    border: solid .1em #37474f;
+.plus, .button-typical ,button.sp-choose, .button-success{
+    background-color: #272B30;
+    border: solid .1em #272B30;
 }
-.button-typical ,button.sp-choose{
-    background-color: #37474f;
-    border: solid .1em #37474f;
+.button-typical ,button.sp-choose, .button-success{
     color: white;
 }
-.button-typical:hover, button.sp-choose:hover, .plus:hover, .button-typical:disabled, .button-typical:disabled:hover, .plus:disabled:hover{
-    border: solid .1em #5F6B72;
-    background-color: #5F6B72;
+.button-typical:hover, button.sp-choose:hover, .plus:hover, .button-typical:disabled, .button-typical:disabled:hover, .plus:disabled:hover,
+.button-success:hover{
+    border: solid .1em #3e4248;
+    background-color: #3e4248;
 }
 .button-typical:disabled, .button-typical:disabled:hover, .plus:disabled:hover{
     cursor: not-allowed;
-}
-.button-success:hover{
-    background-color: rgba(55, 71, 79, 0.8);
-}
-.button-success{
-    background-color: #37474f;
 }
 .button-bordered, a.sp-cancel{
     background: white;
