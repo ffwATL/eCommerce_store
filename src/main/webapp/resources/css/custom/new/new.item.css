@@ -540,7 +540,7 @@ li.logo{
 .info{
     height: 110px;
     margin-bottom: 25px;
-    padding: 10px 0;
+    padding: 10px 6px;
 }
 .info h5{
     max-width: 510px;
@@ -731,7 +731,7 @@ textarea.b-dsc{
     margin-bottom: 5px;
 }
 .brand-tabs > DIV, .color-tabs > DIV{
-    border: solid .09em black;
+    border: solid #e6e8ef .09em;
     border-top: none;
     margin-top: -1px;
     margin-left: -2px;

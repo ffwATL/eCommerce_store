@@ -1,6 +1,6 @@
 /*<![CDATA[*/
 $(function(){
-    var magic =/*[[@{context:}]]*/'', editMode = false, lang = $.cookie("app");
+    var magic =/*[[@{context:}]]*/'', editMode = false, lang = $.cookie("app"), text, grName;
     if(lang == undefined || lang.length < 2) lang = 'en';
     var locale = getLocale(lang), menClothesPattern = '',
         treeData = [], temporaryGroup = {}, gender = 0, x_buff='', cat, item, group_code = -1, itemGroup_id, sz_edit,
@@ -44,21 +44,26 @@ $(function(){
         $('#section_4').hide();
         $('.icon-wrapper').remove();
         if(group_code < 0) return;
-        else if(group_code < 4) {
-            group_1_clear_forms();
-            group_1_unbind();
-        }else if(group_code < 10){
-            group_2_unbind();
-            group_2_clear_forms();
-        }else if(group_code < 12){
-            group_4_clear_forms();
-            group_4_unbind();
+        if(!editMode){
+            if(group_code < 4) {
+                group_1_clear_forms();
+                group_1_unbind();
+            }else if(group_code < 10){
+                group_2_unbind();
+                group_2_clear_forms();
+            }else if(group_code < 12){
+                group_4_clear_forms();
+                group_4_unbind();
+            }
+            closeSession();
+        }else{
+            if(group_code < 4) group_1_unbind();
+            else if(group_code < 10) group_2_unbind();
+            else if(group_code < 12) group_4_unbind();
         }
-        closeSession();
         $('#group_one').show();
     });
     function chooseItemGroup(name){
-        console.log(name);
         var res = resolveGroupCommonCode(name);
         group_code = res.code;
         if(group_code < 0) return;
@@ -688,22 +693,17 @@ $(function(){
             child = '#lvl-'+data[i].level+i;
             if(editMode) {
                 var ch = $(child);
-                if(data[i].level == 2 && data[i].text == text) {
-                    ch.addClass('chosen');
-                    resolveActiveDependencies(levels[data[i].level], data[i].text, true);
-                    if(data[i].nodes != undefined) drawCategoryPopup(data[i].nodes, levels[data[i].level+1].level_div.find('ul'),undefined, cat);
-                }else if(data[i].childCat == cat){
-                    ch.addClass('chosen');
-                    resolveActiveDependencies(levels[data[i].level], data[i].text, true);
-                    if(data[i].nodes != undefined) drawCategoryPopup(data[i].nodes, levels[data[i].level+1].level_div.find('ul'),undefined, cat);
-                } else if(data[i].cat == cat){
-                    console.log(grName);
-                    if(data[i].level == 4 && data[i].cat == cat && data[i].text == grName)  {
+                if((data[i].level == 2 && data[i].text == text) || data[i].childCat == cat || data[i].cat == cat) {
+                    if(data[i].level == 4 && data[i].cat == cat && data[i].text == grName || data[i].level != 4)  {
+                        if(data[i].level == 4) {
+                            setItemGroupTemporary(data[i]);
+                            $('#accept_group').click();
+                        }
                         ch.addClass('chosen');
                         resolveActiveDependencies(levels[data[i].level], data[i].text, true);
                     }
                     if(data[i].nodes != undefined) drawCategoryPopup(data[i].nodes, levels[data[i].level+1].level_div.find('ul'),undefined, cat);
-                }else ch.addClass('cat-blocked');
+                } else ch.addClass('cat-blocked');
             }
             $(child).click(function(){
                 var li = $(this), number = li.find('input').val();
@@ -716,16 +716,20 @@ $(function(){
                 resolveActiveDependencies(levels[data[number].level], data[number].text,data[number].nodes != undefined);
                 if(data[number].nodes == undefined){
                     if(data[number].level == 4){
-                        menClothesPattern = data[number].parent;
-                        temporaryGroup.text = data[number].text;
-                        temporaryGroup.cat = data[number].cat;
-                        itemGroup_id = data[number].id;
+                        console.log('lizzi');
+                        setItemGroupTemporary(data[number]);
                     }
                     return;
                 }
                 drawCategoryPopup(data[number].nodes, levels[data[number].level+1].level_div.find('ul'),undefined, cat);
             })
         }
+    }
+    function setItemGroupTemporary(data){
+        menClothesPattern = data.parent;
+        temporaryGroup.text = data.text;
+        temporaryGroup.cat = data.cat;
+        itemGroup_id = data.id;
     }
     $('#accept_group').click(function(){
         changeBlockStatus($('#cat-block'), true);
@@ -1106,7 +1110,6 @@ $(function(){
             }
         });
     }
-    var text, grName;
     function fillItemsInfo(item){
         item_name_ru.val(item.itemName.locale_ru);
         item_name_en.val(item.itemName.locale_en);
@@ -1117,6 +1120,7 @@ $(function(){
         text = resolveGenderToText(item.gender, locale);
         grName = resolveLocale(item.itemGroup.groupName);
         categoryInit(item.itemGroup.cat);
+
         $('.cat-blocked').click(function(){
             $(this).preventDefault();
         })
@@ -1148,6 +1152,7 @@ $(function(){
         }
         console.log(files);
         photoInit(files);
+        changeBlockStatus($('#ph-block'), true);
     }
 
     function categoryInit(cat){

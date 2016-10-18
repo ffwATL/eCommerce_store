@@ -386,7 +386,7 @@ input:checked + .slider:before {
 .forTabs LI {
     margin-right: -3px;
     margin-left: -2px;
-    border-bottom: solid #272B30 .09em;
+    border-bottom: solid #e6e8ef .09em;
     border-top: solid transparent .18em;
     display: inline-block;
 }
