@@ -1,8 +1,6 @@
-
 /*<![CDATA[*/
 $(function(){
-    var magic =/*[[@{context:}]]*/'',
-        lang = $.cookie("app");
+    var magic =/*[[@{context:}]]*/'', editMode = false, lang = $.cookie("app");
     if(lang == undefined || lang.length < 2) lang = 'en';
     var locale = getLocale(lang), menClothesPattern = '',
         treeData = [], temporaryGroup = {}, gender = 0, x_buff='', cat, item, group_code = -1, itemGroup_id, sz_edit,
@@ -541,43 +539,46 @@ $(function(){
         sale_price_input.val(0);
         sizeMap = [];
     }
-    $('#filer_input').filer({
-        showThumbs: true,
-        limit: 6,
-        appendTo: $('#upload_wrapper'),
-        templates: {
-            box: filer.box,
-            item: filer.item,
-            itemAppend: filer.itemAppend,
-            itemAppendToEnd: true,
-            removeConfirmation: true,
-            _selectors: {
-                list: '.jFiler-items-list',
-                item: '.jFiler-item',
-                remove: '.jFiler-item-trash-action'
-            }
-        },
-        captions: {
-            button: locale.label_addPhotos,
-            feedback: "Choose files To Upload",
-            feedback2: "files were chosen",
-            drop: "Drop file here to Upload",
-            removeConfirmation: "Are you sure you want to remove this file?",
-            errors: {
-                filesLimit: "Only {{fi-limit}} files are allowed to be uploaded.",
-                filesType: "Only Images are allowed to be uploaded.",
-                filesSize: "{{fi-name}} is too large! Please upload file up to {{fi-maxSize}} MB.",
-                filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
-            }
-        },
-        afterShow: function(){
-            changePhotoBlockStatus(true)
-        },
-        onEmpty: function(){
-            changePhotoBlockStatus(false)
-        },
-        addMore: true
-    });
+    function photoInit(files){
+        $('#filer_input').filer({
+            showThumbs: true,
+            limit: 6,
+            files: files,
+            appendTo: $('#upload_wrapper'),
+            templates: {
+                box: filer.box,
+                item: filer.item,
+                itemAppend: filer.itemAppend,
+                itemAppendToEnd: true,
+                removeConfirmation: true,
+                _selectors: {
+                    list: '.jFiler-items-list',
+                    item: '.jFiler-item',
+                    remove: '.jFiler-item-trash-action'
+                }
+            },
+            captions: {
+                button: locale.label_addPhotos,
+                feedback: "Choose files To Upload",
+                feedback2: "files were chosen",
+                drop: "Drop file here to Upload",
+                removeConfirmation: "Are you sure you want to remove this file?",
+                errors: {
+                    filesLimit: "Only {{fi-limit}} files are allowed to be uploaded.",
+                    filesType: "Only Images are allowed to be uploaded.",
+                    filesSize: "{{fi-name}} is too large! Please upload file up to {{fi-maxSize}} MB.",
+                    filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
+                }
+            },
+            afterShow: function(){
+                changePhotoBlockStatus(true)
+            },
+            onEmpty: function(){
+                changePhotoBlockStatus(false)
+            },
+            addMore: true
+        });
+    }
 
     function changePhotoBlockStatus(cond){
         files = cond;
@@ -599,44 +600,6 @@ $(function(){
         });
     }
 
-    /*Entry point main method*/
-    function init_0(){
-        $('.brand-tabs').tabslet();
-        $('.color-tabs').tabslet();
-        bindPriceInput();
-        bindItemNameInput();
-        bindNewColorInput();
-        bindNewBrandInput();
-        quantity_input.bind('input propertychange', function(){
-            checkIntegerInput(quantity_input);
-        });
-
-        $('.main-content .dropbtn').click(function(e){
-            $(this).parent().find('.dropdown-content').toggle(150);
-        });
-        $.ajax({
-            url: magic + "../../manage/ajax/get/item/options/clothes",
-            contentType: 'application/json',
-            mimeType: 'application/json',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(csrf.header, csrf.token);
-            },
-            type: "POST",
-            success: function(result){
-                treeData = createTreeData(result.itemGroup.child, 'items');
-                setTimeout(function(){
-                    drawCategoryPopup(treeData,$('#level-2').find('ul'),[3,4]);
-                },50);
-                fillColor(result.colorList);
-                fillBrand(result.brandList, result.brandImgUrl);
-            },
-            error: function(result){
-                console.log('Error while getting itemsgroup =/');
-                console.log(result)
-            }
-        });
-    }
-
     function fillColor(data){
         var content = $('#color').find('.dropdown-content');
         content.find('a.color-option').remove();
@@ -649,7 +612,7 @@ $(function(){
             if(text.length > 15) text = text.substring(0,15) + '.';
             $('#color').find('.dropbtn').text(text);
             text =  $('#color_sample');
-            text.css({'background':hex.css('background')});
+            text.css({'background-color':hex.css('background')});
             text.find('input').val(hex.find('input').val());
             text.data('color', true);
             checkAllFormsGroup ();
@@ -702,7 +665,10 @@ $(function(){
             obj.parent = parent;
             obj.id=data[i].id;
             if(data[i].level < 3) obj.state={expanded: true};
-            if(data[i].child.length > 0) obj.nodes = (createTreeData(data[i].child, parent +' > ' +obj.text));
+            if(data[i].child.length > 0) {
+                obj.childCat = data[i].child[0].cat;
+                obj.nodes = (createTreeData(data[i].child, parent +' > ' +obj.text));
+            }
             result.push(obj);
         }
         return result;
@@ -713,14 +679,35 @@ $(function(){
         else if(text == 'Women' || text == 'Женское' || text =='Жіноче') gender = 1;
     }
 
-    function drawCategoryPopup(data, lvl, id){
+    function drawCategoryPopup(data, lvl, id, cat){
+        if(data == undefined) return;
         for(var i=0; i< data.length; i++){
             var child = '<input hidden type="number" value="'+i+'">';
             if(data[i].nodes != undefined && data[i].nodes.length > 0) child= child+'<span class="glyphicon glyphicon-menu-right"></span>';
             lvl.append('<li id="lvl-'+data[i].level+i+'">'+data[i].text+child+'</li>');
             child = '#lvl-'+data[i].level+i;
+            if(editMode) {
+                var ch = $(child);
+                if(data[i].level == 2 && data[i].text == text) {
+                    ch.addClass('chosen');
+                    resolveActiveDependencies(levels[data[i].level], data[i].text, true);
+                    if(data[i].nodes != undefined) drawCategoryPopup(data[i].nodes, levels[data[i].level+1].level_div.find('ul'),undefined, cat);
+                }else if(data[i].childCat == cat){
+                    ch.addClass('chosen');
+                    resolveActiveDependencies(levels[data[i].level], data[i].text, true);
+                    if(data[i].nodes != undefined) drawCategoryPopup(data[i].nodes, levels[data[i].level+1].level_div.find('ul'),undefined, cat);
+                } else if(data[i].cat == cat){
+                    console.log(grName);
+                    if(data[i].level == 4 && data[i].cat == cat && data[i].text == grName)  {
+                        ch.addClass('chosen');
+                        resolveActiveDependencies(levels[data[i].level], data[i].text, true);
+                    }
+                    if(data[i].nodes != undefined) drawCategoryPopup(data[i].nodes, levels[data[i].level+1].level_div.find('ul'),undefined, cat);
+                }else ch.addClass('cat-blocked');
+            }
             $(child).click(function(){
                 var li = $(this), number = li.find('input').val();
+                if(li.hasClass('cat-blocked')) return;
                 li.parent().find('.chosen').removeClass('chosen');
                 if(data[number].level == 2){
                     resolveGender(data[number].text)
@@ -736,7 +723,7 @@ $(function(){
                     }
                     return;
                 }
-                drawCategoryPopup(data[number].nodes, levels[data[number].level+1].level_div.find('ul'));
+                drawCategoryPopup(data[number].nodes, levels[data[number].level+1].level_div.find('ul'),undefined, cat);
             })
         }
     }
@@ -1098,6 +1085,121 @@ $(function(){
             sz_e_popup.find('.sz-e-fields-ex li:eq(0)').hide();
         }
     });
+
+    function editModeGetItemInfo(id){
+        console.log('id='+id);
+        $.ajax({
+            url: magic + "../../manage/ajax/get/item/single",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf.header, csrf.token);
+            },
+            data: {'id': parseInt(id)},
+            type: "POST",
+            success: function(result){
+                console.log(result);
+                fillItemsInfo(result);
+            },
+            error: function(result){
+                console.log(result);
+                editMode = false;
+                init_0(true)
+            }
+        });
+    }
+    var text, grName;
+    function fillItemsInfo(item){
+        item_name_ru.val(item.itemName.locale_ru);
+        item_name_en.val(item.itemName.locale_en);
+        item_name_ua.val(item.itemName.locale_ua);
+        changeBlockStatus($('#name-block'), true);
+        editColorBrand(item);
+        editPhotos(item.images);
+        text = resolveGenderToText(item.gender, locale);
+        grName = resolveLocale(item.itemGroup.groupName);
+        categoryInit(item.itemGroup.cat);
+        $('.cat-blocked').click(function(){
+            $(this).preventDefault();
+        })
+    }
+    function editColorBrand(item){
+        var element = $('#brnd').find('.dropbtn');
+        changeBlockStatus($('#cb-block'), true);
+        element.text(item.brand.name);
+        element.append('<input hidden type=number value="'+item.brand.id+'">');
+        $('#brand-logo').find('img').attr('src', magic+"../.." + item.brandImgUrl + item.brand.name.toLowerCase().replace(/\s/g,"_")+'/logo.jpg').show();
+        element = $('#color').find('.dropbtn');
+        element.text(resolveLocale(item.color.color));
+        element.append('<input hidden type=number value="'+item.color.id+'">');
+        element = $('#color_sample');
+        element.data('color', true);
+        element.find('input').val(item.color.id);
+        element.css({'background-color':item.color.hex});
+    }
+    function editPhotos(images){
+        var files=[];
+        for(var i=0; i< images.length;i++){
+            files.push({
+                name: images[i].substring(images[i].lastIndexOf('/')+1),
+                url: magic + '../..'+images[i],
+                type: 'image/jpg',
+                file: magic+'../..'+images[i],
+                size: ''
+            });
+        }
+        console.log(files);
+        photoInit(files);
+    }
+
+    function categoryInit(cat){
+        console.log('cat='+cat);
+        $.ajax({
+            url: magic + "../../manage/ajax/get/item/options/clothes",
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf.header, csrf.token);
+            },
+            type: "POST",
+            success: function(result){
+                treeData = createTreeData(result.itemGroup.child, 'items');
+                setTimeout(function(){
+                    console.log(treeData);
+                    drawCategoryPopup(treeData,$('#level-2').find('ul'),[3,4], cat);
+                },50);
+                fillColor(result.colorList);
+                fillBrand(result.brandList, result.brandImgUrl);
+            },
+            error: function(result){
+                console.log('Error while getting itemsgroup =/');
+                console.log(result)
+            }
+        });
+    }
+    /*Entry point main method*/
+    function init_0(standart){
+        if(getURLParameter('edit') && standart == undefined){
+            editMode = true;
+            editModeGetItemInfo(getURLParameter('id'));
+        }else {
+            console.log('edit=false');
+            photoInit([]);
+            categoryInit('');
+        }
+        $('.brand-tabs').tabslet();
+        $('.color-tabs').tabslet();
+        bindPriceInput();
+        bindItemNameInput();
+        bindNewColorInput();
+        bindNewBrandInput();
+        quantity_input.bind('input propertychange', function(){
+            checkIntegerInput(quantity_input);
+        });
+
+        $('.main-content .dropbtn').click(function(e){
+            $(this).parent().find('.dropdown-content').toggle(150);
+        });
+
+    }
     init_0();
 });
 /*]]>*/

@@ -142,9 +142,17 @@
                     <div id="color_name" class="inline"></div>
                 </div>
                 <br>
+                <script>
+                    function editItem(){
+                        /*<![CDATA[*/
+                        window.location.assign(/*[[@{context:}]]*/'../../manage/new/item?edit=true&id='+
+                                $('.productId .info').text());
+                        /*]]>*/
+                    }
+                </script>
                 <div class="buttons">
                     <button class="button-typical" id="addToBag_button" th:text="#{label.addToBag}">Add to bag</button>
-                    <button class="button-bordered" id="edit_button" th:text="#{label.edit}">Edit</button>
+                    <button class="button-bordered" id="edit_button" th:text="#{label.edit}" onclick="editItem()">Edit</button>
                 </div>
                 <div class="tabs">
                     <ul id="forTabs" class="forTabs">

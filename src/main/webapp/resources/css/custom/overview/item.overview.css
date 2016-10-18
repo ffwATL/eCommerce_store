@@ -483,7 +483,7 @@ thead th{
     text-align: center;
     padding: 15px 5px;
     margin-bottom: 10px;
-    color: #90939a;
+    color: #959595;
 }
 thead tr{
     border-top: solid #dee0e7 1px;
@@ -587,10 +587,6 @@ li.color a{
 #category input[type=checkbox]{
     margin-right: 5px;
 }
-.info_h5{
-    min-height: 30px;
-    padding-top: 20px;
-}
 .action-panel .dropdown-content{
     min-width: 110px;
 }
@@ -628,7 +624,9 @@ li.color a{
 .info_h5{
     font-family: Tahoma, Geneva, sans-serif;
     font-size: 1em;
-    color: #a6a9b0;
+    color: #959595;
+    min-height: 30px;
+    padding-top: 20px;
 }
 ul#ex-forTabs{
     padding-left: 0;

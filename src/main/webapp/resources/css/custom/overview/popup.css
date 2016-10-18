@@ -269,11 +269,7 @@ h4#options:hover{
 #add-cat-popup .content .cat-list .level li{
     padding: 3px;
 }
-#add-cat-popup .level li{
-    text-decoration: none;
-    cursor: pointer;
-    padding: 3px 6px;
-}
+
 
 #add-cat-popup .buttons {
     padding: 6px;
@@ -283,9 +279,6 @@ h4#options:hover{
     margin-right: 15px;
     margin-top: 5px;
     width: 200px;
-}
-#add-cat-popup li.chosen, #add-cat-popup .level li:hover{
-    background: rgba(216, 218, 218, 0.42);
 }
 #category-header{
     background-color: white;

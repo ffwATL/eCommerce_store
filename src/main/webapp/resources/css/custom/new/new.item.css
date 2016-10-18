@@ -869,7 +869,6 @@ ul.sz-main{
     color: #969aa1;
     padding: 0;
     font-size: 12px;
-
 }
 .sz-e-fields-ex li:nth-child(1){
     display: none;
@@ -883,5 +882,17 @@ ul.sz-main{
 #item_group_4 .dropdown-content{
     width: 155px;
     text-align: center;
+}
+.level li{
+    text-decoration: none;
+    cursor: pointer;
+    padding: 3px 6px;
+}
+li.chosen, .level li:hover{
+    background: rgba(216, 218, 218, 0.42);
+}
+li.cat-blocked{
+    background: rgba(240, 242, 242, 0.42);
+    color: rgba(163, 165, 165, 0.71);
 }
 

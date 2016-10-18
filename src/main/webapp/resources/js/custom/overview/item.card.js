@@ -83,7 +83,25 @@ $(function(){
             menu.append('<li>'+options.data[i]+'</li>');
         }
     }
-
+    function changeItemStatus(item){
+        $.ajax({
+            url: magic + "../../manage/ajax/update/item/status",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf.header, csrf.token);
+            },
+            dataType: "html",
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            type: "POST",
+            data: JSON.stringify(item),
+            success: function(result){
+                console.log("ok")
+            },
+            error: function(result){
+                console.log(result);
+            }
+        });
+    }
     /*Processing item data from ajax request*/
     function processData(data, name){
         $('#totalQTY').text(data.quantity);
@@ -96,14 +114,18 @@ $(function(){
         $('#originPrice').text(data.originPrice/100);
         var salePrice =data.salePrice/100,
             code = resolveGroupCommonCode(resolveLocale(data.itemGroup.groupName)).code,
-            sp = $('.sp-wrap');
+            sp = $('.sp-wrap'),
+            status = $('.switch-active input');
+        status.click(function(){
+            changeItemStatus({id:data.id, isActive:$(this).checked})
+        });
         if(data.discount > 0) {
             $('.sale').css('color','#cc6e81');
             $('span.prev_price').text(salePrice);
             $('.prev_price').css('display','inline');
         }
         $('span.salePrice').text(Math.round(salePrice-(salePrice*data.discount/100)).toFixed(0));
-        $('.switch-active input').prop('checked', data.active);
+        status.prop('checked', data.active);
         $('#discount').text(data.discount);
         $('#addedBy').text(data.addedBy.email);
         $('#color_hex').css('background', data.color.hex);
