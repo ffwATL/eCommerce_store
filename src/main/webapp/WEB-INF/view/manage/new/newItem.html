@@ -154,10 +154,10 @@
     </div>
 </div>
 <div id="size_popup" class="popup">
-    <div class="popup-header"><h3 class="headH3"><span class="headSpan" th:text="#{label.extraNotes.header}">Size edit</span></h3></div>
+    <div class="popup-header"><h3 class="headH3"><span class="headSpan" th:text="#{label.sizeEdit.header}">Size edit</span></h3></div>
     <div class="popup-content">
         <div class="popup-info">
-            <h5 class="popup-h5" th:text="#{label.extraNotes.headInfo}">Enter the brand name then choose a brand logo and write a few words about new brand in the right block. </h5>
+            <h5 class="popup-h5" th:text="#{label.sizeEdit.headInfo}">Enter the brand name then choose a brand logo and write a few words about new brand in the right block. </h5>
         </div>
         <div class="sz-e-container">
             <ul class="sz-e-major list-inline">
@@ -215,7 +215,7 @@
 
             <div class="info not_completed" id="name-block">
                 <h3 th:text="#{new.item.itemName}">Item name</h3>
-                <h5>Enter the item name in EN, RU and UA.</h5>
+                <h5 th:text="#{label.itemName.h5}">Enter the item name in EN, RU and UA.</h5>
                 <img class="info-pic" src="../../../../resources/img/new/item-name.svg" th:src="@{/resources/img/new/item-name.svg}">
             </div>
             <div id="section_0" class="bottom_line">
@@ -250,7 +250,7 @@
             <div id="section_2" class="bottom_line">
                 <div class="info not_completed" id="cb-block">
                     <h3 th:text="#{new.item.colorBrand}">Color & brand</h3>
-                    <h5>Choose item color and brand. If you can't find the color or brand you can add manually by pressing the 'plus' button.</h5>
+                    <h5 th:text="#{label.colorBrand.h5}">Choose item color and brand. If you can't find the color or brand you can add manually by pressing the 'plus' button.</h5>
                     <img class="info-pic" src="../../../../resources/img/new/art-palette.svg" th:src="@{/resources/img/new/art-palette.svg}">
                 </div>
                 <div class="brand-list">
@@ -448,7 +448,7 @@
                 </div>
                 <div class="info not_completed" id="pr-block">
                     <h3 th:text="#{new.item.price}">Price</h3>
-                    <h5>Provide price information about product. Chose another currency to bind prices to the actual currency rate.
+                    <h5 th:text="#{label.priceDiscount.h5}">Provide price information about product. Chose another currency to bind prices to the actual currency rate.
                         Add discount value to make special offer to this item.</h5>
                     <img class="info-pic" src="../../../../resources/img/new/price.svg" th:src="@{/resources/img/new/price.svg}">
                 </div>
@@ -460,7 +460,7 @@
                         <input type="number" step="0.1" min="0" value="0" id="sale_price" class="highlight block height">
                     </li>
                     <li id="discount_li">
-                        <label class="block">Discount, %</label>
+                        <label class="block" th:text="(#{label.discount}+', %')">Discount, %</label>
                         <input type="number" step="1" min="0" value="0" max="99" id="discount" class="highlight block height">
                     </li>
                     <li id="currency">

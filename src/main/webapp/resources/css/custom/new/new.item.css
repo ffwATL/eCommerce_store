@@ -359,7 +359,7 @@ hr.null{
 }
 .jFiler-item-inner .jFiler-item-assets{
     z-index: 1;
-    background: #a6a9b0;
+    background: #3e4248;
 }
 .inline{
     display: inline;
@@ -502,7 +502,7 @@ li.logo{
     border: solid 1px black;
     width: 45px;
     height: 45px;
-    background: white;
+    background-color: #fff;
     margin-left: 580px;
 }
 #brand-logo img{
@@ -543,7 +543,7 @@ li.logo{
     padding: 10px 6px;
 }
 .info h5{
-    max-width: 510px;
+    max-width: 520px;
     text-align: justify;
     font-family: Tahoma, Geneva, sans-serif;
     padding: 5px 0;

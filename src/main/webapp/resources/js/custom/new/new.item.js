@@ -1,6 +1,6 @@
 /*<![CDATA[*/
 $(function(){
-    var magic =/*[[@{context:}]]*/'', editMode = false, lang = $.cookie("app"), text, grName;
+    var magic =/*[[@{context:}]]*/'', editMode = false, lang = $.cookie("app"), text, grName, sizeMap = [];
     if(lang == undefined || lang.length < 2) lang = 'en';
     var locale = getLocale(lang), menClothesPattern = '',
         treeData = [], temporaryGroup = {}, gender = 0, x_buff='', cat, item, group_code = -1, itemGroup_id, sz_edit,
@@ -131,7 +131,8 @@ $(function(){
             dropbtn.append('<input type="number" hidden value="'+t.find('input').val()+'">');
             t.hide();
             checkAllFormsGroup();
-        })
+        });
+        editSizes(item.size, tmp);
     }
     function bindItemNameInput(){
         item_name_en.bind('input propertychange', function(){
@@ -402,7 +403,6 @@ $(function(){
             default:                           return -1;
         }
     }
-    var sizeMap = [];
     function syncSizeInfo(eu){
         var sz_popup= $('#size_popup');
         sz_popup.find('.dropbtn').text(eu);
@@ -617,10 +617,10 @@ $(function(){
             if(text.length > 15) text = text.substring(0,15) + '.';
             $('#color').find('.dropbtn').text(text);
             text =  $('#color_sample');
-            text.css({'background-color':hex.css('background')});
+            text.css({'backgroundColor':hex.css('backgroundColor')});
             text.find('input').val(hex.find('input').val());
             text.data('color', true);
-            checkAllFormsGroup ();
+            checkAllFormsGroup();
         });
     }
     $('#add-cat-popup').popup({
@@ -634,16 +634,20 @@ $(function(){
         closeelement:'.extra_close',
         transition: 'all 0.3s',
         onclose: function(){
-            var b = $('.extra_note'), info = $('#ex-info');
-            if(info.val().length > 0 && !b.hasClass('extra_note_filled')){
-                b.removeClass('extra_note_not_filled');
-                b.addClass('extra_note_filled');
-            }else if (info.val().length < 1 && !b.hasClass('extra_note_not_filled')){
-                b.removeClass('extra_note_filled');
-                b.addClass('extra_note_not_filled');
-            }
+            extraNotesFilled();
         }
     });
+
+    function extraNotesFilled(){
+        var b = $('.extra_note'), info = $('#ex-info');
+        if(info.val().length > 0 && !b.hasClass('extra_note_filled')){
+            b.removeClass('extra_note_not_filled');
+            b.addClass('extra_note_filled');
+        }else if (info.val().length < 1 && !b.hasClass('extra_note_not_filled')){
+            b.removeClass('extra_note_filled');
+            b.addClass('extra_note_not_filled');
+        }
+    }
 
     function fillBrand(data, imageUrl){
         var brandDropdown = $('li#brand').find('.dropdown-content');
@@ -684,7 +688,7 @@ $(function(){
         else if(text == 'Women' || text == 'Женское' || text =='Жіноче') gender = 1;
     }
 
-    function drawCategoryPopup(data, lvl, id, cat){
+    function drawCategoryPopup(data, lvl, id, cat, spec){
         if(data == undefined) return;
         for(var i=0; i< data.length; i++){
             var child = '<input hidden type="number" value="'+i+'">';
@@ -693,8 +697,8 @@ $(function(){
             child = '#lvl-'+data[i].level+i;
             if(editMode) {
                 var ch = $(child);
-                if((data[i].level == 2 && data[i].text == text) || data[i].childCat == cat || data[i].cat == cat) {
-                    if(data[i].level == 4 && data[i].cat == cat && data[i].text == grName || data[i].level != 4)  {
+                if((data[i].level == 2 && data[i].text == text) || data[i].childCat == cat || (data[i].cat == cat || data[i].cat == spec) ) {
+                    if(data[i].level == 4 && (data[i].cat == cat || data[i].cat == spec) && data[i].text == grName || data[i].level != 4)  {
                         if(data[i].level == 4) {
                             setItemGroupTemporary(data[i]);
                             $('#accept_group').click();
@@ -702,26 +706,21 @@ $(function(){
                         ch.addClass('chosen');
                         resolveActiveDependencies(levels[data[i].level], data[i].text, true);
                     }
-                    if(data[i].nodes != undefined) drawCategoryPopup(data[i].nodes, levels[data[i].level+1].level_div.find('ul'),undefined, cat);
+                    if(data[i].nodes != undefined) drawCategoryPopup(data[i].nodes, levels[data[i].level+1].level_div.find('ul'),undefined, cat, spec);
                 } else ch.addClass('cat-blocked');
             }
             $(child).click(function(){
                 var li = $(this), number = li.find('input').val();
                 if(li.hasClass('cat-blocked')) return;
                 li.parent().find('.chosen').removeClass('chosen');
-                if(data[number].level == 2){
-                    resolveGender(data[number].text)
-                }
+                if(data[number].level == 2) resolveGender(data[number].text)
                 li.addClass('chosen');
                 resolveActiveDependencies(levels[data[number].level], data[number].text,data[number].nodes != undefined);
                 if(data[number].nodes == undefined){
-                    if(data[number].level == 4){
-                        console.log('lizzi');
-                        setItemGroupTemporary(data[number]);
-                    }
+                    if(data[number].level == 4)  setItemGroupTemporary(data[number]);
                     return;
                 }
-                drawCategoryPopup(data[number].nodes, levels[data[number].level+1].level_div.find('ul'),undefined, cat);
+                drawCategoryPopup(data[number].nodes, levels[data[number].level+1].level_div.find('ul'),undefined, cat, spec);
             })
         }
     }
@@ -999,13 +998,11 @@ $(function(){
             });
         })
     }
-    function checkForSizeEdit(block,eu, itself){
+    function checkForSizeEdit(block,eu){
         for(var i = 0; i< sizeMap[eu].measurements.length; i++){
             var t;
             if(i < 3) t = block.find('.sz-e-fields li:eq('+i+')');
-            else if(i < 5) {
-                t = block.find('.sz-e-fields-ex li:eq(0)');
-            }
+            else if(i < 5) t = block.find('.sz-e-fields-ex li:eq(0)');
             else break;
             t = t.find('input');
             checkMeasurementInput(t);
@@ -1091,7 +1088,6 @@ $(function(){
     });
 
     function editModeGetItemInfo(id){
-        console.log('id='+id);
         $.ajax({
             url: magic + "../../manage/ajax/get/item/single",
             beforeSend: function (xhr) {
@@ -1101,6 +1097,7 @@ $(function(){
             type: "POST",
             success: function(result){
                 console.log(result);
+                item = result;
                 fillItemsInfo(result);
             },
             error: function(result){
@@ -1114,16 +1111,48 @@ $(function(){
         item_name_ru.val(item.itemName.locale_ru);
         item_name_en.val(item.itemName.locale_en);
         item_name_ua.val(item.itemName.locale_ua);
+        files = true; featuresOk = true;
         changeBlockStatus($('#name-block'), true);
-        editColorBrand(item);
-        editPhotos(item.images);
         text = resolveGenderToText(item.gender, locale);
         grName = resolveLocale(item.itemGroup.groupName);
         categoryInit(item.itemGroup.cat);
-
-        $('.cat-blocked').click(function(){
-            $(this).preventDefault();
-        })
+        editColorBrand(item);
+        editPhotos(item.images);
+        extractFeatures(item.description);
+        editExtraNotes(item.extraNotes);
+        sale_price_input.val(item.salePrice/100);
+        origin_price_input.val(item.originPrice/100);
+        $('#discount').val(item.discount);
+        $('#save').prop('disabled', false);
+    }
+    function extractFeatures(features){
+        var en = features.locale_en.split('|'),
+            ru = features.locale_ru.split('|'),
+            ua = features.locale_ua.split('|');
+        editFeatures(en, ru, ua);
+    }
+    function editExtraNotes(extraNotes){
+        if(extraNotes != undefined && extraNotes.length > 0){
+            x_buff = extraNotes;
+            $('#extraNotes_popup').find('textarea').val(extraNotes);
+            extraNotesFilled();
+        }
+    }
+    function editFeatures(en, ru, ua){
+        var ul = $('.item_description'), block = $('#ds-block'),
+            holder = ul.parent().find('.feature_holder'),
+            lastEq = holder.find('ul').length;
+        for(var i=0; i< en.length; i++){
+            holder.append('<ul class="list-inline feature_preview">' +
+                '<li><input type="text" class="height val f-en" value="'+en[i]+'" spellcheck="false"></li>' +
+                '<li class="marg"><input type="text" class="height val f-ru" value="'+ru[i]+'" spellcheck="false"></li>' +
+                '<li class="marg"><input type="text" class="height val f-ua" value="'+ua[i]+'" spellcheck="false"></li>' +
+                '<li><button class="remove_row"></button></li></ul>');
+            checkFeatureInputLength(holder.find('input.val'), block);
+            ul = holder.find('ul:eq('+lastEq+')');
+            removeRowClick(ul.find('button.remove_row'), block);
+        }
+        changeBlockStatus(block, true);
     }
     function editColorBrand(item){
         var element = $('#brnd').find('.dropbtn');
@@ -1144,9 +1173,9 @@ $(function(){
         for(var i=0; i< images.length;i++){
             files.push({
                 name: images[i].substring(images[i].lastIndexOf('/')+1),
-                url: magic + '../..'+images[i],
+                url: magic + '../..' + images[i],
                 type: 'image/jpg',
-                file: magic+'../..'+images[i],
+                file: magic+'../..' + images[i],
                 size: ''
             });
         }
@@ -1154,9 +1183,27 @@ $(function(){
         photoInit(files);
         changeBlockStatus($('#ph-block'), true);
     }
+    function editSizes(sizes){
+        for(var i=0; i<sizes.length; i++){
+            var fields = [], eu = resolveLocale(sizes[i].eu_size.name), size,
+                s = '.'+transliterate(eu.replace(/\s/g, ''));
+            for(var k = 0; k< sizes[i].measurements.length; k++){
+                fields.push({
+                    id: sizes[i].measurements[k].id,
+                    name: sizes[i].measurements[k].name,
+                    value: sizes[i].measurements[k].value
+                });
+            }
+            size = {quantity: sizes[i].quantity, measurements: fields, eu_size: {id: sizes[i].eu_size.id}};
+            addSizePreview(size, eu, makeFieldString(fields));
+            processNewSize(size, eu);
+            $(s).hide();
+        }
+        changeBlockStatus($('#sz-block'), true)
+    }
 
     function categoryInit(cat){
-        console.log('cat='+cat);
+        var spec = undefined;
         $.ajax({
             url: magic + "../../manage/ajax/get/item/options/clothes",
             contentType: 'application/json',
@@ -1168,8 +1215,8 @@ $(function(){
             success: function(result){
                 treeData = createTreeData(result.itemGroup.child, 'items');
                 setTimeout(function(){
-                    console.log(treeData);
-                    drawCategoryPopup(treeData,$('#level-2').find('ul'),[3,4], cat);
+                    if(cat == 'WAIST') {spec = cat; cat = 'BOTTOM';}
+                    drawCategoryPopup(treeData,$('#level-2').find('ul'),[3,4], cat, spec);
                 },50);
                 fillColor(result.colorList);
                 fillBrand(result.brandList, result.brandImgUrl);
