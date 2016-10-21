@@ -229,7 +229,7 @@ $(function(){
         '<td><div class="sale-price"><div class="sale '+cl+'"><span class="price">'+item.salePrice/100+'</span><span class="currency"> ₴</span></div>' +
         f+'</div>' +
         '<td class="dropdown1"><button class="dropbtn">'+locale.options+'</button><div class="dropdown-content"><a class="expressEdit" href="#">'+locale.expressEdit+'</a>' +
-        '<a href="#">'+locale.add_to_group+'</a></div></td></tr>')
+        '<a href="#">'+locale.add_to_group+'</a><a href="'+magic+'../../manage/new/item?edit=true&id='+item.id+'">Full edit</a></div></td></tr>')
         }
         if(arr.length == 0 && !notFound){
         b.append('<tr class="notFound"><td colspan="10" ><img style="text-align: center" class="notFoundImg" src="'+magic+'../../resources/img/sad.jpg">'+locale.no_results_found+'</td></tr>');

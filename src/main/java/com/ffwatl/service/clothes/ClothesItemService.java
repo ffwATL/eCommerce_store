@@ -2,8 +2,9 @@ package com.ffwatl.service.clothes;
 
 
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
+import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
 
-import java.io.IOException;
+import java.util.Optional;
 
 public interface ClothesItemService {
 
@@ -11,5 +12,5 @@ public interface ClothesItemService {
 
     void removeById(long id);
 
-    void save(ClothesItem item, String email) throws IOException;
+    void save (Optional<ClothesItemPresenter> optional, String email);
 }

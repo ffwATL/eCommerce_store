@@ -3,24 +3,21 @@ package com.ffwatl.service.clothes;
 import com.ffwatl.dao.clothes.ClothesItemDao;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.manage.entities.items.clothes.size.Size;
+import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.service.items.ColorService;
 import com.ffwatl.service.items.EuroSizeService;
 import com.ffwatl.service.users.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class ClothesItemServiceImpl implements ClothesItemService{
-
-    private static final Logger logger = LogManager.getLogger();
 
     @Autowired
     private ClothesItemDao clothesItemDao;
@@ -49,18 +46,41 @@ public class ClothesItemServiceImpl implements ClothesItemService{
 
     @Override
     @Transactional
-    public void save(ClothesItem item, String email) throws IOException {
-        item.setAddedBy(userService.findByEmail(email));
-        item.setColor(colorService.findById(item.getColor().getId()));
-        item.setItemGroup(itemGroupService.findById(item.getItemGroup().getId()));
-        item.setBrand(brandService.findById(item.getBrand().getId()));
-        for (Size s: item.getSize()){
-            s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
-        }
-        item.setImportDate(new Date());
-        item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
-        clothesItemDao.save(item);
+    public void save(Optional<ClothesItemPresenter> optional, String email){
+        if(!optional.isPresent()) throw new IllegalArgumentException("Items data is empty :(");
+        clothesItemDao.save(presenter2Item(optional.get(), email));
     }
 
-
+    private ClothesItem presenter2Item(ClothesItemPresenter presenter, String email){
+        ClothesItem item;
+        if(!presenter.isEdit()) {
+            item = new ClothesItem();
+            item.setImportDate(new Date());
+            item.setAddedBy(userService.findByEmail(email));
+        }
+        else{
+            item = findById(presenter.getId());
+            item.setSize(presenter.getSize());
+        }
+        for(Size s: presenter.getSize()){
+            s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
+        }
+        item.setSize(presenter.getSize());
+        item.setItemGroup(itemGroupService.findById(presenter.getItemGroup().getId()));
+        item.setColor(colorService.findById(presenter.getColor().getId()));
+        item.setBrand(brandService.findById(presenter.getBrand().getId()));
+        item.setQuantity(presenter.getQuantity());
+        item.setId(presenter.getId());
+        item.setIsActive(presenter.isActive());
+        item.setGender(presenter.getGender());
+        item.setDiscount(presenter.getDiscount());
+        item.setExtraNotes(presenter.getExtraNotes());
+        item.setDescription(presenter.getDescription());
+        item.setItemName(presenter.getItemName());
+        item.setSalePrice(presenter.getSalePrice());
+        item.setOriginPrice(presenter.getOriginPrice());
+        item.setCurrency(presenter.getCurrency());
+        item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
+        return item;
+    }
 }

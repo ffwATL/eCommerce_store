@@ -3,6 +3,7 @@ package com.ffwatl.dao.clothes;
 
 import com.ffwatl.manage.entities.items.CommonCategory;
 import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
+import com.ffwatl.manage.entities.items.clothes.size.Size;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,11 @@ public class EuroSizeDaoImpl implements EuroSizeDao{
     @Override
     public void save(EuroSize eu) {
         em.persist(eu);
+    }
+
+    @Override
+    public void removeSizeById(long id) {
+        em.remove(findById(id));
     }
 
     @Override

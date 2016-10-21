@@ -175,8 +175,8 @@ public class GetController {
     private List<ItemCatalog> fillItemCatalog(List<Item> items){
         List<ItemCatalog> itemCatalogList = new ArrayList<>(items.size());
         for(Item i: items){
-            ItemCatalog wrapper = new ItemCatalog(i, settings.getPhotoUrl());
-            itemCatalogList.add(wrapper);
+            ItemCatalog catalog = new ItemCatalog(i, settings.getPhotoUrl());
+            itemCatalogList.add(catalog);
         }
         return itemCatalogList;
     }

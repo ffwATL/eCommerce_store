@@ -1,53 +1,65 @@
 package com.ffwatl.manage.presenters.items;
 
 
+import com.ffwatl.manage.entities.currency.Currency;
 import com.ffwatl.manage.entities.group.Gender;
 import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.entities.i18n.I18n;
 import com.ffwatl.manage.entities.items.color.Color;
 import com.ffwatl.manage.presenters.users.UserGenPresenter;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ItemPresenter {
-
+    /*These parameters used for a common cases*/
     private long id;
-
     private I18n itemName;
-
     private int quantity;
-
     private int originPrice;
-
     private int salePrice;
-
     private int discount;
-
     private boolean active;
-
     private Color color;
-
     private Gender gender;
-
     private ItemGroup itemGroup;
-
-    private List<String> images;
-
-    private List<String> thumbs;
-
-    private UserGenPresenter addedBy;
-
     private I18n description;
-
     private String extraNotes;
+    private Currency currency;
+
+    /*These parameters used in item 'edit' mode*/
+    private int[] removedImgs;
+    private long[] oldSizes;
+    private boolean edit;
+
+    /*These parameters send only to UI*/
+    private List<ItemImage> images;
+    private List<ItemImage> thumbs;
+    private UserGenPresenter addedBy;
 
 
     public long getId() {
         return id;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public long[] getOldSizes() {
+        return oldSizes;
+    }
+
     public Gender getGender() {
         return gender;
+    }
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public int[] getRemovedImgs() {
+        return removedImgs;
     }
 
     public String getExtraNotes() {
@@ -94,16 +106,20 @@ public class ItemPresenter {
         return itemGroup;
     }
 
-    public List<String> getImages() {
+    public List<ItemImage> getImages() {
         return images;
     }
 
-    public List<String> getThumbs() {
+    public List<ItemImage> getThumbs() {
         return thumbs;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public void setItemName(I18n itemName) {
@@ -112,6 +128,10 @@ public class ItemPresenter {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setOldSizes(long[] oldSizes) {
+        this.oldSizes = oldSizes;
     }
 
     public void setOriginPrice(int originPrice) {
@@ -138,11 +158,11 @@ public class ItemPresenter {
         this.itemGroup = itemGroup;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(List<ItemImage> images) {
         this.images = images;
     }
 
-    public void setThumbs(List<String> thumbs) {
+    public void setThumbs(List<ItemImage> thumbs) {
         this.thumbs = thumbs;
     }
 
@@ -162,6 +182,15 @@ public class ItemPresenter {
         this.gender = gender;
     }
 
+    public void setRemovedImgs(int[] removedImgs) {
+        this.removedImgs = removedImgs;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
+
+
     @Override
     public String toString() {
         return "ItemPresenter{" +
@@ -173,12 +202,17 @@ public class ItemPresenter {
                 ", discount=" + discount +
                 ", active=" + active +
                 ", color=" + color +
+                ", gender=" + gender +
                 ", itemGroup=" + itemGroup +
+                ", description=" + description +
+                ", extraNotes='" + extraNotes + '\'' +
+                ", currency=" + currency +
+                ", removedImgs=" + Arrays.toString(removedImgs) +
+                ", oldSizes=" + Arrays.toString(oldSizes) +
+                ", edit=" + edit +
                 ", images=" + images +
                 ", thumbs=" + thumbs +
                 ", addedBy=" + addedBy +
-                ", description=" + description +
-                ", extraNotes='" + extraNotes + '\'' +
                 '}';
     }
 }

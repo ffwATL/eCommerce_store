@@ -2,9 +2,10 @@ package com.ffwatl.manage.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.manage.entities.items.brand.Brand;
-import com.ffwatl.manage.entities.items.clothes.ClothesItem;
+import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesItemService;
+import com.ffwatl.service.items.SizeService;
 import com.ffwatl.util.Settings;
 import com.ffwatl.util.WebUtil;
 import org.apache.logging.log4j.LogManager;
@@ -23,17 +24,22 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class AddNewItemController {
 
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private SizeService sizeService;
     @Autowired
     private ClothesItemService clothesItemService;
     @Autowired
@@ -60,22 +66,35 @@ public class AddNewItemController {
 
     @RequestMapping(value = "/manage/new/item/clothes", method = RequestMethod.POST)
     public String addClothesItem(@RequestParam("files[]") List<MultipartFile> file, HttpServletRequest request,
-                                                 ModelMap model, @RequestParam String item) throws IOException {
-        ClothesItem clothesItem;
+                                 ModelMap model, @RequestParam String item) throws IOException {
+        ClothesItemPresenter clothesItem;
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String dir;
         try {
-            clothesItem = new ObjectMapper().readValue(item, ClothesItem.class);
-            if(clothesItem == null) {
-                logger.error("NullPointer");
-                throw new NullPointerException();
+            clothesItem = new ObjectMapper().readValue(item, ClothesItemPresenter.class);
+            clothesItemService.save(Optional.of(clothesItem), email);
+            dir = settings.getPhotoDir() + "item_" + clothesItem.getId();
+            if(clothesItem.isEdit()) {
+                for(int id: clothesItem.getRemovedImgs()){
+                    deleteImagesByEnds(dir,id+"s.jpg");
+                    deleteImagesByEnds(dir,id+"m.jpg");
+                    deleteImagesByEnds(dir,id+"l.jpg");
+                    deleteImagesByEnds(dir,id+"xl.jpg");
+                }
             }
-            clothesItemService.save(clothesItem, SecurityContextHolder.getContext().getAuthentication().getName());
-            proceedImages(settings.getPhotoDir() + "item_" + clothesItem.getId(), file);
-            logger.info("clothes item saved: " + clothesItem);
+            proceedImages(dir, file, clothesItem.isEdit());
+            if(clothesItem.isEdit()) {
+                sizeService.removeById(clothesItem.getOldSizes());
+                logger.info("Item with id = " + clothesItem.getId() + " was UPDATED by user: " + email);
+            }
+            else logger.info("New item was ADDED by user: " + email + ", item name: " +
+                    clothesItem.getItemName().getLocale_en()+", id = "+clothesItem.getId());
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            model.addAttribute("isError", true);
+            /*logger.error(e.getMessage());*/
+            throw e;
+            /*model.addAttribute("isError", true);
             model.addAttribute("errorMessage", e.getMessage());
-            return "manage/new/result";
+            return "manage/new/result";*/
         }
         Cookie[] cookies = request.getCookies();
         String cookie = LocaleContextHolder.getLocale().getDisplayLanguage();
@@ -90,28 +109,44 @@ public class AddNewItemController {
         return "manage/new/result";
     }
 
-    private void proceedImages(String dirPath, List<MultipartFile> file) throws IOException {
-        WebUtil.createFolder(dirPath);
-        int count = 1;
+    private void proceedImages(String dirPath, List<MultipartFile> file, boolean editMode) throws IOException {
+        if(!editMode) WebUtil.createFolder(dirPath);
+        int count = finder(dirPath, "xl.jpg").length + 1;
         for(MultipartFile f: file){
             resizeAndSave(f, dirPath, count++);
         }
     }
 
     private void resizeAndSave(MultipartFile f, String dirPath, int count) throws IOException {
-        if (f == null) return;
+        if (f == null || f.getInputStream() == null) return;
+        BufferedImage image = ImageIO.read(f.getInputStream());
+        if(image == null) return;
         try(OutputStream os = new FileOutputStream(new File(dirPath + "\\"+"image"+count+"xl.jpg"))) {
-            ImageIO.write(Scalr.resize(ImageIO.read(f.getInputStream()),
-                    115), "jpeg", new File(dirPath + "\\image" + count + "s.jpg"));
-            ImageIO.write(Scalr.resize(ImageIO.read(f.getInputStream()),
-                    230), "jpeg", new File(dirPath + "\\image"+count+"m.jpg"));
-            ImageIO.write(Scalr.resize(ImageIO.read(f.getInputStream()),
-                    370), "jpeg", new File(dirPath + "\\image"+count+"l.jpg"));
+            ImageIO.write(Scalr.resize(image,115), "jpeg", new File(dirPath + "\\image"+count+"s.jpg"));
+            ImageIO.write(Scalr.resize(image,230), "jpeg", new File(dirPath + "\\image"+count+"m.jpg"));
+            ImageIO.write(Scalr.resize(image,370), "jpeg", new File(dirPath + "\\image"+count+"l.jpg"));
             os.write(f.getBytes());
         }catch (IOException e){
+            logger.error("Error while saving item images");
             logger.error(e.getMessage());
             throw e;
         }
     }
 
+    private void deleteImagesByEnds(String dirPath, String ends){
+        for(File f: finder(dirPath, ends)){
+            String name = f.getName();
+            try {
+                Files.deleteIfExists(f.toPath());
+                logger.trace(name + " DELETED");
+            } catch (IOException e) {
+                logger.error("Error on delete file: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private File[] finder(String dirName, String endName){
+        return new File(dirName).listFiles((dir1, filename) -> {return filename.endsWith(endName);});
+    }
 }

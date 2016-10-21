@@ -14,6 +14,8 @@ public interface EuroSizeService {
 
     void save(List<EuroSize> list);
 
+    void removeSizeById(long id);
+
     List<EuroSize> findAll();
 
     List<EuroSize> findByCat(CommonCategory cat);

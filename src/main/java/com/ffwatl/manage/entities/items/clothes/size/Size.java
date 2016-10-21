@@ -83,6 +83,7 @@ public class Size implements Comparable<Size>{
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", measurements=" + measurements +
+                ", eu_size=" + eu_size +
                 '}';
     }
 
@@ -91,7 +92,7 @@ public class Size implements Comparable<Size>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Size size = (Size) o;
-        return getMeasurements().equals(size.getMeasurements());
+        return getId() == size.getId();
     }
 
     @Override

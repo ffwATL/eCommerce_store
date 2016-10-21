@@ -2,7 +2,7 @@
 $(function(){
     var magic =/*[[@{context:}]]*/'', editMode = false, lang = $.cookie("app"), text, grName, sizeMap = [];
     if(lang == undefined || lang.length < 2) lang = 'en';
-    var locale = getLocale(lang), menClothesPattern = '',
+    var locale = getLocale(lang), menClothesPattern = '', removedImgs = [],
         treeData = [], temporaryGroup = {}, gender = 0, x_buff='', cat, item, group_code = -1, itemGroup_id, sz_edit,
         pattern, featuresOk = false, files=false,item_name_en = $('#item-name-en'), item_name_ru = $('#item-name-ru'),
         item_name_ua =$('#item-name-ua'), quantity_input = $('#add_size_panel_qty_li').find('input'),
@@ -474,14 +474,28 @@ $(function(){
     }
 
     function saveClothesItem (){
-        var size = [];
+        var size = [], itemId = undefined, isActive = false, qty = 0, oldSizes=[];
         for(var key in sizeMap){
             if(sizeMap.hasOwnProperty(key)){
+                qty += sizeMap[key].quantity;
                 size.push(sizeMap[key]);
             }
         }
+        if(editMode) {
+            itemId = item.id;
+            isActive = item.active;
+            for (var i=0; i<item.size.length; i++){
+                oldSizes.push(item.size[i].id);
+            }
+        }
         item = {
+            id: itemId,
+            active: isActive,
+            edit: editMode,
+            removedImgs: removedImgs,
             gender: gender,
+            oldSizes: oldSizes,
+            quantity: qty,
             itemName: {
                 locale_en: item_name_en.val(),
                 locale_ru: item_name_ru.val(),
@@ -498,7 +512,6 @@ $(function(){
                 id: itemGroup_id
             },
             discount: $('input#discount').val(),
-            quantity: Object.keys(sizeMap).length,
             color: {id: $('#color_sample').find('input').val()},
             originPrice: parseInt(origin_price_input.val()*100),
             salePrice: parseInt(sale_price_input.val()*100),
@@ -507,7 +520,7 @@ $(function(){
             },
             size: size
         };
-        console.log(JSON.stringify(item));
+        console.log((item));
         $('#item').val(JSON.stringify(item));
         $('#sub').click();
     }
@@ -581,6 +594,9 @@ $(function(){
             onEmpty: function(){
                 changePhotoBlockStatus(false)
             },
+            onRemove: function(index){
+                removedImgs.push(index[0].jfiler_id+1)
+            },
             addMore: true
         });
     }
@@ -588,7 +604,7 @@ $(function(){
     function changePhotoBlockStatus(cond){
         files = cond;
         changeBlockStatus($('#ph-block'), files);
-        checkForSaveButton();
+        unlock(save_button,checkForSaveButton());
     }
     function checkPriceInput(){
         return (sale_price_input.val() > 0) && (origin_price_input.val() > 0)
@@ -1117,11 +1133,12 @@ $(function(){
         grName = resolveLocale(item.itemGroup.groupName);
         categoryInit(item.itemGroup.cat);
         editColorBrand(item);
-        editPhotos(item.images);
+        editPhotos(item.thumbs);
         extractFeatures(item.description);
         editExtraNotes(item.extraNotes);
         sale_price_input.val(item.salePrice/100);
         origin_price_input.val(item.originPrice/100);
+        changeBlockStatus($('#pr-block'), true);
         $('#discount').val(item.discount);
         $('#save').prop('disabled', false);
     }
@@ -1172,11 +1189,11 @@ $(function(){
         var files=[];
         for(var i=0; i< images.length;i++){
             files.push({
-                name: images[i].substring(images[i].lastIndexOf('/')+1),
-                url: magic + '../..' + images[i],
+                name: images[i].url.substring(images[i].url.lastIndexOf('/')+1),
+                url: magic + '../..' + images[i].url,
                 type: 'image/jpg',
-                file: magic+'../..' + images[i],
-                size: ''
+                file: magic+'../..' + images[i].url,
+                size:  images[i].size
             });
         }
         console.log(files);
@@ -1189,7 +1206,6 @@ $(function(){
                 s = '.'+transliterate(eu.replace(/\s/g, ''));
             for(var k = 0; k< sizes[i].measurements.length; k++){
                 fields.push({
-                    id: sizes[i].measurements[k].id,
                     name: sizes[i].measurements[k].name,
                     value: sizes[i].measurements[k].value
                 });
@@ -1233,7 +1249,6 @@ $(function(){
             editMode = true;
             editModeGetItemInfo(getURLParameter('id'));
         }else {
-            console.log('edit=false');
             photoInit([]);
             categoryInit('');
         }
@@ -1246,11 +1261,9 @@ $(function(){
         quantity_input.bind('input propertychange', function(){
             checkIntegerInput(quantity_input);
         });
-
         $('.main-content .dropbtn').click(function(e){
             $(this).parent().find('.dropdown-content').toggle(150);
         });
-
     }
     init_0();
 });

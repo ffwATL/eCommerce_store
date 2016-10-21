@@ -5,14 +5,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.dao.items.ClothesItemRepository;
 import com.ffwatl.dao.items.ItemRepository;
-import com.ffwatl.manage.filter.grid_filter.ClothesGridFilter;
-import com.ffwatl.manage.filter.grid_filter.ItemGridFilter;
 import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.entities.items.CommonCategory;
 import com.ffwatl.manage.entities.items.Item;
+import com.ffwatl.manage.filter.grid_filter.ClothesGridFilter;
+import com.ffwatl.manage.filter.grid_filter.ItemGridFilter;
 import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
 import com.ffwatl.manage.presenters.options.ClothesOptionsPresenter;
 import com.ffwatl.service.clothes.BrandService;
+import com.ffwatl.service.clothes.ClothesItemService;
 import com.ffwatl.service.clothes.ClothesPaginationService;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.service.items.ColorService;
@@ -55,6 +56,8 @@ public class SpecificationTest {
 
     @Autowired
     private ItemGroupService itemGroupService;
+    @Autowired
+    private ClothesItemService clothesItemService;
 
     @Autowired
     private BrandService brandService;

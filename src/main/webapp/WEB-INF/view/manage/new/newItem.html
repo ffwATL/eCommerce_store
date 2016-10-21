@@ -296,6 +296,8 @@
                     <form action="/manage/new/item/clothes" th:action="@{/manage/new/item/clothes(${_csrf.parameterName}=${_csrf.token})}" method="post" enctype="multipart/form-data" id="img">
                         <input type="file" name="files[]" id="filer_input" multiple="multiple">
                         <input id="item" hidden name="item">
+                        <input id="editMode" hidden name="edit" value="false">
+                        <input id="removedImg" hidden name="removed" value="''">
                         <input hidden type="submit" id="sub">
                     </form>
                     <div id="upload_wrapper"></div>

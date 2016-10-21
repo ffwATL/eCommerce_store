@@ -133,14 +133,13 @@ $(function(){
         $('#tab-2').find('p.info').text(data.brand.name);
         $('#brand_logo').find('img').attr('src',magic+'../..'+data.brandImgUrl+data.brand.name.toLowerCase().replace(/\s/g,"_")+'/logo.jpg');
         $('p.aboutBrand').text(resolveLocale(data.brand.description));
-        console.log(data.extraNotes);
         $('#tab-3').find('p').text(data.extraNotes);
         $('.productId li:eq(1)').text(data.id);
         resolveItemDescription(resolveLocale(data.description));
         sizeBlockRoutine(data, code);
         sizeBlockOnClick($('.size_block').find('.sizeSelect_ul'),$('#inStock'), code);
-        for(i = 0; i<data.images.length; i++){
-            var url = magic+'../..'+data.images[i];
+        for(var i = 0; i<data.images.length; i++){
+            var url = magic+'../..'+data.images[i].url;
             sp.append('<a href="'+url+'"><img src="'+url+'"></a>')
         }
     }

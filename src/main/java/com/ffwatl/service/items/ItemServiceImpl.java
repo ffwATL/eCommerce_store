@@ -7,6 +7,7 @@ import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.manage.entities.items.clothes.size.Size;
 import com.ffwatl.manage.entities.users.User;
 import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
+import com.ffwatl.manage.presenters.items.ItemImage;
 import com.ffwatl.manage.presenters.items.ItemPresenter;
 import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
 import com.ffwatl.manage.presenters.users.UserGenPresenter;
@@ -171,11 +172,15 @@ public class ItemServiceImpl implements ItemService{
         return presenter;
     }
 
-    private List<String> urlImages(String directory, String end, String url) {
-        List<String> textFiles = new ArrayList<>();
+    private List<ItemImage> urlImages(String directory, String end, String url) {
+        List<ItemImage> textFiles = new ArrayList<>();
         for (File file : new File(directory).listFiles()) {
             if (file.getName().endsWith(end)) {
-                textFiles.add(url+file.getName());
+                ItemImage image = new ItemImage();
+                image.setSize(file.length());
+                image.setName(file.getName());
+                image.setUrl(url+file.getName());
+                textFiles.add(image);
             }
         }
         return textFiles;

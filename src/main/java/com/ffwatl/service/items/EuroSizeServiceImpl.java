@@ -26,7 +26,6 @@ public class EuroSizeServiceImpl implements EuroSizeService {
     @Transactional
     public void save(EuroSize eu) {
         euroSizeDao.save(eu);
-
     }
 
     @Override
@@ -47,6 +46,11 @@ public class EuroSizeServiceImpl implements EuroSizeService {
     public void save(List<EuroSize> list) {
         if(list == null || list.size() < 1) return;
         list.forEach(this::save);
+    }
+
+    @Override
+    public void removeSizeById(long id) {
+        if(id > 0) euroSizeDao.removeSizeById(id);
     }
 
     @Override

@@ -14,6 +14,8 @@ public interface EuroSizeDao {
 
     void save(EuroSize eu);
 
+    void removeSizeById(long id);
+
     List<EuroSize> findAll();
 
     List<EuroSize> findAllUsed();
