@@ -164,7 +164,7 @@ public class ItemServiceImpl implements ItemService{
         presenter.setColor(item.getColor());
         presenter.setItemName(item.getItemName());
         presenter.setQuantity(item.getQuantity());
-        presenter.setImages(urlImages(photoDir, "xl.jpg", url));
+        presenter.setImages(urlImages(photoDir, "xl_.jpg", url));
         presenter.setThumbs(urlImages(photoDir, "s.jpg", url));
         presenter.setDescription(item.getDescription());
         presenter.setExtraNotes(item.getExtraNotes());

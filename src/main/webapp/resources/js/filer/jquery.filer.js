@@ -843,7 +843,6 @@
                                             .length - 2)) + "-" + t) + '">');
                                     input.appendTo(p);
                                 }
-
                                 if (val && $.isArray(val)) {
                                     val = JSON.stringify(val);
                                     input.val(val);
@@ -852,7 +851,6 @@
                             callback = function(el, id) {
                                 var item = f._itFl[id],
                                     val = [];
-
                                 if (item.file._choosed || item.file._appended || item.uploaded) {
                                     f._itFr.push(item);
 

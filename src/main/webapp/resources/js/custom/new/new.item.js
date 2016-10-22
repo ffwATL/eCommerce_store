@@ -477,7 +477,7 @@ $(function(){
         var size = [], itemId = undefined, isActive = false, qty = 0, oldSizes=[];
         for(var key in sizeMap){
             if(sizeMap.hasOwnProperty(key)){
-                qty += sizeMap[key].quantity;
+                qty += parseInt(sizeMap[key].quantity);
                 size.push(sizeMap[key]);
             }
         }
@@ -595,7 +595,7 @@ $(function(){
                 changePhotoBlockStatus(false)
             },
             onRemove: function(index){
-                removedImgs.push(index[0].jfiler_id+1)
+                if(editMode) removedImgs.push(parseInt($(this)[0].files[index[0].jfiler_id].name.charAt(5)));
             },
             addMore: true
         });

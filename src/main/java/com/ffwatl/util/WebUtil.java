@@ -79,10 +79,36 @@ public final class WebUtil {
         return list;
     }
 
+    public static void deleteImagesByEnds(String dirPath, String ends){
+        for(File f: finder(dirPath, ends)){
+            String name = f.getName();
+            try {
+                Files.deleteIfExists(f.toPath());
+                logger.trace(name + " DELETED");
+            } catch (IOException e) {
+                logger.error("Error on delete file: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void createFolder(String dirPath) throws IOException {
         File file = new File(dirPath);
         if(file.exists()){
             FileUtils.cleanDirectory(file);
         } else Files.createDirectory(Paths.get(dirPath).toAbsolutePath());
+    }
+
+    public static void rearrangeImages(String dirName, String... ends){
+        for(String end: ends){
+            int count = 1;
+            for(File f: finder(dirName, end)){
+                f.renameTo(new File(dirName+"\\image"+(count++)+end));
+            }
+        }
+    }
+
+    public static File[] finder(String dirName, String endName){
+        return new File(dirName).listFiles((dir1, filename) -> {return filename.endsWith(endName);});
     }
 }

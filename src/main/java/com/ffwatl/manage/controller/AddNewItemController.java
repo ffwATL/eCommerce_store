@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +43,8 @@ public class AddNewItemController {
     private ClothesItemService clothesItemService;
     @Autowired
     private Settings settings;
+
+    private static final String[] ENDS = new String[]{"s.jpg","m.jpg","l.jpg","xl_.jpg"};
 
 
     private static final Logger logger = LogManager.getLogger("com.ffwatl.manage.controller.AddNewItemController");
@@ -76,11 +77,12 @@ public class AddNewItemController {
             dir = settings.getPhotoDir() + "item_" + clothesItem.getId();
             if(clothesItem.isEdit()) {
                 for(int id: clothesItem.getRemovedImgs()){
-                    deleteImagesByEnds(dir,id+"s.jpg");
-                    deleteImagesByEnds(dir,id+"m.jpg");
-                    deleteImagesByEnds(dir,id+"l.jpg");
-                    deleteImagesByEnds(dir,id+"xl.jpg");
+                    WebUtil.deleteImagesByEnds(dir, id + "s.jpg");
+                    WebUtil.deleteImagesByEnds(dir, id + "m.jpg");
+                    WebUtil.deleteImagesByEnds(dir, id + "l.jpg");
+                    WebUtil.deleteImagesByEnds(dir, id + "xl_.jpg");
                 }
+                WebUtil.rearrangeImages(dir, ENDS);
             }
             proceedImages(dir, file, clothesItem.isEdit());
             if(clothesItem.isEdit()) {
@@ -111,7 +113,7 @@ public class AddNewItemController {
 
     private void proceedImages(String dirPath, List<MultipartFile> file, boolean editMode) throws IOException {
         if(!editMode) WebUtil.createFolder(dirPath);
-        int count = finder(dirPath, "xl.jpg").length + 1;
+        int count = WebUtil.finder(dirPath, "xl_.jpg").length + 1;
         for(MultipartFile f: file){
             resizeAndSave(f, dirPath, count++);
         }
@@ -121,7 +123,7 @@ public class AddNewItemController {
         if (f == null || f.getInputStream() == null) return;
         BufferedImage image = ImageIO.read(f.getInputStream());
         if(image == null) return;
-        try(OutputStream os = new FileOutputStream(new File(dirPath + "\\"+"image"+count+"xl.jpg"))) {
+        try(OutputStream os = new FileOutputStream(new File(dirPath + "\\"+"image"+count+"xl_.jpg"))) {
             ImageIO.write(Scalr.resize(image,115), "jpeg", new File(dirPath + "\\image"+count+"s.jpg"));
             ImageIO.write(Scalr.resize(image,230), "jpeg", new File(dirPath + "\\image"+count+"m.jpg"));
             ImageIO.write(Scalr.resize(image,370), "jpeg", new File(dirPath + "\\image"+count+"l.jpg"));
@@ -131,22 +133,5 @@ public class AddNewItemController {
             logger.error(e.getMessage());
             throw e;
         }
-    }
-
-    private void deleteImagesByEnds(String dirPath, String ends){
-        for(File f: finder(dirPath, ends)){
-            String name = f.getName();
-            try {
-                Files.deleteIfExists(f.toPath());
-                logger.trace(name + " DELETED");
-            } catch (IOException e) {
-                logger.error("Error on delete file: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private File[] finder(String dirName, String endName){
-        return new File(dirName).listFiles((dir1, filename) -> {return filename.endsWith(endName);});
     }
 }
