@@ -30,46 +30,48 @@
     <title th:text="#{index.title}">Index</title>
 </head>
 <body>
-<div th:replace="template :: header" class="header col-lg-12 text-center">
-    <input type="search" placeholder="Search" class="form-control">
-</div>
-<div class="custom_jumbo col-lg-12 text-center ">
-    <div class="col-lg-12"><p class="text-center" th:text="(#{index.welcome} + ${user}+'!')">Welcome ffw_ATL!</p></div>
-    <div class="col-lg-12" id="menu">
-        <div class="col-lg-12 button-menu">
-            <a th:href="@{/manage/overview/all}"><button id="view-items" th:text="#{index.button.view_items}">View Items</button></a>
-            <button id="sell-item" th:text="#{index.button.sell_item}">Sell Item</button>
-            <a th:href="@{/manage/new/item}"><button id="add-item" th:text="#{index.button.new_item}">Add Item</button></a>
-            <button id="return-item" th:text="#{index.button.return_item}">Return Item</button>
-        </div>
-        <div class="col-lg-12 button-menu">
-            <button id="profile" th:text="#{index.button.profile}">Profile</button>
-            <button id="users" th:text="#{index.button.users}">Users</button>
-            <button id="settings" th:text="#{index.button.settings}">Settings</button>
-            <button id="statistic" th:text="#{index.button.statistic}">Statistic</button>
-        </div>
+<div class="content-wrapper">
+    <div th:replace="template :: header" class="header col-lg-12 text-center">
+        <input type="search" placeholder="Search" class="form-control">
     </div>
-</div>
-<div class="col-lg-12"><br><br></div>
-<div class="content col-lg-4 graph">
-    <div class="chartist ">
-        <div class="ct-chart cbar"></div>
-    </div>
-    <p class="col-lg-12 text-info lbl" th:text="#{index.graph.in_out_money}">Income / outcome money</p>
-</div>
-<div class="content col-lg-4 graph">
-    <div class="chartist ">
-        <div id="css_animation" class="ct-chart cline"></div>
-    </div>
-    <p class="col-lg-12 text-info lbl" th:text="#{index.graph.sold_earn}">Sold / earn</p>
-</div>
-<div class="content col-lg-4">
-    <div class="chart col-lg-12">
-        <div class="pie-chart" data-set='[["Chinos", 2], ["Shorts",2], ["T-Shirts",8],["Jeans",1]]'
-             data-colors="#BCCFED,#3B6CC6,#3043AC, #4D8DF1">
+    <div class="custom_jumbo col-lg-12 text-center ">
+        <div class="col-lg-12"><p class="text-center" th:text="(#{index.welcome} + ${user}+'!')">Welcome ffw_ATL!</p></div>
+        <div class="col-lg-12" id="menu">
+            <div class="col-lg-12 button-menu">
+                <a th:href="@{/manage/overview/all}"><button id="view-items" th:text="#{index.button.view_items}">View Items</button></a>
+                <button id="sell-item" th:text="#{index.button.sell_item}">Sell Item</button>
+                <a th:href="@{/manage/new/item}"><button id="add-item" th:text="#{index.button.new_item}">Add Item</button></a>
+                <button id="return-item" th:text="#{index.button.return_item}">Return Item</button>
+            </div>
+            <div class="col-lg-12 button-menu">
+                <button id="profile" th:text="#{index.button.profile}">Profile</button>
+                <button id="users" th:text="#{index.button.users}">Users</button>
+                <button id="settings" th:text="#{index.button.settings}">Settings</button>
+                <button id="statistic" th:text="#{index.button.statistic}">Statistic</button>
+            </div>
         </div>
     </div>
-    <p class="col-lg-12 text-info lbl ch" th:text="#{index.graph.bestsellers}">Best sellers</p>
+    <div class="col-lg-12"><br><br></div>
+    <div class="content col-lg-4 graph">
+        <div class="chartist ">
+            <div class="ct-chart cbar"></div>
+        </div>
+        <p class="col-lg-12 text-info lbl" th:text="#{index.graph.in_out_money}">Income / outcome money</p>
+    </div>
+    <div class="content col-lg-4 graph">
+        <div class="chartist ">
+            <div id="css_animation" class="ct-chart cline"></div>
+        </div>
+        <p class="col-lg-12 text-info lbl" th:text="#{index.graph.sold_earn}">Sold / earn</p>
+    </div>
+    <div class="content col-lg-4">
+        <div class="chart col-lg-12">
+            <div class="pie-chart" data-set='[["Chinos", 2], ["Shorts",2], ["T-Shirts",8],["Jeans",1]]'
+                 data-colors="#BCCFED,#3B6CC6,#3043AC, #4D8DF1">
+            </div>
+        </div>
+        <p class="col-lg-12 text-info lbl ch" th:text="#{index.graph.bestsellers}">Best sellers</p>
+    </div>
 </div>
 <footer th:replace="template :: footer" class="col-lg-12 panel-footer">Footer</footer>
 </body>

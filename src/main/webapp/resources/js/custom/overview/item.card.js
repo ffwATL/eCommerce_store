@@ -84,6 +84,7 @@ $(function(){
         }
     }
     function changeItemStatus(item){
+        console.log(item);
         $.ajax({
             url: magic + "../../manage/ajax/update/item/status",
             beforeSend: function (xhr) {
@@ -117,7 +118,7 @@ $(function(){
             sp = $('.sp-wrap'),
             status = $('.switch-active input');
         status.click(function(){
-            changeItemStatus({id:data.id, isActive:$(this).checked})
+            changeItemStatus({id:data.id, isActive: this.checked})
         });
         if(data.discount > 0) {
             $('.sale').css('color','#cc6e81');
