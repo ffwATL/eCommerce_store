@@ -35,7 +35,6 @@ html, body {
 }
 .header{
     height: 45px;
-    background-color: #272B30;
     padding: 5px;
 }
 .header input{
@@ -136,17 +135,19 @@ label{
 .button-lowPriority:hover{
     background-image: -webkit-linear-gradient(top,#e7e7e7 0,#e7e7e7 100%);
 }
-.plus, .button-typical ,button.sp-choose, .button-success{
-    background-color: #272B30;
-    border: solid .1em #272B30;
+.plus, .button-typical ,button.sp-choose, .button-success, .header, .list-items .dropbtn, .left-side button.status{
+    background-color: #111111;
+}
+.plus, .button-typical ,button.sp-choose, .button-success,.list-items .dropbtn, .left-side button.status{
+    border: solid .1em #111111;
 }
 .button-typical ,button.sp-choose, .button-success{
     color: white;
 }
 .button-typical:hover, button.sp-choose:hover, .plus:hover, .button-typical:disabled, .button-typical:disabled:hover, .plus:disabled:hover,
 .button-success:hover{
-    border: solid .1em #3e4248;
-    background-color: #3e4248;
+    border: solid .1em #2d2d2d;
+    background-color: #2d2d2d;
 }
 .button-typical:disabled, .button-typical:disabled:hover, .plus:disabled:hover{
     cursor: not-allowed;
@@ -206,7 +207,7 @@ ul.block{
 #locale button.lang-dropbtn{
     min-width: 50px;
     width: 50px;
-    background-color: #272B30;
+    background-color: #111111;
     color: white;
 }
 #locale .dropdown-content{
@@ -214,11 +215,11 @@ ul.block{
     width: 50px;
 }
 #locale button.lang-dropbtn:hover, #locale button.lang-dropbtn:focus{
-    background-color: #41464c;
+    background-color: #2d2d2d;
 }
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus, .left-side button.price:focus, {
-    background: #5F6B72;
+    background: #2d2d2d;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -414,7 +415,7 @@ input:checked + .slider:before {
 }
 .forTabs .active, .forTabs LI.active:hover {
     border-bottom: none;
-    border-top: solid #272B30 .18em;
+    border-top: solid #111111 .18em;
     border-right: solid #e6e8ef .09em;
     border-left: solid #e6e8ef .09em;
 }

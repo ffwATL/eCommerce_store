@@ -11,6 +11,7 @@ import com.ffwatl.manage.entities.items.Item;
 import com.ffwatl.manage.filter.grid_filter.ClothesGridFilter;
 import com.ffwatl.manage.filter.grid_filter.ItemGridFilter;
 import com.ffwatl.manage.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
 import com.ffwatl.manage.presenters.options.ClothesOptionsPresenter;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.clothes.ClothesItemService;
@@ -32,9 +33,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Rollback(value = true)
@@ -128,6 +132,52 @@ public class SpecificationTest {
     @Ignore
     public void imageReadTest(){
         System.err.println("********" + itemService.findItemPresenterById(5));
+    }
+
+    public Optional<List<ClothesItemPresenter>> importItemsFromJsonUTF8(@NotNull File file) throws IOException {
+        if(!file.exists() || !file.getName().endsWith(".json")) throw new IllegalArgumentException("Wrong input file");
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF8"))){
+            char[] buf = new char[(int) file.length()];
+            in.read(buf);
+            String json = new String(buf);
+            ObjectMapper mapper = new ObjectMapper();
+            return Optional.of(mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(
+                    List.class, ClothesItemPresenter.class)));
+        }catch (Exception e){
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    public void exportItemsToJsonUTF8(@NotNull File output){
+        List<ClothesItemPresenter> items = clothesItemService.findAll().get();
+        try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(output), "UTF-8")){
+            writer.write(new ObjectMapper().writeValueAsString(items));
+            writer.flush();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void readItemsToJson() throws IOException {
+        File file = new File("items_export.json");
+        if(!file.exists() || !file.getName().endsWith(".json")) throw new IllegalArgumentException("Wrong input file");
+        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF8"));
+        char[] buf = new char[(int) file.length()];
+        in.read(buf);
+        String json = new String(buf);
+        ObjectMapper mapper = new ObjectMapper();
+        List<ClothesItemPresenter> items = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(
+                List.class, ClothesItemPresenter.class));
+        System.err.println(items);
+       /* List<ClothesItemPresenter> items = clothesItemService.findAll().get();
+        try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("items_export.json"), "UTF-8")){
+            writer.write(new ObjectMapper().writeValueAsString(items));
+            writer.flush();
+        }catch (IOException e){
+            e.printStackTrace();
+        }*/
     }
 
     @Test

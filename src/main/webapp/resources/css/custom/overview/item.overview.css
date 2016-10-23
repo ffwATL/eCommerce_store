@@ -495,9 +495,6 @@ thead{
 }
 
 /* Dropdown Button */
-.list-items .dropbtn, .left-side button.status{
-    background-color: #37474f;
-}
 .list-items .dropbtn{
     margin-top: 25px;
 }

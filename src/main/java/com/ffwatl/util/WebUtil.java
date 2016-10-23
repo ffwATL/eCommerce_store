@@ -1,20 +1,21 @@
 package com.ffwatl.util;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.manage.entities.i18n.I18n;
+import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sfm.csv.CsvParser;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.validation.constraints.NotNull;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Utility class for different routine work to simplify developer's life.
@@ -77,6 +78,42 @@ public final class WebUtil {
             logger.error(e.getMessage());
         }
         return list;
+    }
+
+    /**
+     * Converts clothes items from UTF8 JSON file to POJO and returns a List of ClothesItemPresenter;
+     * @param file JSON file with clothes items data. File should have the following structure:
+     *             [
+     *                  {clothesItemPresenter object 1},
+     *                  {clothesItemPresenter object 2}
+     *             ]
+     * @return Optional object with List<ClothesItemPresenter> inside
+     * @throws IOException
+     */
+    public static Optional<List<ClothesItemPresenter>> importItemsFromJsonUTF8(@NotNull File file) throws IOException {
+        if(!file.exists() || !file.getName().endsWith(".json")) throw new IllegalArgumentException("Wrong input file");
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF8"))){
+            char[] buf = new char[(int) file.length()];
+            in.read(buf);
+            String json = new String(buf);
+            ObjectMapper mapper = new ObjectMapper();
+            return Optional.of(mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(
+                    List.class, ClothesItemPresenter.class)));
+        }catch (Exception e){
+            logger.error("Error on import items from JSON in UTF8. " + e.getCause().getMessage());
+            throw e;
+        }
+    }
+
+    public static void exportItemsToJsonUTF8(@NotNull File output, @NotNull Optional<List<ClothesItemPresenter>> items)
+            throws IOException {
+        try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(output), "UTF-8")){
+            if(items.isPresent()) writer.write(new ObjectMapper().writeValueAsString(items.get()));
+            writer.flush();
+        }catch (IOException e){
+            logger.error("Error on export items to JSON in UTF8. " + e.getCause().getMessage());
+            throw e;
+        }
     }
 
     public static void deleteImagesByEnds(String dirPath, String ends){

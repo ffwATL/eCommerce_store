@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClothesItemServiceImpl implements ClothesItemService{
@@ -36,6 +39,14 @@ public class ClothesItemServiceImpl implements ClothesItemService{
     @Override
     public ClothesItem findById(long id) {
         return clothesItemDao.findById(id);
+    }
+
+    @Override
+    public Optional<List<ClothesItemPresenter>> findAll() {
+        List<ClothesItemPresenter> list = new ArrayList<>();
+        List<ClothesItem> clothesItemList = clothesItemDao.findAll();
+        list.addAll(clothesItemList.stream().map(ClothesItemPresenter::new).collect(Collectors.toList()));
+        return Optional.of(list);
     }
 
     @Override

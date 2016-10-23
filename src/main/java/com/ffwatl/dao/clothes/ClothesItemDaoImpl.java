@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
+@SuppressWarnings("JpaQlInspection")
 @Repository
 public class ClothesItemDaoImpl implements ClothesItemDao{
 
@@ -16,6 +18,11 @@ public class ClothesItemDaoImpl implements ClothesItemDao{
     @Override
     public ClothesItem findById(long id) {
         return em.find(ClothesItem.class, id);
+    }
+
+    @Override
+    public List<ClothesItem> findAll() {
+        return em.createQuery("SELECT i FROM ClothesItem i", ClothesItem.class).getResultList();
     }
 
     @Override

@@ -2,19 +2,36 @@ package com.ffwatl.manage.presenters.items;
 
 
 import com.ffwatl.manage.entities.items.brand.Brand;
+import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.manage.entities.items.clothes.size.Size;
+import com.ffwatl.manage.presenters.users.UserGenPresenter;
 
 import java.util.List;
 
 public class ClothesItemPresenter extends ItemPresenter{
 
     private Brand brand;
-
     private String brandImgUrl;
-
     private List<Size> size;
 
     public ClothesItemPresenter(){}
+
+    public ClothesItemPresenter(ClothesItem item){
+        setItemName(item.getItemName());
+        setQuantity(item.getQuantity());
+        setColor(item.getColor());
+        setSalePrice(item.getSalePrice());
+        setOriginPrice(item.getOriginPrice());
+        setDiscount(item.getDiscount());
+        setItemGroup(item.getItemGroup());
+        setActive(item.isActive());
+        UserGenPresenter user = new UserGenPresenter();
+        user.setEmail(item.getAddedBy().getEmail());
+        setAddedBy(user);
+        setDescription(item.getDescription());
+        setExtraNotes(item.getExtraNotes());
+        setGender(item.getGender());
+    }
 
     public ClothesItemPresenter(ItemPresenter presenter){
         setItemName(presenter.getItemName());
