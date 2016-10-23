@@ -693,10 +693,11 @@ $(function(){
     })(this));
     function recalcItemThumbMargin(){
         var items = currentTab.find('.items'), thumbWidth=items.find('.thumbnail').first().width(),
-            marg= (items.width() - thumbWidth*4)/3 - 2.5;
+            marg= (items.width() - thumbWidth*4)/3 - 2.7;
         if(marg > 0) {
             items.find('li').css('margin-left',parseInt(marg)+'px');
             items.find('li:nth-child(1)').css('margin-left','0px');
+            items.find('li:nth-child(5n)').css('margin-left','0px');
         }
     }
     function recalcTabsWidth(){

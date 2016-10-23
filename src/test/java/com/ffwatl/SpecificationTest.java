@@ -1,6 +1,31 @@
 package com.ffwatl;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.validation.constraints.NotNull;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.dao.items.ClothesItemRepository;
@@ -22,26 +47,10 @@ import com.ffwatl.service.items.EuroSizeService;
 import com.ffwatl.service.items.ItemPaginationServiceImpl;
 import com.ffwatl.service.items.ItemService;
 import com.ffwatl.util.Settings;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.validation.constraints.NotNull;
-import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import com.ffwatl.util.WebUtil;
 
 @Component
-@Rollback(value = true)
+@Rollback(value = false)
 @ContextConfiguration({"/spring/application-config.xml", "/spring/spring-security.xml" })
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -158,8 +167,14 @@ public class SpecificationTest {
             e.printStackTrace();
         }
     }
+    @Test
+    @Ignore
+    public void importItems() throws IOException {
+        clothesItemService.save(WebUtil.importItemsFromJsonUTF8(new File("items.json")));
+    }
 
     @Test
+    @Ignore
     public void readItemsToJson() throws IOException {
         File file = new File("items_export.json");
         if(!file.exists() || !file.getName().endsWith(".json")) throw new IllegalArgumentException("Wrong input file");

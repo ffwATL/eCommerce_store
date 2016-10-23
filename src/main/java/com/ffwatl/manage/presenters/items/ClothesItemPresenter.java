@@ -1,12 +1,12 @@
 package com.ffwatl.manage.presenters.items;
 
 
+import java.util.List;
+
 import com.ffwatl.manage.entities.items.brand.Brand;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.manage.entities.items.clothes.size.Size;
 import com.ffwatl.manage.presenters.users.UserGenPresenter;
-
-import java.util.List;
 
 public class ClothesItemPresenter extends ItemPresenter{
 
@@ -17,6 +17,7 @@ public class ClothesItemPresenter extends ItemPresenter{
     public ClothesItemPresenter(){}
 
     public ClothesItemPresenter(ClothesItem item){
+        setId(item.getId());
         setItemName(item.getItemName());
         setQuantity(item.getQuantity());
         setColor(item.getColor());
@@ -31,6 +32,7 @@ public class ClothesItemPresenter extends ItemPresenter{
         setDescription(item.getDescription());
         setExtraNotes(item.getExtraNotes());
         setGender(item.getGender());
+        setImportDate(item.getImportDate());
     }
 
     public ClothesItemPresenter(ItemPresenter presenter){
@@ -49,6 +51,7 @@ public class ClothesItemPresenter extends ItemPresenter{
         setDescription(presenter.getDescription());
         setExtraNotes(presenter.getExtraNotes());
         setGender(presenter.getGender());
+        setImportDate(presenter.getImportDate());
     }
 
     public String getBrandImgUrl() {

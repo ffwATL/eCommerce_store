@@ -1,15 +1,16 @@
 package com.ffwatl.manage.presenters.items;
 
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import com.ffwatl.manage.entities.currency.Currency;
 import com.ffwatl.manage.entities.group.Gender;
 import com.ffwatl.manage.entities.group.ItemGroup;
 import com.ffwatl.manage.entities.i18n.I18n;
 import com.ffwatl.manage.entities.items.color.Color;
 import com.ffwatl.manage.presenters.users.UserGenPresenter;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class ItemPresenter {
     /*These parameters used for a common cases*/
@@ -36,10 +37,15 @@ public class ItemPresenter {
     private List<ItemImage> images;
     private List<ItemImage> thumbs;
     private UserGenPresenter addedBy;
+    private Date importDate;
 
 
     public long getId() {
         return id;
+    }
+
+    public Date getImportDate() {
+        return importDate;
     }
 
     public Currency getCurrency() {
@@ -172,6 +178,10 @@ public class ItemPresenter {
 
     public void setDescription(I18n description) {
         this.description = description;
+    }
+
+    public void setImportDate(Date importDate) {
+        this.importDate = importDate;
     }
 
     public void setExtraNotes(String extraNotes) {
