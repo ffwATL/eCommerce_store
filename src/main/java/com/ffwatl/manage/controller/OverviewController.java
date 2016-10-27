@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
+@SessionAttributes("loggedInUser")
 public class OverviewController {
 
     private static final Logger logger = LogManager.getLogger("com.ffwatl.manage.controller.OverviewController");

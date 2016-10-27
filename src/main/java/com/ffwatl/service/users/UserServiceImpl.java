@@ -4,6 +4,7 @@ package com.ffwatl.service.users;
 import com.ffwatl.dao.users.UserRepository;
 import com.ffwatl.manage.filter.grid_filter.GridFilter;
 import com.ffwatl.manage.entities.users.User;
+import com.ffwatl.manage.presenters.users.UserGenPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
@@ -46,6 +47,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserName(String name) {
         return userRepository.findByUserName(name);
+    }
+
+    @Override
+    public UserGenPresenter findUserByEmail(String email){
+        User u = findByEmail(email);
+        if(u == null) throw new IllegalArgumentException("User with that email not found ;(");
+        UserGenPresenter presenter = new UserGenPresenter();
+        presenter.setEmail(u.getEmail());
+        presenter.setState(u.getState());
+        presenter.setPhotoUrl(u.getPhotoUrl());
+        presenter.setFirstName(u.getFirstName());
+        presenter.setLastName(u.getLastName());
+        presenter.setId(u.getId());
+        presenter.setCreateDt(u.getCreateDt());
+        return presenter;
     }
 
     @Override

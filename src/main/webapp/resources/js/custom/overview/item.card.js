@@ -80,7 +80,7 @@ $(function(){
     function resolveCatTree(options){
         var menu = $(options.menu);
         for(var i = 0; i< options.lvl; i++){
-            menu.append('<li>'+options.data[i]+'</li>');
+            menu.append('<li class="cat-tree-'+(i+2)+'">'+options.data[i]+'</li>');
         }
     }
     function changeItemStatus(item){

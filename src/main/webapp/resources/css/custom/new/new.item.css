@@ -409,15 +409,15 @@ select.height, #size_popup .dropbtn,#item_group_4 .dropbtn{
     border: solid #8b8b8b .12em;
     color: #8b8b8b;
 }
-menu, ul.item_description textarea, .input-block textarea{
+.add-cat-popup menu, ul.item_description textarea, .input-block textarea{
     overflow: hidden;
 }
-menu{
+.add-cat-popup menu{
     background:  linear-gradient(#fff, #ccc);
     box-sizing: border-box; padding: 0; margin: 0;
     box-shadow: inset 0px 0px 2px #333, 0 0 1px #333;
 }
-menu li{
+.add-cat-popup menu li{
     color: transparent;
     height: 50px;
     position: relative;
@@ -428,10 +428,10 @@ menu li{
     margin: 0;
     background: #efefef;
 }
-menu li:before, menu li:after{
+.add-cat-popup menu li:before, .add-cat-popup menu li:after{
     content: '';
 }
-menu li:before{
+.add-cat-popup menu li:before{
     top: 7px;
     width: 37px;
     height: 37px;

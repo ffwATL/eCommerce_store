@@ -19,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@SessionAttributes("loggedInUser")
 public class AddNewItemController {
 
     @Autowired
@@ -52,6 +54,7 @@ public class AddNewItemController {
     @RequestMapping(value = "/manage/new/item", method = RequestMethod.GET)
     public String addNewItem(HttpServletRequest request, ModelMap model,
                              @RequestParam(required = false) String lang){
+
         Cookie[] cookies = request.getCookies();
         String cookie = LocaleContextHolder.getLocale().getDisplayLanguage();
         if(cookies != null){
@@ -71,16 +74,18 @@ public class AddNewItemController {
         ClothesItemPresenter clothesItem;
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         String dir;
+        long id;
         try {
             clothesItem = new ObjectMapper().readValue(item, ClothesItemPresenter.class);
-            clothesItemService.save(Optional.of(clothesItem), email);
-            dir = settings.getPhotoDir() + "item_" + clothesItem.getId();
+            logger.info(clothesItem);
+            id = clothesItemService.save(Optional.of(clothesItem), email);
+            dir = settings.getPhotoDir() + "item_" + id;
             if(clothesItem.isEdit()) {
-                for(int id: clothesItem.getRemovedImgs()){
-                    WebUtil.deleteImagesByEnds(dir, id + "s.jpg");
-                    WebUtil.deleteImagesByEnds(dir, id + "m.jpg");
-                    WebUtil.deleteImagesByEnds(dir, id + "l.jpg");
-                    WebUtil.deleteImagesByEnds(dir, id + "xl_.jpg");
+                for(int i: clothesItem.getRemovedImgs()){
+                    WebUtil.deleteImagesByEnds(dir, i + "s.jpg");
+                    WebUtil.deleteImagesByEnds(dir, i + "m.jpg");
+                    WebUtil.deleteImagesByEnds(dir, i + "l.jpg");
+                    WebUtil.deleteImagesByEnds(dir, i + "xl_.jpg");
                 }
                 WebUtil.rearrangeImages(dir, ENDS);
             }
@@ -90,13 +95,13 @@ public class AddNewItemController {
                 logger.info("Item with id = " + clothesItem.getId() + " was UPDATED by user: " + email);
             }
             else logger.info("New item was ADDED by user: " + email + ", item name: " +
-                    clothesItem.getItemName().getLocale_en()+", id = "+clothesItem.getId());
+                    clothesItem.getItemName().getLocale_en()+", id = "+id);
         } catch (Exception e) {
-            /*logger.error(e.getMessage());*/
-            throw e;
-            /*model.addAttribute("isError", true);
+            logger.error(e.getMessage());
+            /*throw e;*/
+            model.addAttribute("isError", true);
             model.addAttribute("errorMessage", e.getMessage());
-            return "manage/new/result";*/
+            return "manage/new/result";
         }
         Cookie[] cookies = request.getCookies();
         String cookie = LocaleContextHolder.getLocale().getDisplayLanguage();
@@ -105,7 +110,7 @@ public class AddNewItemController {
                 if(c.getName().equals("app")) cookie = c.getValue();
             }
         }
-        model.addAttribute("itemId", clothesItem.getId());
+        model.addAttribute("itemId", id);
         model.addAttribute("isError", false);
         model.addAttribute("itemName", clothesItem.getItemName().getValue(cookie));
         return "manage/new/result";

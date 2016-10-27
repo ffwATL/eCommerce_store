@@ -16,37 +16,40 @@
                 <SizeBasedTriggeringPolicy size="100 KB"/>
                 <TimeBasedTriggeringPolicy interval="2"/>
             </Policies>
-            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} [%t] %-5p %c{2} - %m%n"/>
+            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} %-5p %c{2} - %m%n"/>
         </RollingFile>
         <RollingFile name="addItemAppender" fileName="LOGS\addItem.log" filePattern="LOGS\addItem-%d{MM-dd-yyyy}-%i.log">
             <DefaultRolloverStrategy fileIndex="max" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="2"/>
             </Policies>
-            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} [%t] %-5p %c{2} - %m%n"/>
+            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} %-5p %c{2} - %m%n"/>
         </RollingFile>
         <RollingFile name="loginServiceAppender" fileName="LOGS\loginService.log" filePattern="LOGS\loginService-%d{MM-dd-yyyy}-%i.log">
             <DefaultRolloverStrategy fileIndex="max" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="2"/>
             </Policies>
-            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} [%t] %-5p %c{2} - %m%n"/>
+            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} %-5p %c{2} - %m%n"/>
         </RollingFile>
         <RollingFile name="overviewAll" fileName="LOGS\overviewAll.log" filePattern="LOGS\overviewAll-%d{MM-dd-yyyy}-%i.log">
             <DefaultRolloverStrategy fileIndex="max" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="2"/>
             </Policies>
-            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} [%t] %-5p %c{2} - %m%n"/>
+            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} %-5p %c{2} - %m%n"/>
         </RollingFile>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} [%t] %-5p %c{2} - %m%n"/>
+            <PatternLayout pattern="%d{MM-dd-yy} %d{HH:mm:ss.SSS} %-5p %c{2} - %m%n"/>
         </Console>
     </Appenders>
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="Console"/>
         </Root>
+        <Logger name ="com.ffwatl.thymeleaf.LocaleProcessor" level="trace" additivity="false">
+            <AppenderRef ref="rootFile"/>
+        </Logger>
         <Logger name ="com.ffwatl.manage.controller.IndexController" level="trace" additivity="false">
             <AppenderRef ref="rootFile"/>
         </Logger>

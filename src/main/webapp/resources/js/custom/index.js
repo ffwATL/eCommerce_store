@@ -1,3 +1,4 @@
+/*
 $(function(){
     $('.donut-chart').cssCharts({type:"donut"}).trigger('show-donut-chart');
     $('.pie-chart').cssCharts({type:"pie"}).trigger('show-donut-chart');
@@ -22,7 +23,7 @@ $(function(){
         ]
     };
 
-    /* Set some base options (settings will override the default settings in Chartist.js *see default settings*). We are adding a basic label interpolation function for the xAxis labels. */
+    /!* Set some base options (settings will override the default settings in Chartist.js *see default settings*). We are adding a basic label interpolation function for the xAxis labels. *!/
     var optForSoldEarn = {
         axisX: {
             labelInterpolationFnc: function(value) {
@@ -37,7 +38,7 @@ $(function(){
         ]
     };
 
-    /* Now we can specify multiple responsive settings that will override the base settings based on order and if the media queries match. In this example we are changing the visibility of dots and lines as well as use different label interpolations for space reasons. */
+    /!* Now we can specify multiple responsive settings that will override the base settings based on order and if the media queries match. In this example we are changing the visibility of dots and lines as well as use different label interpolations for space reasons. *!/
     var respOptSoldEarn = [
         ['screen and (min-width: 641px) and (max-width: 1024px)', {
             showPoint: true,
@@ -57,7 +58,7 @@ $(function(){
         }]
     ];
 
-    /* Initialize the chart with the above settings */
+    /!* Initialize the chart with the above settings *!/
     new Chartist.Line('.cline', dataForSoldEarn, optForSoldEarn, respOptSoldEarn);
 
     var dataMoneyIncome = {
@@ -94,4 +95,4 @@ $(function(){
     };
 
     new Chartist.Bar('.cbar', dataMoneyIncome, optForMoneyIncome, respOptSoldEarn);
-});
+});*/

@@ -31,46 +31,114 @@
 </head>
 <body>
 <div class="content-wrapper">
-    <div th:replace="template :: header" class="header col-lg-12 text-center">
-        <input type="search" placeholder="Search" class="form-control">
-    </div>
-    <div class="custom_jumbo col-lg-12 text-center ">
-        <div class="col-lg-12"><p class="text-center" th:text="(#{index.welcome} + ${user}+'!')">Welcome ffw_ATL!</p></div>
-        <div class="col-lg-12" id="menu">
-            <div class="col-lg-12 button-menu">
-                <a th:href="@{/manage/overview/all}"><button id="view-items" th:text="#{index.button.view_items}">View Items</button></a>
-                <button id="sell-item" th:text="#{index.button.sell_item}">Sell Item</button>
-                <a th:href="@{/manage/new/item}"><button id="add-item" th:text="#{index.button.new_item}">Add Item</button></a>
-                <button id="return-item" th:text="#{index.button.return_item}">Return Item</button>
+    <!--Header-->
+    <div th:replace="template :: header" class="header col-lg-12">
+        <div class="menu-container">
+            <div class="menu">
+                <ul class="list-inline head-menu">
+                    <li class="h-profile menu-top-level">
+                        <div class="h-icon">
+                            <img class="h-profile-icon" src="../../resources/img/header/profile-icon.svg">
+                        </div>
+                        <span class="h-profile-name h-info">Mikhail</span>
+                        <ul class="menu-inner profile-menu">
+                            <li><a>My account</a></li>
+                            <li><a th:href="@{/logout}">Sign out</a></li>
+                        </ul>
+                    </li>
+                    <li class="h-shopping-cart menu-top-level">
+                        <div class="h-icon">
+                            <img class="h-cart-icon" src="../../resources/img/header/shopping-cart.svg">
+                            <div class="h-count h-count-cart">5</div>
+                            <div class="h-info inline">
+                                <span class="inline">Your bag </span>
+                                <span class="inline h-cart-total">(₴ 0.0)</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="h-lang menu-top-level">
+                        <button class="h-lang-icon h-uk-lang"></button>
+                        <span class="h-lang-text">ENG</span>
+                        <ul class="menu-inner lang-menu">
+                            <li th:with="url=('?lang=en')">
+                                <a href="#" th:href="@{${url}}">
+                                    <button class="h-lang-icon h-uk-lang"></button>
+                                    <span class="h-lang-text" th:text="#{locale.en}">ENG</span>
+                                </a>
+                            </li>
+                            <li th:with="url=('?lang=ru')">
+                                <a href="#" th:href="@{${url}}">
+                                    <button class="h-lang-icon h-ru-lang"></button>
+                                    <span class="h-lang-text" th:text="#{locale.ru}">RUS</span>
+                                </a>
+                            </li>
+                            <li th:with="url=('?lang=ua')">
+                                <a href="#" th:href="@{${url}}">
+                                    <button class="h-lang-icon h-ua-lang"></button>
+                                    <span class="h-lang-text">UKR</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-            <div class="col-lg-12 button-menu">
-                <button id="profile" th:text="#{index.button.profile}">Profile</button>
-                <button id="users" th:text="#{index.button.users}">Users</button>
-                <button id="settings" th:text="#{index.button.settings}">Settings</button>
-                <button id="statistic" th:text="#{index.button.statistic}">Statistic</button>
+        </div>
+    </div>
+    <!--Navigation menu with logo-->
+    <div class="sub-header" th:replace="template :: sub_header">
+        <div class="menu-container">
+            <div class="logo">FPoint</div>
+            <div class="menu">
+                <ul class="list-inline" style="height: 0">
+                    <li class="menu-top-level">
+                        <div>Catalog</div>
+                        <ul class="menu-inner">
+                            <li><a th:href="@{/manage/overview/all}" th:text="#{index.button.view_items}">Items</a></li>
+                            <li><a th:href="@{/manage/new/item}" th:text="#{index.button.new_item}">Add new item</a></li>
+                            <li>Categories</li>
+                            <li>Brands</li>
+                            <li>Reviews</li>
+                            <li>Information</li>
+                        </ul>
+                    </li>
+                    <li class="menu-top-level">
+                        <div>Sales</div>
+                        <ul class="menu-inner">
+                            <li>Orders</li>
+                            <li>Returns</li>
+                        </ul>
+                    </li>
+                    <li class="menu-top-level">
+                        <div>Customers</div>
+                        <ul class="menu-inner">
+                            <li>Customers</li>
+                            <li>Customer Groups</li>
+                            <li>Banned IP</li>
+                        </ul>
+                    </li>
+                    <li class="menu-top-level">
+                        <span th:text="#{index.button.users}">Marketing</span>
+                        <ul class="menu-inner">
+                            <li>Promo Groups</li>
+                            <li>Promo Codes</li>
+                            <li>Mail</li>
+                        </ul>
+                    </li>
+                </ul>
+                <input class="main-search" type="text">
             </div>
         </div>
     </div>
-    <div class="col-lg-12"><br><br></div>
-    <div class="content col-lg-4 graph">
-        <div class="chartist ">
-            <div class="ct-chart cbar"></div>
+    <div class="custom_jumbo col-lg-12">
+        <div>
+            <menu class="cat-tree">
+                <li class="home">
+                    <a class="homeBefore"></a>
+                    <a class="home-main home-st" th:href="@{/}"></a>
+                </li>
+                <li class="cat-tree-4" th:text="#{label.dashboard}">Dashboard</li>
+            </menu>
         </div>
-        <p class="col-lg-12 text-info lbl" th:text="#{index.graph.in_out_money}">Income / outcome money</p>
-    </div>
-    <div class="content col-lg-4 graph">
-        <div class="chartist ">
-            <div id="css_animation" class="ct-chart cline"></div>
-        </div>
-        <p class="col-lg-12 text-info lbl" th:text="#{index.graph.sold_earn}">Sold / earn</p>
-    </div>
-    <div class="content col-lg-4">
-        <div class="chart col-lg-12">
-            <div class="pie-chart" data-set='[["Chinos", 2], ["Shorts",2], ["T-Shirts",8],["Jeans",1]]'
-                 data-colors="#BCCFED,#3B6CC6,#3043AC, #4D8DF1">
-            </div>
-        </div>
-        <p class="col-lg-12 text-info lbl ch" th:text="#{index.graph.bestsellers}">Best sellers</p>
     </div>
 </div>
 <footer th:replace="template :: footer" class="col-lg-12 panel-footer">Footer</footer>

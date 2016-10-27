@@ -1,15 +1,5 @@
 package com.ffwatl.service.clothes;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ffwatl.dao.clothes.ClothesItemDao;
 import com.ffwatl.manage.entities.items.clothes.ClothesItem;
 import com.ffwatl.manage.entities.items.clothes.size.Size;
@@ -18,6 +8,16 @@ import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.service.items.ColorService;
 import com.ffwatl.service.items.EuroSizeService;
 import com.ffwatl.service.users.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClothesItemServiceImpl implements ClothesItemService{
@@ -57,9 +57,11 @@ public class ClothesItemServiceImpl implements ClothesItemService{
 
     @Override
     @Transactional
-    public void save(Optional<ClothesItemPresenter> optional, String email){
+    public long save(Optional<ClothesItemPresenter> optional, String email){
         if(!optional.isPresent()) throw new IllegalArgumentException("Items data is empty :(");
-        clothesItemDao.save(presenter2Item(optional.get(), email));
+        ClothesItem item = presenter2Item(optional.get(), email);
+        clothesItemDao.save(item);
+        return item.getId();
     }
 
     @Override
@@ -74,8 +76,7 @@ public class ClothesItemServiceImpl implements ClothesItemService{
         ClothesItem item;
         if(!presenter.isEdit()) {
             item = new ClothesItem();
-            /*item.setImportDate(new Date());*/
-            item.setImportDate(presenter.getImportDate());
+            item.setImportDate(new Date());
             item.setAddedBy(userService.findByEmail(email));
         }
         else{

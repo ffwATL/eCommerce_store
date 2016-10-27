@@ -19,20 +19,102 @@
 </head>
 <body>
 <div class="content-wrapper">
+    <!--Header-->
     <div th:replace="template :: header" class="header col-lg-12">
-        <ul class="list-inline" id="logo">
-            <li><a th:href="@{/}"><img src="../../../../resources/img/logo.jpg" th:src="@{/resources/img/logo.jpg}"></a></li>
-        </ul>
-        <ul class="list-inline" id="search">
-            <li><input type="text" placeholder="Search" class="form-control"></li>
-        </ul>
-        <ul id="locale" class="list-inline">
-            <li><a>EN</a></li>
-            <li><a>RU</a></li>
-        </ul>
+        <div class="menu-container">
+            <div class="menu">
+                <ul class="list-inline head-menu">
+                    <li class="h-profile menu-top-level">
+                        <div class="h-icon">
+                            <img class="h-profile-icon" src="../../resources/img/header/profile-icon.svg">
+                        </div>
+                        <span class="h-profile-name h-info">Mikhail</span>
+                        <ul class="menu-inner profile-menu">
+                            <li><a>My account</a></li>
+                            <li><a th:href="@{/logout}">Sign out</a></li>
+                        </ul>
+                    </li>
+                    <li class="h-shopping-cart menu-top-level">
+                        <div class="h-icon">
+                            <img class="h-cart-icon" src="../../resources/img/header/shopping-cart.svg">
+                            <div class="h-count h-count-cart">5</div>
+                            <div class="h-info inline">
+                                <span class="inline">Your bag </span>
+                                <span class="inline h-cart-total">(₴ 0.0)</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="h-lang menu-top-level">
+                        <button class="h-lang-icon h-uk-lang"></button>
+                        <span class="h-lang-text">ENG</span>
+                        <ul class="menu-inner lang-menu">
+                            <li th:with="url=('?lang=en')">
+                                <a href="#" th:href="@{${url}}">
+                                    <button class="h-lang-icon h-uk-lang"></button>
+                                    <span class="h-lang-text" th:text="#{locale.en}">ENG</span>
+                                </a>
+                            </li>
+                            <li th:with="url=('?lang=ru')">
+                                <a href="#" th:href="@{${url}}">
+                                    <button class="h-lang-icon h-ru-lang"></button>
+                                    <span class="h-lang-text" th:text="#{locale.ru}">RUS</span>
+                                </a>
+                            </li>
+                            <li th:with="url=('?lang=ua')">
+                                <a href="#" th:href="@{${url}}">
+                                    <button class="h-lang-icon h-ua-lang"></button>
+                                    <span class="h-lang-text">UKR</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="custom_jumbo col-lg-12 text-center">
-        <p class="head-text">Add new item</p>
+    <!--Navigation menu with logo-->
+    <div class="sub-header" th:replace="template :: sub_header">
+        <div class="menu-container">
+            <div class="logo">FPoint</div>
+            <div class="menu">
+                <ul class="list-inline" style="height: 0">
+                    <li class="menu-top-level">
+                        Items
+                        <ul class="menu-inner">
+                            <li><a th:href="@{/manage/overview/all}" th:text="#{index.button.view_items}">All items</a></li>
+                            <li>Active items</li>
+                            <li>Inactive items</li>
+                            <li>Sale items</li>
+                            <li><a th:href="@{/manage/new/item}" th:text="#{index.button.new_item}">Add new item</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-top-level">Categories
+                        <ul class="menu-inner">
+                            <li>Jeans</li>
+                            <li>Chinos</li>
+                            <li>T-Shirts</li>
+                            <li>Shoes</li>
+                            <li>Shorts</li>
+                        </ul>
+                    </li>
+                    <li class="menu-top-level">Orders</li>
+                    <li class="menu-top-level"><span th:text="#{index.button.users}">Users</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="custom_jumbo col-lg-12">
+        <div>
+            <menu class="cat-tree">
+                <li class="home">
+                    <a class="homeBefore"></a>
+                    <a class="home-main home-st" th:href="@{/}"></a>
+                </li>
+                <li class="cat-tree-1" th:text="#{label.catalog}">Items</li>
+                <li class="cat-tree-2">Add New</li>
+                <li class="cat-tree-4">Success</li>
+            </menu>
+        </div>
     </div>
     <div class="col-lg-12">
         <input hidden type="text" id="isError" th:value="${isError}">

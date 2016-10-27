@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:locale="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8" th:remove="all">
     <title th:remove="all">Template</title>
@@ -9,38 +9,109 @@
 </head>
 <body>
 <div th:fragment="header" class="header col-lg-12 text-center">
-    <ul class="list-inline" id="logo">
-        <li><a th:href="@{/}"><img src="../../resources/img/logo.png" th:src="@{/resources/img/logo.png}"></a></li>
-    </ul>
-    <ul class="list-inline" id="search">
-        <li><input type="text" placeholder="Search" th:placeholder="#{index.search}" class="form-control"></li>
-    </ul>
-    <ul id="locale" class="list-inline">
-        <script>
-            function showLang(e){
-                console.log(e);
-                $(e.srcElement.parentElement).find('.dropdown-content').toggle(150);
-            }
-        </script>
-        <li>
-            <div class="lang">
-                <div class="dropdown">
-                    <button class="dropbtn lang-dropbtn" onclick="showLang(event)">EN</button>
-                    <div class="dropdown-content">
-                        <div th:with="url=('?lang=en')">
-                            <a th:text="#{locale.en}" th:href="@{${url}}">EN</a>
-                        </div>
-                        <div th:with="url=('?lang=ru')">
-                            <a th:text="#{locale.ru}" th:href="@{${url}}">RU</a>
+    <div class="menu-container">
+        <div class="menu">
+            <ul class="list-inline head-menu">
+                <li class="h-profile menu-top-level">
+                    <div class="h-icon">
+                        <img class="h-profile-icon" src="../../resources/img/header/profile-icon.svg" th:src="@{/resources/img/header/profile-icon.svg}">
+                    </div>
+                    <span class="h-profile-name h-info" th:text="${session.loggedInUser.firstName}">Mikhail</span>
+                    <ul class="menu-inner profile-menu">
+                        <li><a th:href="@{/}" th:text="#{label.myAccount}">My account</a></li>
+                        <li><a th:href="@{/logout}" th:text="#{label.signOut}">Sign out</a></li>
+                    </ul>
+                </li>
+                <li class="h-shopping-cart menu-top-level">
+                    <div class="h-icon">
+                        <img class="h-cart-icon" src="../../resources/img/header/shopping-cart.svg" th:src="@{/resources/img/header/shopping-cart.svg}">
+                        <div class="h-count h-count-cart">5</div>
+                        <div class="h-info inline">
+                            <span class="inline">Your bag </span>
+                            <span class="inline h-cart-total">(₴ 0.0)</span>
                         </div>
                     </div>
-                </div>
-            </div>
-        </li>
-        <li>
-            <a th:href="@{/logout}"><img src="../../resources/img/logout.svg" th:src="@{/resources/img/logout.svg}"></a>
-        </li>
-    </ul>
+                </li>
+                <li class="h-lang menu-top-level" >
+                    <div locale:ifLang="en">
+                        <button class="h-lang-icon h-uk-lang"></button>
+                        <span class="h-lang-text" th:text="#{locale.en}">ENG</span>
+                    </div>
+                    <div locale:ifLang="ru">
+                        <button class="h-lang-icon h-ru-lang"></button>
+                        <span class="h-lang-text" th:text="#{locale.ru}">RUS</span>
+                    </div>
+                    <div locale:ifLang="ua">
+                        <button class="h-lang-icon h-ru-lang"></button>
+                        <span class="h-lang-text" th:text="#{locale.ua}">UKR</span>
+                    </div>
+                    <ul class="menu-inner lang-menu">
+                        <li th:with="url=('?lang=en')">
+                            <a href="#" th:href="@{${url}}">
+                                <button class="h-lang-icon h-uk-lang"></button>
+                                <span class="h-lang-text" th:text="#{locale.en}">ENG</span>
+                            </a>
+                        </li>
+                        <li th:with="url=('?lang=ru')">
+                            <a href="#" th:href="@{${url}}">
+                                <button class="h-lang-icon h-ru-lang"></button>
+                                <span class="h-lang-text" th:text="#{locale.ru}">RUS</span>
+                            </a>
+                        </li>
+                        <li th:with="url=('?lang=ua')">
+                            <a href="#" th:href="@{${url}}">
+                                <button class="h-lang-icon h-ua-lang"></button>
+                                <span class="h-lang-text" th:text="#{locale.ua}">UKR</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="sub-header" th:fragment="sub_header" >
+    <div class="menu-container">
+        <div class="logo">FPoint</div>
+        <div class="menu">
+            <ul class="list-inline" style="height: 0">
+                <li class="menu-top-level">
+                    <div th:text="#{label.catalog}">Catalog</div>
+                    <ul class="menu-inner">
+                        <li><a th:href="@{/manage/overview/all}" th:text="#{label.itemList}">Items</a></li>
+                        <li><a th:href="@{/manage/new/item}" th:text="#{index.button.new_item}">Add new item</a></li>
+                        <li th:text="#{label.catalog.categories}">Categories</li>
+                        <li th:text="#{label.catalog.brands}">Brands</li>
+                        <li th:text="#{label.catalog.reviews}">Reviews</li>
+                        <li th:text="#{label.catalog.information}">Information</li>
+                    </ul>
+                </li>
+                <li class="menu-top-level">
+                    <div th:text="#{label.sales}">Sales</div>
+                    <ul class="menu-inner">
+                        <li th:text="#{label.sales.orders}">Orders</li>
+                        <li th:text="#{label.sales.returns}">Returns</li>
+                    </ul>
+                </li>
+                <li class="menu-top-level">
+                    <div th:text="#{label.customers}">Customers</div>
+                    <ul class="menu-inner">
+                        <li th:text="#{label.customers}">Customers</li>
+                        <li th:text="#{label.customers.bannedIp}">Banned IP</li>
+                    </ul>
+                </li>
+                <li class="menu-top-level">
+                    <span th:text="#{label.marketing}">Marketing</span>
+                    <ul class="menu-inner">
+                        <li th:text="#{label.marketing.promoGroups}">Promo Groups</li>
+                        <li th:text="#{label.marketing.promoCodes}">Promo Codes</li>
+                        <li th:text="#{label.marketing.mail}">Mail</li>
+                    </ul>
+                </li>
+            </ul>
+            <input class="main-search" type="text">
+        </div>
+    </div>
 </div>
 
 <footer th:fragment="footer" class="col-lg-12 panel-footer" id="footer" th:text="#{index.footer}">Footer</footer>
