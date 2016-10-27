@@ -210,7 +210,7 @@
                 <ul class="list-inline head-menu">
                     <li class="h-profile menu-top-level">
                         <div class="h-icon">
-                            <img class="h-profile-icon" src="../../resources/img/header/profile-icon.svg">
+                            <img class="h-profile-icon">
                         </div>
                         <span class="h-profile-name h-info">Mikhail</span>
                         <ul class="menu-inner profile-menu">
@@ -220,7 +220,7 @@
                     </li>
                     <li class="h-shopping-cart menu-top-level">
                         <div class="h-icon">
-                            <img class="h-cart-icon" src="../../resources/img/header/shopping-cart.svg">
+                            <img class="h-cart-icon">
                             <div class="h-count h-count-cart">5</div>
                             <div class="h-info inline">
                                 <span class="inline">Your bag </span>
@@ -294,7 +294,7 @@
                     <a class="homeBefore"></a>
                     <a class="home-main home-st" th:href="@{/}"></a>
                 </li>
-                <li class="cat-tree-1" th:text="#{label.catalog}">Items</li>
+                <li class="cat-tree-1"><a th:text="#{label.catalog}" th:href="@{/manage/overview/all}">Items</a></li>
                 <li class="cat-tree-4">Add New</li>
             </menu>
         </div>
