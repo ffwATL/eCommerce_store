@@ -2,7 +2,7 @@ package com.ffwatl.service.items;
 
 
 import com.ffwatl.dao.items.ColorDao;
-import com.ffwatl.manage.entities.items.color.Color;
+import com.ffwatl.admin.entities.items.color.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

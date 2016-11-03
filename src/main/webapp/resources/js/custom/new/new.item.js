@@ -97,7 +97,7 @@ $(function(){
     function getEuroSize(cat){
         console.log(cat);
         $.ajax({
-            url: magic + "../../manage/ajax/get/eurosize/cat",
+            url: magic + "../../admin/ajax/get/eurosize/cat",
             dataType: "",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
@@ -132,7 +132,7 @@ $(function(){
             t.hide();
             checkAllFormsGroup();
         });
-        editSizes(item.size, tmp);
+        if(editMode) editSizes(item.size, tmp);
     }
     function bindItemNameInput(){
         item_name_en.bind('input propertychange', function(){
@@ -807,7 +807,8 @@ $(function(){
      * @param button - .remove_row button from current ul.
      */
     function removeRowClick(button, block){
-        button.click(function(){
+        button.click(function(e){
+            console.log(e);
             var list = $(this).parent().parent();
             list.fadeOut(150);
             setTimeout(function(){
@@ -920,7 +921,7 @@ $(function(){
     }
     function updateColor(color){
         $.ajax({
-            url: magic + "../../manage/ajax/save/color",
+            url: magic + "../../admin/ajax/save/color",
             contentType: 'application/json',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
@@ -980,7 +981,7 @@ $(function(){
         formData.append('file', popup.p.find('#brand_input')[0].files[0]);
         formData.append('b', JSON.stringify(data));
         $.ajax({
-            url: magic + "../../manage/ajax/save/brand",
+            url: magic + "../../admin/ajax/save/brand",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
@@ -1105,7 +1106,7 @@ $(function(){
 
     function editModeGetItemInfo(id){
         $.ajax({
-            url: magic + "../../manage/ajax/get/item/single",
+            url: magic + "../../admin/ajax/get/item/single",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
@@ -1167,9 +1168,12 @@ $(function(){
                 '<li><button class="remove_row"></button></li></ul>');
             checkFeatureInputLength(holder.find('input.val'), block);
             ul = holder.find('ul:eq('+lastEq+')');
+
             removeRowClick(ul.find('button.remove_row'), block);
+            lastEq++;
         }
         changeBlockStatus(block, true);
+
     }
     function editColorBrand(item){
         var element = $('#brnd').find('.dropbtn');
@@ -1221,7 +1225,7 @@ $(function(){
     function categoryInit(cat){
         var spec = undefined;
         $.ajax({
-            url: magic + "../../manage/ajax/get/item/options/clothes",
+            url: magic + "../../admin/ajax/get/item/options/clothes",
             contentType: 'application/json',
             mimeType: 'application/json',
             beforeSend: function (xhr) {

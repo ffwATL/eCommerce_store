@@ -140,7 +140,7 @@
         font-size: 16px;
     }
     .items .thumbnail{
-        width: 180px;
+        width: 182px;
         min-height: 159px;
     }
     .items li{
@@ -252,6 +252,7 @@ ul.items .inner{
     list-style: none;
 }
 .items .thumbnail{
+    border: none;
     margin-bottom: 3px;
     padding: 0;
     border-radius: 2px;
@@ -648,8 +649,9 @@ ul#ex-pr-panel{
     width: 415px;
 }
 .item .thumbnail > img{
-    width: 179px;
-    height: 228px;
+    border-radius: 0;
+    width: 180px;
+    height: 230px;
     margin-left: 0;
     margin-right: 0;
 }

@@ -2,8 +2,8 @@ package com.ffwatl.util;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ffwatl.manage.entities.i18n.I18n;
-import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
+import com.ffwatl.admin.entities.i18n.I18n;
+import com.ffwatl.admin.presenters.items.ClothesItemPresenter;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

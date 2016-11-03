@@ -2,11 +2,11 @@ package com.ffwatl.service.clothes;
 
 
 import com.ffwatl.dao.items.ClothesItemRepository;
-import com.ffwatl.manage.filter.specification.ClothesItemSpecifications;
-import com.ffwatl.manage.filter.grid_filter.GridFilter;
-import com.ffwatl.manage.filter.grid_filter.GridFilterRule;
-import com.ffwatl.manage.entities.items.Item;
-import com.ffwatl.manage.entities.items.clothes.ClothesItem;
+import com.ffwatl.admin.filter.specification.ClothesItemSpecifications;
+import com.ffwatl.admin.filter.grid_filter.GridFilter;
+import com.ffwatl.admin.filter.grid_filter.GridFilterRule;
+import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.clothes.ClothesItem;
 import com.ffwatl.service.PaginationService;
 import com.ffwatl.service.SortProperties;
 import org.springframework.beans.factory.annotation.Autowired;

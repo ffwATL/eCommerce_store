@@ -1,6 +1,6 @@
 package com.ffwatl.util;
 
-import com.ffwatl.manage.entities.i18n.I18n;
+import com.ffwatl.admin.entities.i18n.I18n;
 
 
 

@@ -1,7 +1,7 @@
 package com.ffwatl.dao.items;
 
 
-import com.ffwatl.manage.entities.items.Item;
+import com.ffwatl.admin.entities.items.Item;
 
 import java.util.List;
 

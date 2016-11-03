@@ -1,8 +1,8 @@
 package com.ffwatl.dao.group;
 
 
-import com.ffwatl.manage.entities.group.ItemGroup;
-import com.ffwatl.manage.entities.items.CommonCategory;
+import com.ffwatl.admin.entities.group.ItemGroup;
+import com.ffwatl.admin.entities.items.CommonCategory;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@ $(function(){
         };
     if(lang == undefined || lang.length < 2) lang = 'en';
     locale = getLocale(lang);
-    $('.lang .dropdown-content a').each(function(){
+    $('.lang-menu a').each(function(){
         $(this).attr('href',this.href+'&id='+$('#itemId').val())
     });
 
@@ -20,7 +20,7 @@ $(function(){
     /*Getting item information by requested itemId and managing the whole process on the page*/
     function refreshData(){
         $.ajax({
-            url: magic + "../../manage/ajax/get/item/single",
+            url: magic + "../../admin/ajax/get/item/single",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
@@ -86,7 +86,7 @@ $(function(){
     function changeItemStatus(item){
         console.log(item);
         $.ajax({
-            url: magic + "../../manage/ajax/update/item/status",
+            url: magic + "../../admin/ajax/update/item/status",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },

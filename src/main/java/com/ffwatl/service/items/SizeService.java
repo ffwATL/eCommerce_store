@@ -1,7 +1,7 @@
 package com.ffwatl.service.items;
 
 
-import com.ffwatl.manage.entities.items.clothes.size.Size;
+import com.ffwatl.admin.entities.items.clothes.size.Size;
 
 public interface SizeService {
 

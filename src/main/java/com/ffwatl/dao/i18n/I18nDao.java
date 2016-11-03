@@ -1,6 +1,6 @@
 package com.ffwatl.dao.i18n;
 
-import com.ffwatl.manage.entities.i18n.I18n;
+import com.ffwatl.admin.entities.i18n.I18n;
 
 import java.util.List;
 

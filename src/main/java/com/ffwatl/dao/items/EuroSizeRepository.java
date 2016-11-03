@@ -1,8 +1,8 @@
 package com.ffwatl.dao.items;
 
 
-import com.ffwatl.manage.entities.items.CommonCategory;
-import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
+import com.ffwatl.admin.entities.items.CommonCategory;
+import com.ffwatl.admin.entities.items.clothes.size.EuroSize;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

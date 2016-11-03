@@ -9,13 +9,9 @@
     }
 }
 .content-wrapper{
-    /*min-height: calc(100% - 41px);*/
     height: calc(100% - 41px);
-    /*min-height: 100vh;
-    height: 100vh;*/
 }
 .panel-footer{
-    /*position: absolute;*/
     bottom: 0;
 }
 html {
@@ -39,7 +35,6 @@ html, body {
 .header{
     height: 25px;
     padding: 0 50px;
-    /*padding: 5px;*/
 }
 input.main-search{
     background: url("../../img/search-icon.svg") no-repeat 97% 50%;
@@ -94,7 +89,6 @@ p.head-text{
 }
 .custom_jumbo{
     padding: 20px;
-   /* background: hsla(206,27%,96%,1);*/
 }
 .custom_jumbo p{
     font-size: 21px;
@@ -127,8 +121,7 @@ label{
     height: 29px;
     padding: 1px 5px;
     color: white;
-    background-color: #ff8f16;
-    background-image: -webkit-linear-gradient(top,#fe9a20 0,#ee8024 100%);
+    background: #ff8f16 -webkit-linear-gradient(top, #fe9a20 0, #ee8024 100%);
 }
 .button-warn:hover{
     background: #ff9c32;
@@ -794,19 +787,19 @@ Mobile style's
 }
 /******************************************/
 .cat-tree li:nth-child(1) {
-    z-index: 3000;
+    z-index: 404;
 }
 .cat-tree li:nth-child(2){
-    z-index: 2000;
+    z-index: 403;
 }
 .cat-tree li:nth-child(3){
-    z-index: 1000;
+    z-index: 402;
 }
 .cat-tree li:nth-child(4){
-    z-index: 999;
+    z-index: 401;
 }
 .cat-tree li:nth-child(5){
-    z-index: 998;
+    z-index: 400;
 }
 .cat-tree li.cat-tree-1:before, .cat-tree li.cat-tree-2:before, .cat-tree li.cat-tree-3:before{
     width: 18px;
@@ -881,7 +874,7 @@ a.homeBefore{
 }
 a.home-main{
     position: absolute;
-    z-index: 5000;
+    z-index: 405;
     margin-left: -12px;
     margin-top: -3px;
     color: white;

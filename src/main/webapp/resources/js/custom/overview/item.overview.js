@@ -120,7 +120,7 @@ $(function(){
         recalcTabsWidth();
         fillTempFilter(staticFilter.refineFilter.cat);
         $.ajax({
-            url: magic + "../../manage/ajax/get/item/all",
+            url: magic + "../../admin/ajax/get/item/all",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
@@ -229,7 +229,7 @@ $(function(){
         '<td><div class="sale-price"><div class="sale '+cl+'"><span class="price">'+item.salePrice/100+'</span><span class="currency"> ₴</span></div>' +
         f+'</div>' +
         '<td class="dropdown1"><button class="dropbtn">'+locale.options+'</button><div class="dropdown-content"><a class="expressEdit" href="#">'+locale.expressEdit+'</a>' +
-        '<a href="#">'+locale.add_to_group+'</a><a href="'+magic+'../../manage/new/item?edit=true&id='+item.id+'">Full edit</a></div></td></tr>')
+        '<a href="#">'+locale.add_to_group+'</a><a href="'+magic+'../../admin/new/item?edit=true&id='+item.id+'">Full edit</a></div></td></tr>')
         }
         if(arr.length == 0 && !notFound){
         b.append('<tr class="notFound"><td colspan="10" ><img style="text-align: center" class="notFoundImg" src="'+magic+'../../resources/img/sad.jpg">'+locale.no_results_found+'</td></tr>');
@@ -586,7 +586,7 @@ $(function(){
 
     function getClothesFilters (){
         $.ajax({
-            url: magic + "../../manage/ajax/get/filter/clothes",
+            url: magic + "../../admin/ajax/get/filter/clothes",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
@@ -625,7 +625,7 @@ $(function(){
     }
 
     function escapeRegExp(str) {
-        return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "");
+        return str.replace(/([.*+?^=\/!:${}()|\[\]\\])/g, "");
     }
 
     /*****Link checking filter check box to add or to remove from filter array******/
@@ -635,7 +635,7 @@ $(function(){
                 parent= el.parent(),
                 name = parent.find('label').text().trim(),
                 id = parent.find('.id').val(),
-                listSelector = 'c_'+c+transliterate(name.replace(new RegExp(escapeRegExp(' '), 'g'),''));
+                listSelector = 'c_'+c+transliterate(name.replace(new RegExp(escapeRegExp(' '), 'g'),'')).replace(new RegExp('/','g'),'');
             el.change(function(){
                 var s;
                 if(this.checked) {
@@ -810,7 +810,7 @@ $(function(){
                 };
                 if(this.checked) console.log('activate item with id: '+ id);
                 else console.log('DE activate item with id: '+ id);
-                $.when(sendUpdateSingleItem(options, '../../manage/ajax/update/item/status'), true).then(function(result){
+                $.when(sendUpdateSingleItem(options, '../../admin/ajax/update/item/status'), true).then(function(result){
                     setTimeout(function(){
                         if(currentTab != $('.all')) {
                             console.log('total: ' + staticFilter.filter.totalItems);
@@ -834,7 +834,7 @@ $(function(){
                 color.find('input').val(item.color.id);
                 itemGroupList.find('a').remove();
                 currentItem = i;
-                getExpressEditInfo({cat:item.itemGroup.cat}, "../../manage/ajax/get/expressEditInfo", [itemGroupList,editClass.find('li.color').find('.dropdown-content')]);
+                getExpressEditInfo({cat:item.itemGroup.cat}, "../../admin/ajax/get/expressEditInfo", [itemGroupList,editClass.find('li.color').find('.dropdown-content')]);
                 editClass.find('.id').val(id);
                 editClass.find('img.preview').attr('src',i.find('.thumb img').attr('src'));
                 editClass.find('.origin-price').find('.price').text(origin);
@@ -972,7 +972,7 @@ $(function(){
                     color: {id:editClass.find('li.color input').val()},
                     itemGroup:{id:editClass.find('button.item-group input').val()}
                 }};
-            $.when(sendUpdateSingleItem(options, '../../manage/ajax/update/item/single')).then(function(){
+            $.when(sendUpdateSingleItem(options, '../../admin/ajax/update/item/single')).then(function(){
                 setTimeout(function(){
                     refreshItems();
                 },250);
@@ -1015,7 +1015,7 @@ $(function(){
         });
         console.log(update);
         $.ajax({
-            url: magic + "../../manage/ajax/update/item/multi",
+            url: magic + "../../admin/ajax/update/item/multi",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },

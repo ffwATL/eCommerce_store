@@ -1,9 +1,9 @@
 package com.ffwatl.service.items;
 
 
-import com.ffwatl.manage.entities.items.Item;
-import com.ffwatl.manage.presenters.items.ItemPresenter;
-import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
+import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.presenters.items.ItemPresenter;
+import com.ffwatl.admin.presenters.items.update.ItemUpdatePresenter;
 
 import java.util.List;
 

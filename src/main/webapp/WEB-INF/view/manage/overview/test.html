@@ -4,6 +4,7 @@
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
     <title>Overview</title>
     <link href="../../../../resources/img/favicon.png" th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/png">
+<!--    <link rel="stylesheet" href="code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
     <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/css/bootstrap.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/css/custom/main.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
@@ -13,6 +14,7 @@
     <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
     <link rel="stylesheet" href="../../../../resources/css/custom/overview/item.overview.css" th:href="@{/resources/css/custom/overview/item.overview.css}" type="text/css">
     <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
+    <script rel="script" src="../../../../resources/js/jquery-sortable.js" ></script>
     <script rel="script" src="../../../../resources/js/filer/jquery.filer.js" th:src="@{/resources/js/filer/jquery.filer.js}" ></script>
     <script rel="script" src="../../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/js/jquery.popupoverlay.min.js}"></script>
     <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
@@ -31,12 +33,63 @@
                 openelement: '#brand-plus',
                 closeelement: '.edit_close'
             });
-            ed_popup.popup('show');
+           /* ed_popup.popup('show');*/
             $('.ex-tabs').tabslet();
+            $(".row").sortable({
+                handle: '.ui-state-default'
+            });
 
+          /*  $("#sortable").sortable({cancel:".ui-stuck"});*/
 
         })
     </script>
+    <style>
+        #sortable > div { display: inline-block; }
+        ul.row{
+            margin-top: 25px;
+        }
+        ul.row input[type=text]{
+            height: 16px;
+            font-size: .8em;
+            width: 50px;
+        }
+        ul.row li{
+            cursor: move;
+            padding: 0 15px;
+            border: solid .08em black;
+            margin: 0 10px;
+        }
+        body.dragging, body.dragging * {
+            cursor: move !important;
+        }
+
+        .dragged {
+            position: absolute;
+            opacity: 0.5;
+            z-index: 2000;
+        }
+
+        ul.row li.placeholder {
+            position: relative;
+            /*padding-top: 15px;*/
+            /** More li styles **/
+            background: #e2e2e2;
+            border: none;
+            /*border: solid red .06em;*/
+            width: 82px;
+            height: 22px;
+            margin-bottom: -7px;
+            /*margin-top: -12px;
+            margin-left: -5px;*/
+           /* margin: 0;*/
+        }
+        ul.row li.placeholder::before {
+            position: absolute;
+            background: red;
+            /** Define arrowhead **/
+        }
+
+    </style>
 </head>
 <body>
 <div id="size_popup" class="popup">
@@ -189,19 +242,25 @@
         </div>
     </div>
 </div>
-<ul class="list-inline sz-main">
-    <li class="sz-preview-list">
-        <div class="sz-container">
-            <ul class="list-inline sz-ul">
-                <li class="sz-eu"><span>M</span></li>
-                <li class="sz-ms"><label class="sz-invisible">43-45 / 71-72 / 106-111 / 66-67</label> </li>
-            </ul>
-        </div>
-        <div class="sz-qty-tag">1</div>
-        <div class="sz-remove sz-invisible"></div>
-        <button class="sz-remove-btn sz-invisible"></button>
+<ul class="list-inline">
+    <li class="ui-stuck" id="stuck">
+        <input class="row-header" type="text" value="Stucked">
+    </li>
+    <li>
+        <ul class="list-inline row" id="sortable">
+            <li class="ui-state-default">
+                <input class="row-element" type="text" value="1 first">
+            </li>
+            <li class="ui-state-default">
+                <input class="row-element" type="text" value="2 second">
+            </li>
+            <li class="ui-state-default">
+                <input class="row-element" type="text" value="3 third">
+            </li>
+        </ul>
     </li>
 </ul>
+
 
 </body>
 </html>

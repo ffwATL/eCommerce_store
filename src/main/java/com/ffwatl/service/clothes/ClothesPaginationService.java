@@ -1,8 +1,8 @@
 package com.ffwatl.service.clothes;
 
 
-import com.ffwatl.manage.filter.grid_filter.GridFilter;
-import com.ffwatl.manage.entities.items.clothes.ClothesItem;
+import com.ffwatl.admin.filter.grid_filter.GridFilter;
+import com.ffwatl.admin.entities.items.clothes.ClothesItem;
 import org.springframework.data.domain.Page;
 
 public interface ClothesPaginationService {

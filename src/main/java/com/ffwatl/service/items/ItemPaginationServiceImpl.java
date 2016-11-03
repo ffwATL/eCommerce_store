@@ -2,10 +2,10 @@ package com.ffwatl.service.items;
 
 
 import com.ffwatl.dao.items.ItemRepository;
-import com.ffwatl.manage.filter.grid_filter.GridFilter;
-import com.ffwatl.manage.filter.grid_filter.GridFilterRule;
-import com.ffwatl.manage.filter.specification.ItemSpecification;
-import com.ffwatl.manage.entities.items.Item;
+import com.ffwatl.admin.filter.grid_filter.GridFilter;
+import com.ffwatl.admin.filter.grid_filter.GridFilterRule;
+import com.ffwatl.admin.filter.specification.ItemSpecification;
+import com.ffwatl.admin.entities.items.Item;
 import com.ffwatl.service.PaginationService;
 import com.ffwatl.service.SortProperties;
 

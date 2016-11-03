@@ -2,15 +2,15 @@ package com.ffwatl.service.items;
 
 
 import com.ffwatl.dao.items.ItemDao;
-import com.ffwatl.manage.entities.items.Item;
-import com.ffwatl.manage.entities.items.clothes.ClothesItem;
-import com.ffwatl.manage.entities.items.clothes.size.Size;
-import com.ffwatl.manage.entities.users.User;
-import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
-import com.ffwatl.manage.presenters.items.ItemImage;
-import com.ffwatl.manage.presenters.items.ItemPresenter;
-import com.ffwatl.manage.presenters.items.update.ItemUpdatePresenter;
-import com.ffwatl.manage.presenters.users.UserGenPresenter;
+import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.clothes.ClothesItem;
+import com.ffwatl.admin.entities.items.clothes.size.Size;
+import com.ffwatl.admin.entities.users.User;
+import com.ffwatl.admin.presenters.items.ClothesItemPresenter;
+import com.ffwatl.admin.presenters.items.ItemImage;
+import com.ffwatl.admin.presenters.items.ItemPresenter;
+import com.ffwatl.admin.presenters.items.update.ItemUpdatePresenter;
+import com.ffwatl.admin.presenters.users.UserGenPresenter;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.util.Settings;

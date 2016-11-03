@@ -1,8 +1,8 @@
 package com.ffwatl.service.items;
 
 import com.ffwatl.dao.clothes.EuroSizeDao;
-import com.ffwatl.manage.entities.items.CommonCategory;
-import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
+import com.ffwatl.admin.entities.items.CommonCategory;
+import com.ffwatl.admin.entities.items.clothes.size.EuroSize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

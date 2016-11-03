@@ -1,8 +1,8 @@
 package com.ffwatl.service.clothes;
 
 
-import com.ffwatl.manage.entities.items.clothes.ClothesItem;
-import com.ffwatl.manage.presenters.items.ClothesItemPresenter;
+import com.ffwatl.admin.entities.items.clothes.ClothesItem;
+import com.ffwatl.admin.presenters.items.ClothesItemPresenter;
 
 import java.util.List;
 import java.util.Optional;

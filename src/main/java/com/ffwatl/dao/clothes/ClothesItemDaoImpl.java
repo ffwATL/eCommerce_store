@@ -1,7 +1,7 @@
 package com.ffwatl.dao.clothes;
 
 
-import com.ffwatl.manage.entities.items.clothes.ClothesItem;
+import com.ffwatl.admin.entities.items.clothes.ClothesItem;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
