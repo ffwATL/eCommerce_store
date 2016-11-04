@@ -37,7 +37,7 @@ public class OverviewController {
         List<ItemGroup> result = itemGroupService.findByLvlLazyWithoutChild(1);
         resolveI18n(lang != null ? lang : cookie, result);
         model.addAttribute("globalCategories", result);
-        return "manage/overview/itemOverview";
+        return "admin/overview/itemOverview";
     }
 
     private void resolveI18n(String lang, List<ItemGroup> list){

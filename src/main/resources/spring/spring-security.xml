@@ -14,7 +14,7 @@
 
 	<http auto-config="true">
 		<intercept-url pattern="/" access="permitAll" />
-		<intercept-url pattern="/manage/**" access="hasRole('ADMINISTRATOR') or hasRole('MANAGER')" />
+		<intercept-url pattern="/admin/**" access="hasRole('ADMINISTRATOR') or hasRole('MANAGER')" />
 		<form-login  login-page="/login"
                      username-parameter="username"
                      password-parameter="password"

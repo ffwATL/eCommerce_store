@@ -18,6 +18,6 @@ public class ItemCardController {
     @RequestMapping(value = "/admin/overview/item")
     public String showItemCardAdmin(ModelMap model, @RequestParam long id){
         model.addAttribute("itemId", id);
-        return "/manage/overview/itemCard";
+        return "/admin/overview/itemCard";
     }
 }
