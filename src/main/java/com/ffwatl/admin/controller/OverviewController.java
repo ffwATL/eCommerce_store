@@ -25,7 +25,7 @@ public class OverviewController {
     private ItemGroupService itemGroupService;
 
 
-    @RequestMapping(value = "/manage/overview/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/overview/all", method = RequestMethod.GET)
     public String getAllItems(HttpServletRequest request, ModelMap model, @RequestParam(required = false) String lang){
         Cookie[] cookies = request.getCookies();
         String cookie = LocaleContextHolder.getLocale().getDisplayLanguage();

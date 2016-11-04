@@ -33,7 +33,7 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping("/manage")
+    @RequestMapping("/admin")
     public String helloWorld(ModelMap model){
         model.addAttribute("user", getPrincipal());
         return "index";

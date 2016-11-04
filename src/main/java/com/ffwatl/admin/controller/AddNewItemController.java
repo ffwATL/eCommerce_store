@@ -51,7 +51,7 @@ public class AddNewItemController {
 
     private static final Logger logger = LogManager.getLogger("com.ffwatl.admin.controller.AddNewItemController");
 
-    @RequestMapping(value = "/manage/new/item", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/new/item", method = RequestMethod.GET)
     public String addNewItem(HttpServletRequest request, ModelMap model,
                              @RequestParam(required = false) String lang){
 
@@ -65,10 +65,10 @@ public class AddNewItemController {
         List<Brand> brandList = brandService.findAll();
         model.addAttribute("brandList", brandList);
         model.addAttribute("lang", lang != null ? lang : cookie);
-        return "manage/new/newItem";
+        return "admin/new/newItem";
     }
 
-    @RequestMapping(value = "/manage/new/item/clothes", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/new/item/clothes", method = RequestMethod.POST)
     public String addClothesItem(@RequestParam("files[]") List<MultipartFile> file, HttpServletRequest request,
                                  ModelMap model, @RequestParam String item) throws IOException {
         ClothesItemPresenter clothesItem;
@@ -101,7 +101,7 @@ public class AddNewItemController {
             /*throw e;*/
             model.addAttribute("isError", true);
             model.addAttribute("errorMessage", e.getMessage());
-            return "manage/new/result";
+            return "admin/new/result";
         }
         Cookie[] cookies = request.getCookies();
         String cookie = LocaleContextHolder.getLocale().getDisplayLanguage();
@@ -113,7 +113,7 @@ public class AddNewItemController {
         model.addAttribute("itemId", id);
         model.addAttribute("isError", false);
         model.addAttribute("itemName", clothesItem.getItemName().getValue(cookie));
-        return "manage/new/result";
+        return "admin/new/result";
     }
 
     private void proceedImages(String dirPath, List<MultipartFile> file, boolean editMode) throws IOException {

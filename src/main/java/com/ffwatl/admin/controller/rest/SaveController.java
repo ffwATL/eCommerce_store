@@ -27,7 +27,7 @@ import java.util.List;
  * Rest controller, serves all the ajax requests that starts with '/admin/ajax/save' and have 'POST' type.
  */
 @RestController
-@RequestMapping(value = "/manage/ajax/save", method = RequestMethod.POST)
+@RequestMapping(value = "/admin/ajax/save", method = RequestMethod.POST)
 public class SaveController {
 
     private static final Logger logger = LogManager.getLogger();

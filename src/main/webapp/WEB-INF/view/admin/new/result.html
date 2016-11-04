@@ -81,11 +81,11 @@
                     <li class="menu-top-level">
                         Items
                         <ul class="menu-inner">
-                            <li><a th:href="@{/manage/overview/all}" th:text="#{index.button.view_items}">All items</a></li>
+                            <li><a th:href="@{/admin/overview/all}" th:text="#{index.button.view_items}">All items</a></li>
                             <li>Active items</li>
                             <li>Inactive items</li>
                             <li>Sale items</li>
-                            <li><a th:href="@{/manage/new/item}" th:text="#{index.button.new_item}">Add new item</a></li>
+                            <li><a th:href="@{/admin/new/item}" th:text="#{index.button.new_item}">Add new item</a></li>
                         </ul>
                     </li>
                     <li class="menu-top-level">Categories
@@ -138,7 +138,7 @@
                     <td class="resp"></td>
                     <td id="button-list">
                         <a th:href="@{/}"><button id="home" class="button button-bordered button-danger" th:text="#{label.home}">Home</button></a>
-                        <a th:href="@{/manage/new/item}"><button id="one_more" class="button button-success" th:text="#{label.oneMore}">One more</button></a>
+                        <a th:href="@{/admin/new/item}"><button id="one_more" class="button button-success" th:text="#{label.oneMore}">One more</button></a>
                     </td>
                 </tr>
             </table>

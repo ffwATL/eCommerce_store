@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * Rest controller, serves all the ajax requests that starts with '/admin/ajax/update' and have 'POST' type.
  */
 @RestController
-@RequestMapping(value = "/manage/ajax/update", method = RequestMethod.POST)
+@RequestMapping(value = "/admin/ajax/update", method = RequestMethod.POST)
 public class UpdateController {
 
     private static final Logger logger = LogManager.getLogger();

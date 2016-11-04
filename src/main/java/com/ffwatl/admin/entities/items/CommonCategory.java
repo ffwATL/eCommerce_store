@@ -6,5 +6,5 @@ package com.ffwatl.admin.entities.items;
  * to group ItemGroup objects by common attribute.
  */
 public enum CommonCategory {
-    ROOT, NONE, BOTTOM, WAIST, TOP, SHOES, ONESIZE
+    ROOT, NONE, BOTTOM, WAIST, SLEEVELESS, LONG_SLEEVED, SHOES, ONESIZE
 }

@@ -15,7 +15,7 @@ public class ItemCardController {
     @Autowired
     private ItemService itemService;
 
-    @RequestMapping(value = "/manage/overview/item")
+    @RequestMapping(value = "/admin/overview/item")
     public String showItemCardAdmin(ModelMap model, @RequestParam long id){
         model.addAttribute("itemId", id);
         return "/manage/overview/itemCard";

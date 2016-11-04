@@ -116,7 +116,7 @@
                 <li>
                     <div id="brand_upload">
                         <div id="b-file-holder"></div>
-                        <form id="brand_form" action="/manage/ajax/save/brand" th:action="@{/manage/ajax/save/brand(${_csrf.parameterName}=${_csrf.token})}"
+                        <form id="brand_form" action="/admin/ajax/save/brand" th:action="@{/admin/ajax/save/brand(${_csrf.parameterName}=${_csrf.token})}"
                               method="post" enctype="multipart/form-data">
                             <input type="file" name="files[]" id="brand_input">
                         </form>
@@ -265,11 +265,11 @@
                     <li class="menu-top-level">
                         Items
                         <ul class="menu-inner">
-                            <li><a th:href="@{/manage/overview/all}" th:text="#{index.button.view_items}">All items</a></li>
+                            <li><a th:href="@{/admin/overview/all}" th:text="#{index.button.view_items}">All items</a></li>
                             <li>Active items</li>
                             <li>Inactive items</li>
                             <li>Sale items</li>
-                            <li><a th:href="@{/manage/new/item}" th:text="#{index.button.new_item}">Add new item</a></li>
+                            <li><a th:href="@{/admin/new/item}" th:text="#{index.button.new_item}">Add new item</a></li>
                         </ul>
                     </li>
                     <li class="menu-top-level">Categories
@@ -294,7 +294,7 @@
                     <a class="homeBefore"></a>
                     <a class="home-main home-st" th:href="@{/}"></a>
                 </li>
-                <li class="cat-tree-1"><a th:text="#{label.catalog}" th:href="@{/manage/overview/all}">Items</a></li>
+                <li class="cat-tree-1"><a th:text="#{label.catalog}" th:href="@{/admin/overview/all}">Items</a></li>
                 <li class="cat-tree-4">Add New</li>
             </menu>
         </div>
@@ -383,7 +383,7 @@
                     <img class="info-pic" src="../../../../resources/img/new/photos.svg" th:src="@{/resources/img/new/photos.svg}">
                 </div>
                 <div id="image_upload">
-                    <form action="/manage/new/item/clothes" th:action="@{/manage/new/item/clothes(${_csrf.parameterName}=${_csrf.token})}" method="post" enctype="multipart/form-data" id="img">
+                    <form action="/admin/new/item/clothes" th:action="@{/admin/new/item/clothes(${_csrf.parameterName}=${_csrf.token})}" method="post" enctype="multipart/form-data" id="img">
                         <input type="file" name="files[]" id="filer_input" multiple="multiple">
                         <input id="item" hidden name="item">
                         <input id="editMode" hidden name="edit" value="false">

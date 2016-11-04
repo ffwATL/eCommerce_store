@@ -41,7 +41,7 @@ import java.util.Map;
  * Rest controller, serves all the ajax requests that starts with '/admin/ajax/get' and have 'POST' type.
  */
 @RestController
-@RequestMapping(value = "/manage/ajax/get", method = RequestMethod.POST)
+@RequestMapping(value = "/admin/ajax/get", method = RequestMethod.POST)
 public class GetController {
 
     private static final Logger logger = LogManager.getLogger();

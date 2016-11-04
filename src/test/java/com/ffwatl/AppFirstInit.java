@@ -3,13 +3,13 @@ package com.ffwatl;
 
 
 import com.ffwatl.dao.items.ColorRepository;
-import com.ffwatl.manage.entities.group.ItemGroup;
-import com.ffwatl.manage.entities.items.brand.Brand;
-import com.ffwatl.manage.entities.items.clothes.size.EuroSize;
-import com.ffwatl.manage.entities.items.color.Color;
-import com.ffwatl.manage.entities.users.Role;
-import com.ffwatl.manage.entities.users.User;
-import com.ffwatl.manage.entities.users.UserProfile;
+import com.ffwatl.admin.entities.group.ItemGroup;
+import com.ffwatl.admin.entities.items.brand.Brand;
+import com.ffwatl.admin.entities.items.clothes.size.EuroSize;
+import com.ffwatl.admin.entities.items.color.Color;
+import com.ffwatl.admin.entities.users.Role;
+import com.ffwatl.admin.entities.users.User;
+import com.ffwatl.admin.entities.users.UserProfile;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.service.items.EuroSizeService;
