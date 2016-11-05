@@ -1,20 +1,28 @@
 package com.ffwatl;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.validation.constraints.NotNull;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ffwatl.admin.entities.group.IGroup;
+import com.ffwatl.admin.entities.items.CommonCategory;
+import com.ffwatl.admin.entities.items.DefaultItem;
+import com.ffwatl.admin.filter.grid_filter.ClothesGridFilter;
+import com.ffwatl.admin.filter.grid_filter.ItemGridFilter;
+import com.ffwatl.admin.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.admin.presenters.items.ClothesItemPresenter;
+import com.ffwatl.admin.presenters.options.ClothesOptionsPresenter;
+import com.ffwatl.dao.items.ClothesItemRepository;
+import com.ffwatl.dao.items.ItemRepository;
+import com.ffwatl.service.clothes.BrandService;
+import com.ffwatl.service.clothes.ClothesItemService;
+import com.ffwatl.service.clothes.ClothesPaginationService;
+import com.ffwatl.service.group.ItemGroupService;
+import com.ffwatl.service.items.ColorService;
+import com.ffwatl.service.items.EuroSizeService;
+import com.ffwatl.service.items.ItemPaginationServiceImpl;
+import com.ffwatl.service.items.ItemService;
+import com.ffwatl.util.Settings;
+import com.ffwatl.util.WebUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,28 +34,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ffwatl.dao.items.ClothesItemRepository;
-import com.ffwatl.dao.items.ItemRepository;
-import com.ffwatl.admin.entities.group.ItemGroup;
-import com.ffwatl.admin.entities.items.CommonCategory;
-import com.ffwatl.admin.entities.items.Item;
-import com.ffwatl.admin.filter.grid_filter.ClothesGridFilter;
-import com.ffwatl.admin.filter.grid_filter.ItemGridFilter;
-import com.ffwatl.admin.presenters.itemgroup.ItemGroupPresenter;
-import com.ffwatl.admin.presenters.items.ClothesItemPresenter;
-import com.ffwatl.admin.presenters.options.ClothesOptionsPresenter;
-import com.ffwatl.service.clothes.BrandService;
-import com.ffwatl.service.clothes.ClothesItemService;
-import com.ffwatl.service.clothes.ClothesPaginationService;
-import com.ffwatl.service.group.ItemGroupService;
-import com.ffwatl.service.items.ColorService;
-import com.ffwatl.service.items.EuroSizeService;
-import com.ffwatl.service.items.ItemPaginationServiceImpl;
-import com.ffwatl.service.items.ItemService;
-import com.ffwatl.util.Settings;
-import com.ffwatl.util.WebUtil;
+import javax.validation.constraints.NotNull;
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Rollback(value = false)
@@ -94,16 +86,12 @@ public class SpecificationTest {
         /*params.put("parentGroup","Clothes");*/
     }
 
-    private ItemGroupPresenter resolveItemGroup(ItemGroup itemGroup, List<ItemGroupPresenter> all, List<ItemGroupPresenter> gender){
+    private IGroup resolveItemGroup(IGroup itemGroup, List<IGroup> all, List<IGroup> gender){
         if(itemGroup.getLevel() == 2){
-            gender.add(new ItemGroupPresenter()
-                    .setGroupName(itemGroup.getGroupName())
-                    .setId(itemGroup.getId())
-                    .setLvl(itemGroup.getLevel())
-                    .setCat(itemGroup.getCat()));
+            gender.add(new ItemGroupPresenter(itemGroup, false));
         }
         if(itemGroup.getChild() != null && itemGroup.getChild().size() > 0){
-            for(ItemGroup i: itemGroup.getChild()) {
+            for(IGroup i: itemGroup.getChild()) {
                 if(i.getCat() != CommonCategory.NONE) all.add(resolveItemGroup(i, all, gender));
                 else resolveItemGroup(i, all, gender);
             }
@@ -112,7 +100,7 @@ public class SpecificationTest {
                 .setCat(itemGroup.getCat())
                 .setGroupName(itemGroup.getGroupName())
                 .setId(itemGroup.getId())
-                .setLvl(itemGroup.getLevel());
+                .setLevel(itemGroup.getLevel());
     }
    /* @Test
     public void imageTest() throws IOException {
@@ -211,8 +199,8 @@ public class SpecificationTest {
     @Ignore
     public void workingSpecTest(){
         ItemGridFilter cfc= new ClothesGridFilter(params);
-        Page<? extends Item> page = clothesPaginationService.findAllByFilter(cfc);
-        for(Item c: page.getContent()){
+        Page<? extends DefaultItem> page = clothesPaginationService.findAllByFilter(cfc);
+        for(DefaultItem c: page.getContent()){
             System.err.println("id: " + c.getId() + ", name: " + c.getItemName());
         }
         System.err.println("*** size: " + page.getNumberOfElements()+", total pages: "+page.getTotalPages());

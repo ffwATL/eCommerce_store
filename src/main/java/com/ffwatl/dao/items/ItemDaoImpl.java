@@ -1,6 +1,6 @@
 package com.ffwatl.dao.items;
 
-import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.DefaultItem;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,22 +15,22 @@ public class ItemDaoImpl implements ItemDao{
 
 
     @Override
-    public Item findById(long id) {
-        return em.find(Item.class, id);
+    public DefaultItem findById(long id) {
+        return em.find(DefaultItem.class, id);
     }
 
     @Override
-    public List<Item> findAll() {
-        return em.createQuery("SELECT i FROM Item i",Item.class).getResultList();
+    public List<DefaultItem> findAll() {
+        return em.createQuery("SELECT i FROM DefaultItem i",DefaultItem.class).getResultList();
     }
 
     @Override
-    public void save(Item item) {
+    public void save(DefaultItem item) {
          em.persist(item);
     }
 
     @Override
-    public void remove(Item item) {
+    public void remove(DefaultItem item) {
         em.remove(item);
     }
 }

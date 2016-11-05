@@ -1,6 +1,7 @@
 package com.ffwatl.admin.controller;
 
 
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.group.ItemGroup;
 import com.ffwatl.service.group.ItemGroupService;
 import org.apache.logging.log4j.LogManager;
@@ -34,28 +35,28 @@ public class OverviewController {
                 if(c.getName().equals("app")) cookie = c.getValue();
             }
         }
-        List<ItemGroup> result = itemGroupService.findByLvlLazyWithoutChild(1);
+        List<IGroup> result = itemGroupService.findByLvlLazyWithoutChild(1);
         resolveI18n(lang != null ? lang : cookie, result);
         model.addAttribute("globalCategories", result);
         return "admin/overview/itemOverview";
     }
 
-    private void resolveI18n(String lang, List<ItemGroup> list){
+    private void resolveI18n(String lang, List<IGroup> list){
         switch (lang) {
             case "en":
-                for (ItemGroup i : list) {
+                for (IGroup i : list) {
                     String l = i.getGroupName().getLocale_en();
                     i.getGroupName().setLocale_ru(l);
                     i.getGroupName().setLocale_ua(l);
                 }
             case "ru":
-                for (ItemGroup i : list) {
+                for (IGroup i : list) {
                     String l = i.getGroupName().getLocale_ru();
                     i.getGroupName().setLocale_en(l);
                     i.getGroupName().setLocale_ua(l);
                 }
             case "ua":
-                for (ItemGroup i : list) {
+                for (IGroup i : list) {
                     String l = i.getGroupName().getLocale_ua();
                     i.getGroupName().setLocale_en(l);
                     i.getGroupName().setLocale_ru(l);

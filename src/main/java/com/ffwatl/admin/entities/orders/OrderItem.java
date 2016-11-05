@@ -2,6 +2,7 @@ package com.ffwatl.admin.entities.orders;
 
 
 import com.ffwatl.admin.entities.currency.Currency;
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.group.ItemGroup;
 import com.ffwatl.admin.entities.i18n.I18n;
 import com.ffwatl.admin.entities.items.clothes.size.Size;
@@ -18,8 +19,8 @@ public class OrderItem {
 
     private long itemId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    private ItemGroup itemGroup;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, targetEntity = ItemGroup.class)
+    private IGroup itemGroup;
 
     @Embedded
     private I18n name;
@@ -58,6 +59,10 @@ public class OrderItem {
 
     public String getShortName() {
         return shortName;
+    }
+
+    public IGroup getItemGroup() {
+        return itemGroup;
     }
 
     public int getQty() {
@@ -110,6 +115,10 @@ public class OrderItem {
 
     public void setItemId(long itemId) {
         this.itemId = itemId;
+    }
+
+    public void setItemGroup(IGroup itemGroup) {
+        this.itemGroup = itemGroup;
     }
 
     public void setName(I18n name) {

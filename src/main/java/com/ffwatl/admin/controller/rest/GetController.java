@@ -2,9 +2,9 @@ package com.ffwatl.admin.controller.rest;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ffwatl.admin.dto.ItemGroupDto;
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.items.CommonCategory;
-import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.DefaultItem;
 import com.ffwatl.admin.entities.items.brand.Brand;
 import com.ffwatl.admin.entities.items.clothes.size.EuroSize;
 import com.ffwatl.admin.entities.items.color.Color;
@@ -65,15 +65,15 @@ public class GetController {
 
 
     /**
-     * Returns ItemGroupDto object with all children by given group name. It's only looking for
+     * Returns ItemGroupDTO object with all children by given group name. It's only looking for
      * a result from level 1 of ItemGroup hierarchy;
      * @param name - name of the ItemGroup from level 1 of ItemGroup hierarchy;
-     * @return ItemGroupDto object with all children.
+     * @return ItemGroupDTO object with all children.
      */
     @RequestMapping(value = "/itemgroup")
     @ResponseBody
-    public ResponseEntity<ItemGroupDto> ajaxAllItemGroupByName(@RequestParam String name){
-        ItemGroupDto result = itemGroupService.findByLvlAndByNameFetchCollection(1, name);
+    public ResponseEntity<IGroup> ajaxAllItemGroupByName(@RequestParam String name){
+        IGroup result = itemGroupService.findByLvlAndByNameFetchCollection(1, name);
         return ResponseEntity.ok(result);
     }
 
@@ -100,7 +100,7 @@ public class GetController {
         ClothesFilterPresenter result = new ClothesFilterPresenter();
         result.setBrandList(brandService.findAllUsed());
         result.setSize(euroSizeService.findAllUsed());
-        result.setUsedCat(itemGroupService.findAllUsedWrapper());
+        result.setUsedCat(itemGroupService.findAllUsed());
         result.setGender(itemGroupService.findGenderGroup());
         result.setColors(colorService.findAllUsed());
         return ResponseEntity.ok(result);
@@ -121,9 +121,9 @@ public class GetController {
     @RequestMapping(value = "/item/all")
     @ResponseBody
     public ResponseEntity<ItemCatalogPresenter> ajaxAllItems(@RequestParam Map<String, String> params){
-        Page<? extends Item> page = getPage(params.get("cat"), params);
+        Page<? extends DefaultItem> page = getPage(params.get("cat"), params);
         try {
-            ItemCatalogPresenter presenter = new ItemCatalogPresenter(fillItemCatalog((List<Item>) page.getContent()));
+            ItemCatalogPresenter presenter = new ItemCatalogPresenter(fillItemCatalog((List<DefaultItem>) page.getContent()));
             presenter.setPge(page.getNumber());
             presenter.setPgeSize(page.getNumberOfElements());
             presenter.setTotalPages(page.getTotalPages());
@@ -161,7 +161,7 @@ public class GetController {
         return ResponseEntity.ok(presenter);
     }
 
-    private Page<? extends Item> getPage(String cat, Map<String, String> params){
+    private Page<? extends DefaultItem> getPage(String cat, Map<String, String> params){
         GridFilter filter;
         if(cat == null) filter = new ItemGridFilter(params);
         else if(cat.equals("Clothes") || cat.equals("Одежда")){
@@ -172,9 +172,9 @@ public class GetController {
         return itemPaginationService.findAll(filter);
     }
 
-    private List<ItemCatalog> fillItemCatalog(List<Item> items){
+    private List<ItemCatalog> fillItemCatalog(List<DefaultItem> items){
         List<ItemCatalog> itemCatalogList = new ArrayList<>(items.size());
-        for(Item i: items){
+        for(DefaultItem i: items){
             ItemCatalog catalog = new ItemCatalog(i, settings.getPhotoUrl());
             itemCatalogList.add(catalog);
         }

@@ -66,7 +66,7 @@ public class ItemGroupDaoImpl implements ItemGroupDao{
 
     @Override
     public List<ItemGroup> findAllUsed() {
-        return em.createQuery("SELECT DISTINCT i.itemGroup FROM Item i", ItemGroup.class).getResultList();
+        return em.createQuery("SELECT DISTINCT i.itemGroup FROM DefaultItem i", ItemGroup.class).getResultList();
     }
 
     @Override
@@ -74,8 +74,16 @@ public class ItemGroupDaoImpl implements ItemGroupDao{
         return em.createQuery("SELECT i FROM ItemGroup i LEFT JOIN FETCH i.child WHERE i.level=:lvl " +
                 "AND i.groupName.locale_en=:name", ItemGroup.class)
                 .setParameter("lvl",lvl)
-                .setParameter("name",name)
+                .setParameter("name", name)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<ItemGroup> findByLvlFetchedChild(int lvl){
+        return em.createQuery("SELECT i FROM ItemGroup i LEFT JOIN FETCH i.child " +
+                "WHERE i.level=:lvl", ItemGroup.class)
+                .setParameter("lvl",lvl)
+                .getResultList();
     }
 
 }

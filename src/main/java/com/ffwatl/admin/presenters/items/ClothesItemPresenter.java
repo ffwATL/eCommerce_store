@@ -1,16 +1,19 @@
 package com.ffwatl.admin.presenters.items;
 
 
-import java.util.List;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ffwatl.admin.entities.items.brand.Brand;
+import com.ffwatl.admin.entities.items.brand.IBrand;
 import com.ffwatl.admin.entities.items.clothes.ClothesItem;
 import com.ffwatl.admin.entities.items.clothes.size.Size;
 import com.ffwatl.admin.presenters.users.UserGenPresenter;
 
+import java.util.List;
+
 public class ClothesItemPresenter extends ItemPresenter{
 
-    private Brand brand;
+    @JsonDeserialize(as=Brand.class)
+    private IBrand brand;
     private String brandImgUrl;
     private List<Size> size;
 
@@ -58,7 +61,7 @@ public class ClothesItemPresenter extends ItemPresenter{
         return brandImgUrl;
     }
 
-    public Brand getBrand() {
+    public IBrand getBrand() {
         return brand;
     }
 
@@ -66,7 +69,7 @@ public class ClothesItemPresenter extends ItemPresenter{
         return size;
     }
 
-    public void setBrand(Brand brand) {
+    public void setBrand(IBrand brand) {
         this.brand = brand;
     }
 

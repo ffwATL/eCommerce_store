@@ -1,16 +1,17 @@
 package com.ffwatl.service.items;
 
 
-import com.ffwatl.dao.items.ItemDao;
+import com.ffwatl.admin.entities.items.DefaultItem;
 import com.ffwatl.admin.entities.items.Item;
 import com.ffwatl.admin.entities.items.clothes.ClothesItem;
 import com.ffwatl.admin.entities.items.clothes.size.Size;
-import com.ffwatl.admin.entities.users.User;
+import com.ffwatl.admin.entities.users.IUser;
 import com.ffwatl.admin.presenters.items.ClothesItemPresenter;
 import com.ffwatl.admin.presenters.items.ItemImage;
 import com.ffwatl.admin.presenters.items.ItemPresenter;
 import com.ffwatl.admin.presenters.items.update.ItemUpdatePresenter;
 import com.ffwatl.admin.presenters.users.UserGenPresenter;
+import com.ffwatl.dao.items.ItemDao;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.util.Settings;
@@ -42,20 +43,20 @@ public class ItemServiceImpl implements ItemService{
     private Settings settings;
 
     @Override
-    public Item findById(long id) {
-        Item item = itemDao.findById(id);
+    public DefaultItem findById(long id) {
+        DefaultItem item = itemDao.findById(id);
         item.getItemGroup().setChild(null);
         return item;
     }
 
     @Override
-    public List<Item> findAll() {
+    public List<DefaultItem> findAll() {
         return itemDao.findAll();
     }
 
     @Override
     @Transactional
-    public void save(Item item) {
+    public void save(DefaultItem item) {
         item.setColor(colorService.findById(item.getColor().getId()));
         item.setItemGroup(itemGroupService.findById(item.getItemGroup().getId()));
         if(item instanceof ClothesItem){
@@ -70,14 +71,14 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     @Transactional
-    public void remove(Item item) {
+    public void remove(DefaultItem item) {
         itemDao.remove(item);
     }
 
     @Override
     @Transactional
-    public void changeItemStatus(Item item){
-        Item item_1 = findById(item.getId());
+    public void changeItemStatus(DefaultItem item){
+        DefaultItem item_1 = findById(item.getId());
         item_1.setIsActive(item.isActive());
     }
 
@@ -85,7 +86,7 @@ public class ItemServiceImpl implements ItemService{
     @Transactional
     public void updateSingleItem(ItemUpdatePresenter update){
         Item freshItem = update.getItem();
-        Item item = findById(freshItem.getId());
+        DefaultItem item = findById(freshItem.getId());
         if(item == null) {
             throw new IllegalArgumentException("Probably wrong Item id. Item not found :( [id]="+freshItem.getId() );
         }
@@ -106,7 +107,7 @@ public class ItemServiceImpl implements ItemService{
         int priceValue = map.get("priceValue") != null ? Integer.valueOf(map.get("priceValue")) : 0;
         int discount = map.get("discount") != null ? Integer.valueOf(map.get("discount")) : -1;
         for (long id: ids){
-            Item item = findById(id);
+            DefaultItem item = findById(id);
             item.setSalePrice(item.getSalePrice() + priceValue);
             if(discount > -1) item.setDiscount(discount);
             if(map.get("isActive") != null) item.setIsActive(Boolean.valueOf(map.get("isActive")));
@@ -116,7 +117,7 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public ItemPresenter findItemPresenterById(long id) {
-        Item item = itemDao.findById(id);
+        DefaultItem item = itemDao.findById(id);
         if(item == null){
             System.err.println("Item == null");
             throw new IllegalArgumentException();
@@ -135,7 +136,7 @@ public class ItemServiceImpl implements ItemService{
         return presenter;
     }
 
-    private UserGenPresenter user2Presenter(User u){
+    private UserGenPresenter user2Presenter(IUser u){
         if(u == null) return null;
         UserGenPresenter userGenPresenter = new UserGenPresenter();
         userGenPresenter.setId(u.getId());
@@ -148,7 +149,7 @@ public class ItemServiceImpl implements ItemService{
         return userGenPresenter;
     }
 
-    private ItemPresenter item2Presenter(Item item){
+    private ItemPresenter item2Presenter(DefaultItem item){
         String photoDir = settings.getPhotoDir()+"item_"+item.getId();
         String url = settings.getPhotoUrl() +"item_"+item.getId()+"/";
 

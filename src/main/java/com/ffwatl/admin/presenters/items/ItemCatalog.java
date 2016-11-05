@@ -1,8 +1,9 @@
 package com.ffwatl.admin.presenters.items;
 
 import com.ffwatl.admin.entities.currency.Currency;
-import com.ffwatl.admin.entities.group.ItemGroup;
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.i18n.I18n;
+import com.ffwatl.admin.entities.items.DefaultItem;
 import com.ffwatl.admin.entities.items.Item;
 import com.ffwatl.admin.entities.items.clothes.ClothesItem;
 import com.ffwatl.admin.entities.items.clothes.size.Size;
@@ -19,7 +20,7 @@ public class ItemCatalog {
     private String thumbnail_url;
     private List<Size> size;
 
-    public ItemCatalog(Item item, String photoUrl) {
+    public ItemCatalog(DefaultItem item, String photoUrl) {
         if(item == null) throw  new IllegalArgumentException();
         this.item = item;
         this.photoUrl = photoUrl;
@@ -39,7 +40,7 @@ public class ItemCatalog {
         return item.getCurrency();
     }
 
-    public ItemGroup getItemGroup() {
+    public IGroup getItemGroup() {
         return item.getItemGroup();
     }
 

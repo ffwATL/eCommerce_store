@@ -1,7 +1,7 @@
 package com.ffwatl.admin.entities.promo;
 
 
-import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.DefaultItem;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,7 +17,7 @@ public class PromoGroup {
     private String name;
 
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    private List<Item> items;
+    private List<DefaultItem> items;
 
     private int discount;
 
@@ -31,7 +31,7 @@ public class PromoGroup {
         return name;
     }
 
-    public List<Item> getItems() {
+    public List<DefaultItem> getItems() {
         return items;
     }
 
@@ -51,7 +51,7 @@ public class PromoGroup {
         this.name = name;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<DefaultItem> items) {
         this.items = items;
     }
 

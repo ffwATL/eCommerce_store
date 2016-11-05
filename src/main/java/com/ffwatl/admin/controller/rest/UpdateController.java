@@ -1,7 +1,7 @@
 package com.ffwatl.admin.controller.rest;
 
 
-import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.DefaultItem;
 import com.ffwatl.admin.presenters.items.update.ItemUpdatePresenter;
 import com.ffwatl.service.items.ItemService;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +48,7 @@ public class UpdateController {
      */
     @RequestMapping(value = "/item/status")
     @ResponseBody
-    public ResponseEntity<String> changeItemStatus(@RequestBody Item item){
+    public ResponseEntity<String> changeItemStatus(@RequestBody DefaultItem item){
         try {
             itemService.changeItemStatus(item);
         }catch (Exception e){

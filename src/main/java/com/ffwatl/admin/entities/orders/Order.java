@@ -3,6 +3,7 @@ package com.ffwatl.admin.entities.orders;
 
 import com.ffwatl.admin.entities.currency.Currency;
 import com.ffwatl.admin.entities.promo.PromoCode;
+import com.ffwatl.admin.entities.users.IUser;
 import com.ffwatl.admin.entities.users.User;
 
 import javax.persistence.*;
@@ -20,8 +21,8 @@ public class Order {
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<OrderItem> items;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private User createdBy;
+    @OneToOne(cascade = CascadeType.PERSIST, targetEntity = User.class)
+    private IUser createdBy;
 
     private OrderState orderState;
 
@@ -48,7 +49,7 @@ public class Order {
         return items;
     }
 
-    public User getCreatedBy() {
+    public IUser getCreatedBy() {
         return createdBy;
     }
 
@@ -92,7 +93,7 @@ public class Order {
         this.items = items;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(IUser createdBy) {
         this.createdBy = createdBy;
     }
 

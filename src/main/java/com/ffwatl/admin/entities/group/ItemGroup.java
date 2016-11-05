@@ -2,6 +2,7 @@ package com.ffwatl.admin.entities.group;
 
 import com.ffwatl.admin.entities.i18n.I18n;
 import com.ffwatl.admin.entities.items.CommonCategory;
+import com.ffwatl.admin.entities.users.IUser;
 import com.ffwatl.admin.entities.users.User;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "items_group")
-public class ItemGroup implements Comparable<ItemGroup>, Serializable{
+public class ItemGroup implements Comparable<ItemGroup>, Serializable, IGroup{
 
     /**
      * ItemGroup identifier.
@@ -42,11 +43,11 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
     @Embedded
     private I18n groupName;
 
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private User createdBy;
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, targetEntity = User.class)
+    private IUser createdBy;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ItemGroup> child = new LinkedList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = ItemGroup.class)
+    private List<IGroup> child = new LinkedList<>();
 
     @Column(length = 2048)
     private String description;
@@ -54,7 +55,7 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
     private int weight;
 
 
-    public User getCreatedBy() {
+    public IUser getCreatedBy() {
         return createdBy;
     }
 
@@ -74,7 +75,7 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
         return level;
     }
 
-    public List<ItemGroup> getChild() {
+    public List<IGroup> getChild() {
         return child;
     }
 
@@ -86,40 +87,44 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
         return description;
     }
 
-    public void setId(long id) {
+    public IGroup setId(long id) {
         this.id = id;
+        return this;
     }
 
-    public void setCat(CommonCategory cat) {
+    public IGroup setCat(CommonCategory cat) {
         this.cat = cat;
+        return this;
     }
 
-    public ItemGroup setGroupName(I18n groupName) {
+    public IGroup setGroupName(I18n groupName) {
         this.groupName = groupName;
         return this;
     }
 
-    public ItemGroup setCreatedBy(User createdBy) {
+    public IGroup setCreatedBy(IUser createdBy) {
         this.createdBy = createdBy;
         return this;
     }
 
-    public void setDescription(String description) {
+    public IGroup setDescription(String description) {
         this.description = description;
+        return this;
     }
 
-    public ItemGroup setChild(List<ItemGroup> child) {
+    public IGroup setChild(List<IGroup> child) {
         this.child = child;
         return this;
     }
 
-    public ItemGroup setLevel(int level) {
+    public IGroup setLevel(int level) {
         this.level = level;
         return this;
     }
 
-    public void setWeight(int weight) {
+    public IGroup setWeight(int weight) {
         this.weight = weight;
+        return this;
     }
 
     @Override
@@ -132,6 +137,7 @@ public class ItemGroup implements Comparable<ItemGroup>, Serializable{
                 ", createdBy=" + createdBy +
                 ", description='" + description + '\'' +
                 ", weight=" + weight +
+                ", child: "+child+
                 '}';
     }
 

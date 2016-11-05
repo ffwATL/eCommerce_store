@@ -10,10 +10,10 @@ public class CurrencyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private double UAH = 1;
-    private double USD;
-    private double EUR;
-    private double GBP;
+    private double uah = 1;
+    private double usd;
+    private double eur;
+    private double gbp;
 
     private Date date;
 
@@ -21,20 +21,20 @@ public class CurrencyEntity {
         return id;
     }
 
-    public double getUAH() {
-        return UAH;
+    public double getUah() {
+        return uah;
     }
 
-    public double getUSD() {
-        return USD;
+    public double getUsd() {
+        return usd;
     }
 
-    public double getEUR() {
-        return EUR;
+    public double getEur() {
+        return eur;
     }
 
-    public double getGBP() {
-        return GBP;
+    public double getGbp() {
+        return gbp;
     }
 
     public Date getDate() {
@@ -45,20 +45,20 @@ public class CurrencyEntity {
         this.id = id;
     }
 
-    public void setUAH(double UAH) {
-        this.UAH = UAH;
+    public void setUah(double uah) {
+        this.uah = uah;
     }
 
-    public void setUSD(double USD) {
-        this.USD = USD;
+    public void setUsd(double usd) {
+        this.usd = usd;
     }
 
-    public void setEUR(double EUR) {
-        this.EUR = EUR;
+    public void setEur(double eur) {
+        this.eur = eur;
     }
 
-    public void setGBP(double GBP) {
-        this.GBP = GBP;
+    public void setGbp(double gbp) {
+        this.gbp = gbp;
     }
 
     public void setDate(Date date) {

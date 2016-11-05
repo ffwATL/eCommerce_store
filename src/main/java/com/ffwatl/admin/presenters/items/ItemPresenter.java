@@ -1,16 +1,18 @@
 package com.ffwatl.admin.presenters.items;
 
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ffwatl.admin.entities.currency.Currency;
 import com.ffwatl.admin.entities.group.Gender;
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.group.ItemGroup;
 import com.ffwatl.admin.entities.i18n.I18n;
 import com.ffwatl.admin.entities.items.color.Color;
 import com.ffwatl.admin.presenters.users.UserGenPresenter;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class ItemPresenter {
     /*These parameters used for a common cases*/
@@ -23,7 +25,8 @@ public class ItemPresenter {
     private boolean active;
     private Color color;
     private Gender gender;
-    private ItemGroup itemGroup;
+    @JsonDeserialize(as=ItemGroup.class)
+    private IGroup itemGroup;
     private I18n description;
     private String extraNotes;
     private Currency currency;
@@ -108,7 +111,7 @@ public class ItemPresenter {
         return color;
     }
 
-    public ItemGroup getItemGroup() {
+    public IGroup getItemGroup() {
         return itemGroup;
     }
 
@@ -160,7 +163,7 @@ public class ItemPresenter {
         this.color = color;
     }
 
-    public void setItemGroup(ItemGroup itemGroup) {
+    public void setItemGroup(IGroup itemGroup) {
         this.itemGroup = itemGroup;
     }
 

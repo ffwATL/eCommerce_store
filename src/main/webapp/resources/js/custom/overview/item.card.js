@@ -79,7 +79,7 @@ $(function(){
     ///item, levels, menu, data[]
     function resolveCatTree(options){
         var menu = $(options.menu);
-        for(var i = 0; i< options.lvl; i++){
+        for(var i = 0; i< options.level; i++){
             menu.append('<li class="cat-tree-'+(i+2)+'">'+options.data[i]+'</li>');
         }
     }
@@ -109,7 +109,7 @@ $(function(){
         resolveCatTree({
             menu:'.cat-tree',
             data:[resolveGenderToText(data.gender, locale), resolveLocale(data.itemGroup.groupName), name],
-            lvl: 3
+            level: 3
         });
         $('.item_title').text(document.title);
         $('#originPrice').text(data.originPrice/100);

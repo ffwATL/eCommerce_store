@@ -13,7 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements IUser{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,8 +47,8 @@ public class User {
             inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
     private Set<UserProfile> userProfiles = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private User createdBy;
+    @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = User.class)
+    private IUser createdBy;
 
     public long getId() {
         return id;
@@ -102,64 +102,78 @@ public class User {
         return createDt;
     }
 
-    public User getCreatedBy() {
+    public IUser getCreatedBy() {
         return createdBy;
     }
 
-    public void setId(long id) {
+    public IUser setId(long id) {
         this.id = id;
+        return this;
     }
 
-    public void setUserName(String userName) {
+    public IUser setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
-    public void setEmail(String email) {
+    public IUser setEmail(String email) {
         this.email = email;
+        return this;
     }
 
-    public void setFirstName(String firstName) {
+    public IUser setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
-    public void setLastName(String lastName) {
+    public IUser setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
-    public void setPhone(Phone phone) {
+    public IUser setPhone(Phone phone) {
         this.phone = phone;
+        return this;
     }
 
-    public void setSkype(String skype) {
+    public IUser setSkype(String skype) {
         this.skype = skype;
+        return this;
     }
 
-    public void setCreateDt(Date createDt) {
+    public IUser setCreateDt(Date createDt) {
         this.createDt = createDt;
+        return this;
     }
 
-    public void setPassword(String password) {
+    public IUser setPassword(String password) {
         this.password = password;
+        return this;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public IUser setCreatedBy(IUser createdBy) {
         this.createdBy = createdBy;
+        return this;
     }
 
-    public void setAddress(Address address) {
+    public IUser setAddress(Address address) {
         this.address = address;
+        return this;
     }
 
-    public void setPhotoUrl(String photoUrl) {
+    public IUser setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+        return this;
     }
 
-    public void setUserProfiles(Set<UserProfile> userProfiles) {
+    public IUser setUserProfiles(Set<UserProfile> userProfiles) {
         this.userProfiles = userProfiles;
+        return this;
     }
 
-    public void setState(State state) {
+    public IUser setState(State state) {
         this.state = state;
+        return this;
     }
 
     @Override

@@ -1,11 +1,11 @@
 package com.ffwatl.service.items;
 
 
+import com.ffwatl.admin.entities.items.DefaultItem;
 import com.ffwatl.dao.items.ItemRepository;
 import com.ffwatl.admin.filter.grid_filter.GridFilter;
 import com.ffwatl.admin.filter.grid_filter.GridFilterRule;
 import com.ffwatl.admin.filter.specification.ItemSpecification;
-import com.ffwatl.admin.entities.items.Item;
 import com.ffwatl.service.PaginationService;
 import com.ffwatl.service.SortProperties;
 
@@ -26,18 +26,18 @@ public class ItemPaginationServiceImpl extends PaginationService implements Item
     private ItemRepository itemRepository;
 
     @Override
-    public Page<Item> findAll(GridFilter f) {
+    public Page<DefaultItem> findAll(GridFilter f) {
         SortProperties p = getProperties(f.getSortOption());
         PageRequest request = new PageRequest(f.getPge(), f.getPgeSize(), p.getDirection(), p.getColumn());
         Map<String, List<GridFilterRule>> map = f.getRules();
-        ItemSpecification<Item> itemSpec = new ItemSpecification<>();
-        Specifications<Item> spec = Specifications
+        ItemSpecification<DefaultItem> itemSpec = new ItemSpecification<>();
+        Specifications<DefaultItem> spec = Specifications
                 .where(itemSpec.isInPriceRange(map.get("originPrice")))
                 .and(itemSpec.isInPriceRange(map.get("salePrice")));
         if(map.get("isActive") != null) spec = spec.and(itemSpec.isActive(map.get("isActive")));
         if(map.get("isSale") != null) spec = spec.and(itemSpec.isSale(map.get("isSale")));
-        Page<Item> result = itemRepository.findAll(spec, request);
-        for(Item i: result.getContent()){
+        Page<DefaultItem> result = itemRepository.findAll(spec, request);
+        for(DefaultItem i: result.getContent()){
             i.getItemGroup().setChild(null);
         }
         return result;

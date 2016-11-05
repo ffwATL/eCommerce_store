@@ -1,10 +1,10 @@
 package com.ffwatl.dao.items;
 
-import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.DefaultItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 
 
-public interface ItemRepository extends JpaRepository<Item, Long>, JpaSpecificationExecutor<Item> {
+public interface ItemRepository extends JpaRepository<DefaultItem, Long>, JpaSpecificationExecutor<DefaultItem> {
 }

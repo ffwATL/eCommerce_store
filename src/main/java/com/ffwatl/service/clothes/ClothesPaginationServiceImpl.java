@@ -5,7 +5,7 @@ import com.ffwatl.dao.items.ClothesItemRepository;
 import com.ffwatl.admin.filter.specification.ClothesItemSpecifications;
 import com.ffwatl.admin.filter.grid_filter.GridFilter;
 import com.ffwatl.admin.filter.grid_filter.GridFilterRule;
-import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.DefaultItem;
 import com.ffwatl.admin.entities.items.clothes.ClothesItem;
 import com.ffwatl.service.PaginationService;
 import com.ffwatl.service.SortProperties;
@@ -42,7 +42,7 @@ public class ClothesPaginationServiceImpl extends PaginationService implements C
         if(map.get("isSale") != null) res = res.and(spec.isSale(map.get("isSale")));
         if(map.get("gender") != null) res = res.and(spec.isGenderEquals(map.get("gender")));
         Page<ClothesItem> result = clothesItemRepository.findAll(res, request);
-        for(Item i: result.getContent()){
+        for(DefaultItem i: result.getContent()){
             i.getItemGroup().setChild(null);
         }
         return result;

@@ -1,6 +1,7 @@
 package com.ffwatl.admin.entities.users.messages;
 
 
+import com.ffwatl.admin.entities.users.IUser;
 import com.ffwatl.admin.entities.users.User;
 
 import javax.persistence.*;
@@ -8,17 +9,17 @@ import java.util.List;
 
 @Entity
 @Table(name = "p_messages")
-public class PrivateMessage {
+public class PrivateMessage implements Message{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.REFRESH)
-    private User from;
+    @OneToOne(cascade = CascadeType.REFRESH, targetEntity = User.class)
+    private IUser from;
 
-    @OneToMany(cascade = CascadeType.REFRESH)
-    private List<User> to;
+    @OneToMany(cascade = CascadeType.REFRESH, targetEntity = User.class)
+    private List<IUser> to;
 
     private String message;
 
@@ -34,7 +35,7 @@ public class PrivateMessage {
         return topic;
     }
 
-    public User getFrom() {
+    public IUser getFrom() {
         return from;
     }
 
@@ -42,7 +43,7 @@ public class PrivateMessage {
         return unread;
     }
 
-    public List<User> getTo() {
+    public List<IUser> getTo() {
         return to;
     }
 
@@ -50,28 +51,34 @@ public class PrivateMessage {
         return message;
     }
 
-    public void setId(long id) {
+    public Message setId(long id) {
         this.id = id;
+        return this;
     }
 
-    public void setFrom(User from) {
+    public Message setFrom(IUser from) {
         this.from = from;
+        return this;
     }
 
-    public void setTo(List<User> to) {
+    public Message setTo(List<IUser> to) {
         this.to = to;
+        return this;
     }
 
-    public void setMessage(String message) {
+    public Message setMessage(String message) {
         this.message = message;
+        return this;
     }
 
-    public void setUnread(boolean unread) {
+    public Message setUnread(boolean unread) {
         this.unread = unread;
+        return this;
     }
 
-    public void setTopic(String topic) {
+    public Message setTopic(String topic) {
         this.topic = topic;
+        return this;
     }
 
     @Override

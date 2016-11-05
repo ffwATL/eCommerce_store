@@ -1,23 +1,23 @@
 package com.ffwatl.admin.filter.specification;
 
 
+import com.ffwatl.admin.entities.items.DefaultItem;
 import com.ffwatl.admin.filter.grid_filter.GridFilterRule;
 import com.ffwatl.admin.entities.group.ItemGroup;
-import com.ffwatl.admin.entities.items.Item;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemSpecification<T extends Item> {
+public class ItemSpecification<T extends DefaultItem> {
 
     public Specification<T> isGroupEquals(List<GridFilterRule> rules){
         return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);
-                Join<Item, ItemGroup> join_itemGroup = root.join("itemGroup", JoinType.INNER);
+                Join<DefaultItem, ItemGroup> join_itemGroup = root.join("itemGroup", JoinType.INNER);
                 List<Predicate> predicates = new ArrayList<>();
                 if(rules != null){
                     for (GridFilterRule r: rules){

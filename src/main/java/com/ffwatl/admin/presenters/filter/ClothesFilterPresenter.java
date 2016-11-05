@@ -1,12 +1,12 @@
 package com.ffwatl.admin.presenters.filter;
 
 
-import com.ffwatl.admin.entities.group.ItemGroup;
-import com.ffwatl.admin.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.items.CommonCategory;
 import com.ffwatl.admin.entities.items.brand.Brand;
 import com.ffwatl.admin.entities.items.clothes.size.EuroSize;
 import com.ffwatl.admin.entities.items.color.Color;
+import com.ffwatl.admin.presenters.itemgroup.ItemGroupPresenter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,21 +36,21 @@ public class ClothesFilterPresenter implements Serializable {
     /**
      * List of 'all' item groups.
      */
-    private List<ItemGroupPresenter> allCategories = new ArrayList<>();
+    private List<IGroup> allCategories = new ArrayList<>();
 
-    private List<ItemGroupPresenter> usedCat = new ArrayList<>();
+    private List<IGroup> usedCat = new ArrayList<>();
 
     /**
      * List of 'gender' item groups.
      */
-    private List<ItemGroupPresenter> gender = new ArrayList<>();
+    private List<IGroup> gender = new ArrayList<>();
 
     /**
      * List of all colors.
      */
     private List<Color> colors;
 
-    public List<ItemGroupPresenter> getUsedCat() {
+    public List<IGroup> getUsedCat() {
         return usedCat;
     }
 
@@ -58,11 +58,11 @@ public class ClothesFilterPresenter implements Serializable {
         return colors;
     }
 
-    public List<ItemGroupPresenter> getGender() {
+    public List<IGroup> getGender() {
         return gender;
     }
 
-    public List<ItemGroupPresenter> getAllCategories() {
+    public List<IGroup> getAllCategories() {
         return allCategories;
     }
 
@@ -82,15 +82,15 @@ public class ClothesFilterPresenter implements Serializable {
         this.size = size;
     }
 
-    public void setItemGroupAll(ItemGroup itemGroup) {
+    public void setItemGroupAll(IGroup itemGroup) {
         resolveItemGroup(itemGroup, this.allCategories, this.gender);
     }
 
-    public void setUsedCat(List<ItemGroupPresenter> usedCat) {
+    public void setUsedCat(List<IGroup> usedCat) {
         this.usedCat = usedCat;
     }
 
-    public void setGender(List<ItemGroupPresenter> gender) {
+    public void setGender(List<IGroup> gender) {
         this.gender = gender;
     }
 
@@ -108,25 +108,17 @@ public class ClothesFilterPresenter implements Serializable {
      * @param gender List<ItemGroupPresenter> object that will contain 'gender' ItemGroupPresenter objects;
      * @return ItemGroupPresenter object. You should ignore this value from outside of this method.
      */
-    private ItemGroupPresenter resolveItemGroup(ItemGroup itemGroup, List<ItemGroupPresenter> all, List<ItemGroupPresenter> gender){
+    private IGroup resolveItemGroup(IGroup itemGroup, List<IGroup> all, List<IGroup> gender){
         if(itemGroup.getLevel() == 2){
-            gender.add(new ItemGroupPresenter()
-                    .setGroupName(itemGroup.getGroupName())
-                    .setId(itemGroup.getId())
-                    .setLvl(itemGroup.getLevel())
-                    .setCat(itemGroup.getCat()));
+            gender.add(new ItemGroupPresenter(itemGroup));
         }
         if(itemGroup.getChild() != null && itemGroup.getChild().size() > 0){
-            for(ItemGroup i: itemGroup.getChild()) {
+            for(IGroup i: itemGroup.getChild()) {
                 if(i.getCat() != CommonCategory.NONE) all.add(resolveItemGroup(i, all, gender));
                 else resolveItemGroup(i, all, gender);
             }
         }
-        return new ItemGroupPresenter()
-                .setCat(itemGroup.getCat())
-                .setGroupName(itemGroup.getGroupName())
-                .setId(itemGroup.getId())
-                .setLvl(itemGroup.getLevel());
+        return new ItemGroupPresenter(itemGroup);
     }
 
     @Override

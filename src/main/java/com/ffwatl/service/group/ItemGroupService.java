@@ -1,35 +1,31 @@
 package com.ffwatl.service.group;
 
 
-import com.ffwatl.admin.dto.ItemGroupDto;
-import com.ffwatl.admin.entities.group.ItemGroup;
-import com.ffwatl.admin.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.items.CommonCategory;
 
 import java.util.List;
 
 public interface ItemGroupService {
 
-    ItemGroup findById(long id);
+    IGroup findById(long id);
 
-    void save(ItemGroup itemGroup);
+    void save(IGroup itemGroup);
 
-    void save(List<? extends ItemGroup> list);
+    void save(List<? extends IGroup> list);
 
-    ItemGroup findByName(String name);
+    IGroup findByName(String name);
 
-    ItemGroupDto findByLvlAndByNameFetchCollection(int lvl, String name);
+    IGroup findByLvlAndByNameFetchCollection(int lvl, String name);
 
-    List<ItemGroupPresenter> findByCatNoChildren(CommonCategory cat);
+    List<IGroup> findByCatNoChildren(CommonCategory cat);
 
-    List<ItemGroup> findByLvlLazyWithoutChild(int lvl);
+    List<IGroup> findByLvlLazyWithoutChild(int lvl);
 
-    List<ItemGroup> findByLvlEager(int lvl);
+    List<IGroup> findByLvlEager(int lvl);
 
-    List<ItemGroup> findAllUsed();
+    List<IGroup> findAllUsed();
 
-    List<ItemGroupPresenter> findGenderGroup();
-
-    List<ItemGroupPresenter> findAllUsedWrapper();
+    List<IGroup> findGenderGroup();
 
 }

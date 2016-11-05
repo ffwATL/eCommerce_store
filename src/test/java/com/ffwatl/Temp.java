@@ -1,5 +1,6 @@
 package com.ffwatl;
 
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.group.ItemGroup;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -17,7 +18,7 @@ public class Temp {
     @Ignore
     public void readGson() throws FileNotFoundException {
         JsonReader reader = new JsonReader(new FileReader("item_group_tree.json"));
-        ItemGroup i = new Gson().fromJson(reader, ItemGroup.class);
+        IGroup i = new Gson().fromJson(reader, ItemGroup.class);
       /*  fillParent(null, i);*/
         System.err.println(i);
     }

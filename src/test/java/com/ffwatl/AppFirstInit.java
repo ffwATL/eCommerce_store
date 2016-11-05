@@ -2,7 +2,7 @@
 package com.ffwatl;
 
 
-import com.ffwatl.dao.items.ColorRepository;
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.group.ItemGroup;
 import com.ffwatl.admin.entities.items.brand.Brand;
 import com.ffwatl.admin.entities.items.clothes.size.EuroSize;
@@ -10,12 +10,14 @@ import com.ffwatl.admin.entities.items.color.Color;
 import com.ffwatl.admin.entities.users.Role;
 import com.ffwatl.admin.entities.users.User;
 import com.ffwatl.admin.entities.users.UserProfile;
+import com.ffwatl.dao.items.ColorRepository;
 import com.ffwatl.service.clothes.BrandService;
 import com.ffwatl.service.group.ItemGroupService;
 import com.ffwatl.service.items.EuroSizeService;
 import com.ffwatl.service.users.UserProfileService;
 import com.ffwatl.service.users.UserService;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -115,7 +117,8 @@ public class AppFirstInit {
     @Test
     public void itemGroupInit() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("item_group_tree.json"),"UTF-8");
-        ItemGroup i = new Gson().fromJson(reader, ItemGroup.class);
+        ItemGroup i =  new GsonBuilder().registerTypeAdapter(IGroup.class, new IGroupDeserializer())
+                .create().fromJson(reader, ItemGroup.class);
         itemGroupService.save(i);
 
     }

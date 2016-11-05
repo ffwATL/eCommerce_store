@@ -117,7 +117,7 @@ $(function(){
         console.log(data);
         var tmp;
         if(cat == 'BOTTOM' || cat == 'WAIST') tmp = gr_1_eu_dropDown.parent().find('.dropdown-content');
-        else if(cat == 'LONG_SLEEVED' || cat == 'SLEEVELESS') tmp = gr2_eu_dropDown.parent().find('.dropdown-content');
+        else if(cat == 'TOP') tmp = gr2_eu_dropDown.parent().find('.dropdown-content');
         else if(cat == 'SHOES' || cat == 'ONESIZE') tmp = gr_4_eu_dropDown.parent().find('.dropdown-content');
         else return;
         tmp.find('.lazy').remove();
@@ -741,6 +741,7 @@ $(function(){
         }
     }
     function setItemGroupTemporary(data){
+        if(data.cat =='SLEEVELESS' || data.cat == 'LONG_SLEEVED') data.cat = 'TOP';
         menClothesPattern = data.parent;
         temporaryGroup.text = data.text;
         temporaryGroup.cat = data.cat;
@@ -1233,6 +1234,7 @@ $(function(){
             },
             type: "POST",
             success: function(result){
+                console.log(result);
                 treeData = createTreeData(result.itemGroup.child, 'items');
                 setTimeout(function(){
                     if(cat == 'WAIST') {spec = cat; cat = 'BOTTOM';}

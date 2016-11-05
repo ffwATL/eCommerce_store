@@ -24,4 +24,5 @@ public interface ItemGroupDao {
 
     List<ItemGroup> findAllUsed();
     ItemGroup findByLvlAndNameFetched(int lvl, String name);
+    List<ItemGroup> findByLvlFetchedChild(int lvl);
 }

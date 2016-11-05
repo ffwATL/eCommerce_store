@@ -1,8 +1,9 @@
 package com.ffwatl.admin.entities.items.clothes;
 
 
-import com.ffwatl.admin.entities.items.Item;
+import com.ffwatl.admin.entities.items.DefaultItem;
 import com.ffwatl.admin.entities.items.brand.Brand;
+import com.ffwatl.admin.entities.items.brand.IBrand;
 import com.ffwatl.admin.entities.items.clothes.size.Size;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -13,15 +14,15 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(referencedColumnName="id")
 @Table(name = "clothes_items")
-public class ClothesItem extends Item {
+public class ClothesItem extends DefaultItem {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @Column(nullable = false)
     private List<Size> size;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    private Brand brand;
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = Brand.class)
+    private IBrand brand;
 
     public List<Size> getSize() {
         return size;
@@ -31,11 +32,11 @@ public class ClothesItem extends Item {
         this.size = size;
     }
 
-    public Brand getBrand() {
+    public IBrand getBrand() {
         return brand;
     }
 
-    public void setBrand(Brand brand) {
+    public void setBrand(IBrand brand) {
         this.brand = brand;
     }
 

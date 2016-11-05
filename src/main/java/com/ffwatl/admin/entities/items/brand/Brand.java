@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "brand")
-public class Brand {
+public class Brand implements IBrand{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,28 +19,33 @@ public class Brand {
     @Embedded
     private I18n description;
 
+
+    @Override
     public long getId() {
         return id;
     }
-
+    @Override
     public I18n getDescription() {
         return description;
     }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setDescription(I18n description) {
-        this.description = description;
-    }
-
+    @Override
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
+    @Override
+    public IBrand setId(long id) {
+        this.id = id;
+        return this;
+    }
+    @Override
+    public IBrand setDescription(I18n description) {
+        this.description = description;
+        return this;
+    }
+    @Override
+    public IBrand setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Override

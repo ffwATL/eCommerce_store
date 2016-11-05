@@ -1,15 +1,16 @@
 package com.ffwatl.service.group;
 
 
-import com.ffwatl.dao.group.ItemGroupDao;
-import com.ffwatl.admin.dto.ItemGroupDto;
+import com.ffwatl.admin.entities.group.IGroup;
 import com.ffwatl.admin.entities.group.ItemGroup;
 import com.ffwatl.admin.entities.items.CommonCategory;
 import com.ffwatl.admin.presenters.itemgroup.ItemGroupPresenter;
+import com.ffwatl.dao.group.ItemGroupDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      * @return ItemGroup object.
      */
     @Override
-    public ItemGroup findById(long id) {
+    public IGroup findById(long id) {
         return itemGroupDao.findById(id);
     }
 
@@ -41,9 +42,9 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     @Transactional
-    public void save(ItemGroup itemGroup) {
+    public void save(IGroup itemGroup) {
         if(itemGroup == null) throw new IllegalArgumentException();
-        itemGroupDao.save(itemGroup);
+        itemGroupDao.save((ItemGroup) itemGroup);
     }
 
     /**
@@ -54,7 +55,7 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     @Transactional
-    public void save(List<? extends ItemGroup> list) {
+    public void save(List<? extends IGroup> list) {
         if(list == null || list.size() < 1) throw new IllegalArgumentException("Bad parameter: list");
         list.forEach(this::save);
     }
@@ -65,11 +66,10 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      * @return ItemGroup object if it present in the DB or null if it not.
      */
     @Override
-    public ItemGroup findByName(String name) {
-        if(name == null) return null;
+    public IGroup findByName(@NotNull String name) {
         List<ItemGroup> list = itemGroupDao.findByName(name);
         if(list.size() < 1) return null;
-        return list.get(0);
+        return new ItemGroupPresenter(list.get(0));
     }
 
     /**
@@ -79,24 +79,15 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      * @return ItemGroup object if it present in the DB or null if it not.
      */
     @Override
-    public ItemGroupDto findByLvlAndByNameFetchCollection(int lvl, String name) {
-        return new ItemGroupDto(itemGroupDao.findByLvlAndNameFetched(lvl, name));
+    public IGroup findByLvlAndByNameFetchCollection(int lvl, @NotNull String name) {
+        return new ItemGroupPresenter(itemGroupDao.findByLvlAndNameFetched(lvl, name), IGroup.FETCHED);
     }
 
 
 
     @Override
-    public List<ItemGroupPresenter> findByCatNoChildren(CommonCategory cat) {
-        List<ItemGroup> groupList = itemGroupDao.findByCat(cat);
-        List<ItemGroupPresenter> result = new ArrayList<>();
-        for(ItemGroup i: groupList){
-            result.add(new ItemGroupPresenter()
-                    .setCat(cat)
-                    .setId(i.getId())
-                    .setGroupName(i.getGroupName())
-                    .setLvl(i.getLevel()));
-        }
-        return result;
+    public List<IGroup> findByCatNoChildren(@NotNull final CommonCategory cat) {
+        return itemGroupList2DTOList(itemGroupDao.findByCat(cat), IGroup.NO_CHILD);
     }
 
     /**
@@ -107,26 +98,13 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      * @return list of ItemGroup objects without children.
      */
     @Override
-    public List<ItemGroup> findByLvlLazyWithoutChild(int lvl) {
-        List<ItemGroup> result = itemGroupDao.findByLvl(lvl);
-        for(ItemGroup itemGroup: result){
-            itemGroup.setChild(null);
-        }
-        return result;
+    public List<IGroup> findByLvlLazyWithoutChild(int lvl) {
+        return itemGroupList2DTOList(itemGroupDao.findByLvl(lvl), IGroup.NO_CHILD);
     }
 
     @Override
-    public List<ItemGroupPresenter> findGenderGroup(){
-        List<ItemGroup> list = findByLvlLazyWithoutChild(2);
-        List<ItemGroupPresenter> result = new ArrayList<>();
-        for(ItemGroup i: list){
-            result.add(new ItemGroupPresenter()
-                    .setLvl(2)
-                    .setCat(i.getCat())
-                    .setGroupName(i.getGroupName())
-                    .setId(i.getId()));
-        }
-        return result;
+    public List<IGroup> findGenderGroup(){
+        return itemGroupList2DTOList(itemGroupDao.findByLvl(2), IGroup.NO_CHILD);
     }
 
     /**
@@ -138,31 +116,19 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      * @return ist of ItemGroup objects with children
      */
     @Override
-    public List<ItemGroup> findByLvlEager(int lvl) {
-        List<ItemGroup> result = itemGroupDao.findByLvl(lvl);
-        System.out.println(result);
-        return result;
+    public List<IGroup> findByLvlEager(int lvl) {
+        return itemGroupList2DTOList(itemGroupDao.findByLvlFetchedChild(lvl), IGroup.FETCHED);
     }
 
     @Override
-    public List<ItemGroup> findAllUsed() {
-        List<ItemGroup> list = itemGroupDao.findAllUsed();
-        for(ItemGroup i: list){
-            i.setChild(null);
-        }
-        return list;
+    public List<IGroup> findAllUsed() {
+        return itemGroupList2DTOList(itemGroupDao.findAllUsed(), IGroup.NO_CHILD);
     }
 
-    @Override
-    public List<ItemGroupPresenter> findAllUsedWrapper(){
-        List<ItemGroup> list = findAllUsed();
-        List<ItemGroupPresenter> result = new ArrayList<>();
-        for(ItemGroup i: list){
-            result.add(new ItemGroupPresenter()
-                    .setLvl(i.getLevel())
-                    .setCat(i.getCat())
-                    .setGroupName(i.getGroupName())
-                    .setId(i.getId()));
+    private List<IGroup> itemGroupList2DTOList(List<ItemGroup> list, boolean fetched){
+        List<IGroup> result = new ArrayList<>();
+        for(IGroup i: list){
+            result.add(new ItemGroupPresenter(i, fetched));
         }
         return result;
     }
