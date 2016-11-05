@@ -69,7 +69,6 @@ $(function(){
     }
 
     function resolveItemDescription(desc){
-        console.log(desc);
         var arr = desc.split('|'), ul = $('#itemDescription');
         $('.f-li').remove();
         for(var i = 0; i<arr.length; i++){
@@ -78,9 +77,12 @@ $(function(){
     }
     ///item, levels, menu, data[]
     function resolveCatTree(options){
-        var menu = $(options.menu);
+        var menu = $(options.menu), url=magic+'../../admin/overview/all?cat=Clothes&';//FIXME: change to dynamic parameter
         for(var i = 0; i< options.level; i++){
-            menu.append('<li class="cat-tree-'+(i+2)+'">'+options.data[i]+'</li>');
+            if(i== options.level-1) url = '';
+            else url += options.data[i].name + '=' + options.data[i].value;
+            menu.append('<li class="cat-tree-'+(i+2)+'"><a class="cat" href="'+url+'">'+options.data[i].text+'</a></li>');
+            if(i< options.level-1) url+='&';
         }
     }
     function changeItemStatus(item){
@@ -106,9 +108,13 @@ $(function(){
     /*Processing item data from ajax request*/
     function processData(data, name){
         $('#totalQTY').text(data.quantity);
+        console.log(data);
         resolveCatTree({
             menu:'.cat-tree',
-            data:[resolveGenderToText(data.gender, locale), resolveLocale(data.itemGroup.groupName), name],
+            data:[
+                {'text': resolveGenderToText(data.gender, locale), 'name':'gender','value': resolveGenderToValue(data.gender)},
+                {'text': resolveLocale(data.itemGroup.groupName), 'name':'group','value': data.itemGroup.id},
+                {'text': name, 'name':'id','value': data.id}],
             level: 3
         });
         $('.item_title').text(document.title);

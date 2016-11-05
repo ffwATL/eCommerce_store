@@ -889,3 +889,7 @@ a.home-main{
     color: black;
     text-decoration: none;
 }
+a.cat{
+    padding: 10px 7px 10px 16px;
+    margin-left: -10px;
+}

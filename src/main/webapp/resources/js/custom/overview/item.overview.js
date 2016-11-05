@@ -24,6 +24,30 @@ $(function(){
         header : $("meta[name='_csrf_header']").attr("content")
     };
 
+    function makeSearchURL(){
+        var result = 'all?pge='+staticFilter.filter.pge;
+        result+='&pgeSize='+staticFilter.filter.pgeSize;
+
+        if(staticFilter.refineFilter.cat.length > 0) result+='&cat='+staticFilter.refineFilter.cat;
+        if(staticFilter.filter.salePrice.length>0) result+='&sPrice='+staticFilter.filter.salePrice;
+        if(staticFilter.filter.originPrice.length>0) result+='&oPrice='+staticFilter.filter.originPrice;
+        result+=makeSearchURLFromArray(staticFilter.refineFilter.itemGroup, 'group');
+        result+=makeSearchURLFromArray(staticFilter.refineFilter.color, 'color');
+        result+=makeSearchURLFromArray(staticFilter.refineFilter.gender,'gender');
+        result+=makeSearchURLFromArray(staticFilter.refineFilter.brand,'brand');
+        result+=makeSearchURLFromArray(staticFilter.refineFilter.size,'size');
+        window.history.pushState('page2', 'Title', result);
+    }
+    function makeSearchURLFromArray(array, name){
+        if(array.length < 1) return '';
+        var t ='&'+name+'=';
+        for(var i= 0; i<array.length; i++ ){
+            if(i>0) t+='|';
+            t+=array[i]
+        }
+        return t;
+    }
+
     function tabClick (active, grid, tab, h2, h5){
         staticFilter.filter.pge = 0;
         function routine(){
@@ -119,6 +143,8 @@ $(function(){
         onCheckBoxSelected(false);
         recalcTabsWidth();
         fillTempFilter(staticFilter.refineFilter.cat);
+        makeSearchURL();
+        console.log(filter);
         $.ajax({
             url: magic + "../../admin/ajax/get/item/all",
             beforeSend: function (xhr) {
@@ -350,20 +376,33 @@ $(function(){
         if(sale) staticFilter.filter.salePrice=data.from*100+'|'+data.to*100;
         else staticFilter.filter.originPrice =data.from*100+'|'+data.to*100;
         staticFilter.filter.pge=0;
+        window.history.pushState('page2', 'Title', 'all?pge=0');
         refreshItems();
     }
 
     function sliderInit (){
         info.info_h2.text(locale.grid_tabs_info_all_h2);
         info.info_h5.text(locale.grid_tabs_info_all_h5);
+        var sMin = minPriceSale, sMax = maxPriceSale, oMin = minPriceSale, oMax = maxPriceSale;
+        if(staticFilter.filter.salePrice.length > 0){
+            var t = staticFilter.filter.salePrice.split('|');
+            console.log(parseInt(t[0]));
+            sMin = parseInt(t[0])/100;
+            sMax = parseInt(t[1])/100;
+        }
+        if(staticFilter.filter.originPrice.length > 0){
+            t = staticFilter.filter.originPrice.split('|');
+            oMin = parseInt(t[0])/100;
+            oMax = parseInt(t[1])/100;
+        }
         for(var i=0; i<sliders.length; i++){
             sliders[i].sliderSale.ionRangeSlider({
                 type: "double",
                 grid: true,
-                min: 0,
-                max: 1000,
-                from: minPriceSale,
-                to: maxPriceSale,
+                min: minPriceSale,
+                max: maxPriceSale,
+                from: sMin,
+                to: sMax,
                 onFinish: function (data) {
                     refineByPrice(data, true)
                 },
@@ -372,10 +411,10 @@ $(function(){
             sliders[i].sliderOrigin.ionRangeSlider({
                 type: "double",
                 grid: true,
-                min: 0,
-                max: 1000,
-                from: minPriceSale,
-                to: maxPriceSale,
+                min: minPriceSale,
+                max: maxPriceSale,
+                from: oMin,
+                to: oMax,
                 onFinish: function (data) {
                     refineByPrice(data, false)
                 },
@@ -434,24 +473,27 @@ $(function(){
         panelFilter.change(function(){
             if(this.checked){
                 var transl = lang != 'en' ? transliterate(listSelector) : listSelector;
-                console.log(transl);
                 $('.filter-list').append('<li class="checked filter '+transl+'">'+name+'<button></button></li>');
                 linkFilterListToFilterPanel('.'+transl, panelFilter,undefined,undefined)
-            }
-            globalFilterRoutine(name, this.checked, parent,'.'+transl);
+            }else{staticFilter.refineFilter.cat = ''}
+            globalFilterRoutine(name, this.checked, parent,'.'+transl, name == staticFilter.refineFilter.cat);
             staticFilter.filter.pge = 0;
             changeSideBarHeight(sidebar);
         });
+        if(name == staticFilter.refineFilter.cat){
+            panelFilter.prop('checked', true);
+            panelFilter.trigger('change');
+        }
     }
 
-    function globalFilterRoutine (cat, checked, parent,listSelector){
+    function globalFilterRoutine (cat, checked, parent,listSelector, doNotRefresh){
         staticFilter.refineFilter.cat = cat;
         if(cat == 'Clothes' || cat =='Одежда'|| cat=='Одяг'){
             if(checked){
                 $(listSelector).addClass('clothes');
                 getClothesFilters();
                 setTimeout(function(){
-                    refreshItems();
+                    if(!doNotRefresh) refreshItems();
                 }, 100);
             }else{
                 var selector = '#filter-clothes',clth;
@@ -635,14 +677,17 @@ $(function(){
                 parent= el.parent(),
                 name = parent.find('label').text().trim(),
                 id = parent.find('.id').val(),
-                listSelector = 'c_'+c+transliterate(name.replace(new RegExp(escapeRegExp(' '), 'g'),'')).replace(new RegExp('/','g'),'');
+                listSelector = 'c_'+c+transliterate(name.replace(new RegExp(escapeRegExp(' '), 'g'),'')).replace(new RegExp('/','g'),''),
+                notRefresh = false;
             el.change(function(){
+                console.log('inside');
                 var s;
                 if(this.checked) {
                     $('.filter-list').append('<li class="checked filter '+listSelector+'">'+name+'<button></button></li>');
                     s = '.'+listSelector;
                     linkFilterListToFilterPanel(s, el, id, array);
-                    array.push(id);
+                    if(!notRefresh) array.push(id);
+                    console.log(name);
                 }
                 else {
                     s = '.'+listSelector;
@@ -651,9 +696,17 @@ $(function(){
                     removeFromArray(id, array);
                 }
                 staticFilter.filter.pge=0;
-                refreshItems();
+                if(!notRefresh) refreshItems();
+                notRefresh = false;
             });
             c++;
+            for(var i=0; i< array.length; i++){
+                if(id == array[i]){
+                    notRefresh = true;
+                    el.click();
+                    break;
+                }
+            }
         })
     }
 
@@ -1036,8 +1089,22 @@ $(function(){
             }
         });
     }
+    function extractURLParams(){
+        var params = getAllURLParameters();
+        if(params['pge'] != undefined) staticFilter.filter.pge = params['pge'];
+        if(params['pgeSize'] != undefined) staticFilter.filter.pgeSize = params['pgeSize'];
+        if(params['cat'] != undefined) staticFilter.refineFilter.cat=params['cat'];
+        if(params['gender'] != undefined) staticFilter.refineFilter.gender=params['gender'].split('|');
+        if(params['size'] != undefined) staticFilter.refineFilter.size=params['size'].split('|');
+        if(params['color'] != undefined) staticFilter.refineFilter.color=params['color'].split('|');
+        if(params['brand'] != undefined) staticFilter.refineFilter.brand=params['brand'].split('|');
+        if(params['group'] != undefined) staticFilter.refineFilter.itemGroup=params['group'].split('|');
+        if(params['sPrice'] != undefined) staticFilter.filter.salePrice=params['sPrice'];
+        if(params['oPrice'] != undefined) staticFilter.filter.salePrice=params['oPrice'];
+    }
 
     function init_0(){
+        extractURLParams();
         refreshItems();
         sidebar.css('height',sidebar.height() + 30);
         globalEditInit();

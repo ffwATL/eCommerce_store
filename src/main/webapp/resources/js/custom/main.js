@@ -420,14 +420,19 @@ function unlock (b, enable){
     b.prop('disabled', !enable)
 }
 function resolveGenderToValue(text){
-    if(text == 'Men' || text =='Мужское' || text == 'Чоловіче') return 0;
-    else if(text == 'Women' || text == 'Женское' || text =='Жіноче') return 1;
+    if(text=='MEN' ||text == 'Men' || text =='Мужское' || text == 'Чоловіче') return 0;
+    else if(text == 'WOMEN' || text == 'Women' || text == 'Женское' || text =='Жіноче') return 1;
 }
 function resolveGenderToText(value, locale){
     switch (value) {
         case 'MEN': return locale.label_cat_men;
         case 'WOMEN': return locale.label_cat_women;
     }
+}
+function getAllURLParameters(){
+    var search = location.search.substring(1);
+    return search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+        function(key, value) { return key===""?value:decodeURIComponent(value) }):{}
 }
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
