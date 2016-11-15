@@ -75,7 +75,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <jpa:repositories base-package="com.ffwatl.dao" />
+    <jpa:repositories base-package="com.ffwatl.admin" />
     <aop:aspectj-autoproxy />
     <context:annotation-config/>
 

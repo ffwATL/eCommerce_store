@@ -513,7 +513,7 @@ $(function(){
             },
             discount: $('input#discount').val(),
             color: {id: $('#color_sample').find('input').val()},
-            originPrice: parseInt(origin_price_input.val()*100),
+            retailPrice: parseInt(origin_price_input.val()*100),
             salePrice: parseInt(sale_price_input.val()*100),
             brand: {
                 id: $('li#brand').find('.dropbtn').find('input').val()
@@ -729,7 +729,7 @@ $(function(){
                 var li = $(this), number = li.find('input').val();
                 if(li.hasClass('cat-blocked')) return;
                 li.parent().find('.chosen').removeClass('chosen');
-                if(data[number].level == 2) resolveGender(data[number].text)
+                if(data[number].level == 2) resolveGender(data[number].text);
                 li.addClass('chosen');
                 resolveActiveDependencies(levels[data[number].level], data[number].text,data[number].nodes != undefined);
                 if(data[number].nodes == undefined){
@@ -1126,20 +1126,21 @@ $(function(){
         });
     }
     function fillItemsInfo(item){
-        item_name_ru.val(item.itemName.locale_ru);
-        item_name_en.val(item.itemName.locale_en);
-        item_name_ua.val(item.itemName.locale_ua);
+        item_name_ru.val(item.productName.locale_ru);
+        item_name_en.val(item.productName.locale_en);
+        item_name_ua.val(item.productName.locale_ua);
         files = true; featuresOk = true;
         changeBlockStatus($('#name-block'), true);
         text = resolveGenderToText(item.gender, locale);
         grName = resolveLocale(item.itemGroup.groupName);
+        var cat = (item.itemGroup.cat =='SLEEVELESS'|| item.itemGroup.cat =='LONG_SLEEVED') ? 'TOP' : item.itemGroup.cat;
         categoryInit(item.itemGroup.cat);
         editColorBrand(item);
         editPhotos(item.thumbs);
         extractFeatures(item.description);
         editExtraNotes(item.extraNotes);
         sale_price_input.val(item.salePrice/100);
-        origin_price_input.val(item.originPrice/100);
+        origin_price_input.val(item.retailPrice/100);
         changeBlockStatus($('#pr-block'), true);
         $('#discount').val(item.discount);
         $('#save').prop('disabled', false);
@@ -1223,7 +1224,7 @@ $(function(){
         changeBlockStatus($('#sz-block'), true)
     }
 
-    function categoryInit(cat){
+    function categoryInit(cat, realCat){
         var spec = undefined;
         $.ajax({
             url: magic + "../../admin/ajax/get/item/options/clothes",
@@ -1238,6 +1239,9 @@ $(function(){
                 treeData = createTreeData(result.itemGroup.child, 'items');
                 setTimeout(function(){
                     if(cat == 'WAIST') {spec = cat; cat = 'BOTTOM';}
+                    if(cat == 'LONG_SLEEVED') {spec = cat; cat = 'SLEEVELESS'}
+                    console.log(treeData);
+
                     drawCategoryPopup(treeData,$('#level-2').find('ul'),[3,4], cat, spec);
                 },50);
                 fillColor(result.colorList);
@@ -1249,14 +1253,20 @@ $(function(){
             }
         });
     }
+    function i18nTitle(title){
+        document.title = title;
+        $('.cat-tree-4').text(title);
+    }
     /*Entry point main method*/
     function init_0(standart){
         if(getURLParameter('edit') && standart == undefined){
             editMode = true;
             editModeGetItemInfo(getURLParameter('id'));
+            i18nTitle(locale.new_item_edit_title);
         }else {
             photoInit([]);
             categoryInit('');
+            i18nTitle(locale.new_item_add_title);
         }
         $('.brand-tabs').tabslet();
         $('.color-tabs').tabslet();

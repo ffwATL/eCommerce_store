@@ -10,7 +10,7 @@
 	             http://www.springframework.org/schema/context
 	             http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="com.ffwatl.admin.controller"/>
+    <context:component-scan base-package="com.ffwatl.admin.web.controller"/>
 
     <mvc:annotation-driven />
 
@@ -44,7 +44,7 @@
         <property name="templateResolver" ref="templateResolver" />
         <property name="additionalDialects">
             <set>
-                <bean class="com.ffwatl.thymeleaf.dialect.LocaleDialect"/>
+                <bean class="com.ffwatl.admin.web.thymeleaf.dialect.LocaleDialect"/>
                 <!--<bean class="nz.net.ultraq.thymeleaf.LayoutDialect" />-->
                 <bean class="org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect"/>
             </set>

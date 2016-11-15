@@ -2,20 +2,14 @@
 package com.ffwatl;
 
 
-import com.ffwatl.admin.entities.group.IGroup;
-import com.ffwatl.admin.entities.group.ItemGroup;
-import com.ffwatl.admin.entities.items.brand.Brand;
-import com.ffwatl.admin.entities.items.clothes.size.EuroSize;
-import com.ffwatl.admin.entities.items.color.Color;
-import com.ffwatl.admin.entities.users.Role;
-import com.ffwatl.admin.entities.users.User;
-import com.ffwatl.admin.entities.users.UserProfile;
-import com.ffwatl.dao.items.ColorRepository;
-import com.ffwatl.service.clothes.BrandService;
-import com.ffwatl.service.group.ItemGroupService;
-import com.ffwatl.service.items.EuroSizeService;
-import com.ffwatl.service.users.UserProfileService;
-import com.ffwatl.service.users.UserService;
+import com.ffwatl.admin.catalog.dao.ColorRepository;
+import com.ffwatl.admin.catalog.domain.*;
+import com.ffwatl.admin.catalog.service.BrandService;
+import com.ffwatl.admin.catalog.service.EuroSizeService;
+import com.ffwatl.admin.catalog.service.ItemGroupService;
+import com.ffwatl.admin.user.domain.*;
+import com.ffwatl.admin.user.service.UserProfileService;
+import com.ffwatl.admin.user.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -53,7 +47,7 @@ public class AppFirstInit {
     private static final Type EURO_SIZE_TYPE = new TypeToken<List<EuroSize>>() {
     }.getType();
 
-    private static final Type BRAND_TYPE = new TypeToken<List<Brand>>() {
+    private static final Type BRAND_TYPE = new TypeToken<List<BrandImpl>>() {
     }.getType();
 
     @Autowired
@@ -77,7 +71,7 @@ public class AppFirstInit {
     @Ignore
     public void justTest() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("item_group_tree.json"),"UTF-8");
-        ItemGroup i = new Gson().fromJson(reader, ItemGroup.class);
+        Category i = new Gson().fromJson(reader, CategoryImpl.class);
         System.err.println(i);
     }
 
@@ -85,16 +79,16 @@ public class AppFirstInit {
     @Test
     public void A_setUserProfile(){
         List<UserProfile> list = new ArrayList<>();
-        list.add(new UserProfile().setRole(Role.ADMINISTRATOR));
-        list.add(new UserProfile().setRole(Role.MODERATOR));
-        list.add(new UserProfile().setRole(Role.MANAGER));
-        list.add(new UserProfile().setRole(Role.CUSTOMER));
+        list.add(new UserProfileImpl().setRole(Role.ADMINISTRATOR));
+        list.add(new UserProfileImpl().setRole(Role.MODERATOR));
+        list.add(new UserProfileImpl().setRole(Role.MANAGER));
+        list.add(new UserProfileImpl().setRole(Role.CUSTOMER));
         profileService.save(list);
     }
 
     @Test
     public void userCreationTest(){
-        User user = new User();
+        UserImpl user = new UserImpl();
         user.setFirstName("Misha");
         user.setEmail("4else@i.ua");
         user.setPassword("arsenalforever1");
@@ -110,32 +104,32 @@ public class AppFirstInit {
     @Test
     public void fillBrand() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("brand.json"),"UTF-8");
-        List<Brand> list = new Gson().fromJson(reader, BRAND_TYPE);
+        List<BrandImpl> list = new Gson().fromJson(reader, BRAND_TYPE);
         brandService.save(list);
     }
 
     @Test
     public void itemGroupInit() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("item_group_tree.json"),"UTF-8");
-        ItemGroup i =  new GsonBuilder().registerTypeAdapter(IGroup.class, new IGroupDeserializer())
-                .create().fromJson(reader, ItemGroup.class);
+        Category i =  new GsonBuilder().registerTypeAdapter(Category.class, new CategoryDeserializer())
+                .create().fromJson(reader, CategoryImpl.class);
         itemGroupService.save(i);
-
     }
 
     @Test
     public void colorInitTest() throws FileNotFoundException, UnsupportedEncodingException {
-        Type colorType = new TypeToken<List<Color>>() {
+        Type colorType = new TypeToken<List<ColorImpl>>() {
         }.getType();
         Reader reader = new InputStreamReader(new FileInputStream("color.json"),"UTF-8");
-        List<Color> list = new Gson().fromJson(reader, colorType);
+        List<ColorImpl> list = new Gson().fromJson(reader, colorType);
         colorRepository.save(list);
     }
 
     @Test
     public void euroSizeInit() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("euro_size.json"),"UTF-8");
-        List<EuroSize> e = new Gson().fromJson(reader, EURO_SIZE_TYPE);
+        List<EuroSize> e = new GsonBuilder().registerTypeAdapter(EuroSize.class, new EuroSizeDeserializer())
+                .create().fromJson(reader, EURO_SIZE_TYPE);
         euroSizeService.save(e);
     }
 

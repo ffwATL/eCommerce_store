@@ -3,24 +3,24 @@ package com.ffwatl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ffwatl.admin.entities.group.IGroup;
-import com.ffwatl.admin.entities.items.CommonCategory;
-import com.ffwatl.admin.entities.items.DefaultItem;
-import com.ffwatl.admin.filter.grid_filter.ClothesGridFilter;
-import com.ffwatl.admin.filter.grid_filter.ItemGridFilter;
-import com.ffwatl.admin.presenters.itemgroup.ItemGroupPresenter;
-import com.ffwatl.admin.presenters.items.ClothesItemPresenter;
-import com.ffwatl.admin.presenters.options.ClothesOptionsPresenter;
-import com.ffwatl.dao.items.ClothesItemRepository;
-import com.ffwatl.dao.items.ItemRepository;
-import com.ffwatl.service.clothes.BrandService;
-import com.ffwatl.service.clothes.ClothesItemService;
-import com.ffwatl.service.clothes.ClothesPaginationService;
-import com.ffwatl.service.group.ItemGroupService;
-import com.ffwatl.service.items.ColorService;
-import com.ffwatl.service.items.EuroSizeService;
-import com.ffwatl.service.items.ItemPaginationServiceImpl;
-import com.ffwatl.service.items.ItemService;
+import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.CommonCategory;
+import com.ffwatl.admin.catalog.domain.ProductDefault;
+import com.ffwatl.admin.catalog.domain.filter.grid_filter.ClothesGridFilter;
+import com.ffwatl.admin.catalog.domain.filter.grid_filter.ItemGridFilter;
+import com.ffwatl.admin.catalog.domain.dto.CategoryDTO;
+import com.ffwatl.admin.catalog.domain.presenter.ClothesItemPresenter;
+import com.ffwatl.admin.catalog.domain.presenter.ClothesOptionsPresenter;
+import com.ffwatl.admin.catalog.dao.ClothesItemRepository;
+import com.ffwatl.admin.catalog.dao.ItemRepository;
+import com.ffwatl.admin.catalog.service.BrandService;
+import com.ffwatl.admin.catalog.service.ClothesItemService;
+import com.ffwatl.admin.catalog.service.ClothesPaginationService;
+import com.ffwatl.admin.catalog.service.ItemGroupService;
+import com.ffwatl.admin.catalog.service.ColorService;
+import com.ffwatl.admin.catalog.service.EuroSizeService;
+import com.ffwatl.admin.catalog.service.ItemPaginationServiceImpl;
+import com.ffwatl.admin.catalog.service.ItemService;
 import com.ffwatl.util.Settings;
 import com.ffwatl.util.WebUtil;
 import org.junit.Ignore;
@@ -86,17 +86,17 @@ public class SpecificationTest {
         /*params.put("parentGroup","Clothes");*/
     }
 
-    private IGroup resolveItemGroup(IGroup itemGroup, List<IGroup> all, List<IGroup> gender){
+    private Category resolveItemGroup(Category itemGroup, List<Category> all, List<Category> gender){
         if(itemGroup.getLevel() == 2){
-            gender.add(new ItemGroupPresenter(itemGroup, false));
+            gender.add(new CategoryDTO(itemGroup, false));
         }
         if(itemGroup.getChild() != null && itemGroup.getChild().size() > 0){
-            for(IGroup i: itemGroup.getChild()) {
+            for(Category i: itemGroup.getChild()) {
                 if(i.getCat() != CommonCategory.NONE) all.add(resolveItemGroup(i, all, gender));
                 else resolveItemGroup(i, all, gender);
             }
         }
-        return new ItemGroupPresenter()
+        return new CategoryDTO()
                 .setCat(itemGroup.getCat())
                 .setGroupName(itemGroup.getGroupName())
                 .setId(itemGroup.getId())
@@ -109,16 +109,16 @@ public class SpecificationTest {
     }*/
     /*@Test
     public void instanceTest(){
-        Item item = new Item();
-        Item clothesItem = new ClothesItem();
-        System.err.println(clothesItem instanceof ClothesItem);
+        Product item = new Product();
+        Product clothesItem = new ProductClothes();
+        System.err.println(clothesItem instanceof ProductClothes);
     }*/
 
    /* @Test
     public void lazyInitTest(){
-        ItemGroup itemGroup = itemGroupService.findByLvlAndByNameFetchCollection(1, "Clothes");
-        List<ItemGroupPresenter> gender = new ArrayList<>();
-        List<ItemGroupPresenter> list = new ArrayList<>();
+        CategoryImpl itemGroup = itemGroupService.findByLvlAndByNameFetchCollection(1, "Clothes");
+        List<CategoryDTO> gender = new ArrayList<>();
+        List<CategoryDTO> list = new ArrayList<>();
         resolveItemGroup(itemGroup, list, gender);
         System.err.println("result: " + list);
         System.err.println("*** gender: " + gender);
@@ -199,9 +199,9 @@ public class SpecificationTest {
     @Ignore
     public void workingSpecTest(){
         ItemGridFilter cfc= new ClothesGridFilter(params);
-        Page<? extends DefaultItem> page = clothesPaginationService.findAllByFilter(cfc);
-        for(DefaultItem c: page.getContent()){
-            System.err.println("id: " + c.getId() + ", name: " + c.getItemName());
+        Page<? extends ProductDefault> page = clothesPaginationService.findAllByFilter(cfc);
+        for(ProductDefault c: page.getContent()){
+            System.err.println("id: " + c.getId() + ", name: " + c.getProductName());
         }
         System.err.println("*** size: " + page.getNumberOfElements()+", total pages: "+page.getTotalPages());
     }

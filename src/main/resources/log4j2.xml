@@ -47,19 +47,19 @@
         <Root level="trace">
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name ="com.ffwatl.thymeleaf.dialect.LocaleProcessor" level="trace" additivity="false">
+        <Logger name ="com.ffwatl.admin.web.thymeleaf.dialect.LocaleProcessor" level="trace" additivity="false">
             <AppenderRef ref="rootFile"/>
         </Logger>
-        <Logger name ="com.ffwatl.admin.controller.IndexController" level="trace" additivity="false">
+        <Logger name ="com.ffwatl.admin.web.controller.IndexController" level="trace" additivity="false">
             <AppenderRef ref="rootFile"/>
         </Logger>
-        <Logger name="com.ffwatl.admin.controller.OverviewController" level="trace" additivity="false">
+        <Logger name="com.ffwatl.admin.web.controller.OverviewController" level="trace" additivity="false">
             <AppenderRef ref="overviewAll"/>
         </Logger>
-        <Logger name ="com.ffwatl.admin.controller.AddNewItemController" level="trace" additivity="false">
+        <Logger name ="com.ffwatl.admin.web.controller.AddNewItemController" level="trace" additivity="false">
             <AppenderRef ref="addItemAppender"/>
         </Logger>
-        <Logger name ="com.ffwatl.admin.controller.rest.UpdateController" level="trace" additivity="false">
+        <Logger name ="com.ffwatl.admin.web.controller.rest.UpdateController" level="trace" additivity="false">
             <AppenderRef ref="ajaxControllerAppender"/>
         </Logger>
         <Logger name ="com.ffwatl.admin.controller.CustomUserDetailsService" level="trace" additivity="false">

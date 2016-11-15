@@ -1,7 +1,7 @@
 package com.ffwatl;
 
-import com.ffwatl.admin.entities.group.IGroup;
-import com.ffwatl.admin.entities.group.ItemGroup;
+import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.CategoryImpl;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.junit.Ignore;
@@ -18,7 +18,7 @@ public class Temp {
     @Ignore
     public void readGson() throws FileNotFoundException {
         JsonReader reader = new JsonReader(new FileReader("item_group_tree.json"));
-        IGroup i = new Gson().fromJson(reader, ItemGroup.class);
+        Category i = new Gson().fromJson(reader, CategoryImpl.class);
       /*  fillParent(null, i);*/
         System.err.println(i);
     }
@@ -47,9 +47,9 @@ public class Temp {
         return new File(dirName).listFiles((dir1, filename) -> {return filename.endsWith(endName);});
     }
 
-   /* private void fillParent(ItemGroup parent, ItemGroup child){
+   /* private void fillParent(CategoryImpl parent, CategoryImpl child){
         if(child == null) return;
-        for(ItemGroup i: child.setParent(parent).getChild()){
+        for(CategoryImpl i: child.setParent(parent).getChild()){
             fillParent(child, i);
         }
     }*/

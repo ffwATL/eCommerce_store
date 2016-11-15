@@ -206,7 +206,9 @@ var locale_en = {
     label_sleeve: 'Sleeve',
     label_insole: 'Insole',
     label_cat_men: 'Men',
-    label_cat_women: 'Women'
+    label_cat_women: 'Women',
+    new_item_add_title: 'Add New Item',
+    new_item_edit_title: 'Edit Item'
 };
 
 var locale_ru = {
@@ -271,7 +273,9 @@ var locale_ru = {
     label_sleeve: 'Рукав',
     label_insole: 'Стелька',
     label_cat_men: 'Мужское',
-    label_cat_women: 'Женское'
+    label_cat_women: 'Женское',
+    new_item_add_title: 'Добавить новый товар',
+    new_item_edit_title: 'Редактировать товар'
 };
 
 var locale_ua = {
@@ -334,7 +338,9 @@ var locale_ua = {
     label_sleeve: 'Рукав',
     label_insole: 'Стелька',
     label_cat_men: 'Чоловіче',
-    label_cat_women: 'Жіноче'
+    label_cat_women: 'Жіноче',
+    new_item_add_title: 'Додати новий товар',
+    new_item_edit_title: 'Редагувати товар'
 };
 var lang='en';
 function getLocale(locale){

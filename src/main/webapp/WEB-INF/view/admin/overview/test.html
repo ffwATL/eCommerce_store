@@ -4,61 +4,73 @@
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
     <title>Overview</title>
     <link href="../../../../resources/img/favicon.png" th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/png">
-<!--    <link rel="stylesheet" href="code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="../../../../resources/css/bootstrap.css" th:href="@{/css/bootstrap.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/custom/main.css" th:href="@{/css/custom/main.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/custom/overview/popup.css" th:href="@{/resources/css/custom/overview/popup.css}" type="text/css">
+   
 
-
-    <link rel="stylesheet" href="../../../../resources/css/spectrum.css" th:href="@{/resources/css/spectrum.css}" type="text/css">
-    <link rel="stylesheet" href="../../../../resources/css/custom/overview/item.overview.css" th:href="@{/resources/css/custom/overview/item.overview.css}" type="text/css">
+    
     <script rel="script" src="../../../../resources/js/jquery-1.12.3.min.js" th:src="@{/resources/js/jquery-1.12.3.min.js}" ></script>
-    <script rel="script" src="../../../../resources/js/jquery-sortable.js" ></script>
-    <script rel="script" src="../../../../resources/js/filer/jquery.filer.js" th:src="@{/resources/js/filer/jquery.filer.js}" ></script>
-    <script rel="script" src="../../../../resources/js/jquery.popupoverlay.min.js" th:src="@{/js/jquery.popupoverlay.min.js}"></script>
-    <script rel="script" src="../../../../resources/js/custom/main.js" th:src="@{/resources/js/custom/main.js}"></script>
-    <script rel="script" src="../../../../resources/js/jquery.tabslet.min.js" th:src="@{/resources/js/jquery.tabslet.min.js}"></script>
-    <script rel="script" src="../../../../resources/js/spectrum.min.js" th:src="@{/resources/js/spectrum.min.js}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   
    <!-- <script rel="script" src="../../../../resources/js/custom/new/new.item.js" th:src="@{/resources/js/custom/new/new.item.js}" ></script>-->
     <script>
         $(function(){
-            var lang = $.cookie("app");
-            if(lang == undefined || lang.length < 2) lang = 'en';
-            var locale = getLocale(lang);
-            var ed_popup = $('#edit_popup');
-            ed_popup.popup({
-                opacity: 0.3,
-                transition: 'all 0.3s',
-                openelement: '#brand-plus',
-                closeelement: '.edit_close'
+            $("#sortable").sortable({
+                revert: true,
+                start: function( event, ui ) {
+                    console.log(event.toElement);
+                    $(event.toElement).addClass('clicked');
+                },
+                stop: function(event, ui){
+                    $(ui.item).removeClass('clicked');
+                },
+                opacity: 0.5
             });
-           /* ed_popup.popup('show');*/
-            $('.ex-tabs').tabslet();
-            $(".row").sortable({
-                handle: '.ui-state-default'
+            $('.drag li').draggable({
+                connectToSortable: "#sortable",
+                helper: "clone",
+                revert: "invalid"
             });
+
+
 
           /*  $("#sortable").sortable({cancel:".ui-stuck"});*/
 
         })
     </script>
     <style>
-        #sortable > div { display: inline-block; }
-        ul.row{
+        .row-header{
+            padding: 1px 4px;
+        }
+        #sortable > li , .row-header{float: left; }
+        ul.table-row{
             margin-top: 25px;
+            margin-left: 20px;
         }
         ul.row input[type=text]{
             height: 16px;
             font-size: .8em;
             width: 50px;
         }
+        li.empty{
+            padding: 2px 18px;
+            height: 26px;
+            width: 50px;
+        }
         ul.row li{
             cursor: move;
-            padding: 0 15px;
+            padding: 2px 18px;
             border: solid .08em black;
-            margin: 0 10px;
+            margin: 0 2px;
+            transition: transform 250ms ease-in-out;
         }
+        #sortable li.clicked{
+            border: solid .03em;
+            /*zoom: 0.9;*/
+            transform: scale(.9);
+            transition: transform 150ms ease-in-out;
+        }
+
         body.dragging, body.dragging * {
             cursor: move !important;
         }
@@ -69,182 +81,22 @@
             z-index: 2000;
         }
 
-        ul.row li.placeholder {
-            position: relative;
-            /*padding-top: 15px;*/
-            /** More li styles **/
-            background: #e2e2e2;
-            border: none;
-            /*border: solid red .06em;*/
-            width: 82px;
-            height: 22px;
-            margin-bottom: -7px;
-            /*margin-top: -12px;
-            margin-left: -5px;*/
-           /* margin: 0;*/
-        }
-        ul.row li.placeholder::before {
-            position: absolute;
-            background: red;
-            /** Define arrowhead **/
-        }
+
 
     </style>
 </head>
 <body>
-<div id="size_popup" class="popup">
-    <div class="popup-header"><h3 class="headH3"><span class="headSpan" th:text="#{label.extraNotes.header}">Size edit</span></h3></div>
-    <div class="popup-content">
-        <div class="popup-info">
-            <h5 class="popup-h5" th:text="#{label.extraNotes.headInfo}">Enter the brand name then choose a brand logo and write a few words about new brand in the right block. </h5>
-        </div>
-        <div class="sz-e-container">
-            <ul class="sz-e-major list-inline">
-                <li>
-                    <div class="dropdown">
-                        <button class="dropbtn button-bordered inline">W32 L32</button>
-                        <div class="dropdown-content">
-                        </div>
-                    </div>
-                </li>
-                <li><div class="sz-e-label"><label>Qty</label></div>
-                    <input class="height" id="sz-e-qty" type="text" value="2">
-                </li>
-            </ul>
-            <ul class="sz-e-fields list-inline">
-                <li>
-                    <div class="sz-e-label"><label>Waist</label></div>
-                    <input type="text" class="height" value="82-84">
-                </li>
-                <li>
-                    <div class="sz-e-label"><label>Length</label></div>
-                    <input type="text" class="height" value="103-104">
-                </li>
-                <li>
-                    <div class="sz-e-label"><label>Bottom</label></div>
-                    <input type="text" class="height" value="16-16.5">
-                </li>
-            </ul>
-            <ul class="sz-e-fields-ex list-inline">
-                <li>
-                    <div class="sz-e-label"><label>Sleeve</label></div>
-                    <input type="text" class="height" value="67-68">
-                </li>
-            </ul>
-        </div>
-        <div class="buttons">
-            <ul class="list-inline">
-                <li><button class="update-button button-typical size_close" th:text="#{label.accept}" disabled>Accept</button></li>
-                <li><button class="cancel-button button-bordered size_close" th:text="#{label.cancel}">Cancel</button></li>
-            </ul>
-        </div>
-    </div>
+<table>
+    <tr></tr>
+</table>
+<div class="drag">
+    <ul class="list-unstyled">
+        <li class="empty"><input type="text" placeholder="textfield" contenteditable="false"></li>
+    </ul>
 </div>
-<div id="edit_popup" class="popup">
-    <div class="popup-header"><h3><span th:text="#{label.expressEdit.popup}">Express edit</span></h3></div>
-    <div class="left">
-        <div class="wrapper">
-            <img class="preview">
-            <span class="status offer"><img src="../../../../resources/img/offer.png" th:src="@{/resources/img/offer.png}"></span>
-            <span class="last offer">-55%</span>
-        </div>
-        <ul class="list-inline" id="ex-pr-panel">
-            <li>
-                <div class="final">
-                    <div class="origin-price">
-                        <span class="price">350</span>
-                        <span class="currency">uah</span>
-                    </div>
-                    <div class="sale-price">
-                        <span class="price">1200</span>
-                        <span class="currency">uah</span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="activate">
-                    <label class="switch-active"><input type="checkbox"><div class="slider"></div></label>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div class="right">
-        <div class="ex-tabs">
-            <ul id="ex-forTabs" class="forTabs">
-                <li class="active" ><a href="#ex-tab-1" th:text="#{locale.en}">EN</a></li>
-                <li><a href="#ex-tab-2" th:text="#{locale.ru}">RU</a></li>
-                <li class="last-li"><a href="#ex-tab-3" th:text="#{locale.ua}">UA</a></li>
-            </ul>
-            <div id="ex-tab-1">
-                <div class="name">
-                    <input id="item-name" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
-                </div>
-            </div>
-            <div id="ex-tab-2">
-                <div class="name">
-                    <input id="item-name-ru" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
-                </div>
-            </div>
-            <div id="ex-tab-3">
-                <div class="name">
-                    <input id="item-name-ua" type="text" spellcheck="false" placeholder="Item name" th:placeholder="#{label.itemName}" value="Asos Skinny chinos navy">
-                </div>
-            </div>
-        </div>
-        <div class="prices">
-            <div class="left_info">
-                <h4 th:text="#{label.expressEdit.price}">Price</h4>
-            </div>
-            <ul class="list-inline">
-                <li><label for="sale" th:text="#{label.expressEdit.sale}">Sale, ₴</label><input id="sale" class="" type="number" value="719"></li>
-                <li class="discount"><label for="discount" th:text="(#{label.discount}+', %')">Discount, %</label><input id="discount" class="" type="number" value="15"></li>
-            </ul>
-            <input hidden class="id" type="number">
-        </div>
-        <div class="options">
-            <div class="left_info">
-                <h4 id="options" th:text="#{label.options}">Options</h4>
-            </div>
-            <ul class="list-inline">
-                <li class="currency main-option">
-                    <div class="dropdown1">
-                        <button class="dropbtn currency" id="currency-select">uah</button>
-                        <div class="dropdown-content">
-                            <a class="currency-value">uah</a>
-                            <a class="currency-value">usd</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="color main-option">
-                    <div class="dropdown1">
-                        <button class="dropbtn color" id="color-select"><input hidden type="number"><a id="hex" class="hex"></a></button>
-                        <div class="dropdown-content">
-                            <a class="color-value" th:remove="all"><input hidden type="number"><div class="hex"></div></a>
-                            <a class="color-value" th:remove="all">light blue</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="second-option">
-                    <div class="item-group">
-                        <div class="dropdown">
-                            <button class="dropbtn item-group button-bordered">Chinos</button>
-                            <div class="dropdown-content group-content"></div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="buttons">
-            <ul class="list-inline">
-                <li><button class="update-button button-typical edit_close" th:text="#{label.update}">Update</button></li>
-                <li><button class="cancel-button button-bordered edit_close" th:text="#{label.cancel}">Cancel</button></li>
-            </ul>
-        </div>
-    </div>
-</div>
-<ul class="list-inline">
+<ul class="list-inline table-row">
     <li class="ui-stuck" id="stuck">
-        <input class="row-header" type="text" value="Stucked">
+        <input class="row-header" type="text" value="accept rules">
     </li>
     <li>
         <ul class="list-inline row" id="sortable">
@@ -256,6 +108,30 @@
             </li>
             <li class="ui-state-default">
                 <input class="row-element" type="text" value="3 third">
+            </li>
+            <li class="empty">
+
+            </li>
+        </ul>
+    </li>
+</ul>
+<ul class="list-inline table-row">
+    <li class="ui-stuck">
+        <input class="row-header" type="text" value="accept rules">
+    </li>
+    <li>
+        <ul class="list-inline row" id="sortable_green">
+            <li class="ui-state-default">
+                <input class="row-element" type="text" value="1 first">
+            </li>
+            <li class="ui-state-default">
+                <input class="row-element" type="text" value="2 second">
+            </li>
+            <li class="ui-state-default">
+                <input class="row-element" type="text" value="3 third">
+            </li>
+            <li class="empty">
+
             </li>
         </ul>
     </li>

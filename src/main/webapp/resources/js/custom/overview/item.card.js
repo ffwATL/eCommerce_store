@@ -118,7 +118,7 @@ $(function(){
             level: 3
         });
         $('.item_title').text(document.title);
-        $('#originPrice').text(data.originPrice/100);
+        $('#originPrice').text(data.retailPrice/100);
         var salePrice =data.salePrice/100,
             code = resolveGroupCommonCode(resolveLocale(data.itemGroup.groupName)).code,
             sp = $('.sp-wrap'),
