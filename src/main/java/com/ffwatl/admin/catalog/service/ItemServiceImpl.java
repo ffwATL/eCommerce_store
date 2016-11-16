@@ -12,6 +12,8 @@ import com.ffwatl.admin.catalog.domain.presenter.ItemUpdatePresenter;
 import com.ffwatl.admin.user.domain.dto.UserDTO;
 import com.ffwatl.admin.catalog.dao.ItemDao;
 import com.ffwatl.util.Settings;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,7 @@ import java.util.Map;
 
 @Service
 public class ItemServiceImpl implements ItemService{
-
+    private static final Logger logger = LogManager.getLogger("com.ffwatl.admin.web.controller.AddNewItemController");
     @Autowired
     private ItemDao itemDao;
     @Autowired
@@ -128,8 +130,10 @@ public class ItemServiceImpl implements ItemService{
             Collections.sort(((ProductClothes) item).getSize());
             cPresenter.setSize(((ProductClothes) item).getSize());
             cPresenter.setBrandImgUrl(settings.getBrandImgUrl());
+            logger.info("*****" + ((ProductClothes) item).getSize());
             return cPresenter;
         }
+        logger.info("not clothes");
         return presenter;
     }
 

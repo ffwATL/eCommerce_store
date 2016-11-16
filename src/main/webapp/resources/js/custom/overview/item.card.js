@@ -27,7 +27,7 @@ $(function(){
             type: "POST",
             data: {'id':$('#itemId').val()},
             success: function(result){
-                var name = resolveLocale(result.itemName);
+                var name = resolveLocale(result.productName);
                 document.title = name;
                 processData(result, name);
                 $('.sp-wrap').smoothproducts();
