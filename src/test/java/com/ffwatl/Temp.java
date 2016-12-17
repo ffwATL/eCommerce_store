@@ -1,26 +1,26 @@
 package com.ffwatl;
 
-import com.ffwatl.admin.catalog.domain.Category;
-import com.ffwatl.admin.catalog.domain.CategoryImpl;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Temp {
 
     @Test
-    @Ignore
+   /* @Ignore*/
     public void readGson() throws FileNotFoundException {
-        JsonReader reader = new JsonReader(new FileReader("item_group_tree.json"));
-        Category i = new Gson().fromJson(reader, CategoryImpl.class);
+        int i = 5;
+        i = i++;
+        System.out.println(i);
+        /*JsonReader reader = new JsonReader(new FileReader("item_group_tree.json"));
+        Category i = new Gson().fromJson(reader, CategoryImpl.class);*/
+        AtomicInteger aI = new AtomicInteger(2);
       /*  fillParent(null, i);*/
-        System.err.println(i);
+
     }
 
     @Test

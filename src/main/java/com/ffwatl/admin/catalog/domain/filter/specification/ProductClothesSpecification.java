@@ -11,6 +11,7 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ProductClothesSpecification extends ProductDefaultSpecification<ProductClothes> {
 
 
