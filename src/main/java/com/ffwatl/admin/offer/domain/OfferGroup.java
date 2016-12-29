@@ -1,13 +1,11 @@
-package com.ffwatl.admin.offer;
+package com.ffwatl.admin.offer.domain;
 
 import com.ffwatl.admin.catalog.domain.Product;
 
 import java.util.List;
 
-/**
- * Created by ffw_ATL on 15-Nov-16.
- */
-public interface PromoGroup {
+
+public interface OfferGroup {
     long getId();
 
     String getName();

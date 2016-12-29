@@ -129,7 +129,7 @@ public final class WebUtil {
         }
     }
 
-    public static void createFolder(String dirPath) throws IOException {
+    public synchronized static void createFolder(String dirPath) throws IOException {
         File file = new File(dirPath);
         if(file.exists()){
             FileUtils.cleanDirectory(file);

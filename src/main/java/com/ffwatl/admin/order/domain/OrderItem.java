@@ -1,4 +1,4 @@
-package com.ffwatl.admin.order;
+package com.ffwatl.admin.order.domain;
 
 
 import com.ffwatl.admin.catalog.domain.CategoryImpl;

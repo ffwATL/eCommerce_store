@@ -3,9 +3,12 @@ package com.ffwatl.admin.i18n.domain;
 
 import javax.persistence.*;
 import java.beans.Transient;
+import java.io.Serializable;
 
 @Embeddable
-public class I18n implements Comparable<I18n> {
+public class I18n implements Serializable, Comparable<I18n> {
+
+    private static final long serialVersionUID = 1L;
 
     @Column(length = 2048)
     private String locale_en;
@@ -28,16 +31,19 @@ public class I18n implements Comparable<I18n> {
         return locale_ua;
     }
 
-    public void setLocale_en(String locale_en) {
+    public I18n setLocale_en(String locale_en) {
         this.locale_en = locale_en;
+        return this;
     }
 
-    public void setLocale_ru(String locale_ru) {
+    public I18n setLocale_ru(String locale_ru) {
         this.locale_ru = locale_ru;
+        return this;
     }
 
-    public void setLocale_ua(String locale_ua) {
+    public I18n setLocale_ua(String locale_ua) {
         this.locale_ua = locale_ua;
+        return this;
     }
 
     @Transient

@@ -82,10 +82,10 @@ public class AddNewItemController {
                     clothesItem.getProductName().getLocale_en()+", id = "+id);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            throw e;
-            /*model.addAttribute("isError", true);
+            /*throw e;*/
+            model.addAttribute("isError", true);
             model.addAttribute("errorMessage", e.getMessage());
-            return "admin/new/result";*/
+            return "admin/new/result";
         }
         Cookie[] cookies = request.getCookies();
         String cookie = LocaleContextHolder.getLocale().getDisplayLanguage();

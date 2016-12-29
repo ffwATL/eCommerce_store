@@ -1,4 +1,4 @@
-package com.ffwatl.admin.offer;
+package com.ffwatl.admin.offer.domain;
 
 
 import com.ffwatl.admin.catalog.domain.Product;
@@ -8,8 +8,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "promo_groups")
-public class PromoGroupImpl implements PromoGroup {
+@Table(name = "offer_groups")
+public class OfferGroupImpl implements OfferGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,7 +76,7 @@ public class PromoGroupImpl implements PromoGroup {
 
     @Override
     public String toString() {
-        return "PromoGroupImpl{" +
+        return "OfferGroupImpl{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", items=" + items +

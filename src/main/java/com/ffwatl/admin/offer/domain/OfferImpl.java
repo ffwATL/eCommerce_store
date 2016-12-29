@@ -1,4 +1,4 @@
-package com.ffwatl.admin.offer;
+package com.ffwatl.admin.offer.domain;
 
 import com.ffwatl.admin.catalog.domain.Category;
 import com.ffwatl.admin.catalog.domain.CategoryImpl;
@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "promo_codes")
-public class PromoCodeImpl implements PromoCode {
+@Table(name = "offer_codes")
+public class OfferImpl implements Offer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,12 +35,12 @@ public class PromoCodeImpl implements PromoCode {
     }
 
     @Override
-    public String getCode() {
+    public String getName() {
         return code;
     }
 
     @Override
-    public Date getValidTo() {
+    public Date getEndDate() {
         return validTo;
     }
 
@@ -50,7 +50,7 @@ public class PromoCodeImpl implements PromoCode {
     }
 
     @Override
-    public int getDiscount() {
+    public int getValue() {
         return discount;
     }
 
@@ -70,12 +70,12 @@ public class PromoCodeImpl implements PromoCode {
     }
 
     @Override
-    public void setCode(String code) {
+    public void setName(String code) {
         this.code = code;
     }
 
     @Override
-    public void setValidTo(Date validTo) {
+    public void setEndDate(Date validTo) {
         this.validTo = validTo;
     }
 
@@ -85,7 +85,7 @@ public class PromoCodeImpl implements PromoCode {
     }
 
     @Override
-    public void setDiscount(int discount) {
+    public void setValue(int discount) {
         this.discount = discount;
     }
 
@@ -101,7 +101,7 @@ public class PromoCodeImpl implements PromoCode {
 
     @Override
     public String toString() {
-        return "PromoCodeImpl{" +
+        return "OfferImpl{" +
                 "id=" + id +
                 ", code='" + code + '\'' +
                 ", validTo=" + validTo +

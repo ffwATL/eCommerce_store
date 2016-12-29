@@ -1,8 +1,6 @@
 package com.ffwatl.admin.user.domain;
 
-/**
- * Created by ffw_ATL on 15-Nov-16.
- */
+
 public interface Address {
     long getId();
 
