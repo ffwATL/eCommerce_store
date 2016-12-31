@@ -30,12 +30,12 @@ public class CategoryDTO implements Category {
     private I18n groupName;
 
     /**
-     * CategoryImpl's depth level value.
+     * Category's depth level value.
      */
     private int level;
 
     /**
-     * Common attribute for CategoryImpl objects.
+     * Common attribute for Category objects.
      */
     private CommonCategory cat;
     private String description;
@@ -147,6 +147,12 @@ public class CategoryDTO implements Category {
     public Category setCat(CommonCategory cat) {
         this.cat = cat;
         return this;
+    }
+
+    @Override
+    public int compareTo(Category o) {
+        if(o == null) return 1;
+        return groupName.compareTo(o.getGroupName());
     }
 
     @Override

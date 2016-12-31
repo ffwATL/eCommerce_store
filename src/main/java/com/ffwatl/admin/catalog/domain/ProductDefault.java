@@ -2,6 +2,8 @@ package com.ffwatl.admin.catalog.domain;
 
 import com.ffwatl.admin.currency.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
+import com.ffwatl.admin.offer.domain.Offer;
+import com.ffwatl.admin.offer.domain.OfferImpl;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.UserImpl;
 
@@ -79,184 +81,198 @@ public class ProductDefault implements Product {
 
     @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = UserImpl.class)
     private User addedBy;
+    @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = OfferImpl.class)
+    private Offer offer;
 
-    public User getAddedBy() {
-        return addedBy;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public String getExtraNotes() {
-        return extraNotes;
-    }
-
-    public String getVendorCode() {
-        return vendorCode;
-    }
-
-    public boolean isUsed() {
-        return isUsed;
-    }
-
-    public I18n getDescription() {
-        return description;
-    }
-
+    @Override
     public long getId() {
         return id;
     }
-
+    @Override
+    public User getAddedBy() {
+        return addedBy;
+    }
+    @Override
+    public Gender getGender() {
+        return gender;
+    }
+    @Override
+    public String getExtraNotes() {
+        return extraNotes;
+    }
+    @Override
+    public String getVendorCode() {
+        return vendorCode;
+    }
+    @Override
+    public boolean isUsed() {
+        return isUsed;
+    }
+    @Override
+    public I18n getDescription() {
+        return description;
+    }
+    @Override
     public String getMetaInfo() {
         return metaInfo;
     }
-
+    @Override
     public String getMetaKeys() {
         return metaKeys;
     }
-
+    @Override
     public Currency getCurrency() {
         return currency;
     }
-
+    @Override
     public Category getCategory() {
         return itemGroup;
     }
-
+    @Override
     public I18n getProductName() {
         return itemName;
     }
-
+    @Override
     public int getQuantity() {
         return quantity;
     }
-
+    @Override
     public Color getColor() {
         return color;
     }
-
+    @Override
     public int getDiscount() {
         return discount;
     }
-
+    @Override
     public int getRetailPrice() {
         return originPrice;
     }
-
+    @Override
     public int getSalePrice() {
         return salePrice;
     }
-
+    @Override
     public boolean isActive() {
         return isActive;
     }
-
+    @Override
     public Date getImportDate() {
         return importDate;
     }
-
+    @Override
     public Timestamp getLastChangeDate() {
         return lastChangeDate;
     }
 
+    @Override
+    public Offer getOffer() {
+        return this.offer;
+    }
+    @Override
     public Product setId(long id) {
         this.id = id;
         return this;
     }
-
+    @Override
     public Product setDescription(I18n description) {
         this.description = description;
         return this;
     }
-
+    @Override
     public Product setCurrency(Currency currency) {
         this.currency = currency;
         return this;
     }
-
+    @Override
     public Product setItemGroup(Category itemGroup) {
         this.itemGroup = itemGroup;
         return this;
     }
-
+    @Override
     public Product setItemName(I18n itemName) {
         this.itemName = itemName;
         return this;
     }
-
+    @Override
     public Product setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
     }
-
+    @Override
     public Product setColor(Color color) {
         this.color = color;
         return this;
     }
-
+    @Override
     public Product setDiscount(int discount) {
         this.discount = discount;
         return this;
     }
-
+    @Override
     public Product setRetailPrice(int originPrice) {
         this.originPrice = originPrice;
         return this;
     }
-
+    @Override
     public Product setSalePrice(int salePrice) {
         this.salePrice = salePrice;
         return this;
     }
-
+    @Override
     public Product setActive(boolean isActive) {
         this.isActive = isActive;
         return this;
     }
-
+    @Override
     public Product setImportDate(Date importDate) {
         this.importDate = importDate;
         return this;
     }
-
+    @Override
     public Product setMetaInfo(String metaInfo) {
         this.metaInfo = metaInfo;
         return this;
     }
-
+    @Override
     public Product setMetaKeys(String metaKeys) {
         this.metaKeys = metaKeys;
         return this;
     }
-
+    @Override
     public Product setLastChangeDate(Timestamp lastChangeDate) {
         this.lastChangeDate = lastChangeDate;
         return this;
     }
-
+    @Override
     public Product setAddedBy(User addedBy) {
         this.addedBy = addedBy;
         return this;
     }
-
+    @Override
     public Product setIsUsed(boolean isUsed) {
         this.isUsed = isUsed;
         return this;
     }
-
+    @Override
     public Product setExtraNotes(String extraNotes) {
         this.extraNotes = extraNotes;
         return this;
     }
-
+    @Override
     public Product setVendorCode(String vendorCode) {
         this.vendorCode = vendorCode;
         return this;
     }
-
+    @Override
     public Product setGender(Gender gender) {
         this.gender = gender;
+        return this;
+    }
+
+    @Override
+    public Product setOffer(Offer offer) {
+        this.offer = offer;
         return this;
     }
 

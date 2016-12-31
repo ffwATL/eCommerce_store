@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "items_group")
-public class CategoryImpl implements Comparable<CategoryImpl>, Serializable, Category {
+public class CategoryImpl implements Serializable, Category {
 
     /**
      * CategoryImpl identifier.
@@ -141,8 +141,8 @@ public class CategoryImpl implements Comparable<CategoryImpl>, Serializable, Cat
     }
 
     @Override
-    public int compareTo(CategoryImpl o) {
+    public int compareTo(Category o) {
         if(o == null) return 1;
-        return groupName.compareTo(o.groupName);
+        return groupName.compareTo(o.getGroupName());
     }
 }

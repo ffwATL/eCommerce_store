@@ -6,7 +6,7 @@ import com.ffwatl.admin.user.domain.User;
 
 import java.util.List;
 
-public interface Category {
+public interface Category extends Comparable<Category>{
 
     boolean FETCHED = true;
     boolean NO_CHILD = false;

@@ -14,10 +14,16 @@ public class OfferType implements Serializable, EnumerationType, Comparable<Offe
     private static final long serialVersionUID = 1L;
 
     private static final Map<String, OfferType> TYPES = new LinkedHashMap<>();
-    public static final OfferType ORDER_ITEM = new OfferType("ORDER_ITEM", new I18n().setLocale_en("Order Item"), 1000);
+
+    public static final OfferType ORDER_ITEM = new OfferType("ORDER_ITEM",
+            new I18n().setLocale_en("Order Item"), 1000);
     public static final OfferType ORDER = new OfferType("ORDER", new I18n().setLocale_en("Order"), 2000);
     public static final OfferType FULFILLMENT_GROUP = new OfferType("FULFILLMENT_GROUP",
             new I18n().setLocale_en("Fulfillment Group"), 3000);
+
+    public static OfferType getInstance(final String type) {
+        return TYPES.get(type);
+    }
 
     private String type;
     private I18n friendlyType;

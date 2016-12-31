@@ -1,14 +1,16 @@
 package com.ffwatl.common.rule;
 
-/**
- * Created by ffw_ATL on 29-Dec-16.
- */
-public interface Rule<T,B> {
+
+public interface Rule {
 
     long getId();
-    boolean isMatch(T target);
-    B getBound();
+    String getType();
+    String getBoundValue();
+    String getFieldName();
 
-    Rule<T, B> setBound(B bound);
-    Rule<T, B> setId(long id);
+    Rule setId(long id);
+    Rule setType(String type);
+    Rule setBoundValue(String boundValue);
+    Rule setFieldName(String fieldName);
+
 }

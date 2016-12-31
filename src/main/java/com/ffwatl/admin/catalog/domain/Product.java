@@ -3,6 +3,7 @@ package com.ffwatl.admin.catalog.domain;
 
 import com.ffwatl.admin.currency.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
+import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.user.domain.User;
 
 import java.sql.Timestamp;
@@ -30,6 +31,7 @@ public interface Product {
     boolean isActive();
     Date getImportDate();
     Timestamp getLastChangeDate();
+    Offer getOffer();
 
     Product setId(long id);
     Product setDescription(I18n description);
@@ -51,5 +53,6 @@ public interface Product {
     Product setExtraNotes(String extraNotes);
     Product setVendorCode(String vendorCode);
     Product setGender(Gender gender);
+    Product setOffer(Offer offer);
 
 }
