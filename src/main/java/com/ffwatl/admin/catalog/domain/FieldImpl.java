@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 /**
  * @author ffw_ATL;
- * Entity class is for handling custom numbers of fields in SizeImpl object. *
+ * Entity class is for handling custom numbers of fields in ProductAttributeImpl object. *
  * All the fields must be filled.
  */
 @Entity

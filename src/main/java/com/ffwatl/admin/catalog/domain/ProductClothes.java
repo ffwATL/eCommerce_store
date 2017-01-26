@@ -12,19 +12,19 @@ import java.util.List;
 @Table(name = "clothes_items")
 public class ProductClothes extends ProductDefault {
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = SizeImpl.class)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductAttributeImpl.class)
     @Fetch(value = FetchMode.SUBSELECT)
     @Column(nullable = false)
-    private List<Size> size;
+    private List<ProductAttribute> size;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = BrandImpl.class)
     private Brand brand;
 
-    public List<Size> getSize() {
+    public List<ProductAttribute> getSize() {
         return size;
     }
 
-    public void setSize(List<Size> size) {
+    public void setSize(List<ProductAttribute> size) {
         this.size = size;
     }
 

@@ -1,148 +1,167 @@
 package com.ffwatl.admin.order.domain;
 
 
-import com.ffwatl.admin.catalog.domain.CategoryImpl;
-import com.ffwatl.admin.catalog.domain.Size;
-import com.ffwatl.admin.catalog.domain.SizeImpl;
-import com.ffwatl.admin.currency.Currency;
 import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.Color;
+import com.ffwatl.admin.catalog.domain.ProductAttributeType;
 import com.ffwatl.admin.i18n.domain.I18n;
+import com.ffwatl.admin.offer.domain.CandidateItemOffer;
 
-import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
-@Entity
-@Table(name = "order_items")
-public class OrderItem {
+public interface OrderItem extends Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    /**
+     * The unique identifier of this OrderItem.
+     * @return the unique identifier of this OrderItem.
+     */
+    long getId();
 
-    private long itemId;
+    long getProductId();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, targetEntity = CategoryImpl.class)
-    private Category itemGroup;
+    I18n getProductName();
 
-    @Embedded
-    private I18n name;
+    ProductAttributeType getProductAttributeType();
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY, targetEntity = SizeImpl.class)
-    private Size size;
+    Color getOrderItemColor();
 
-    @Column(nullable = false)
-    private String shortName;
+    /**
+     * Reference back to the containing order.
+     * @return reference back to the containing order.
+     */
+    Order getOrder();
 
-    private int qty;
+    int getOriginPrice();
 
-    private int originPrice;
+    /**
+     * The retail price of the item that was added to the {@link Order} at the time that this was added.
+     * This is preferable to use as opposed to checking the price of the item that was added from the
+     * catalog domain, since the price in the catalog domain could have changed since the item
+     * was added to the {@link Order}.
+     * @return the retail price of the item that was added to the {@link Order}.
+     */
+    int getRetailPrice();
 
-    private int salePrice;
+    /**
+     * Returns the salePrice for this item.
+     * @return the salePrice for this item.
+     */
+    int getSalePrice();
 
-    private int discount;
+    /**
+     * The quantity of this {@link OrderItem}.
+     * @return the quantity of this {@link OrderItem}.
+     */
+    int getQuantity();
 
-    private Currency currency;
+    /**
+     * Collection of priceDetails for this orderItem.
+     * Without discounts, an orderItem would have exactly 1 ItemPriceDetail. When orderItem discounting or
+     * tax-calculations result in an orderItem having multiple prices like in a buy-one-get-one free example,
+     * the orderItem will get an additional ItemPriceDetail.
+     * Generally, an OrderItem will have 1 ItemPriceDetail record for each uniquely priced version of the item.
+     */
+    List<OrderItemPriceDetail> getOrderItemPriceDetails();
 
-    public long getId() {
-        return id;
-    }
+    Category getCategory();
 
-    public long getItemId() {
-        return itemId;
-    }
+    Set<CandidateItemOffer> getCandidateItemOffers();
 
-    public I18n getName() {
-        return name;
-    }
+    /**
+     * If any quantity of this item was used to qualify for an offer, then this returned list
+     * will indicate the offer and the relevant quantity.
+     * As an example, a BuyOneGetOneFree offer would have 1 qualifier and 1 adjustment.
+     * @return a List of OrderItemAdjustment.
+     */
+    Set<OrderItemQualifier> getOrderItemQualifiers();
 
-    public Size getSize() {
-        return size;
-    }
+    /**
+     * Return true if this item is on sale;
+     * @return true if this item is on sale.
+     */
+    boolean getIsOnSale();
 
-    public String getShortName() {
-        return shortName;
-    }
+    /**
+     * If true, this item can be discounted..
+     */
+    boolean isDiscountingAllowed();
 
-    public Category getItemGroup() {
-        return itemGroup;
-    }
+    /**
+     * Returns true if this item received a discount.
+     * @return true if this item received a discount.
+     */
+    boolean getIsDiscounted();
 
-    public int getQty() {
-        return qty;
-    }
+    /**
+     * Returns the total price to be paid for this order item including item-level adjustments.
+     * It does not include the effect of order level adjustments. Calculated by looping through
+     * the orderItemPriceDetails
+     * @return the total price to be paid for this order item including item-level adjustments.
+     */
+    int getTotalPrice();
 
-    public int getOriginPrice() {
-        return originPrice;
-    }
+    /**
+     * Returns the discount value in percent that was applied to this orderItem.
+     * @return the discount value in percent that was applied to this orderItem.
+     */
+    int getDiscountValue();
 
-    public int getSalePrice() {
-        return salePrice;
-    }
+    /**
+     * Returns the total price to be paid before adjustments.
+     */
+    int getTotalPriceBeforeAdjustments();
 
-    public int getDiscount() {
-        return discount;
-    }
+    int getPriceBeforeAdjustments(boolean allowSalesPrice);
 
-    public Currency getCurrency() {
-        return currency;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    OrderItem setId(long id);
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
+    OrderItem setProductId(long id);
 
-    public void setQty(int qty) {
-        this.qty = qty;
-    }
+    OrderItem setProductName(I18n productName);
 
-    public void setOriginPrice(int originPrice) {
-        this.originPrice = originPrice;
-    }
+    OrderItem setProductAttributeType(ProductAttributeType productAttributeType);
 
-    public void setSalePrice(int salePrice) {
-        this.salePrice = salePrice;
-    }
+    OrderItem setColor(Color color);
 
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
+    OrderItem setOrder(Order order);
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
+    OrderItem setOriginPrice(int originPrice);
 
-    public void setItemId(long itemId) {
-        this.itemId = itemId;
-    }
+    OrderItem setRetailPrice(int retailPrice);
 
-    public void setItemGroup(Category itemGroup) {
-        this.itemGroup = itemGroup;
-    }
+    OrderItem setSalePrice(int salePrice);
 
-    public void setName(I18n name) {
-        this.name = name;
-    }
+    OrderItem setQuantity(int quantity);
 
-    public void setSize(Size size) {
-        this.size = size;
-    }
+    OrderItem setOrderItemPriceDetails(List<OrderItemPriceDetail> orderItemPriceDetails);
 
-    @Override
-    public String toString() {
-        return "OrderItem{" +
-                "id=" + id +
-                ", itemId=" + itemId +
-                ", name=" + name +
-                ", size=" + size +
-                ", shortName='" + shortName + '\'' +
-                ", qty=" + qty +
-                ", originPrice=" + originPrice +
-                ", salePrice=" + salePrice +
-                ", discount=" + discount +
-                ", currency=" + currency +
-                '}';
-    }
+    OrderItem setCategory(Category category);
+
+    OrderItem setCandidateItemOffers(Set<CandidateItemOffer> candidateItemOffers);
+
+    OrderItem setOrderItemQualifiers(Set<OrderItemQualifier> orderItemQualifiers);
+
+    OrderItem setDiscountingAllowed(boolean discountingAllowed);
+
+    OrderItem setDiscountValue(int discountValue);
+
+    /**
+     * Used by the promotion engine to add offers that might apply to this orderItem.
+     */
+    OrderItem addCandidateItemOffer(CandidateItemOffer candidateItemOffer);
+
+    /**
+     * Removes all candidate offers.   Used by the promotion engine which subsequently adds
+     * the candidate offers that might apply back to this item.
+     */
+    OrderItem removeAllCandidateItemOffers();
+
+    /**
+     * Removes all adjustment for this order item and reset the adjustment price.
+     */
+    int removeAllAdjustments();
+
 }

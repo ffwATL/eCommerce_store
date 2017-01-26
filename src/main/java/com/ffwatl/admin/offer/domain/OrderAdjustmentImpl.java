@@ -28,16 +28,16 @@ public class OrderAdjustmentImpl implements OrderAdjustment {
     private String reason;
 
     @Column(name = "adjustment_value")
-    private int value;
-
-
+    private int adjustmentValue;
 
     @Override
-    public void init(Order order, Offer offer, String reason) {
+    public OrderAdjustment init(Order order, Offer offer, String reason) {
         this.order = order;
         this.offer = offer;
         this.reason = reason;
+        return this;
     }
+
 
     @Override
     public Order getOrder() {
@@ -60,28 +60,38 @@ public class OrderAdjustmentImpl implements OrderAdjustment {
     }
 
     @Override
-    public int getValue() {
-        return this.value;
+    public int getAdjustmentValue() {
+        return this.adjustmentValue;
     }
 
     @Override
-    public void setId(long id) {
+    public OrderAdjustment setId(long id) {
         this.id = id;
+        return this;
     }
 
     @Override
-    public void setOrder(Order order) {
+    public OrderAdjustment setOffer(Offer offer) {
+        this.offer = offer;
+        return this;
+    }
+
+    @Override
+    public OrderAdjustment setOrder(Order order) {
         this.order = order;
+        return this;
     }
 
     @Override
-    public void setValue(int value) {
-        this.value = value;
+    public OrderAdjustment setAdjustmentValue(int adjustmentValue) {
+        this.adjustmentValue = adjustmentValue;
+        return this;
     }
 
     @Override
-    public void setReason(String reason) {
+    public OrderAdjustment setReason(String reason) {
         this.reason = reason;
+        return this;
     }
 
     @Override
@@ -92,7 +102,7 @@ public class OrderAdjustmentImpl implements OrderAdjustment {
         OrderAdjustmentImpl that = (OrderAdjustmentImpl) o;
 
         if (getId() != that.getId()) return false;
-        if (getValue() != that.getValue()) return false;
+        if (getAdjustmentValue() != that.getAdjustmentValue()) return false;
         if (getOrder() != null ? !getOrder().equals(that.getOrder()) : that.getOrder() != null) return false;
         if (getOffer() != null ? !getOffer().equals(that.getOffer()) : that.getOffer() != null) return false;
         return !(getReason() != null ? !getReason().equals(that.getReason()) : that.getReason() != null);
@@ -105,7 +115,7 @@ public class OrderAdjustmentImpl implements OrderAdjustment {
         result = 31 * result + (getOrder() != null ? getOrder().hashCode() : 0);
         result = 31 * result + (getOffer() != null ? getOffer().hashCode() : 0);
         result = 31 * result + (getReason() != null ? getReason().hashCode() : 0);
-        result = 31 * result + getValue();
+        result = 31 * result + getAdjustmentValue();
         return result;
     }
 
@@ -116,7 +126,7 @@ public class OrderAdjustmentImpl implements OrderAdjustment {
                 ", order=" + order +
                 ", offer=" + offer +
                 ", reason='" + reason + '\'' +
-                ", value=" + value +
+                ", adjustmentValue=" + adjustmentValue +
                 '}';
     }
 }

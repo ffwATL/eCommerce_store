@@ -2,6 +2,7 @@ package com.ffwatl.admin.user.domain;
 
 
 public interface Address {
+
     long getId();
 
     Country getCountry();

@@ -27,7 +27,7 @@ public class FilterProductClothes implements Serializable {
     /**
      * List of clothes size.
      */
-    private List<EuroSize> size;
+    private List<ProductAttributeType> size;
 
     /**
      * List of 'all' item groups.
@@ -62,7 +62,7 @@ public class FilterProductClothes implements Serializable {
         return allCategories;
     }
 
-    public List<EuroSize> getSize() {
+    public List<ProductAttributeType> getSize() {
         return size;
     }
 
@@ -74,7 +74,7 @@ public class FilterProductClothes implements Serializable {
         this.brandList = brandList;
     }
 
-    public void setSize(List<EuroSize> size) {
+    public void setSize(List<ProductAttributeType> size) {
         this.size = size;
     }
 

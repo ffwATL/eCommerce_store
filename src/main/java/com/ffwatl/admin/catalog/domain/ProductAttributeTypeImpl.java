@@ -6,8 +6,8 @@ import com.ffwatl.admin.i18n.domain.I18n;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "eu_size")
-public class EuroSizeImpl implements EuroSize {
+@Table(name = "product_attribute_types")
+public class ProductAttributeTypeImpl implements ProductAttributeType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,26 +34,26 @@ public class EuroSizeImpl implements EuroSize {
     }
 
     @Override
-    public EuroSize setId(long id) {
+    public ProductAttributeType setId(long id) {
         this.id = id;
         return this;
     }
 
     @Override
-    public EuroSize setCat(CommonCategory cat) {
+    public ProductAttributeType setCat(CommonCategory cat) {
         this.cat = cat;
         return this;
     }
 
     @Override
-    public EuroSize setName(I18n name) {
+    public ProductAttributeType setName(I18n name) {
         this.name = name;
         return this;
     }
 
     @Override
     public String toString() {
-        return "EuroSizeImpl{" +
+        return "ProductAttributeTypeImpl{" +
                 "id=" + id +
                 ", name=" + name +
                 ", cat=" + cat +
@@ -61,7 +61,7 @@ public class EuroSizeImpl implements EuroSize {
     }
 
     @Override
-    public int compareTo(EuroSize o) {
+    public int compareTo(ProductAttributeType o) {
         if(o == null) return 1;
         if(this.id < o.getId()) return -1;
         return this.id == o.getId() ? 0 : 1;

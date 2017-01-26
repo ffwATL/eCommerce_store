@@ -2,7 +2,7 @@ package com.ffwatl.admin.catalog.service;
 
 
 import com.ffwatl.admin.catalog.dao.SizeDao;
-import com.ffwatl.admin.catalog.domain.Size;
+import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ public class SizeServiceImpl implements SizeService{
     private SizeDao sizeDao;
 
     @Override
-    public Size findById(long id) {
+    public ProductAttribute findById(long id) {
         return sizeDao.findById(id);
     }
 

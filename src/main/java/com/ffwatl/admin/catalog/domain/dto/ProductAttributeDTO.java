@@ -1,22 +1,22 @@
 package com.ffwatl.admin.catalog.domain.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.ffwatl.admin.catalog.domain.EuroSize;
+import com.ffwatl.admin.catalog.domain.ProductAttributeType;
 import com.ffwatl.admin.catalog.domain.Field;
-import com.ffwatl.admin.catalog.domain.Size;
+import com.ffwatl.admin.catalog.domain.ProductAttribute;
 
 import java.util.List;
 
 
 
-public class SizeDTO implements Size{
+public class ProductAttributeDTO implements ProductAttribute {
 
     private long id;
     private int quantity;
     @JsonDeserialize(contentAs=FieldDTO.class)
     private List<Field> measurements;
-    @JsonDeserialize(as=EuroSizeDTO.class)
-    private EuroSize eu_size;
+    @JsonDeserialize(as=ProductAttributeTypeDTO.class)
+    private ProductAttributeType eu_size;
 
     @Override
     public long getId() {
@@ -24,7 +24,7 @@ public class SizeDTO implements Size{
     }
 
     @Override
-    public EuroSize getEu_size() {
+    public ProductAttributeType getEu_size() {
         return eu_size;
     }
 
@@ -34,43 +34,43 @@ public class SizeDTO implements Size{
     }
 
     @Override
-    public List<Field> getMeasurements() {
+    public List<Field> getFields() {
         return measurements;
     }
 
     @Override
-    public Size setId(long id) {
+    public ProductAttribute setId(long id) {
         this.id = id;
         return this;
     }
 
     @Override
-    public Size setQuantity(int quantity) {
+    public ProductAttribute setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
     }
 
     @Override
-    public Size setMeasurements(List<Field> measurements) {
+    public ProductAttribute setFields(List<Field> measurements) {
         this.measurements = measurements;
         return this;
     }
 
     @Override
-    public Size setEu_size(EuroSize eu_size) {
+    public ProductAttribute setEu_size(ProductAttributeType eu_size) {
         this.eu_size = eu_size;
         return this;
     }
 
     @Override
-    public int compareTo(Size o) {
+    public int compareTo(ProductAttribute o) {
         if(o == null) return 1;
         return this.eu_size.compareTo(o.getEu_size());
     }
 
     @Override
     public String toString() {
-        return "SizeDTO{" +
+        return "ProductAttributeDTO{" +
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", measurements=" + measurements +

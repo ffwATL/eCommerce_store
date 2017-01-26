@@ -9,7 +9,9 @@ import java.util.Map;
 
 
 public class FulfillmentGroupStatusType implements Serializable, EnumerationType {
+
     private static final long serialVersionUID = 1L;
+
     private static final Map<String, FulfillmentGroupStatusType> TYPES = new LinkedHashMap<>();
 
     /**
@@ -35,6 +37,10 @@ public class FulfillmentGroupStatusType implements Serializable, EnumerationType
 
     private String type;
     private I18n friendlyType;
+
+    public static FulfillmentGroupStatusType getInstance(final String type) {
+        return TYPES.get(type);
+    }
 
     public FulfillmentGroupStatusType() {
         //do nothing

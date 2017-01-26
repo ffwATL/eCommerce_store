@@ -14,7 +14,7 @@ public class CatalogItem {
     private String photoUrl;
     private Product item;
     private String thumbnail_url;
-    private List<Size> size;
+    private List<ProductAttribute> size;
 
     public CatalogItem(ProductDefault item, String photoUrl) {
         if(item == null) throw  new IllegalArgumentException();
@@ -24,7 +24,7 @@ public class CatalogItem {
         if(item instanceof ProductClothes) this.size = ((ProductClothes) item).getSize();
     }
 
-    public List<Size> getSize() {
+    public List<ProductAttribute> getSize() {
         return size;
     }
 

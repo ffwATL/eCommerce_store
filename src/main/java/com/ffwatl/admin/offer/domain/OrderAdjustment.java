@@ -3,11 +3,29 @@ package com.ffwatl.admin.offer.domain;
 
 import com.ffwatl.admin.order.domain.Order;
 
-public interface OrderAdjustment extends Adjustment {
+import java.io.Serializable;
+
+public interface OrderAdjustment extends Serializable{
+
+    OrderAdjustment init(Order order, Offer offer, String reason);
+
+    long getId();
+
+    Offer getOffer();
+
+    String getReason();
+
+    int getAdjustmentValue();
 
     Order getOrder();
 
-    void init(Order order, Offer offer, String reason);
+    OrderAdjustment setId(long id);
 
-    void setOrder(Order order);
+    OrderAdjustment setOffer(Offer offer);
+
+    OrderAdjustment setAdjustmentValue(int adjustmentValue);
+
+    OrderAdjustment setReason(String reason);
+
+    OrderAdjustment setOrder(Order order);
 }

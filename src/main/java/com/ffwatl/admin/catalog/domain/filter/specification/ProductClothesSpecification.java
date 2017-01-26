@@ -21,8 +21,8 @@ public class ProductClothesSpecification extends ProductDefaultSpecification<Pro
             @Override
             public Predicate toPredicate(Root<ProductClothes> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);
-                Join<ProductClothes, Size> join_size = root.join("size", JoinType.LEFT);
-                Join<Size, EuroSize> join_euSize = join_size.join("eu_size", JoinType.INNER);
+                Join<ProductClothes, ProductAttribute> join_size = root.join("size", JoinType.LEFT);
+                Join<ProductAttribute, ProductAttributeType> join_euSize = join_size.join("eu_size", JoinType.INNER);
                 List<Predicate> predicates = new ArrayList<>();
                 if(rules != null){
                     for (GridFilterRule r: rules){

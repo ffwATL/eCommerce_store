@@ -7,6 +7,7 @@ import com.ffwatl.admin.catalog.domain.dto.CategoryDTO;
 import com.ffwatl.admin.catalog.domain.dto.ColorDTO;
 import com.ffwatl.admin.currency.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
+import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.dto.UserDTO;
 
@@ -90,6 +91,11 @@ public class ProductUpdateImpl implements ProductUpdate {
         return lastChangeDate;
     }
 
+    @Override
+    public Offer getOffer() {
+        return null;
+    }
+
     public Currency getCurrency() {
         return currency;
     }
@@ -140,6 +146,11 @@ public class ProductUpdateImpl implements ProductUpdate {
 
     public int getDiscount() {
         return discount;
+    }
+
+    @Override
+    public int getOriginPrice() {
+        return 0;
     }
 
     public boolean isActive() {
@@ -232,6 +243,11 @@ public class ProductUpdateImpl implements ProductUpdate {
         return this;
     }
 
+    @Override
+    public Product setOriginPrice(int originPrice) {
+        return null;
+    }
+
     public ProductUpdate setActive(boolean active) {
         this.isActive = active;
         return this;
@@ -280,6 +296,11 @@ public class ProductUpdateImpl implements ProductUpdate {
     public ProductUpdate setGender(Gender gender) {
         this.gender = gender;
         return this;
+    }
+
+    @Override
+    public Product setOffer(Offer offer) {
+        return null;
     }
 
     public ProductUpdate setRemovedImgs(int[] removedImgs) {

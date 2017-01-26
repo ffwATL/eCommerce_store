@@ -39,8 +39,6 @@ public class OfferRuleType implements Serializable, EnumerationType{
         setType(type);
     }
 
-
-
     private void setType(final String type) {
         this.type = type;
         if (!TYPES.containsKey(type)) {

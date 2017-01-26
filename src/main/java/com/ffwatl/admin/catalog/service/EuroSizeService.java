@@ -2,25 +2,25 @@ package com.ffwatl.admin.catalog.service;
 
 
 import com.ffwatl.admin.catalog.domain.CommonCategory;
-import com.ffwatl.admin.catalog.domain.EuroSize;
-import com.ffwatl.admin.catalog.domain.EuroSizeImpl;
+import com.ffwatl.admin.catalog.domain.ProductAttributeType;
+import com.ffwatl.admin.catalog.domain.ProductAttributeTypeImpl;
 
 import java.util.List;
 
 public interface EuroSizeService {
 
-    EuroSizeImpl findById(long id);
+    ProductAttributeTypeImpl findById(long id);
 
-    void save(EuroSize eu);
+    void save(ProductAttributeType eu);
 
-    void save(List<EuroSize> list);
+    void save(List<ProductAttributeType> list);
 
     void removeSizeById(long id);
 
-    List<EuroSize> findAll();
+    List<ProductAttributeType> findAll();
 
-    List<EuroSize> findByCat(CommonCategory cat);
+    List<ProductAttributeType> findByCat(CommonCategory cat);
 
-    List<EuroSize> findAllUsed();
+    List<ProductAttributeType> findAllUsed();
 
 }

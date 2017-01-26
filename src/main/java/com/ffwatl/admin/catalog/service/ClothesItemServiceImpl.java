@@ -3,7 +3,7 @@ package com.ffwatl.admin.catalog.service;
 import com.ffwatl.admin.catalog.dao.ClothesItemDao;
 import com.ffwatl.admin.catalog.domain.*;
 import com.ffwatl.admin.catalog.domain.dto.FieldDTO;
-import com.ffwatl.admin.catalog.domain.dto.SizeDTO;
+import com.ffwatl.admin.catalog.domain.dto.ProductAttributeDTO;
 import com.ffwatl.admin.catalog.domain.presenter.ClothesItemPresenter;
 import com.ffwatl.admin.user.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -86,7 +86,7 @@ public class ClothesItemServiceImpl implements ClothesItemService{
             item = findById(presenter.getId());
             item.setSize(sizeDTOConverter.transformList(presenter.getSize(), ConverterDTO.ENTITY_OBJECT));
         }
-        for(Size s: presenter.getSize()){
+        for(ProductAttribute s: presenter.getSize()){
             s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
         }
         item.setSize(sizeDTOConverter.transformList(presenter.getSize(), ConverterDTO.ENTITY_OBJECT));
@@ -108,34 +108,34 @@ public class ClothesItemServiceImpl implements ClothesItemService{
         return item;
     }
 
-    private static class SizeDTOConverter extends ConverterDTO<Size>{
+    private static class SizeDTOConverter extends ConverterDTO<ProductAttribute>{
 
         @Override
-        public Size transformDTO2Entity(Size old) {
-            List<Field> fields = old.getMeasurements().stream().map(f -> new FieldImpl()
+        public ProductAttribute transformDTO2Entity(ProductAttribute old) {
+            List<Field> fields = old.getFields().stream().map(f -> new FieldImpl()
                     .setId(f.getId())
                     .setName(f.getName())
                     .setValue(f.getValue()))
                     .collect(Collectors.toList());
-            return new SizeImpl()
+            return new ProductAttributeImpl()
                     .setId(old.getId())
                     .setEu_size(old.getEu_size())
                     .setQuantity(old.getQuantity())
-                    .setMeasurements(fields);
+                    .setFields(fields);
         }
 
         @Override
-        public Size transformEntity2DTO(Size old) {
-            List<Field> fields = old.getMeasurements().stream().map(f -> new FieldDTO()
+        public ProductAttribute transformEntity2DTO(ProductAttribute old) {
+            List<Field> fields = old.getFields().stream().map(f -> new FieldDTO()
                     .setId(f.getId())
                     .setName(f.getName())
                     .setValue(f.getValue()))
                     .collect(Collectors.toList());
-            return new SizeDTO()
+            return new ProductAttributeDTO()
                     .setId(old.getId())
                     .setEu_size(old.getEu_size())
                     .setQuantity(old.getQuantity())
-                    .setMeasurements(fields);
+                    .setFields(fields);
         }
     }
 

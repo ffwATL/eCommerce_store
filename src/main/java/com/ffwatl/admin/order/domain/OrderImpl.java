@@ -4,23 +4,22 @@ package com.ffwatl.admin.order.domain;
 
 
 import com.ffwatl.admin.currency.Currency;
-import com.ffwatl.admin.offer.domain.CandidateOrderOffer;
-import com.ffwatl.admin.offer.domain.Offer;
-import com.ffwatl.admin.offer.domain.OfferCode;
-import com.ffwatl.admin.offer.domain.OrderAdjustment;
+import com.ffwatl.admin.offer.domain.*;
+import com.ffwatl.admin.payment.OrderPayment;
+import com.ffwatl.admin.payment.OrderPaymentImpl;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.UserImpl;
 
 import javax.persistence.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
 @Table(name = "orders")
 public class OrderImpl implements Order {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,15 +44,44 @@ public class OrderImpl implements Order {
     @Column(name = "order_status")
     private OrderStatus orderStatus = OrderStatus.NEW;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @Column(name = "order_items")
-    private List<OrderItem> orderItems;
+    @OneToMany(mappedBy = "order",
+               fetch = FetchType.LAZY,
+               targetEntity = OrderItemImpl.class,
+               cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    private int totalFulfillmentCharges;
+    @OneToOne(mappedBy = "order", targetEntity = FulfillmentGroupImpl.class)
+    private FulfillmentGroup fulfillmentGroup;
 
+    @OneToMany(mappedBy = "order",
+               fetch = FetchType.LAZY,
+               targetEntity = CandidateOrderOfferImpl.class,
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private Set<CandidateOrderOffer> candidateOrderOffers = new HashSet<>();
 
+    @OneToMany(mappedBy = "order",
+               fetch = FetchType.LAZY,
+               targetEntity = OrderAdjustmentImpl.class,
+               cascade = { CascadeType.ALL },
+               orphanRemoval = true)
+    private Set<OrderAdjustment> orderAdjustments = new HashSet<>();
+
+    @Column(name = "submit_date")
     private Date submitDate;
 
+    @Column(name = "total_fulfillment_charges")
+    private int totalFulfillmentCharges;
+
+    @ManyToOne(targetEntity = OrderPaymentImpl.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_payment_id")
+    private OrderPayment orderPayment;
+
+    @ManyToOne(targetEntity = OfferCodeImpl.class)
+    @JoinColumn(name = "offer_code_id")
+    private OfferCode offerCode;
+
+    private Currency currency;
 
 
 
@@ -98,212 +126,277 @@ public class OrderImpl implements Order {
     }
 
     @Override
-    public Set<FulfillmentGroup> getFulfillmentGroups() {
-        return null;
+    public FulfillmentGroup getFulfillmentGroup() {
+        return fulfillmentGroup;
     }
 
     @Override
     public Set<CandidateOrderOffer> getCandidateOrderOffers() {
-        return null;
-    }
-
-    @Override
-    public Date getSubmitDate() {
-        return null;
-    }
-
-    @Override
-    public int getTotalFulfillmentCharges() {
-        return 0;
-    }
-
-    @Override
-    public OrderPayment getOrderPayment() {
-        return null;
+        return candidateOrderOffers;
     }
 
     @Override
     public Set<OrderAdjustment> getOrderAdjustments() {
-        return null;
+        return orderAdjustments;
     }
 
     @Override
-    public OfferCode getAddedOfferCode() {
-        return null;
+    public Date getSubmitDate() {
+        return submitDate;
     }
 
     @Override
-    public String getFulfillmentStatus() {
-        return null;
+    public int getTotalFulfillmentCharges() {
+        return totalFulfillmentCharges;
     }
 
     @Override
-    public int getItemAdjustmentsValue() {
-        return 0;
+    public OrderPayment getOrderPayment() {
+        return orderPayment;
     }
 
     @Override
-    public int getOrderAdjustmentsValue() {
-        return 0;
-    }
-
-    @Override
-    public int getTotalAdjustmentsValue() {
-        return 0;
-    }
-
-    @Override
-    public int getProductCount() {
-        return 0;
+    public OfferCode getOfferCode() {
+        return offerCode;
     }
 
     @Override
     public Currency getCurrency() {
-        return null;
+        return currency;
+    }
+
+    @Override
+    public String getFulfillmentStatus() {
+        return fulfillmentGroup.getStatus().getType();
+    }
+
+    @Override
+    public int getItemAdjustmentsValue() {
+        int adjustmentValue = 0;
+        for(OrderItem orderItem: orderItems){
+            adjustmentValue+=orderItem.getTotalPrice();
+        }
+        return adjustmentValue;
+    }
+
+    @Override
+    public int getFulfillmentGroupAdjustmentsValue() {
+        return fulfillmentGroup.getFulfillmentGroupAdjustmentsValue();
+    }
+
+    @Override
+    public int getOrderAdjustmentsValue() {
+        int adjustmentValue = 0;
+        for(OrderAdjustment orderAdjustment: orderAdjustments){
+            adjustmentValue += orderAdjustment.getAdjustmentValue();
+        }
+        return adjustmentValue;
+    }
+
+    @Override
+    public int getTotalAdjustmentsValue() {
+        int totalAdjustmentValue = getItemAdjustmentsValue();
+        totalAdjustmentValue += getFulfillmentGroupAdjustmentsValue();
+        totalAdjustmentValue += getOrderAdjustmentsValue();
+        return totalAdjustmentValue;
+    }
+
+    @Override
+    public int getProductCount() {
+        return orderItems.size();
     }
 
     @Override
     public boolean getHasOrderAdjustments() {
-        return false;
+        return getOrderAdjustmentsValue() > 0;
     }
 
     @Override
     public Order setId(long id) {
-        return null;
+        this.id = id;
+        return this;
     }
 
     @Override
     public Order setOrderNumber(String orderNumber) {
-        return null;
+        this.orderNumber = orderNumber;
+        return this;
     }
 
     @Override
     public Order setName(String name) {
-        return null;
+        this.name = name;
+        return this;
     }
 
     @Override
     public Order setSubTotal(int subTotal) {
-        return null;
+        this.subTotal = subTotal;
+        return this;
     }
 
     @Override
     public Order setTotal(int total) {
-        return null;
+        this.total = total;
+        return this;
     }
 
     @Override
     public Order setCustomer(User customer) {
-        return null;
+        this.customer = customer;
+        return this;
     }
 
     @Override
     public Order setOrderStatus(OrderStatus orderStatus) {
-        return null;
+        this.orderStatus = orderStatus;
+        return this;
     }
 
     @Override
     public Order setOrderItems(List<OrderItem> orderItems) {
-        return null;
+        this.orderItems = orderItems;
+        return this;
     }
 
     @Override
-    public Order setFulfillmentGroups(Set<FulfillmentGroup> fulfillmentGroups) {
-        return null;
+    public Order setFulfillmentGroups(FulfillmentGroup fulfillmentGroup) {
+        this.fulfillmentGroup = fulfillmentGroup;
+        return this;
     }
 
     @Override
     public Order setCandidateOrderOffers(Set<CandidateOrderOffer> candidateOrderOffers) {
-        return null;
+        this.candidateOrderOffers = candidateOrderOffers;
+        return this;
     }
 
     @Override
     public Order setSubmitDate(Date submitDate) {
-        return null;
+        this.submitDate = submitDate;
+        return this;
     }
 
     @Override
     public Order setTotalFulfillmentCharges(int totalFulfillmentCharges) {
-        return null;
+        this.totalFulfillmentCharges = totalFulfillmentCharges;
+        return this;
     }
 
     @Override
     public Order setOrderPayment(OrderPayment orderPayment) {
-        return null;
+        this.orderPayment = orderPayment;
+        return this;
     }
 
     @Override
     public Order setOrderAdjustments(Set<OrderAdjustment> orderAdjustments) {
-        return null;
+        this.orderAdjustments = orderAdjustments;
+        return this;
     }
 
     @Override
-    public Order setAddedOfferCode(OfferCode addedOfferCode) {
-        return null;
-    }
-
-    @Override
-    public Order setFulfillmentStatus(String fulfillmentStatus) {
-        return null;
-    }
-
-    @Override
-    public Order setItemAdjustmentsValue(int itemAdjustmentsValue) {
-        return null;
-    }
-
-    @Override
-    public Order setOrderAdjustmentsValue(int orderAdjustmentsValue) {
-        return null;
-    }
-
-    @Override
-    public Order setTotalAdjustmentsValue(int totalAdjustmentsValue) {
-        return null;
-    }
-
-    @Override
-    public Order setProductCount(int productCount) {
-        return null;
+    public Order setOfferCode(OfferCode offerCode) {
+        this.offerCode = offerCode;
+        return this;
     }
 
     @Override
     public Order setCurrency(Currency currency) {
-        return null;
-    }
-
-    @Override
-    public Order setOffer(Offer offer) {
-        return null;
-    }
-
-    @Override
-    public Order assignOrderItemsFinalPrice() {
-        return null;
+        this.currency = currency;
+        return this;
     }
 
     @Override
     public Order addOrderItem(OrderItem orderItem) {
-        return null;
+        orderItems.add(orderItem);
+        return this;
     }
 
     @Override
     public int calculateSubTotal() {
-        return 0;
+        int subTotal = 0;
+        for(OrderItem orderItem: orderItems){
+            subTotal += orderItem.getTotalPrice();
+        }
+        return subTotal;
     }
 
     @Override
-    public boolean updatePrices() {
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrderImpl order = (OrderImpl) o;
+
+        if (getId() != order.getId()) return false;
+        if (getSubTotal() != order.getSubTotal()) return false;
+        if (getTotal() != order.getTotal()) return false;
+        if (getTotalFulfillmentCharges() != order.getTotalFulfillmentCharges()) return false;
+        if (getOrderNumber() != null ? !getOrderNumber().equals(order.getOrderNumber()) : order.getOrderNumber() != null)
+            return false;
+        if (getName() != null ? !getName().equals(order.getName()) : order.getName() != null) return false;
+        if (getCustomer() != null ? !getCustomer().equals(order.getCustomer()) : order.getCustomer() != null)
+            return false;
+        if (getOrderStatus() != order.getOrderStatus()) return false;
+        if (getOrderItems() != null ? !getOrderItems().equals(order.getOrderItems()) : order.getOrderItems() != null)
+            return false;
+        if (getFulfillmentGroup() != null ? !getFulfillmentGroup().equals(order.getFulfillmentGroup()) : order.getFulfillmentGroup() != null)
+            return false;
+        if (getCandidateOrderOffers() != null ? !getCandidateOrderOffers().equals(order.getCandidateOrderOffers()) : order.getCandidateOrderOffers() != null)
+            return false;
+        if (getOrderAdjustments() != null ? !getOrderAdjustments().equals(order.getOrderAdjustments()) : order.getOrderAdjustments() != null)
+            return false;
+        if (getSubmitDate() != null ? !getSubmitDate().equals(order.getSubmitDate()) : order.getSubmitDate() != null)
+            return false;
+        if (getOrderPayment() != null ? !getOrderPayment().equals(order.getOrderPayment()) : order.getOrderPayment() != null)
+            return false;
+        if (getOfferCode() != null ? !getOfferCode().equals(order.getOfferCode()) : order.getOfferCode() != null)
+            return false;
+        return getCurrency() == order.getCurrency();
+
     }
 
     @Override
-    public boolean finalizeItemPrices() {
-        return false;
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getOrderNumber() != null ? getOrderNumber().hashCode() : 0);
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + getSubTotal();
+        result = 31 * result + getTotal();
+        result = 31 * result + (getCustomer() != null ? getCustomer().hashCode() : 0);
+        result = 31 * result + (getOrderStatus() != null ? getOrderStatus().hashCode() : 0);
+        result = 31 * result + (getOrderItems() != null ? getOrderItems().hashCode() : 0);
+        result = 31 * result + (getFulfillmentGroup() != null ? getFulfillmentGroup().hashCode() : 0);
+        result = 31 * result + (getCandidateOrderOffers() != null ? getCandidateOrderOffers().hashCode() : 0);
+        result = 31 * result + (getOrderAdjustments() != null ? getOrderAdjustments().hashCode() : 0);
+        result = 31 * result + (getSubmitDate() != null ? getSubmitDate().hashCode() : 0);
+        result = 31 * result + getTotalFulfillmentCharges();
+        result = 31 * result + (getOrderPayment() != null ? getOrderPayment().hashCode() : 0);
+        result = 31 * result + (getOfferCode() != null ? getOfferCode().hashCode() : 0);
+        result = 31 * result + (getCurrency() != null ? getCurrency().hashCode() : 0);
+        return result;
     }
 
     @Override
-    public Order addOfferCode(OfferCode addedOfferCode) {
-        return null;
+    public String toString() {
+        return "OrderImpl{" +
+                "id=" + id +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", subTotal=" + subTotal +
+                ", total=" + total +
+                ", customer=" + customer +
+                ", orderStatus=" + orderStatus +
+                ", orderItems=" + orderItems +
+                ", fulfillmentGroup=" + fulfillmentGroup +
+                ", candidateOrderOffers=" + candidateOrderOffers +
+                ", orderAdjustments=" + orderAdjustments +
+                ", submitDate=" + submitDate +
+                ", totalFulfillmentCharges=" + totalFulfillmentCharges +
+                ", orderPayment=" + orderPayment +
+                ", offerCode=" + offerCode +
+                ", currency=" + currency +
+                '}';
     }
 }

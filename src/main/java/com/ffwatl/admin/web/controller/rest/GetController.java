@@ -68,18 +68,18 @@ public class GetController {
     }
 
     /**
-     * Returns List of all EuroSizeImpl objects that corresponds given CommonCategory 'cat' parameter.
+     * Returns List of all ProductAttributeTypeImpl objects that corresponds given CommonCategory 'cat' parameter.
      * If parameter 'cat' is empty, method returns status 400;
      * @param cat CommonCategory 'cat' parameter. Shouldn't be null;
-     * @return List of all EuroSizeImpl objects that corresponds given CommonCategory 'cat' parameter.
+     * @return List of all ProductAttributeTypeImpl objects that corresponds given CommonCategory 'cat' parameter.
      */
     @RequestMapping(value = "/eurosize/cat")
     @ResponseBody
-    public ResponseEntity<List<EuroSize>> ajaxEuroSizeByCat(@RequestParam String cat){
+    public ResponseEntity<List<ProductAttributeType>> ajaxEuroSizeByCat(@RequestParam String cat){
         try {
             return ResponseEntity.ok(euroSizeService.findByCat(CommonCategory.valueOf(cat)));
         }catch (Exception e){
-            logger.error("Error on getting EuroSizeImpl by cat. " + e.getMessage());
+            logger.error("Error on getting ProductAttributeTypeImpl by cat. " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }

@@ -3,15 +3,59 @@ package com.ffwatl;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Temp {
 
     @Test
-   /* @Ignore*/
+    @Ignore
+    public void convertData(){
+        File file = new File("AJI05.DAT");
+        if(!file.exists()) throw new AssertionError("file not exist");
+        try {
+            DataInputStream inputStream = new DataInputStream(new FileInputStream(file));
+            FileWriter writer = new FileWriter("converted__15.txt");
+            int i = 0;
+            boolean skip = false;
+
+            while (inputStream.available() > 0){
+                String s = inputStream.readLine();
+
+                if(i == 700) {
+                    skip = true;
+                }else if(i == 8192){
+                    i = 0;
+                    skip = false;
+                }
+
+                if(!skip){
+                    writeResult(s, writer);
+                }
+                i++;
+            }
+            writer.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeResult(final String s, FileWriter writer) throws IOException {
+        String[] arr = s.split("    ");
+        int value = Integer.valueOf(arr[0])*15;
+        StringBuilder builder = new StringBuilder()
+                .append("[")
+                .append(value)
+                .append(",")
+                .append(arr[1])
+                .append("],");
+        writer.append(builder.toString());
+    }
+
+    @Test
+    @Ignore
     public void readGson() throws FileNotFoundException {
         int i = 5;
         i = i++;

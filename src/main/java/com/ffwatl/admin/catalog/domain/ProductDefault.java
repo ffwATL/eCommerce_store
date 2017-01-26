@@ -63,6 +63,8 @@ public class ProductDefault implements Product {
 
     private int originPrice;
 
+    private int retailPrice;
+
     private int salePrice;
 
     private Currency currency;
@@ -144,9 +146,15 @@ public class ProductDefault implements Product {
     public int getDiscount() {
         return discount;
     }
+
+    @Override
+    public int getOriginPrice() {
+        return originPrice;
+    }
+
     @Override
     public int getRetailPrice() {
-        return originPrice;
+        return retailPrice;
     }
     @Override
     public int getSalePrice() {
@@ -209,9 +217,16 @@ public class ProductDefault implements Product {
         this.discount = discount;
         return this;
     }
+
     @Override
-    public Product setRetailPrice(int originPrice) {
+    public Product setOriginPrice(int originPrice) {
         this.originPrice = originPrice;
+        return this;
+    }
+
+    @Override
+    public Product setRetailPrice(int retailPrice) {
+        this.retailPrice = retailPrice;
         return this;
     }
     @Override

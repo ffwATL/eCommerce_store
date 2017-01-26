@@ -1,8 +1,8 @@
 package com.ffwatl.admin.catalog.dao;
 
 
-import com.ffwatl.admin.catalog.domain.Size;
-import com.ffwatl.admin.catalog.domain.SizeImpl;
+import com.ffwatl.admin.catalog.domain.ProductAttribute;
+import com.ffwatl.admin.catalog.domain.ProductAttributeImpl;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,8 +15,8 @@ public class SizeDaoImpl implements SizeDao{
     private EntityManager em;
 
     @Override
-    public Size findById(long id) {
-        return em.find(SizeImpl.class, id);
+    public ProductAttribute findById(long id) {
+        return em.find(ProductAttributeImpl.class, id);
     }
 
     @Override

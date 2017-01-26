@@ -5,8 +5,10 @@ import com.ffwatl.admin.offer.domain.CandidateOrderOffer;
 import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.offer.domain.OfferCode;
 import com.ffwatl.admin.offer.domain.OrderAdjustment;
+import com.ffwatl.admin.payment.OrderPayment;
 import com.ffwatl.admin.user.domain.User;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +29,7 @@ import java.util.Set;
  *
  * 5.  Order shipping (e.g. fulfillment) are represented with Fulfillment objects.
  */
-public interface Order {
+public interface Order extends Serializable{
 
     long getId();
 
@@ -73,17 +75,23 @@ public interface Order {
     List<OrderItem> getOrderItems();
 
     /**
-     * Gets the {@link FulfillmentGroup}s associated with this {@link Order}. An {@link Order} can have many
-     * {@link FulfillmentGroup}s associated with it in order to support multi-type shipping.
+     * Gets the {@link FulfillmentGroup} associated with this {@link Order}.
      * @return the {@link FulfillmentGroup}s associated with this {@link Order}
      */
-    Set<FulfillmentGroup> getFulfillmentGroups();
+    FulfillmentGroup getFulfillmentGroup();
 
     /**
      * Gets the {@link Offer}s that could potentially apply to this {@link Order}. Used in the promotion engine.
      * @return the {@link Offer}s that could potentially apply to this {@link Order}.
      */
     Set<CandidateOrderOffer> getCandidateOrderOffers();
+
+    /**
+     * Returns a unmodifiable List of OrderAdjustment.  To modify the List of OrderAdjustment, please
+     * use the addOrderAdjustments or removeAllOrderAdjustments methods.
+     * @return a unmodifiable List of OrderItemAdjustment
+     */
+    Set<OrderAdjustment> getOrderAdjustments();
 
     /**
      * Gets the date that this {@link Order} was submitted.  Note that if this date is non-null,
@@ -111,14 +119,16 @@ public interface Order {
      */
     OrderPayment getOrderPayment();
 
-    /**
-     * Returns a unmodifiable List of OrderAdjustment.  To modify the List of OrderAdjustment, please
-     * use the addOrderAdjustments or removeAllOrderAdjustments methods.
-     * @return a unmodifiable List of OrderItemAdjustment
-     */
-    Set<OrderAdjustment> getOrderAdjustments();
+    OfferCode getOfferCode();
 
-    OfferCode getAddedOfferCode();
+    /**
+     * The currency that the {@link Order} is priced in. Note that this is only on {@link Order}
+     * since all of the other entities that are related (like {@link FulfillmentGroup} and {@link OrderItem}
+     * have a link back to here. This also has the side effect that an {@link Order} can only be priced
+     * in a single currency.
+     * @return The currency that the {@link Order} is priced in.
+     */
+    Currency getCurrency();
 
     String getFulfillmentStatus();
 
@@ -128,6 +138,8 @@ public interface Order {
      * @return the discount value of all the applied item offers for this order
      */
     int getItemAdjustmentsValue();
+
+    int getFulfillmentGroupAdjustmentsValue();
 
     /**
      * Returns the discount value of all the applied order offers.  The value returned from this
@@ -154,51 +166,43 @@ public interface Order {
     int getProductCount();
 
     /**
-     * The currency that the {@link Order} is priced in. Note that this is only on {@link Order}
-     * since all of the other entities that are related (like {@link FulfillmentGroup} and {@link OrderItem}
-     * have a link back to here. This also has the side effect that an {@link Order} can only be priced
-     * in a single currency.
-     * @return The currency that the {@link Order} is priced in.
-     */
-    Currency getCurrency();
-
-    /**
      * Returns true if this item has order adjustments.
      * @return true if this item has order adjustments.
      */
     boolean getHasOrderAdjustments();
 
 
-
     Order setId(long id);
+
     Order setOrderNumber(String orderNumber);
+
     Order setName(String name);
+
     Order setSubTotal(int subTotal);
+
     Order setTotal(int total);
+
     Order setCustomer(User customer);
+
     Order setOrderStatus(OrderStatus orderStatus);
+
     Order setOrderItems(List<OrderItem> orderItems);
-    Order setFulfillmentGroups(Set<FulfillmentGroup> fulfillmentGroups);
+
+    Order setFulfillmentGroups(FulfillmentGroup fulfillmentGroup);
+
     Order setCandidateOrderOffers(Set<CandidateOrderOffer> candidateOrderOffers);
-    Order setSubmitDate(Date submitDate);
-    Order setTotalFulfillmentCharges(int totalFulfillmentCharges);
-    Order setOrderPayment(OrderPayment orderPayment);
+
     Order setOrderAdjustments(Set<OrderAdjustment> orderAdjustments);
-    Order setAddedOfferCode(OfferCode addedOfferCode);
-    Order setFulfillmentStatus(String fulfillmentStatus);
-    Order setItemAdjustmentsValue(int itemAdjustmentsValue);
-    Order setOrderAdjustmentsValue(int orderAdjustmentsValue);
-    Order setTotalAdjustmentsValue(int totalAdjustmentsValue);
-    Order setProductCount(int productCount);
+
+    Order setSubmitDate(Date submitDate);
+
+    Order setTotalFulfillmentCharges(int totalFulfillmentCharges);
+
+    Order setOrderPayment(OrderPayment orderPayment);
+
+    Order setOfferCode(OfferCode addedOfferCode);
+
     Order setCurrency(Currency currency);
-    Order setOffer(Offer offer);
-
-
-    /**
-     * Assigns a final price to all the order items
-     */
-    Order assignOrderItemsFinalPrice();
-
 
     /**
      * Adds an {@link OrderItem} to the list of {@link OrderItem}s already associated with this {@link Order}
@@ -212,18 +216,4 @@ public interface Order {
      */
     int calculateSubTotal();
 
-    /**
-     * Updates all of the prices of the {@link OrderItem}s in this {@link Order}
-     * @return <b>true</b> if at least 1 {@link OrderItem} returned true from {@link OrderItem#updatePrices},
-     * <b>false</b> otherwise.
-     * @see {@link OrderItem#updatePrices()}
-     */
-    boolean updatePrices();
-
-    /**
-     * Updates the averagePriceField for all order items.
-     */
-    boolean finalizeItemPrices();
-
-    Order addOfferCode(OfferCode addedOfferCode);
 }

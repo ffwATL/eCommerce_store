@@ -61,7 +61,7 @@ public class ItemServiceImpl implements ItemService{
         if(item instanceof ProductClothes){
             ProductClothes i = (ProductClothes) item;
             i.setBrand(brandService.findById(i.getBrand().getId()));
-            for (Size s: i.getSize()){
+            for (ProductAttribute s: i.getSize()){
                 s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
             }
         }

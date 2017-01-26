@@ -1,11 +1,16 @@
 package com.ffwatl.admin.order.domain;
 
 
+import com.ffwatl.admin.i18n.domain.I18n;
+import com.ffwatl.admin.offer.domain.CandidateFulfillmentGroupOffer;
+import com.ffwatl.admin.offer.domain.FulfillmentGroupAdjustment;
 import com.ffwatl.admin.order.service.FulfillmentGroupStatusType;
 import com.ffwatl.admin.order.service.FulfillmentType;
 import com.ffwatl.admin.user.domain.Address;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This is the main entity used to hold fulfillment information about an Order. An Order can have
@@ -19,14 +24,16 @@ import java.io.Serializable;
 public interface FulfillmentGroup extends Serializable {
 
     long getId();
+
     Order getOrder();
-    Address getAddress();
+
     FulfillmentOption getFulfillmentOption();
 
+    Address getAddress();
+
     /**
-     * Returns the retail price for this fulfillmentGroup.
+     * Returns the retail price for this fulfillmentGroup (ie shipping price).
      * Typically only a retail price would be set on a fulfillment group.
-     *
      * @return the retail price for this fulfillmentGroup.
      */
     int getRetailFulfillmentPrice();
@@ -35,23 +42,34 @@ public interface FulfillmentGroup extends Serializable {
      * Gets the price to charge for this fulfillmentGroup.
      * Includes the effects of any adjustments such as those that
      * might have been applied by the promotion engine (e.g. free shipping)
-     *
      * @return price to charge for this fulfillmentGroup.
      */
     int getFulfillmentPrice();
+
     FulfillmentType getType();
+
+    List<CandidateFulfillmentGroupOffer> getCandidateFulfillmentGroupOffers();
+
+    Set<FulfillmentGroupAdjustment> getFulfillmentGroupAdjustments();
+
+    int getFulfillmentGroupAdjustmentsValue();
+
     FulfillmentGroupStatusType getStatus();
+
+    I18n getDeliveryInstruction();
 
 
     FulfillmentGroup setId(long id);
+
     FulfillmentGroup setOrder(Order order);
+
     FulfillmentGroup setAddress(Address address);
+
     FulfillmentGroup setFulfillmentOption(FulfillmentOption fulfillmentOption);
 
     /**
      * Sets the retail price for this fulfillmentGroup.
      * @param retailFulfillmentPrice the retail price for this fulfillmentGroup.
-     *
      * @return this object.
      */
     FulfillmentGroup setRetailFulfillmentPrice(int retailFulfillmentPrice);
@@ -59,12 +77,22 @@ public interface FulfillmentGroup extends Serializable {
     /**
      * Sets the price to charge for this fulfillmentGroup.  Typically set internally by the pricing and
      * promotion engines.
-     *
      * @param fulfillmentPrice price to charge for this fulfillmentGroup;
      * @return this object.
      */
     FulfillmentGroup setFulfillmentPrice(int fulfillmentPrice);
+
     FulfillmentGroup setType(FulfillmentType type);
+
+    FulfillmentGroup setCandidateFulfillmentGroupOffers(List<CandidateFulfillmentGroupOffer> candidateFulfillmentGroupOffers);
+
+    FulfillmentGroup setFulfillmentGroupAdjustments(Set<FulfillmentGroupAdjustment> fulfillmentGroupAdjustments);
+
+    FulfillmentGroup addCandidateFulfillmentGroupOffer(CandidateFulfillmentGroupOffer candidateOffer);
+
+    FulfillmentGroup removeAllCandidateOffers();
+
     FulfillmentGroup setStatus(FulfillmentGroupStatusType status);
 
+    FulfillmentGroup setDeliveryInstruction(I18n deliveryInstruction);
 }

@@ -26,6 +26,7 @@ public interface Product {
     Color getColor();
     int getQuantity();
     int getDiscount();
+    int getOriginPrice();
     int getRetailPrice();
     int getSalePrice();
     boolean isActive();
@@ -41,6 +42,7 @@ public interface Product {
     Product setQuantity(int quantity);
     Product setColor(Color color);
     Product setDiscount(int discount);
+    Product setOriginPrice(int originPrice);
     Product setRetailPrice(int originPrice);
     Product setSalePrice(int salePrice);
     Product setActive(boolean isActive);

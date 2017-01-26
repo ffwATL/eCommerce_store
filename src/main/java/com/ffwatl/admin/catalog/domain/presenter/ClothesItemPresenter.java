@@ -4,7 +4,7 @@ package com.ffwatl.admin.catalog.domain.presenter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ffwatl.admin.catalog.domain.*;
 import com.ffwatl.admin.catalog.domain.dto.BrandDTO;
-import com.ffwatl.admin.catalog.domain.dto.SizeDTO;
+import com.ffwatl.admin.catalog.domain.dto.ProductAttributeDTO;
 import com.ffwatl.admin.user.domain.dto.UserDTO;
 
 import java.util.List;
@@ -15,8 +15,8 @@ public class ClothesItemPresenter extends ProductUpdateImpl {
     private String brandImgUrl;
     @JsonDeserialize(as=BrandDTO.class)
     private Brand brand;
-    @JsonDeserialize(contentAs=SizeDTO.class)
-    private List<Size> size;
+    @JsonDeserialize(contentAs=ProductAttributeDTO.class)
+    private List<ProductAttribute> size;
 
     public ClothesItemPresenter(){}
 
@@ -66,7 +66,7 @@ public class ClothesItemPresenter extends ProductUpdateImpl {
         return brand;
     }
 
-    public List<Size> getSize() {
+    public List<ProductAttribute> getSize() {
         return size;
     }
 
@@ -74,7 +74,7 @@ public class ClothesItemPresenter extends ProductUpdateImpl {
         this.brand = brand;
     }
 
-    public void setSize(List<Size> size) {
+    public void setSize(List<ProductAttribute> size) {
         this.size = size;
     }
 
