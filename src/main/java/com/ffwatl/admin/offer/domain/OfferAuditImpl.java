@@ -13,16 +13,22 @@ public class OfferAuditImpl implements OfferAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(name = "offer_id")
     private long offerId;
+
     @Column(name = "offer_code_id")
     private long offerCodeId;
+
     @Column(name = "order_id")
     private long orderId;
+
     @Column(name = "customer_id")
     private long customerId;
+
     @Column(name = "redeemed_date")
     private Date redeemedDate;
+
 
     @Override
     public long getId() {

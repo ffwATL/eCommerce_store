@@ -45,10 +45,16 @@ public interface OfferAudit extends Serializable{
      */
     Date getRedeemedDate();
 
+
     OfferAudit setId(long id);
+
     OfferAudit setOfferId(long offerId);
+
     OfferAudit setOfferCodeId(long offerCodeId);
+
     OfferAudit setOrderId(long orderId);
+
     OfferAudit setCustomerId(long customerId);
+
     OfferAudit setRedeemedDate(Date redeemedDate);
 }

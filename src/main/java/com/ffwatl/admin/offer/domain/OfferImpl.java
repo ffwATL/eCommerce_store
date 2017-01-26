@@ -13,12 +13,20 @@ import java.util.Set;
 
 @Entity
 @Table(name = "offers")
+@NamedQueries(
+        {
+                @NamedQuery(name = "findAllOffers", query = "SELECT o FROM OfferImpl o"),
+                @NamedQuery(name = "findOffersByAutomaticDeliveryType",
+                        query = "SELECT o FROM OfferImpl o WHERE o.automaticallyAdded=true")
+        }
+)
 public class OfferImpl implements Offer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "offer_name")
     private String name;
 
     @Embedded
