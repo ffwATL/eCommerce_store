@@ -34,7 +34,14 @@ public class FulfillmentGroupDaoImpl implements FulfillmentGroupDao{
 
     @Override
     public FulfillmentGroup findDefaultFulfillmentGroupForOrder(Order order) {
-        return null;
+        if(order == null) throw new IllegalArgumentException("Order can't be null!");
+
+        return em.createQuery("SELECT f FROM FulfillmentGroupImpl f " +
+                "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
+                "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
+                "WHERE f.order.orderNumber=:orderNumber", FulfillmentGroupImpl.class)
+                .setParameter("orderNumber", order.getOrderNumber())
+                .getSingleResult();
     }
 
     @Override

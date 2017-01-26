@@ -52,7 +52,6 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
                targetEntity = CandidateFulfillmentGroupOfferImpl.class,
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    @JoinColumn(name = "c fulfillment group_offer_id")
     private List<CandidateFulfillmentGroupOffer> candidateFulfillmentGroupOffers = new ArrayList<>();
 
     @OneToMany(mappedBy = "fulfillmentGroup",
@@ -60,7 +59,6 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
                targetEntity = FulfillmentGroupAdjustmentImpl.class,
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    @JoinColumn(name = "fulfillment_group_adj_id")
     private Set<FulfillmentGroupAdjustment> fulfillmentGroupAdjustments;
 
     @Column(name = "status")

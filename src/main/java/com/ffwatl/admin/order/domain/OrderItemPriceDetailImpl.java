@@ -23,10 +23,10 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
     private OrderItem orderItem;
 
     @OneToMany(mappedBy = "orderItemPriceDetail",
+               fetch = FetchType.LAZY,
                targetEntity = OrderItemPriceDetailAdjustmentImpl.class,
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    @JoinColumn(name = "order_item_price_detail_adj_id")
     private List<OrderItemPriceDetailAdjustment> orderItemPriceDetailAdjustments = new ArrayList<>();
 
     @Column(name = "quantity")

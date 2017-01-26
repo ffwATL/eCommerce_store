@@ -13,7 +13,7 @@ import java.util.List;
 public class ProductClothes extends ProductDefault {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductAttributeImpl.class)
-    @Fetch(value = FetchMode.JOIN)
+    @Fetch(value = FetchMode.SUBSELECT)
     @Column(nullable = false)
     @JoinColumn(name = "product_attribute_id")
     private List<ProductAttribute> size;
