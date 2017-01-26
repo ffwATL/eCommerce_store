@@ -11,6 +11,7 @@ public class OperatorCodeImpl implements OperatorCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "code")
     private int code;
 
     @Override
@@ -33,6 +34,25 @@ public class OperatorCodeImpl implements OperatorCode {
     public OperatorCode setCode(int code) {
         this.code = code;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OperatorCodeImpl that = (OperatorCodeImpl) o;
+
+        if (getId() != that.getId()) return false;
+        return getCode() == that.getCode();
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + getCode();
+        return result;
     }
 
     @Override

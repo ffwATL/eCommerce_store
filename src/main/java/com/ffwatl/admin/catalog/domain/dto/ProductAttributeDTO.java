@@ -12,9 +12,12 @@ import java.util.List;
 public class ProductAttributeDTO implements ProductAttribute {
 
     private long id;
+
     private int quantity;
+
     @JsonDeserialize(contentAs=FieldDTO.class)
     private List<Field> measurements;
+
     @JsonDeserialize(as=ProductAttributeTypeDTO.class)
     private ProductAttributeType eu_size;
 
@@ -66,6 +69,29 @@ public class ProductAttributeDTO implements ProductAttribute {
     public int compareTo(ProductAttribute o) {
         if(o == null) return 1;
         return this.eu_size.compareTo(o.getEu_size());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProductAttributeDTO that = (ProductAttributeDTO) o;
+
+        if (getId() != that.getId()) return false;
+        if (getQuantity() != that.getQuantity()) return false;
+        if (measurements != null ? !measurements.equals(that.measurements) : that.measurements != null) return false;
+        return !(getEu_size() != null ? !getEu_size().equals(that.getEu_size()) : that.getEu_size() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + getQuantity();
+        result = 31 * result + (measurements != null ? measurements.hashCode() : 0);
+        result = 31 * result + (getEu_size() != null ? getEu_size().hashCode() : 0);
+        return result;
     }
 
     @Override

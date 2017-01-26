@@ -13,11 +13,13 @@ import java.util.List;
 public class ProductClothes extends ProductDefault {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductAttributeImpl.class)
-    @Fetch(value = FetchMode.SUBSELECT)
+    @Fetch(value = FetchMode.JOIN)
     @Column(nullable = false)
+    @JoinColumn(name = "product_attribute_id")
     private List<ProductAttribute> size;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = BrandImpl.class)
+    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = BrandImpl.class)
+    @JoinColumn(name = "brand_id")
     private Brand brand;
 
     public List<ProductAttribute> getSize() {

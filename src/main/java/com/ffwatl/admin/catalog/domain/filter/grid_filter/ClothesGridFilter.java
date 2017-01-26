@@ -6,6 +6,7 @@ import java.util.*;
 public class ClothesGridFilter extends ItemGridFilter{
 
     private final Map<String, String> params;
+
     private Map<String, List<GridFilterRule>> listMap = new HashMap<>();
 
     public ClothesGridFilter(Map<String, String> params){

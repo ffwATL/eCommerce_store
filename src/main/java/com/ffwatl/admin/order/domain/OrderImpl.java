@@ -48,9 +48,11 @@ public class OrderImpl implements Order {
                fetch = FetchType.LAZY,
                targetEntity = OrderItemImpl.class,
                cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_item_id")
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(mappedBy = "order", targetEntity = FulfillmentGroupImpl.class)
+    @JoinColumn(name = "fulfillment_group_id")
     private FulfillmentGroup fulfillmentGroup;
 
     @OneToMany(mappedBy = "order",
@@ -58,6 +60,7 @@ public class OrderImpl implements Order {
                targetEntity = CandidateOrderOfferImpl.class,
                cascade = CascadeType.ALL,
                orphanRemoval = true)
+    @JoinColumn(name = "candidate_order_offer_id")
     private Set<CandidateOrderOffer> candidateOrderOffers = new HashSet<>();
 
     @OneToMany(mappedBy = "order",
@@ -65,6 +68,7 @@ public class OrderImpl implements Order {
                targetEntity = OrderAdjustmentImpl.class,
                cascade = { CascadeType.ALL },
                orphanRemoval = true)
+    @JoinColumn(name = "order_adjustment_id")
     private Set<OrderAdjustment> orderAdjustments = new HashSet<>();
 
     @Column(name = "submit_date")
@@ -81,6 +85,7 @@ public class OrderImpl implements Order {
     @JoinColumn(name = "offer_code_id")
     private OfferCode offerCode;
 
+    @Column(name = "currency")
     private Currency currency;
 
 

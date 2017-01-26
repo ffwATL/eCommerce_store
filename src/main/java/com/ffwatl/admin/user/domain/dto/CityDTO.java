@@ -7,6 +7,7 @@ import com.ffwatl.admin.user.domain.City;
 public class CityDTO implements City{
 
     private long id;
+
     private I18n name;
 
     @Override
@@ -29,6 +30,25 @@ public class CityDTO implements City{
     public City setName(I18n name) {
         this.name = name;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CityDTO cityDTO = (CityDTO) o;
+
+        if (getId() != cityDTO.getId()) return false;
+        return !(getName() != null ? !getName().equals(cityDTO.getName()) : cityDTO.getName() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
     }
 
     @Override

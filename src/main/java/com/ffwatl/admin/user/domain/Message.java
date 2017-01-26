@@ -7,14 +7,14 @@ public interface Message {
 
     long getId();
     String getTopic();
-    User getFrom();
+    User getFromUser();
     boolean isUnread();
-    List<User> getTo();
+    List<User> getToUsers();
     String getMessage();
 
     Message setId(long id);
-    Message setFrom(User from);
-    Message setTo(List<User> to);
+    Message setFromUsers(User fromUser);
+    Message setToUsers(List<User> toUsers);
     Message setMessage(String message);
     Message setUnread(boolean unread);
     Message setTopic(String topic);

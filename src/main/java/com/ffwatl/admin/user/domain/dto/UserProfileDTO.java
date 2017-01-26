@@ -7,6 +7,7 @@ import com.ffwatl.admin.user.domain.UserProfile;
 public class UserProfileDTO implements UserProfile{
 
     private long id;
+
     private Role role = Role.CUSTOMER;
 
     @Override
@@ -66,5 +67,7 @@ public class UserProfileDTO implements UserProfile{
             return false;
         return true;
     }
+
+
 
 }

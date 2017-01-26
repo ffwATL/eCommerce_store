@@ -24,6 +24,7 @@ public class ProductDefault implements Product {
     private long id;
 
     @ManyToOne(cascade = CascadeType.MERGE, targetEntity = CategoryImpl.class)
+    @JoinColumn(name = "category_id")
     private Category itemGroup;
 
     @Embedded
@@ -34,15 +35,17 @@ public class ProductDefault implements Product {
     })
     private I18n itemName;
 
+    @Column(name = "vandor_code")
     private String vendorCode;
 
-    @Column(nullable = false, length = 3)
+    @Column(name = "quantity", nullable = false, length = 3)
     private int quantity;
 
     @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ColorImpl.class)
+    @JoinColumn(name = "color_id")
     private Color color;
 
-    @Column(length = 2)
+    @Column(name = "discount", length = 2)
     private int discount = 0;
 
     @Embedded
@@ -53,37 +56,48 @@ public class ProductDefault implements Product {
     })
     private I18n description;
 
-    @Column(length = 2048)
+    @Column(name = "extra_notes", length = 2048)
     private String extraNotes;
 
-    @Column(length = 1024)
+    @Column(name = "meta_info", length = 1024)
     private String metaInfo;
 
+    @Column(name = "meta_keys")
     private String metaKeys;
 
+    @Column(name = "origin_price")
     private int originPrice;
 
+    @Column(name = "retail_price")
     private int retailPrice;
 
+    @Column(name = "sale_price")
     private int salePrice;
 
+    @Column(name = "currency")
     private Currency currency;
 
+    @Column(name = "gender")
     private Gender gender;
 
+    @Column(name = "active")
     private boolean isActive;
 
+    @Column(name = "used")
     private boolean isUsed;
 
-    @Column(nullable = false)
+    @Column(name = "import_dt", nullable = false)
     private Date importDate;
 
-    @Column(nullable = false)
+    @Column(name = "last_change_dt", nullable = false)
     private Timestamp lastChangeDate;
 
     @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = UserImpl.class)
+    @JoinColumn(name = "added_by_user_id")
     private User addedBy;
+
     @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = OfferImpl.class)
+    @JoinColumn(name = "offer_id")
     private Offer offer;
 
     @Override
@@ -292,8 +306,74 @@ public class ProductDefault implements Product {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProductDefault that = (ProductDefault) o;
+
+        if (getId() != that.getId()) return false;
+        if (getQuantity() != that.getQuantity()) return false;
+        if (getDiscount() != that.getDiscount()) return false;
+        if (getOriginPrice() != that.getOriginPrice()) return false;
+        if (getRetailPrice() != that.getRetailPrice()) return false;
+        if (getSalePrice() != that.getSalePrice()) return false;
+        if (isActive() != that.isActive()) return false;
+        if (isUsed() != that.isUsed()) return false;
+        if (itemGroup != null ? !itemGroup.equals(that.itemGroup) : that.itemGroup != null) return false;
+        if (itemName != null ? !itemName.equals(that.itemName) : that.itemName != null) return false;
+        if (getVendorCode() != null ? !getVendorCode().equals(that.getVendorCode()) : that.getVendorCode() != null)
+            return false;
+        if (getColor() != null ? !getColor().equals(that.getColor()) : that.getColor() != null) return false;
+        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+            return false;
+        if (getExtraNotes() != null ? !getExtraNotes().equals(that.getExtraNotes()) : that.getExtraNotes() != null)
+            return false;
+        if (getMetaInfo() != null ? !getMetaInfo().equals(that.getMetaInfo()) : that.getMetaInfo() != null)
+            return false;
+        if (getMetaKeys() != null ? !getMetaKeys().equals(that.getMetaKeys()) : that.getMetaKeys() != null)
+            return false;
+        if (getCurrency() != that.getCurrency()) return false;
+        if (getGender() != that.getGender()) return false;
+        if (getImportDate() != null ? !getImportDate().equals(that.getImportDate()) : that.getImportDate() != null)
+            return false;
+        if (getLastChangeDate() != null ? !getLastChangeDate().equals(that.getLastChangeDate()) : that.getLastChangeDate() != null)
+            return false;
+        if (getAddedBy() != null ? !getAddedBy().equals(that.getAddedBy()) : that.getAddedBy() != null) return false;
+        return !(getOffer() != null ? !getOffer().equals(that.getOffer()) : that.getOffer() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (itemGroup != null ? itemGroup.hashCode() : 0);
+        result = 31 * result + (itemName != null ? itemName.hashCode() : 0);
+        result = 31 * result + (getVendorCode() != null ? getVendorCode().hashCode() : 0);
+        result = 31 * result + getQuantity();
+        result = 31 * result + (getColor() != null ? getColor().hashCode() : 0);
+        result = 31 * result + getDiscount();
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + (getExtraNotes() != null ? getExtraNotes().hashCode() : 0);
+        result = 31 * result + (getMetaInfo() != null ? getMetaInfo().hashCode() : 0);
+        result = 31 * result + (getMetaKeys() != null ? getMetaKeys().hashCode() : 0);
+        result = 31 * result + getOriginPrice();
+        result = 31 * result + getRetailPrice();
+        result = 31 * result + getSalePrice();
+        result = 31 * result + (getCurrency() != null ? getCurrency().hashCode() : 0);
+        result = 31 * result + (getGender() != null ? getGender().hashCode() : 0);
+        result = 31 * result + (isActive() ? 1 : 0);
+        result = 31 * result + (isUsed() ? 1 : 0);
+        result = 31 * result + (getImportDate() != null ? getImportDate().hashCode() : 0);
+        result = 31 * result + (getLastChangeDate() != null ? getLastChangeDate().hashCode() : 0);
+        result = 31 * result + (getAddedBy() != null ? getAddedBy().hashCode() : 0);
+        result = 31 * result + (getOffer() != null ? getOffer().hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
-        return "Product{" +
+        return "ProductDefault{" +
                 "id=" + id +
                 ", itemGroup=" + itemGroup +
                 ", itemName=" + itemName +
@@ -306,6 +386,7 @@ public class ProductDefault implements Product {
                 ", metaInfo='" + metaInfo + '\'' +
                 ", metaKeys='" + metaKeys + '\'' +
                 ", originPrice=" + originPrice +
+                ", retailPrice=" + retailPrice +
                 ", salePrice=" + salePrice +
                 ", currency=" + currency +
                 ", gender=" + gender +
@@ -314,6 +395,7 @@ public class ProductDefault implements Product {
                 ", importDate=" + importDate +
                 ", lastChangeDate=" + lastChangeDate +
                 ", addedBy=" + addedBy +
+                ", offer=" + offer +
                 '}';
     }
 }

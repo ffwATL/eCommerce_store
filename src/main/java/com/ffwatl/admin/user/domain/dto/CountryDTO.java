@@ -7,6 +7,7 @@ import com.ffwatl.admin.user.domain.Country;
 public class CountryDTO implements Country{
 
     private long id;
+
     private I18n name;
 
     @Override
@@ -29,6 +30,25 @@ public class CountryDTO implements Country{
     public Country setId(long id) {
         this.id = id;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CountryDTO that = (CountryDTO) o;
+
+        if (getId() != that.getId()) return false;
+        return !(getName() != null ? !getName().equals(that.getName()) : that.getName() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
     }
 
     @Override

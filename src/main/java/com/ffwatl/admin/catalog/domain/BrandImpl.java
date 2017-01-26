@@ -13,7 +13,7 @@ public class BrandImpl implements Brand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true)
+    @Column(name = "brand_name", unique = true)
     private String name;
 
     @Embedded
@@ -24,14 +24,17 @@ public class BrandImpl implements Brand {
     public long getId() {
         return id;
     }
+
     @Override
     public I18n getDescription() {
         return description;
     }
+
     @Override
     public String getName() {
         return name;
     }
+
     @Override
     public Brand setId(long id) {
         this.id = id;

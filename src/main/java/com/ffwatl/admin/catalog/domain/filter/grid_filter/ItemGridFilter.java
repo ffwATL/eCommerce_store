@@ -8,6 +8,7 @@ import java.util.Map;
 public class ItemGridFilter extends GridFilter{
 
     private final Map<String, String> params;
+
     private final Map<String, List<GridFilterRule>> listMap = new HashMap<>();
 
     public ItemGridFilter(Map<String, String> params) {

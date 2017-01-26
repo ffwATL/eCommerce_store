@@ -17,7 +17,7 @@ public class OrderItemColor implements Color{
     @Embedded
     private I18n color;
 
-    @Column(length = 30)
+    @Column(length = 30, name = "hex")
     private String hex;
 
     @Override

@@ -8,7 +8,9 @@ import com.ffwatl.admin.i18n.domain.I18n;
 public class BrandDTO implements Brand {
 
     private long id;
+
     private String name;
+
     private I18n description;
 
     @Override
@@ -42,6 +44,27 @@ public class BrandDTO implements Brand {
     public Brand setName(String name) {
         this.name = name;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BrandDTO brandDTO = (BrandDTO) o;
+
+        if (getId() != brandDTO.getId()) return false;
+        if (getName() != null ? !getName().equals(brandDTO.getName()) : brandDTO.getName() != null) return false;
+        return !(getDescription() != null ? !getDescription().equals(brandDTO.getDescription()) : brandDTO.getDescription() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        return result;
     }
 
     @Override

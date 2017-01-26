@@ -53,14 +53,13 @@ public class OfferImpl implements Offer {
     private int maxUsesByCustomer = 1;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
-                    mappedBy = "offers_id", targetEntity = RuleImpl.class)
+                    mappedBy = "id", targetEntity = RuleImpl.class)
     @MapKey(name="type")
-    @Column(name = "match_rules")
     private Map<String, Rule> matchRules;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH,
                     targetEntity = OfferCodeImpl.class)
-    @Column(name = "offer_codes")
+    @JoinColumn(name = "offer_codes_id")
     private Set<OfferCode> offerCodes;
 
     @Column(name = "combinable_with_other_offers")

@@ -7,7 +7,9 @@ import com.ffwatl.admin.catalog.domain.Field;
 public class FieldDTO implements Field {
 
     private long id;
+
     private String name;
+
     private String value;
 
     @Override
@@ -41,6 +43,27 @@ public class FieldDTO implements Field {
     public Field setValue(String value) {
         this.value = value;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FieldDTO fieldDTO = (FieldDTO) o;
+
+        if (getId() != fieldDTO.getId()) return false;
+        if (getName() != null ? !getName().equals(fieldDTO.getName()) : fieldDTO.getName() != null) return false;
+        return !(getValue() != null ? !getValue().equals(fieldDTO.getValue()) : fieldDTO.getValue() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
+        return result;
     }
 
     @Override

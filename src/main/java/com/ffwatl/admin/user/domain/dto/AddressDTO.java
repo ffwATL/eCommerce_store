@@ -9,12 +9,17 @@ import com.ffwatl.admin.user.domain.Country;
 public class AddressDTO implements Address {
 
     private long id;
+
     @JsonDeserialize(as=CountryDTO.class)
     private Country country;
+
     @JsonDeserialize(as=CityDTO.class)
     private City city;
+
     private int zipCode;
+
     private String street;
+
 
     @Override
     public long getId() {
@@ -69,6 +74,31 @@ public class AddressDTO implements Address {
     public Address setStreet(String street) {
         this.street = street;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AddressDTO that = (AddressDTO) o;
+
+        if (getId() != that.getId()) return false;
+        if (getZipCode() != that.getZipCode()) return false;
+        if (getCountry() != null ? !getCountry().equals(that.getCountry()) : that.getCountry() != null) return false;
+        if (getCity() != null ? !getCity().equals(that.getCity()) : that.getCity() != null) return false;
+        return !(getStreet() != null ? !getStreet().equals(that.getStreet()) : that.getStreet() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getCountry() != null ? getCountry().hashCode() : 0);
+        result = 31 * result + (getCity() != null ? getCity().hashCode() : 0);
+        result = 31 * result + getZipCode();
+        result = 31 * result + (getStreet() != null ? getStreet().hashCode() : 0);
+        return result;
     }
 
     @Override

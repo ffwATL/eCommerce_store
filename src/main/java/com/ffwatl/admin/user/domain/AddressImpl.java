@@ -11,14 +11,17 @@ public class AddressImpl implements Address {
     private long id;
 
     @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = CountryImpl.class)
+    @JoinColumn(name = "country_id")
     private Country country;
 
     @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = CityImpl.class)
+    @JoinColumn(name = "city_id")
     private City city;
 
     @Column(nullable = false)
     private int zipCode;
 
+    @Column(name = "street")
     private String street;
 
     @Override

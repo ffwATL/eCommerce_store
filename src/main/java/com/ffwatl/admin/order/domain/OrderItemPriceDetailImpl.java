@@ -26,6 +26,7 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
                targetEntity = OrderItemPriceDetailAdjustmentImpl.class,
                cascade = CascadeType.ALL,
                orphanRemoval = true)
+    @JoinColumn(name = "order_item_price_detail_adj_id")
     private List<OrderItemPriceDetailAdjustment> orderItemPriceDetailAdjustments = new ArrayList<>();
 
     @Column(name = "quantity")

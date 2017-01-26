@@ -15,7 +15,7 @@ public class ColorImpl implements Color {
     @Embedded
     private I18n color;
 
-    @Column(length = 30)
+    @Column(name = "hex", length = 30)
     private String hex;
 
     @Override
@@ -49,6 +49,27 @@ public class ColorImpl implements Color {
     public Color setColor(I18n color) {
         this.color = color;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ColorImpl color1 = (ColorImpl) o;
+
+        if (getId() != color1.getId()) return false;
+        if (getColor() != null ? !getColor().equals(color1.getColor()) : color1.getColor() != null) return false;
+        return !(getHex() != null ? !getHex().equals(color1.getHex()) : color1.getHex() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getColor() != null ? getColor().hashCode() : 0);
+        result = 31 * result + (getHex() != null ? getHex().hashCode() : 0);
+        return result;
     }
 
     @Override

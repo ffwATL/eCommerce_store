@@ -29,11 +29,13 @@ public class CategoryImpl implements Serializable, Category {
     /**
      * CategoryImpl's depth level value.
      */
+    @Column(name = "category_level")
     private int level;
 
     /**
      * Common attribute for CategoryImpl objects.
      */
+    @Column(name = "common_category")
     private CommonCategory cat;
 
     /**
@@ -43,14 +45,17 @@ public class CategoryImpl implements Serializable, Category {
     private I18n groupName;
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, targetEntity = UserImpl.class)
+    @JoinColumn(name = "user_id")
     private User createdBy;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = CategoryImpl.class)
+    @JoinColumn(name = "child_id")
     private List<Category> child = new LinkedList<>();
 
-    @Column(length = 2048)
+    @Column(name="cat_description", length = 2048)
     private String description;
 
+    @Column(name = "avg_weight")
     private int weight;
 
 
@@ -127,6 +132,39 @@ public class CategoryImpl implements Serializable, Category {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CategoryImpl category = (CategoryImpl) o;
+
+        if (getId() != category.getId()) return false;
+        if (getLevel() != category.getLevel()) return false;
+        if (getWeight() != category.getWeight()) return false;
+        if (getCat() != category.getCat()) return false;
+        if (getGroupName() != null ? !getGroupName().equals(category.getGroupName()) : category.getGroupName() != null)
+            return false;
+        if (getCreatedBy() != null ? !getCreatedBy().equals(category.getCreatedBy()) : category.getCreatedBy() != null)
+            return false;
+        if (getChild() != null ? !getChild().equals(category.getChild()) : category.getChild() != null) return false;
+        return !(getDescription() != null ? !getDescription().equals(category.getDescription()) : category.getDescription() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + getLevel();
+        result = 31 * result + (getCat() != null ? getCat().hashCode() : 0);
+        result = 31 * result + (getGroupName() != null ? getGroupName().hashCode() : 0);
+        result = 31 * result + (getCreatedBy() != null ? getCreatedBy().hashCode() : 0);
+        result = 31 * result + (getChild() != null ? getChild().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + getWeight();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "CategoryImpl{" +
                 "id=" + id +
@@ -134,9 +172,9 @@ public class CategoryImpl implements Serializable, Category {
                 ", cat=" + cat +
                 ", groupName=" + groupName +
                 ", createdBy=" + createdBy +
+                ", child=" + child +
                 ", description='" + description + '\'' +
                 ", weight=" + weight +
-                ", child: "+child+
                 '}';
     }
 

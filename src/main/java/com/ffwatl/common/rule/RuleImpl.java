@@ -9,10 +9,15 @@ public class RuleImpl implements Rule{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
+
+    @Column(name = "rule_type")
     private String type; // type of this rule, ie target for which this rule is valid
+
     @Column(name = "bound_value")
     private String boundValue; // bound value to given fieldName
+
     @Column(name = "field_name")
     private String fieldName; // field name for which boundValue is applied
 

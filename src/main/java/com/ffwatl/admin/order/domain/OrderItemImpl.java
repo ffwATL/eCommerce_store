@@ -49,6 +49,7 @@ public class OrderItemImpl implements OrderItem{
 
     @OneToMany(mappedBy = "orderItem", targetEntity = OrderItemPriceDetailImpl.class,
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_item_price_details_id")
     private List<OrderItemPriceDetail> orderItemPriceDetails;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = CategoryImpl.class, optional = false)
@@ -57,10 +58,12 @@ public class OrderItemImpl implements OrderItem{
 
     @OneToMany(mappedBy = "orderItem", targetEntity = CandidateItemOfferImpl.class,
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "candidate_item_offers_id")
     private Set<CandidateItemOffer> candidateItemOffers;
 
     @OneToMany(mappedBy = "orderItem", targetEntity = OrderItemQualifierImpl.class,
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_item_qualifiers_id")
     private Set<OrderItemQualifier> orderItemQualifiers;
 
     @Column(name = "discounting_allowed")

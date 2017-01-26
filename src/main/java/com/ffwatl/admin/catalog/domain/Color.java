@@ -4,6 +4,7 @@ import com.ffwatl.admin.i18n.domain.I18n;
 
 
 public interface Color {
+
     long getId();
 
     String getHex();

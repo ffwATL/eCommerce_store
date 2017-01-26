@@ -3,7 +3,9 @@ package com.ffwatl.admin.order.domain;
 
 import com.ffwatl.admin.offer.domain.Offer;
 
-public interface OrderItemQualifier {
+import java.io.Serializable;
+
+public interface OrderItemQualifier extends Serializable{
 
     long getId();
 

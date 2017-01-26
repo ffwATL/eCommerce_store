@@ -15,13 +15,17 @@ public class OfferGroupImpl implements OfferGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "name")
     private String name;
 
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, targetEntity = ProductDefault.class)
+    @JoinColumn(name = "item_id")
     private List<Product> items;
 
+    @Column(name = "discount")
     private int discount;
 
+    @Column(name = "active")
     private boolean active;
 
     @Override

@@ -15,10 +15,10 @@ public class FieldImpl implements Field{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column(name = "field_name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "field_value", nullable = false)
     private String value;
 
     /**
@@ -73,15 +73,6 @@ public class FieldImpl implements Field{
     }
 
     @Override
-    public String toString() {
-        return "Field{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", value='" + value + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -94,5 +85,14 @@ public class FieldImpl implements Field{
         int result = getName().hashCode();
         result = 31 * result + getValue().hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Field{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

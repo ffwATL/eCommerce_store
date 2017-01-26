@@ -4,6 +4,7 @@ import java.util.List;
 
 
 public interface ProductAttribute extends Comparable<ProductAttribute> {
+
     long getId();
 
     ProductAttributeType getEu_size();

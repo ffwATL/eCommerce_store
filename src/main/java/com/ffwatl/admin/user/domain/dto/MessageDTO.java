@@ -10,80 +10,119 @@ import java.util.List;
 public class MessageDTO implements Message{
 
     private long id;
+
     @JsonDeserialize(as=UserDTO.class)
-    private User from;
+    private User fromUser;
+
     @JsonDeserialize(contentAs=UserDTO.class)
-    private List<User> to;
+    private List<User> toUsers;
+
     private String message;
+
     private String topic;
 
     private boolean unread = true;
+
     @Override
     public long getId() {
-        return 0;
+        return id;
     }
 
     @Override
-    public String getTopic() {
-        return null;
+    public User getFromUser() {
+        return fromUser;
     }
 
     @Override
-    public User getFrom() {
-        return null;
-    }
-
-    @Override
-    public boolean isUnread() {
-        return false;
-    }
-
-    @Override
-    public List<User> getTo() {
-        return null;
+    public List<User> getToUsers() {
+        return toUsers;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
+    }
+
+    @Override
+    public boolean isUnread() {
+        return unread;
+    }
+
+    @Override
+    public String getTopic() {
+        return topic;
     }
 
     @Override
     public Message setId(long id) {
-        return null;
+        this.id = id;
+        return this;
     }
 
     @Override
-    public Message setFrom(User from) {
-        return null;
+    public Message setFromUsers(User fromUser) {
+        this.fromUser = fromUser;
+        return this;
     }
 
     @Override
-    public Message setTo(List<User> to) {
-        return null;
+    public Message setToUsers(List<User> toUser) {
+        this.toUsers = toUser;
+        return this;
     }
 
     @Override
     public Message setMessage(String message) {
-        return null;
+        this.message = message;
+        return this;
     }
 
     @Override
     public Message setUnread(boolean unread) {
-        return null;
+        this.unread = unread;
+        return this;
     }
 
     @Override
     public Message setTopic(String topic) {
-        return null;
+        this.topic = topic;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MessageDTO that = (MessageDTO) o;
+
+        if (getId() != that.getId()) return false;
+        if (isUnread() != that.isUnread()) return false;
+        if (getFromUser() != null ? !getFromUser().equals(that.getFromUser()) : that.getFromUser() != null)
+            return false;
+        if (getToUsers() != null ? !getToUsers().equals(that.getToUsers()) : that.getToUsers() != null) return false;
+        if (getMessage() != null ? !getMessage().equals(that.getMessage()) : that.getMessage() != null) return false;
+        return !(getTopic() != null ? !getTopic().equals(that.getTopic()) : that.getTopic() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getFromUser() != null ? getFromUser().hashCode() : 0);
+        result = 31 * result + (getToUsers() != null ? getToUsers().hashCode() : 0);
+        result = 31 * result + (getMessage() != null ? getMessage().hashCode() : 0);
+        result = 31 * result + (getTopic() != null ? getTopic().hashCode() : 0);
+        result = 31 * result + (isUnread() ? 1 : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "MessageDTO{" +
                 "id=" + id +
-                ", from=" + from +
-                ", to=" + to +
+                ", fromUser=" + fromUser +
+                ", toUsers=" + toUsers +
                 ", message='" + message + '\'' +
                 ", topic='" + topic + '\'' +
                 ", unread=" + unread +

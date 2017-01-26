@@ -16,6 +16,7 @@ public class ProductAttributeTypeImpl implements ProductAttributeType {
     @Embedded
     private I18n name;
 
+    @Column(name = "common_category")
     private CommonCategory cat;
 
     @Override

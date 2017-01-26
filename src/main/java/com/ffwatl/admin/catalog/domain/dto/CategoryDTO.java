@@ -38,10 +38,15 @@ public class CategoryDTO implements Category {
      * Common attribute for Category objects.
      */
     private CommonCategory cat;
+
     private String description;
+
     private int weight;
+
     @JsonDeserialize(contentAs=CategoryDTO.class)
+
     private List<Category> child = new ArrayList<>();
+
     @JsonDeserialize(as=UserDTO.class)
     private User createdBy;
 
@@ -156,12 +161,49 @@ public class CategoryDTO implements Category {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CategoryDTO that = (CategoryDTO) o;
+
+        if (getId() != that.getId()) return false;
+        if (getLevel() != that.getLevel()) return false;
+        if (getWeight() != that.getWeight()) return false;
+        if (getGroupName() != null ? !getGroupName().equals(that.getGroupName()) : that.getGroupName() != null)
+            return false;
+        if (getCat() != that.getCat()) return false;
+        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+            return false;
+        if (getChild() != null ? !getChild().equals(that.getChild()) : that.getChild() != null) return false;
+        return !(getCreatedBy() != null ? !getCreatedBy().equals(that.getCreatedBy()) : that.getCreatedBy() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getGroupName() != null ? getGroupName().hashCode() : 0);
+        result = 31 * result + getLevel();
+        result = 31 * result + (getCat() != null ? getCat().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + getWeight();
+        result = 31 * result + (getChild() != null ? getChild().hashCode() : 0);
+        result = 31 * result + (getCreatedBy() != null ? getCreatedBy().hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "CategoryDTO{" +
                 "id=" + id +
                 ", groupName=" + groupName +
                 ", level=" + level +
                 ", cat=" + cat +
+                ", description='" + description + '\'' +
+                ", weight=" + weight +
+                ", child=" + child +
+                ", createdBy=" + createdBy +
                 '}';
     }
 }

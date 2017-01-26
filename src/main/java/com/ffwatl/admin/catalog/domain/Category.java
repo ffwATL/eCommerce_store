@@ -12,20 +12,35 @@ public interface Category extends Comparable<Category>{
     boolean NO_CHILD = false;
 
     long getId();
+
     int getLevel();
+
     int getWeight();
+
     User getCreatedBy();
+
     CommonCategory getCat();
+
     List<Category> getChild();
+
     I18n getGroupName();
+
     String getDescription();
 
     Category setId(long id);
+
     Category setCat(CommonCategory cat);
+
     Category setGroupName(I18n groupName);
+
     Category setCreatedBy(User createdBy);
+
     Category setDescription(String description);
+
     Category setChild(List<Category> child);
+
     Category setLevel(int level);
+
     Category setWeight(int weight);
+
 }

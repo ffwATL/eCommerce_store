@@ -35,7 +35,10 @@ public class FulfillmentGroupAdjustmentImpl implements FulfillmentGroupAdjustmen
 
     @Override
     public FulfillmentGroupAdjustment init(FulfillmentGroup fulfillmentGroup, Offer offer, String reason) {
-        return null;
+        this.fulfillmentGroup = fulfillmentGroup;
+        this.offer = offer;
+        this.reason = reason;
+        return this;
     }
 
     @Override

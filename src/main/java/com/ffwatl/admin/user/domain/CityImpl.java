@@ -39,6 +39,25 @@ public class CityImpl implements City {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CityImpl city = (CityImpl) o;
+
+        if (getId() != city.getId()) return false;
+        return !(getName() != null ? !getName().equals(city.getName()) : city.getName() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "CityImpl{" +
                 "id=" + id +
