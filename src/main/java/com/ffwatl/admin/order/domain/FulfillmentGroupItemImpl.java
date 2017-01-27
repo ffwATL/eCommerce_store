@@ -6,6 +6,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "fulfillment_group_items")
+@NamedQueries({
+        @NamedQuery(name = "find_fulfillment_group_items_for_fulfillment_group",
+                query = "SELECT f FROM FulfillmentGroupItemImpl f WHERE f.fulfillmentGroup.id =: id")
+})
 public class FulfillmentGroupItemImpl implements FulfillmentGroupItem {
 
     private static final long serialVersionUID = 1L;

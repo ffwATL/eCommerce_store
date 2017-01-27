@@ -18,6 +18,32 @@ import java.util.Set;
 
 @Entity
 @Table(name = "fulfillment_groups")
+@NamedQueries({
+        @NamedQuery(name = "find_unfulfilled_fulfillment_group_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
+                "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
+                "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
+                "LEFT JOIN FETCH f.order.orderItems oo " +
+                "LEFT JOIN FETCH oo.orderItemPriceDetails " +
+                "LEFT JOIN FETCH oo.candidateItemOffers " +
+                "LEFT JOIN FETCH oo.orderItemQualifiers " +
+                "WHERE f.status <> 'FULFILLED' AND f.status <> 'DELIVERED' ORDER BY f.order.submitDate ASC"),
+        @NamedQuery(name = "find_unprocessed_fulfillment_group_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
+                "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
+                "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
+                "LEFT JOIN FETCH f.order.orderItems oo " +
+                "LEFT JOIN FETCH oo.orderItemPriceDetails " +
+                "LEFT JOIN FETCH oo.candidateItemOffers " +
+                "LEFT JOIN FETCH oo.orderItemQualifiers " +
+                "WHERE f.status = 'NEW' ORDER BY f.order.submitDate ASC"),
+        @NamedQuery(name = "find_fulfillment_groups_by_status_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
+                "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
+                "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
+                "LEFT JOIN FETCH f.order.orderItems oo " +
+                "LEFT JOIN FETCH oo.orderItemPriceDetails " +
+                "LEFT JOIN FETCH oo.candidateItemOffers " +
+                "LEFT JOIN FETCH oo.orderItemQualifiers " +
+                "WHERE f.status =:status ORDER BY f.order.submitDate ASC")
+})
 public class FulfillmentGroupImpl implements FulfillmentGroup{
 
     private static final long serialVersionUID = 1L;

@@ -22,6 +22,10 @@ public class FulfillmentGroupDaoImpl implements FulfillmentGroupDao{
         return em.createQuery("SELECT f FROM FulfillmentGroupImpl f " +
                 "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
                 "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
+                "LEFT JOIN FETCH f.order.orderItems oo " +
+                "LEFT JOIN FETCH oo.orderItemPriceDetails " +
+                "LEFT JOIN FETCH oo.candidateItemOffers " +
+                "LEFT JOIN FETCH oo.orderItemQualifiers " +
                 "WHERE f.id=:id", FulfillmentGroupImpl.class)
                 .setParameter("id", id)
                 .getSingleResult();
@@ -39,6 +43,10 @@ public class FulfillmentGroupDaoImpl implements FulfillmentGroupDao{
         return em.createQuery("SELECT f FROM FulfillmentGroupImpl f " +
                 "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
                 "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
+                "LEFT JOIN FETCH f.order.orderItems oo " +
+                "LEFT JOIN FETCH oo.orderItemPriceDetails " +
+                "LEFT JOIN FETCH oo.candidateItemOffers " +
+                "LEFT JOIN FETCH oo.orderItemQualifiers " +
                 "WHERE f.order.orderNumber=:orderNumber", FulfillmentGroupImpl.class)
                 .setParameter("orderNumber", order.getOrderNumber())
                 .getSingleResult();
@@ -46,7 +54,7 @@ public class FulfillmentGroupDaoImpl implements FulfillmentGroupDao{
 
     @Override
     public void delete(FulfillmentGroup fulfillmentGroup) {
-
+        em.remove(fulfillmentGroup);
     }
 
     @Override
@@ -60,33 +68,39 @@ public class FulfillmentGroupDaoImpl implements FulfillmentGroupDao{
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<FulfillmentGroup> findUnfulfilledFulfillmentGroups(int start, int maxResults) {
-        return null;
+        return em.createNamedQuery("find_unfulfilled_fulfillment_group_asc")
+                .setFirstResult(start)
+                .setMaxResults(maxResults)
+                .getResultList();
     }
 
     @Override
-    public List<FulfillmentGroup> findPartiallyFulfilledFulfillmentGroups(int start, int maxResults) {
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("unchecked")
     public List<FulfillmentGroup> findUnprocessedFulfillmentGroups(int start, int maxResults) {
-        return null;
+        return em.createNamedQuery("find_unprocessed_fulfillment_group_asc")
+                .setFirstResult(start)
+                .setMaxResults(maxResults)
+                .getResultList();
     }
 
     @Override
-    public List<FulfillmentGroup> findFulfillmentGroupsByStatus(FulfillmentGroupStatusType status, int start, int maxResults, boolean ascending) {
-        return null;
+    @SuppressWarnings("unchecked")
+    public List<FulfillmentGroup> findFulfillmentGroupsByStatus(FulfillmentGroupStatusType status,
+                                                                int start, int maxResults, boolean ascending) {
+        if(status == null) throw new IllegalArgumentException("FulfillmentGroupStatusType can't be null");
+        //FIXME: add handling ascending value
+        return em.createNamedQuery("find_fulfillment_groups_by_status_asc")
+                .setParameter("status", status.getType())
+                .setFirstResult(start)
+                .setMaxResults(maxResults)
+                .getResultList();
     }
 
     @Override
     public List<FulfillmentGroup> findFulfillmentGroupsByStatus(FulfillmentGroupStatusType status, int start, int maxResults) {
-        return null;
-    }
-
-    @Override
-    public int findNextFulfillmentGroupSequnceForOrder(Order order) {
-        return 0;
+        return findFulfillmentGroupsByStatus(status, start, maxResults, true);
     }
 
 }

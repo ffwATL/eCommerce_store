@@ -21,9 +21,8 @@ public interface FulfillmentGroupDao {
 
     FulfillmentGroup create();
 
-    List<FulfillmentGroup> findUnfulfilledFulfillmentGroups(int start, int maxResults);
 
-    List<FulfillmentGroup> findPartiallyFulfilledFulfillmentGroups(int start, int maxResults);
+    List<FulfillmentGroup> findUnfulfilledFulfillmentGroups(int start, int maxResults);
 
     List<FulfillmentGroup> findUnprocessedFulfillmentGroups(int start, int maxResults);
 
@@ -31,5 +30,4 @@ public interface FulfillmentGroupDao {
 
     List<FulfillmentGroup> findFulfillmentGroupsByStatus(FulfillmentGroupStatusType status, int start, int maxResults);
 
-    int findNextFulfillmentGroupSequnceForOrder(Order order);
 }
