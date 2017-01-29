@@ -42,7 +42,7 @@ public class OrderImpl implements Order {
     private User customer;
 
     @Column(name = "order_status")
-    private OrderStatus orderStatus = OrderStatus.NEW;
+    private OrderStatus orderStatus = OrderStatus.SUBMITTED;
 
     @OneToMany(mappedBy = "order",
                fetch = FetchType.LAZY,

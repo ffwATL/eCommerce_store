@@ -8,7 +8,6 @@ import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.offer.domain.CandidateItemOffer;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 public interface OrderItem extends Serializable {
@@ -63,7 +62,7 @@ public interface OrderItem extends Serializable {
      * the orderItem will get an additional ItemPriceDetail.
      * Generally, an OrderItem will have 1 ItemPriceDetail record for each uniquely priced version of the item.
      */
-    List<OrderItemPriceDetail> getOrderItemPriceDetails();
+    Set<OrderItemPriceDetail> getOrderItemPriceDetails();
 
     Category getCategory();
 
@@ -136,7 +135,7 @@ public interface OrderItem extends Serializable {
 
     OrderItem setQuantity(int quantity);
 
-    OrderItem setOrderItemPriceDetails(List<OrderItemPriceDetail> orderItemPriceDetails);
+    OrderItem setOrderItemPriceDetails(Set<OrderItemPriceDetail> orderItemPriceDetails);
 
     OrderItem setCategory(Category category);
 

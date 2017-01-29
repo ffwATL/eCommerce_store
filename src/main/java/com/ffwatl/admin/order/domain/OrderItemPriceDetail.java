@@ -5,7 +5,7 @@ import com.ffwatl.admin.currency.Currency;
 import com.ffwatl.admin.offer.domain.OrderItemPriceDetailAdjustment;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 public interface OrderItemPriceDetail extends Serializable {
 
@@ -20,7 +20,7 @@ public interface OrderItemPriceDetail extends Serializable {
      * Returns a List of the adjustments that effected this priceDetail.
      * @return a  List of OrderItemPriceDetailAdjustment
      */
-    List<OrderItemPriceDetailAdjustment> getOrderItemPriceDetailAdjustments();
+    Set<OrderItemPriceDetailAdjustment> getOrderItemPriceDetailAdjustments();
 
     /**
      * The quantity of this {@link OrderItemPriceDetail}.
@@ -54,7 +54,7 @@ public interface OrderItemPriceDetail extends Serializable {
 
     OrderItemPriceDetail setOrderItem(OrderItem orderItem);
 
-    OrderItemPriceDetail setOrderItemPriceDetailAdjustments(List<OrderItemPriceDetailAdjustment> orderItemPriceDetailAdjustments);
+    OrderItemPriceDetail setOrderItemPriceDetailAdjustments(Set<OrderItemPriceDetailAdjustment> orderItemPriceDetailAdjustments);
 
     OrderItemPriceDetail setQuantity(int quantity);
 

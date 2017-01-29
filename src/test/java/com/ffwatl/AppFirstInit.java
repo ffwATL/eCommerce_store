@@ -44,7 +44,7 @@ public class AppFirstInit {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private static final Type EURO_SIZE_TYPE = new TypeToken<List<EuroSize>>() {
+    private static final Type EURO_SIZE_TYPE = new TypeToken<List<ProductAttribute>>() {
     }.getType();
 
     private static final Type BRAND_TYPE = new TypeToken<List<BrandImpl>>() {
@@ -128,7 +128,8 @@ public class AppFirstInit {
     @Test
     public void euroSizeInit() throws FileNotFoundException, UnsupportedEncodingException {
         Reader reader = new InputStreamReader(new FileInputStream("euro_size.json"),"UTF-8");
-        List<EuroSize> e = new GsonBuilder().registerTypeAdapter(EuroSize.class, new EuroSizeDeserializer())
+        List<ProductAttributeType> e = new GsonBuilder()
+                .registerTypeAdapter(ProductAttributeTypeImpl.class, new EuroSizeDeserializer())
                 .create().fromJson(reader, EURO_SIZE_TYPE);
         euroSizeService.save(e);
     }

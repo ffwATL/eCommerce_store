@@ -5,8 +5,8 @@ import com.ffwatl.admin.offer.domain.OrderItemPriceDetailAdjustment;
 import com.ffwatl.admin.offer.domain.OrderItemPriceDetailAdjustmentImpl;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "order_item_price_details")
@@ -27,7 +27,7 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
                targetEntity = OrderItemPriceDetailAdjustmentImpl.class,
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    private List<OrderItemPriceDetailAdjustment> orderItemPriceDetailAdjustments = new ArrayList<>();
+    private Set<OrderItemPriceDetailAdjustment> orderItemPriceDetailAdjustments = new HashSet<>();
 
     @Column(name = "quantity")
     private int quantity;
@@ -44,7 +44,7 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
     }
 
     @Override
-    public List<OrderItemPriceDetailAdjustment> getOrderItemPriceDetailAdjustments() {
+    public Set<OrderItemPriceDetailAdjustment> getOrderItemPriceDetailAdjustments() {
         return this.orderItemPriceDetailAdjustments;
     }
 
@@ -91,7 +91,7 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
     }
 
     @Override
-    public OrderItemPriceDetail setOrderItemPriceDetailAdjustments(List<OrderItemPriceDetailAdjustment> orderItemPriceDetailAdjustments) {
+    public OrderItemPriceDetail setOrderItemPriceDetailAdjustments(Set<OrderItemPriceDetailAdjustment> orderItemPriceDetailAdjustments) {
         this.orderItemPriceDetailAdjustments = orderItemPriceDetailAdjustments;
         return this;
     }

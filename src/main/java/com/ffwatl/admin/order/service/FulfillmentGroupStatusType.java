@@ -35,7 +35,7 @@ public class FulfillmentGroupStatusType implements Serializable, EnumerationType
     public static final FulfillmentGroupStatusType PROCESSING = new FulfillmentGroupStatusType("PROCESSING",
             new I18n().setLocale_en("Processing"));
 
-    public static final FulfillmentGroupStatusType NEW = new FulfillmentGroupStatusType("NEW",
+    public static final FulfillmentGroupStatusType NEW = new FulfillmentGroupStatusType("SUBMITTED",
             new I18n().setLocale_en("New"));
 
     private String type;

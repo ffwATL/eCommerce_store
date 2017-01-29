@@ -96,8 +96,8 @@ public class CandidateItemOfferImpl implements CandidateItemOffer{
     public String toString() {
         return "CandidateItemOfferImpl{" +
                 "id=" + id +
-                ", orderItem=" + orderItem +
-                ", offer=" + offer +
+                ", orderItem=" + orderItem.getProductName() +
+                ", offer=" + offer.getName() +
                 ", discountedPrice=" + discountedPrice +
                 '}';
     }

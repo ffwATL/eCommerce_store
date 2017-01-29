@@ -6,7 +6,6 @@ import com.ffwatl.admin.offer.domain.CandidateItemOffer;
 import com.ffwatl.admin.offer.domain.CandidateItemOfferImpl;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,7 +48,7 @@ public class OrderItemImpl implements OrderItem{
 
     @OneToMany(mappedBy = "orderItem", targetEntity = OrderItemPriceDetailImpl.class,
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrderItemPriceDetail> orderItemPriceDetails;
+    private Set<OrderItemPriceDetail> orderItemPriceDetails;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = CategoryImpl.class, optional = false)
     @JoinColumn(name = "category_id")
@@ -121,7 +120,7 @@ public class OrderItemImpl implements OrderItem{
     }
 
     @Override
-    public List<OrderItemPriceDetail> getOrderItemPriceDetails() {
+    public Set<OrderItemPriceDetail> getOrderItemPriceDetails() {
         return orderItemPriceDetails;
     }
 
@@ -252,7 +251,7 @@ public class OrderItemImpl implements OrderItem{
     }
 
     @Override
-    public OrderItem setOrderItemPriceDetails(List<OrderItemPriceDetail> orderItemPriceDetails) {
+    public OrderItem setOrderItemPriceDetails(Set<OrderItemPriceDetail> orderItemPriceDetails) {
         this.orderItemPriceDetails = orderItemPriceDetails;
         return this;
     }
@@ -309,7 +308,7 @@ public class OrderItemImpl implements OrderItem{
     @Override
     public int removeAllAdjustments() {
         int removedAdjustmentCount = 0;
-        List<OrderItemPriceDetail> details = getOrderItemPriceDetails();
+        Set<OrderItemPriceDetail> details = getOrderItemPriceDetails();
         if(details != null){
             for(OrderItemPriceDetail priceDetail: details){
                 priceDetail.setOrderItem(null);
@@ -335,27 +334,17 @@ public class OrderItemImpl implements OrderItem{
         if (getQuantity() != orderItem.getQuantity()) return false;
         if (isDiscountingAllowed() != orderItem.isDiscountingAllowed()) return false;
         if (getDiscountValue() != orderItem.getDiscountValue()) return false;
-        if (getOrder() != null ? !getOrder().equals(orderItem.getOrder()) : orderItem.getOrder() != null) return false;
         if (getProductName() != null ? !getProductName().equals(orderItem.getProductName()) : orderItem.getProductName() != null)
             return false;
         if (getProductAttributeType() != null ? !getProductAttributeType().equals(orderItem.getProductAttributeType()) : orderItem.getProductAttributeType() != null)
             return false;
-        if (color != null ? !color.equals(orderItem.color) : orderItem.color != null) return false;
-        if (getOrderItemPriceDetails() != null ? !getOrderItemPriceDetails().equals(orderItem.getOrderItemPriceDetails()) : orderItem.getOrderItemPriceDetails() != null)
-            return false;
-        if (getCategory() != null ? !getCategory().equals(orderItem.getCategory()) : orderItem.getCategory() != null)
-            return false;
-        if (getCandidateItemOffers() != null ? !getCandidateItemOffers().equals(orderItem.getCandidateItemOffers()) : orderItem.getCandidateItemOffers() != null)
-            return false;
-        return !(getOrderItemQualifiers() != null ? !getOrderItemQualifiers().equals(orderItem.getOrderItemQualifiers()) : orderItem.getOrderItemQualifiers() != null);
-
+        return (color != null ? !color.equals(orderItem.color) : orderItem.color != null);
     }
 
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + (int) (getProductId() ^ (getProductId() >>> 32));
-        result = 31 * result + (getOrder() != null ? getOrder().hashCode() : 0);
         result = 31 * result + (getProductName() != null ? getProductName().hashCode() : 0);
         result = 31 * result + (getProductAttributeType() != null ? getProductAttributeType().hashCode() : 0);
         result = 31 * result + (color != null ? color.hashCode() : 0);
@@ -363,10 +352,6 @@ public class OrderItemImpl implements OrderItem{
         result = 31 * result + getRetailPrice();
         result = 31 * result + getSalePrice();
         result = 31 * result + getQuantity();
-        result = 31 * result + (getOrderItemPriceDetails() != null ? getOrderItemPriceDetails().hashCode() : 0);
-        result = 31 * result + (getCategory() != null ? getCategory().hashCode() : 0);
-        result = 31 * result + (getCandidateItemOffers() != null ? getCandidateItemOffers().hashCode() : 0);
-        result = 31 * result + (getOrderItemQualifiers() != null ? getOrderItemQualifiers().hashCode() : 0);
         result = 31 * result + (isDiscountingAllowed() ? 1 : 0);
         result = 31 * result + getDiscountValue();
         return result;
@@ -377,7 +362,7 @@ public class OrderItemImpl implements OrderItem{
         return "OrderItemImpl{" +
                 "id=" + id +
                 ", productId=" + productId +
-                ", order=" + order +
+                ", order=" + order.getOrderNumber() +
                 ", productName=" + productName +
                 ", productAttributeType=" + productAttributeType +
                 ", color=" + color +

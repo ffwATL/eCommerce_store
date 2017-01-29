@@ -158,7 +158,6 @@ public class CategoryImpl implements Serializable, Category {
         result = 31 * result + (getCat() != null ? getCat().hashCode() : 0);
         result = 31 * result + (getGroupName() != null ? getGroupName().hashCode() : 0);
         result = 31 * result + (getCreatedBy() != null ? getCreatedBy().hashCode() : 0);
-        result = 31 * result + (getChild() != null ? getChild().hashCode() : 0);
         result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
         result = 31 * result + getWeight();
         return result;

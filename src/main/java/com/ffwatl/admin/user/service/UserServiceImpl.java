@@ -49,7 +49,8 @@ public class UserServiceImpl extends ConverterDTO<User> implements UserService {
     public User findById(long id) {
         UserImpl u_original = userRepository.findOne(id);
         if(u_original == null) throw new IllegalArgumentException("No such user in DB");
-        return transformEntity2DTO(u_original);
+        return u_original;
+        /*return transformEntity2DTO(u_original);*/
     }
 
     @Override

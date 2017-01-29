@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = "find_all_fulfillment_options", query = "SELECT f FROM FulfillmentOptionImpl f"),
         @NamedQuery(name = "find_all_fulfillment_options_by_type", query = "SELECT f FROM FulfillmentOptionImpl f " +
-                "WHERE f.fulfillmentType =: fulfillmentType")
+                "WHERE f.fulfillmentType=:fulfillmentType")
 })
 public class FulfillmentOptionImpl implements FulfillmentOption{
 

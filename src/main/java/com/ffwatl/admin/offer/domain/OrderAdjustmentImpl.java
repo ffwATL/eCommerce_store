@@ -112,8 +112,6 @@ public class OrderAdjustmentImpl implements OrderAdjustment {
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getOrder() != null ? getOrder().hashCode() : 0);
-        result = 31 * result + (getOffer() != null ? getOffer().hashCode() : 0);
         result = 31 * result + (getReason() != null ? getReason().hashCode() : 0);
         result = 31 * result + getAdjustmentValue();
         return result;
@@ -123,8 +121,8 @@ public class OrderAdjustmentImpl implements OrderAdjustment {
     public String toString() {
         return "OrderAdjustmentImpl{" +
                 "id=" + id +
-                ", order=" + order +
-                ", offer=" + offer +
+                ", order=" + order.getOrderNumber() +
+                ", offer=" + offer.getName() +
                 ", reason='" + reason + '\'' +
                 ", adjustmentValue=" + adjustmentValue +
                 '}';
