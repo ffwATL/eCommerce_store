@@ -58,6 +58,14 @@
         <property name="brandImgUrl" value="/storage/brand/images/"/>
     </bean>
 
+    <bean id="mergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <value>classpath:common-applicationContext-entity.xml</value>
+            </list>
+        </property>
+    </bean>
+
     <!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.gmail.com" />
         <property name="port" value="587" />

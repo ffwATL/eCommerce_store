@@ -7,6 +7,8 @@ import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderStatus;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.CriteriaProperty;
+import com.ffwatl.common.persistence.CriteriaPropertyImpl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Repository;
 
@@ -28,13 +30,13 @@ public class OrderDaoImpl implements OrderDao{
 
 
     @Override
-    public Order findOrderById(FetchMode fetchMode, long id) {
+    public Order findOrderById(final FetchMode fetchMode, final long id) {
         List<Order> orders = findOrdersByIds(fetchMode, id);
         return orders.size() > 0 ? orders.get(0) : null;
     }
 
     @Override
-    public Order findOrderById(long id, boolean refresh) {
+    public Order findOrderById(final long id, final boolean refresh) {
         Order order = findOrderById(FetchMode.FETCHED, id);
 
         if(refresh){
@@ -44,11 +46,12 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public List<Order> findOrdersByIds(FetchMode fetchMode, long... ids) {
-        CriteriaQuery<Order> criteria = createOrderCriteriaQueryByFetchMode(fetchMode);
+    public List<Order> findOrdersByIds(final FetchMode fetchMode, final long... ids) {
+        final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
+        CriteriaQuery<Order> criteria = property.getCriteria();
 
         // We only want results that match the order IDs
-        criteria.where(criteria.getRoots().iterator().next().get("id")
+        criteria.where(property.getRoot().get("id")
                 .as(Long.class)
                 .in(ArrayUtils.toObject(ids)));
 
@@ -57,11 +60,13 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public List<Order> findBatchOrders(FetchMode fetchMode, int start, int maxResults, List<OrderStatus> statuses) {
-        CriteriaQuery<Order> criteria = createOrderCriteriaQueryByFetchMode(fetchMode);
+    public List<Order> findBatchOrders(final FetchMode fetchMode, final int start, final int maxResults,
+                                       final List<OrderStatus> statuses) {
+        final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
+        CriteriaQuery<Order> criteria = property.getCriteria();
 
         // We only want results that match the order statuses
-        criteria.where(criteria.getRoots().iterator().next().get("orderStatus")
+        criteria.where(property.getRoot().get("orderStatus")
                 .as(OrderStatus.class)
                 .in(statuses));
 
@@ -72,13 +77,15 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public List<Order> findOrdersForCustomer(FetchMode fetchMode, long customerId, OrderStatus orderStatus) {
-        CriteriaQuery<Order> criteria = createOrderCriteriaQueryByFetchMode(fetchMode);
+    public List<Order> findOrdersForCustomer(final FetchMode fetchMode, final long customerId,
+                                             final OrderStatus orderStatus) {
+        final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
+        final CriteriaQuery<Order> criteria = property.getCriteria();
+        final Root<OrderImpl> root = property.getRoot();
+        final CriteriaBuilder cb = property.getBuilder();
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        List<Predicate> predicates = new ArrayList<>();
-        Root<?> root = criteria.getRoots().iterator().next();
-        Join<Order, User> userJoin = root.join("customer", JoinType.INNER);
+        final List<Predicate> predicates = new ArrayList<>();
+        final Join<Order, User> userJoin = root.join("customer", JoinType.INNER);
 
         predicates.add(cb.equal(userJoin.get("id"), customerId));
 
@@ -99,13 +106,14 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public Order findNamedOrderForCustomer(FetchMode fetchMode, long customerId, String name) {
-        CriteriaQuery<Order> criteria = createOrderCriteriaQueryByFetchMode(fetchMode);
+    public Order findNamedOrderForCustomer(final FetchMode fetchMode, final long customerId, final String name) {
+        final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
+        final CriteriaQuery<Order> criteria = property.getCriteria();
+        final CriteriaBuilder cb = property.getBuilder();
+        final Root<OrderImpl> root = property.getRoot();
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        List<Predicate> predicates = new ArrayList<>();
-        Root<?> root = criteria.getRoots().iterator().next();
-        Join<Order, User> userJoin = root.join("customer", JoinType.INNER);
+        final List<Predicate> predicates = new ArrayList<>();
+        final Join<Order, User> userJoin = root.join("customer", JoinType.INNER);
 
         predicates.add(cb.equal(userJoin.get("id"), customerId));
         predicates.add(cb.equal(root.get("name"), name));
@@ -117,13 +125,14 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public Order findCartForCustomer(FetchMode fetchMode, long customerId) {
-        CriteriaQuery<Order> criteria = createOrderCriteriaQueryByFetchMode(fetchMode);
+    public Order findCartForCustomer(final FetchMode fetchMode, final long customerId) {
+        final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
+        final CriteriaQuery<Order> criteria = property.getCriteria();
+        final CriteriaBuilder cb = property.getBuilder();
+        final Root<OrderImpl> root = property.getRoot();
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        List<Predicate> predicates = new ArrayList<>();
-        Root<?> root = criteria.getRoots().iterator().next();
-        Join<Order, User> userJoin = root.join("customer", JoinType.INNER);
+        final List<Predicate> predicates = new ArrayList<>();
+        final Join<Order, User> userJoin = root.join("customer", JoinType.INNER);
 
         predicates.add(cb.equal(userJoin.get("id"), customerId));
         predicates.add(cb.isNull(root.get("name")));
@@ -173,10 +182,11 @@ public class OrderDaoImpl implements OrderDao{
 
     @Override
     public Order findOrderByOrderNumber(FetchMode fetchMode, String orderNumber) {
-        CriteriaQuery<Order> criteria = createOrderCriteriaQueryByFetchMode(fetchMode);
+        CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
+        CriteriaQuery<Order> criteria = property.getCriteria();
 
-        Root<?> root = criteria.getRoots().iterator().next();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        Root<OrderImpl> root = property.getRoot();
+        CriteriaBuilder cb = property.getBuilder();
 
         criteria.where(cb.equal(root.get("orderNumber"), orderNumber));
         return em.createQuery(criteria)
@@ -193,11 +203,11 @@ public class OrderDaoImpl implements OrderDao{
         return false;
     }
 
-    private CriteriaQuery<Order> createOrderCriteriaQueryByFetchMode(FetchMode fetchMode){
-        CriteriaBuilder builder = em.getCriteriaBuilder();
+    private CriteriaProperty<Order, OrderImpl> createOrderCriteriaQueryByFetchMode(final FetchMode fetchMode){
+        final CriteriaBuilder builder = em.getCriteriaBuilder();
 
-        CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
-        Root<OrderImpl> root = criteria.from(OrderImpl.class);
+        final CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
+        final Root<OrderImpl> root = criteria.from(OrderImpl.class);
 
         if(fetchMode == FetchMode.FETCHED){
             Fetch<Order, OrderItem> orderItemFetch = root.fetch("orderItems", JoinType.LEFT);
@@ -214,6 +224,10 @@ public class OrderDaoImpl implements OrderDao{
         }
 
         criteria.select(root);
-        return criteria;
+        return new CriteriaPropertyImpl<Order, OrderImpl>()
+                .setBuilder(builder)
+                .setCriteria(criteria)
+                .setRoot(root);
     }
+
 }
