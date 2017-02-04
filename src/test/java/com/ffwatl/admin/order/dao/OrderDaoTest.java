@@ -1,10 +1,9 @@
-package com.ffwatl;
+package com.ffwatl.admin.order.dao;
 
 import com.ffwatl.admin.catalog.service.ItemGroupService;
 import com.ffwatl.admin.offer.dao.OfferDao;
 import com.ffwatl.admin.offer.domain.CandidateItemOffer;
 import com.ffwatl.admin.offer.domain.OrderAdjustment;
-import com.ffwatl.admin.order.dao.OrderDao;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderStatus;
@@ -23,6 +22,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
 @Named
 @Rollback(value = false)
@@ -105,6 +107,13 @@ public class OrderDaoTest {
 
         orderDao.save(order);
     }*/
+    @Test
+    public void createOrderTest(){
+        Order order = orderDao.create();
+        assertThat(order, notNullValue());
+
+        System.err.println(order);
+    }
 
     @Test
     public void findOrderByIdFetchedTest(){

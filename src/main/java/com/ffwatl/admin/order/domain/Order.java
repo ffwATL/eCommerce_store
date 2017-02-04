@@ -210,6 +210,18 @@ public interface Order extends Serializable{
      */
     Order addOrderItem(OrderItem orderItem);
 
+    void removeLastOrderItem();
+
+    void removeFirstOrderItem();
+
+    void removeOrderItem(OrderItem orderItem);
+
+    void removeOrderItem(int index);
+
+    void removeOrderItemById(long id);
+
+    void removeAllOrderItems();
+
     /**
      * Returns the sum of the item totals.
      * @return the sum of the item totals.

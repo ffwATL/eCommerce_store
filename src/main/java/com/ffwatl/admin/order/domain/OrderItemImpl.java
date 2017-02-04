@@ -6,6 +6,7 @@ import com.ffwatl.admin.offer.domain.CandidateItemOffer;
 import com.ffwatl.admin.offer.domain.CandidateItemOfferImpl;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -48,7 +49,7 @@ public class OrderItemImpl implements OrderItem{
 
     @OneToMany(mappedBy = "orderItem", targetEntity = OrderItemPriceDetailImpl.class,
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<OrderItemPriceDetail> orderItemPriceDetails;
+    private Set<OrderItemPriceDetail> orderItemPriceDetails = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = CategoryImpl.class, optional = false)
     @JoinColumn(name = "category_id")
@@ -56,11 +57,11 @@ public class OrderItemImpl implements OrderItem{
 
     @OneToMany(mappedBy = "orderItem", targetEntity = CandidateItemOfferImpl.class,
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<CandidateItemOffer> candidateItemOffers;
+    private Set<CandidateItemOffer> candidateItemOffers = new HashSet<>();
 
     @OneToMany(mappedBy = "orderItem", targetEntity = OrderItemQualifierImpl.class,
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<OrderItemQualifier> orderItemQualifiers;
+    private Set<OrderItemQualifier> orderItemQualifiers = new HashSet<>();
 
     @Column(name = "discounting_allowed")
     private boolean discountingAllowed = true;

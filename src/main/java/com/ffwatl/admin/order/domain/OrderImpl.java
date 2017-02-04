@@ -315,12 +315,77 @@ public class OrderImpl implements Order {
     }
 
     @Override
+    public void removeLastOrderItem() {
+        checkCollectionIsNotEmpty(orderItems);
+
+        orderItems.remove(orderItems.size() - 1);
+    }
+
+    @Override
+    public void removeFirstOrderItem() {
+        checkCollectionIsNotEmpty(orderItems);
+        orderItems.remove(0);
+    }
+
+    @Override
+    public void removeOrderItem(OrderItem orderItem) {
+        if(orderItem == null) {
+            throw new IllegalArgumentException("Wrong argument is given: null");
+        }
+        checkCollectionIsNotEmpty(orderItems);
+        orderItems.remove(orderItem);
+    }
+
+    @Override
+    public void removeOrderItem(int index){
+        if(index < 0) throw new IllegalArgumentException("Wrong index is given. Index: " + index);
+        checkCollectionIsNotEmpty(orderItems);
+        orderItems.remove(index);
+    }
+
+    @Override
+    public void removeOrderItemById(long id) {
+        if(id < 1) {
+            throw new IllegalArgumentException("OrderItem with such id doesn't exist. ID: " + id);
+        }
+        checkCollectionIsNotEmpty(orderItems);
+
+        Iterator<OrderItem> iterator = orderItems.iterator();
+        boolean removed = false;
+
+        while (iterator.hasNext()){
+            OrderItem oi = iterator.next();
+            if(oi != null && oi.getId() == id) {
+                iterator.remove();
+                removed = true;
+                break;
+            }
+        }
+
+        if(!removed){
+            throw new IllegalArgumentException("OrderItem with such id doesn't exist. ID: " + id);
+        }
+    }
+
+    @Override
+    public void removeAllOrderItems() {
+        orderItems.clear();
+    }
+
+    @Override
     public int calculateSubTotal() {
         int subTotal = 0;
         for(OrderItem orderItem: orderItems){
             subTotal += orderItem.getTotalPrice();
         }
         return subTotal;
+    }
+
+    private void checkCollectionIsNotEmpty(Collection<?> collection){
+        if(collection.isEmpty()) {
+            throw new ArrayIndexOutOfBoundsException(collection.getClass().getName() +
+                    " - is empty, nothing to remove :(");
+        }
     }
 
     @Override

@@ -3,4 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+       <bean id="com.ffwatl.admin.order.domain.Order" class="com.ffwatl.admin.order.domain.OrderImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.order.domain.OrderItem" class="com.ffwatl.admin.order.domain.OrderItemImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.order.domain.OrderItemPriceDetail" class="com.ffwatl.admin.order.domain.OrderItemPriceDetailImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.order.domain.OrderItemQualifier" class="com.ffwatl.admin.order.domain.OrderItemQualifierImpl" scope="prototype"/>
+
 </beans>

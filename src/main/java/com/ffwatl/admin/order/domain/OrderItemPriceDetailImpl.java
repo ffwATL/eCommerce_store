@@ -75,7 +75,10 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
 
     @Override
     public Currency getCurrency() {
-        return getOrderItem().getOrder().getCurrency();
+        OrderItem orderItem = getOrderItem();
+        return orderItem != null && orderItem.getOrder() != null
+                ? orderItem.getOrder().getCurrency()
+                : null;
     }
 
     @Override

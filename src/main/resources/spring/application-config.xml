@@ -61,7 +61,7 @@
     <bean id="mergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
-                <value>classpath:common-applicationContext-entity.xml</value>
+                <value>classpath:spring/common-applicationContext-entity.xml</value>
             </list>
         </property>
     </bean>

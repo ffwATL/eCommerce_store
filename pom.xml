@@ -288,6 +288,12 @@
             <version>3.5</version>
         </dependency>
 
+        <!-- Apache commons beanUtils-->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.3</version>
+        </dependency>
 
         <!--Jackson dependencies-->
         <dependency>

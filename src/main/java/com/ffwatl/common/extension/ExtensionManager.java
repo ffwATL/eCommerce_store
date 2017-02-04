@@ -15,9 +15,11 @@ import java.util.List;
 public class ExtensionManager<T extends ExtensionHandler> implements InvocationHandler {
 
     private boolean handlersSorted = false;
+
     private static final String LOCK_OBJECT = "EM_LOCK";
 
     private final T extensionHandler;
+
     private List<T> handlers = new ArrayList<>();
 
     /**

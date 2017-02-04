@@ -5,13 +5,16 @@ import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderImpl;
 import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderStatus;
+import com.ffwatl.admin.payment.OrderPayment;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.common.FetchMode;
 import com.ffwatl.common.persistence.CriteriaProperty;
 import com.ffwatl.common.persistence.CriteriaPropertyImpl;
+import com.ffwatl.common.persistence.EntityConfiguration;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
@@ -27,6 +30,9 @@ public class OrderDaoImpl implements OrderDao{
 
     @PersistenceContext
     private EntityManager em;
+
+    @Resource(name = "entity_configuration")
+    private EntityConfiguration entityConfiguration;
 
 
     @Override
@@ -151,6 +157,13 @@ public class OrderDaoImpl implements OrderDao{
 
     @Override
     public void delete(Order order) {
+        if(!em.contains(order)){
+            order = findOrderById(FetchMode.FETCHED, order.getId());
+        }
+        OrderPayment payment = order.getOrderPayment();
+
+        payment.setOrder(null);
+
         em.remove(order);
     }
 
@@ -162,7 +175,7 @@ public class OrderDaoImpl implements OrderDao{
 
     @Override
     public Order create() {
-        return null;
+        return ((Order) entityConfiguration.createEntityInstance("com.ffwatl.admin.order.domain.Order"));
     }
 
     @Override

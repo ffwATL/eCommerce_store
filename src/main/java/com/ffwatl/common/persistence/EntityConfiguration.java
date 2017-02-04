@@ -81,6 +81,7 @@ public class EntityConfiguration {
 
     public Object createEntityInstance(String beanId) {
         Object bean = applicationcontext.getBean(beanId);
+
         if (logger.isDebugEnabled()) {
             logger.debug("Returning instance of class (" + bean.getClass().getName() + ") configured with bean id (" + beanId + ')');
         }
