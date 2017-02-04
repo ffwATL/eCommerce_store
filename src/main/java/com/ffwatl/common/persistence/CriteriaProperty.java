@@ -14,9 +14,9 @@ public interface CriteriaProperty<T, I extends T> {
 
     Root<I> getRoot();
 
-    CriteriaPropertyImpl setBuilder(CriteriaBuilder builder);
+    CriteriaProperty<T, I> setBuilder(CriteriaBuilder builder);
 
-    CriteriaPropertyImpl setCriteria(CriteriaQuery<T> criteria);
+    CriteriaProperty<T, I> setCriteria(CriteriaQuery<T> criteria);
 
-    CriteriaPropertyImpl setRoot(Root<I> root);
+    CriteriaProperty<T, I> setRoot(Root<I> root);
 }

@@ -4,6 +4,7 @@ package com.ffwatl.common.extension;
 import org.apache.commons.beanutils.BeanComparator;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class ExtensionManager<T extends ExtensionHandler> implements InvocationH
     private boolean handlersSorted = false;
     private static final String LOCK_OBJECT = "EM_LOCK";
 
-    private T extensionHandler;
+    private final T extensionHandler;
     private List<T> handlers = new ArrayList<>();
 
     /**
@@ -88,8 +89,53 @@ public class ExtensionManager<T extends ExtensionHandler> implements InvocationH
         }
     }
 
+    public void setHandlers(List<T> handlers) {
+        this.handlers = handlers;
+    }
+
+    /**
+     * Utility method that is useful for determining whether or not an ExtensionManager implementation
+     * should continue after processing a ExtensionHandler call.
+     *
+     * By default, returns true for CONTINUE
+     */
+    public boolean shouldContinue(ExtensionResultStatusType result, ExtensionHandler handler,
+                                  Method method, Object[] args) {
+        if (result != null) {
+            if (ExtensionResultStatusType.HANDLED_STOP.equals(result)) {
+                return false;
+            }else if (ExtensionResultStatusType.HANDLED.equals(result) && ! continueOnHandled()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns whether or not this extension manager continues on {@link ExtensionResultStatusType}.HANDLED.
+     */
+    public boolean continueOnHandled() {
+        return false;
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        return null;
+        boolean notHandled = true;
+        for (ExtensionHandler handler : getHandlers()) {
+            try {
+                if (handler.isEnabled()) {
+                    ExtensionResultStatusType result = (ExtensionResultStatusType) method.invoke(handler, args);
+                    if (!ExtensionResultStatusType.NOT_HANDLED.equals(result)) {
+                        notHandled = false;
+                    }
+                    if (!shouldContinue(result, handler, method, args)) {
+                        break;
+                    }
+                }
+            } catch (InvocationTargetException e) {
+                throw e.getCause();
+            }
+        }
+        return notHandled ? ExtensionResultStatusType.NOT_HANDLED : ExtensionResultStatusType.HANDLED;
     }
 }

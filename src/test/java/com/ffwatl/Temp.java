@@ -8,6 +8,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Temp {
+    static public void main(){
+
+    }
+    @Test
+    public void cheat(){
+
+    }
 
     @Test
     @Ignore
