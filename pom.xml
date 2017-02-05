@@ -38,6 +38,12 @@
         <!-- Logging -->
         <log4j.version>2.5</log4j.version>
         <slf4j.version>1.7.2</slf4j.version>
+
+        <!-- Embedded DB testing-->
+        <hsqldb.version>2.3.4</hsqldb.version>
+        <dbh2.version>1.4.187</dbh2.version>
+        <derby.version>10.11.1.1</derby.version>
+
     </properties>
 
     <dependencies>
@@ -166,6 +172,26 @@
         </dependency>
 
         <!--Test-->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${hsqldb.version}</version>
+        </dependency>
+
+        <!-- H2 DB -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${dbh2.version}</version>
+        </dependency>
+
+        <!-- Derby DB -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
