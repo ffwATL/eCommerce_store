@@ -4,8 +4,10 @@ import com.ffwatl.admin.order.domain.FulfillmentGroup;
 import com.ffwatl.admin.order.domain.FulfillmentGroupImpl;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.service.FulfillmentGroupStatusType;
+import com.ffwatl.common.persistence.EntityConfiguration;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
@@ -15,6 +17,9 @@ public class FulfillmentGroupDaoImpl implements FulfillmentGroupDao{
 
     @PersistenceContext
     private EntityManager em;
+
+    @Resource(name = "entity_configuration")
+    private EntityConfiguration entityConfiguration;
 
 
     @Override
@@ -54,17 +59,15 @@ public class FulfillmentGroupDaoImpl implements FulfillmentGroupDao{
 
     @Override
     public void delete(FulfillmentGroup fulfillmentGroup) {
+        if (!em.contains(fulfillmentGroup)) {
+            fulfillmentGroup = findFulfillmentGroupById(fulfillmentGroup.getId());
+        }
         em.remove(fulfillmentGroup);
     }
 
     @Override
-    public FulfillmentGroup createDefault() {
-        return null;
-    }
-
-    @Override
     public FulfillmentGroup create() {
-        return null;
+        return ((FulfillmentGroup) entityConfiguration.createEntityInstance("com.ffwatl.admin.order.domain.FulfillmentGroup"));
     }
 
     @Override

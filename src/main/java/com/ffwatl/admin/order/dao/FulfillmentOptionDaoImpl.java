@@ -4,8 +4,10 @@ package com.ffwatl.admin.order.dao;
 import com.ffwatl.admin.order.domain.FulfillmentOption;
 import com.ffwatl.admin.order.domain.FulfillmentOptionImpl;
 import com.ffwatl.admin.order.service.FulfillmentType;
+import com.ffwatl.common.persistence.EntityConfiguration;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
@@ -15,6 +17,9 @@ public class FulfillmentOptionDaoImpl implements FulfillmentOptionDao{
 
     @PersistenceContext
     private EntityManager em;
+
+    @Resource(name = "entity_configuration")
+    private EntityConfiguration entityConfiguration;
 
 
     @Override

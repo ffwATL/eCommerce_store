@@ -5,7 +5,7 @@ import com.ffwatl.admin.offer.domain.CandidateOrderOffer;
 import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.offer.domain.OfferCode;
 import com.ffwatl.admin.offer.domain.OrderAdjustment;
-import com.ffwatl.admin.payment.OrderPayment;
+import com.ffwatl.admin.payment.domain.OrderPayment;
 import com.ffwatl.admin.user.domain.User;
 
 import java.io.Serializable;
@@ -97,7 +97,7 @@ public interface Order extends Serializable{
      * Gets the date that this {@link Order} was submitted.  Note that if this date is non-null,
      * then the following should also be true:
      *  <ul>
-     *      <li>{@link #getStatus()} should return {@link OrderStatus#SUBMITTED}</li>
+     *      <li>{@link #getOrderStatus()} should return {@link OrderStatus#SUBMITTED}</li>
      *      <li>{@link #getOrderNumber()} should return a non-null value</li>
      *  </ul>
      * @return the date that this {@link Order} was submitted.
@@ -217,8 +217,6 @@ public interface Order extends Serializable{
     void removeOrderItem(OrderItem orderItem);
 
     void removeOrderItem(int index);
-
-    void removeOrderItemById(long id);
 
     void removeAllOrderItems();
 

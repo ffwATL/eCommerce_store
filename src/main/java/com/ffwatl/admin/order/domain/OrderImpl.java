@@ -5,8 +5,8 @@ package com.ffwatl.admin.order.domain;
 
 import com.ffwatl.admin.currency.Currency;
 import com.ffwatl.admin.offer.domain.*;
-import com.ffwatl.admin.payment.OrderPayment;
-import com.ffwatl.admin.payment.OrderPaymentImpl;
+import com.ffwatl.admin.payment.domain.OrderPayment;
+import com.ffwatl.admin.payment.domain.OrderPaymentImpl;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.UserImpl;
 
@@ -341,30 +341,6 @@ public class OrderImpl implements Order {
         if(index < 0) throw new IllegalArgumentException("Wrong index is given. Index: " + index);
         checkCollectionIsNotEmpty(orderItems);
         orderItems.remove(index);
-    }
-
-    @Override
-    public void removeOrderItemById(long id) {
-        if(id < 1) {
-            throw new IllegalArgumentException("OrderItem with such id doesn't exist. ID: " + id);
-        }
-        checkCollectionIsNotEmpty(orderItems);
-
-        Iterator<OrderItem> iterator = orderItems.iterator();
-        boolean removed = false;
-
-        while (iterator.hasNext()){
-            OrderItem oi = iterator.next();
-            if(oi != null && oi.getId() == id) {
-                iterator.remove();
-                removed = true;
-                break;
-            }
-        }
-
-        if(!removed){
-            throw new IllegalArgumentException("OrderItem with such id doesn't exist. ID: " + id);
-        }
     }
 
     @Override

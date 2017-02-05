@@ -7,5 +7,8 @@
        <bean id="com.ffwatl.admin.order.domain.OrderItem" class="com.ffwatl.admin.order.domain.OrderItemImpl" scope="prototype"/>
        <bean id="com.ffwatl.admin.order.domain.OrderItemPriceDetail" class="com.ffwatl.admin.order.domain.OrderItemPriceDetailImpl" scope="prototype"/>
        <bean id="com.ffwatl.admin.order.domain.OrderItemQualifier" class="com.ffwatl.admin.order.domain.OrderItemQualifierImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.order.domain.FulfillmentGroup" class="com.ffwatl.admin.order.domain.FulfillmentGroupImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.order.domain.FulfillmentGroupItem" class="com.ffwatl.admin.order.domain.FulfillmentGroupItemImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.payment.domain.OrderPayment" class="com.ffwatl.admin.payment.domain.OrderPaymentImpl" scope="prototype"/>
 
 </beans>

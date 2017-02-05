@@ -1,7 +1,8 @@
-package com.ffwatl.admin.payment;
+package com.ffwatl.admin.payment.domain;
 
 import com.ffwatl.admin.currency.Currency;
 import com.ffwatl.admin.order.domain.Order;
+import com.ffwatl.admin.payment.PaymentType;
 import com.ffwatl.admin.user.domain.Address;
 
 import java.io.Serializable;

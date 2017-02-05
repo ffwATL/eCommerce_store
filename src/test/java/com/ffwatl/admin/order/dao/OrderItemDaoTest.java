@@ -6,19 +6,19 @@ import com.ffwatl.admin.order.domain.OrderItemQualifier;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.inject.Named;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@Named
 @Rollback(value = false)
+@DirtiesContext
 @ContextConfiguration({"/spring/application-config.xml", "/spring/spring-security.xml" })
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)

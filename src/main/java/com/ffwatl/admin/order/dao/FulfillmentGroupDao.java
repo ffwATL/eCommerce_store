@@ -17,8 +17,6 @@ public interface FulfillmentGroupDao {
 
     void delete(FulfillmentGroup fulfillmentGroup);
 
-    FulfillmentGroup createDefault();
-
     FulfillmentGroup create();
 
 
