@@ -2,5 +2,5 @@ package com.ffwatl.common;
 
 
 public enum FetchMode {
-    LAZY, FETCHED
+    LAZY, FETCHED, DEFAULT
 }

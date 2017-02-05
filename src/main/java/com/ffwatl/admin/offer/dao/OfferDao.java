@@ -1,17 +1,18 @@
 package com.ffwatl.admin.offer.dao;
 
 import com.ffwatl.admin.offer.domain.*;
+import com.ffwatl.common.FetchMode;
 
 import java.util.List;
 
 
 public interface OfferDao {
 
-    List<Offer> findAllOffers();
+    List<Offer> findAllOffers(FetchMode fetchMode);
 
-    Offer findOfferById(long id);
+    Offer findOfferById(long id, FetchMode fetchMode);
 
-    List<Offer> findOffersByAutomaticDeliveryType();
+    List<Offer> findOffersByAutomaticDeliveryType(FetchMode fetchMode);
 
     Offer save(Offer offer);
 

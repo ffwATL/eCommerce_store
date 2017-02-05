@@ -10,5 +10,8 @@
        <bean id="com.ffwatl.admin.order.domain.FulfillmentGroup" class="com.ffwatl.admin.order.domain.FulfillmentGroupImpl" scope="prototype"/>
        <bean id="com.ffwatl.admin.order.domain.FulfillmentGroupItem" class="com.ffwatl.admin.order.domain.FulfillmentGroupItemImpl" scope="prototype"/>
        <bean id="com.ffwatl.admin.payment.domain.OrderPayment" class="com.ffwatl.admin.payment.domain.OrderPaymentImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.CustomerOffer" class="com.ffwatl.admin.offer.domain.CustomerOfferImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.OfferAudit" class="com.ffwatl.admin.offer.domain.OfferAuditImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.OfferCode" class="com.ffwatl.admin.offer.domain.OfferCodeImpl" scope="prototype"/>
 
 </beans>

@@ -8,10 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "customer_offers")
-@NamedQueries({
-        @NamedQuery(name = "read_customer_offers_by_customer_id",
-                query = "SELECT c FROM CustomerOfferImpl c WHERE c.customer.id=:id")
-})
 public class CustomerOfferImpl implements CustomerOffer{
 
     private static final long serialVersionUID = 1L;

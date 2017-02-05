@@ -3,8 +3,10 @@ package com.ffwatl.admin.offer.dao;
 
 import com.ffwatl.admin.offer.domain.OfferAudit;
 import com.ffwatl.admin.offer.domain.OfferAuditImpl;
+import com.ffwatl.common.persistence.EntityConfiguration;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,6 +15,9 @@ public class OfferAuditDaoImpl implements OfferAuditDao{
 
     @PersistenceContext
     private EntityManager em;
+
+    @Resource(name = "entity_configuration")
+    private EntityConfiguration entityConfiguration;
 
 
     @Override
@@ -32,7 +37,7 @@ public class OfferAuditDaoImpl implements OfferAuditDao{
 
     @Override
     public OfferAudit create() {
-        return null;
+        return (OfferAudit) entityConfiguration.createEntityInstance(OfferAudit.class.getName());
     }
 
     @Override

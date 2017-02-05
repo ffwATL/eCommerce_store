@@ -13,13 +13,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "offers")
-@NamedQueries(
+/*@NamedQueries(
         {
                 @NamedQuery(name = "findAllOffers", query = "SELECT o FROM OfferImpl o"),
                 @NamedQuery(name = "findOffersByAutomaticDeliveryType",
                         query = "SELECT o FROM OfferImpl o WHERE o.automaticallyAdded=true")
         }
-)
+)*/
 public class OfferImpl implements Offer {
 
     @Id

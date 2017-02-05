@@ -3,8 +3,10 @@ package com.ffwatl.admin.offer.dao;
 
 import com.ffwatl.admin.offer.domain.OfferCode;
 import com.ffwatl.admin.offer.domain.OfferCodeImpl;
+import com.ffwatl.common.persistence.EntityConfiguration;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,6 +15,9 @@ public class OfferCodeDaoImpl implements OfferCodeDao{
 
     @PersistenceContext
     private EntityManager em;
+
+    @Resource(name = "entity_configuration")
+    private EntityConfiguration entityConfiguration;
 
     @Override
     public OfferCode findOfferCodeById(long id) {
@@ -38,6 +43,6 @@ public class OfferCodeDaoImpl implements OfferCodeDao{
 
     @Override
     public OfferCode create() {
-        return null;
+        return (OfferCode) entityConfiguration.createEntityInstance(OfferCode.class.getName());
     }
 }
