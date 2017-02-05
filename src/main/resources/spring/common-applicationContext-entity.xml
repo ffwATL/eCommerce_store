@@ -14,4 +14,12 @@
        <bean id="com.ffwatl.admin.offer.domain.OfferAudit" class="com.ffwatl.admin.offer.domain.OfferAuditImpl" scope="prototype"/>
        <bean id="com.ffwatl.admin.offer.domain.OfferCode" class="com.ffwatl.admin.offer.domain.OfferCodeImpl" scope="prototype"/>
 
+       <bean id="com.ffwatl.admin.offer.domain.Offer" class="com.ffwatl.admin.offer.domain.OfferImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.CandidateOrderOffer" class="com.ffwatl.admin.offer.domain.CandidateOrderOfferImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.CandidateItemOffer" class="com.ffwatl.admin.offer.domain.CandidateItemOfferImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.CandidateFulfillmentGroupOffer" class="com.ffwatl.admin.offer.domain.CandidateFulfillmentGroupOfferImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.OrderItemAdjustment" class="com.ffwatl.admin.offer.domain.OrderItemAdjustmentImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.OrderItemPriceDetailAdjustment" class="com.ffwatl.admin.offer.domain.OrderItemPriceDetailAdjustmentImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.OrderAdjustment" class="com.ffwatl.admin.offer.domain.OrderAdjustmentImpl" scope="prototype"/>
+       <bean id="com.ffwatl.admin.offer.domain.FulfillmentGroupAdjustment" class="com.ffwatl.admin.offer.domain.FulfillmentGroupAdjustmentImpl" scope="prototype"/>
 </beans>

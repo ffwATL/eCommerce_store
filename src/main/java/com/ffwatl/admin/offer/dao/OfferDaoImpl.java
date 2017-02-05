@@ -111,10 +111,10 @@ public class OfferDaoImpl implements OfferDao, FetchModeOption<Offer, OfferImpl>
         Root<OfferImpl> root = criteria.from(OfferImpl.class);
 
         if(fetchMode == FetchMode.FETCHED){
-
             root.fetch("matchRules"); //TODO: It may not working..
             root.fetch("offerCodes");
         }
+
         criteria.select(root);
         return new CriteriaPropertyImpl<Offer, OfferImpl>()
                 .setCriteria(criteria)
