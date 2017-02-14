@@ -1,4 +1,4 @@
-package com.ffwatl.admin.catalog.service;
+package com.ffwatl.common.service;
 
 
 import javax.validation.constraints.NotNull;

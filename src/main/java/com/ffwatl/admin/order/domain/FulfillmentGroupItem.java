@@ -21,7 +21,7 @@ public interface FulfillmentGroupItem extends Serializable{
 
     FulfillmentGroupStatusType getStatus();
 
-    /*OrderItem getOrderItem();*/
+    OrderItem getOrderItem();
 
 
     FulfillmentGroupItem setId(long id);
@@ -38,6 +38,6 @@ public interface FulfillmentGroupItem extends Serializable{
 
     FulfillmentGroupItem setStatus(FulfillmentGroupStatusType status);
 
-    /*FulfillmentGroupItem setOrderItem(OrderItem orderItem);*/
+    FulfillmentGroupItem setOrderItem(OrderItem orderItem);
 
 }

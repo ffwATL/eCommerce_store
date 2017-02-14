@@ -1,6 +1,6 @@
 package com.ffwatl.admin.order.domain;
 
-import com.ffwatl.admin.currency.Currency;
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.offer.domain.CandidateOrderOffer;
 import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.offer.domain.OfferCode;

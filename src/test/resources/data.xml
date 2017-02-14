@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <users id="1"
+           user_name="First_user"
+           email="jack.hamper@gmail.com"
+           psw_hash="zxeQSC(_^%123"
+           first_name="Jack"/>
+
+    <orders id="1"
+            order_name="named"
+            order_number="fp1001"
+            customer_id="1"
+            order_sub_total_value="0"
+            order_total_value="0"
+            total_fulfillment_charges="0"/>
+</dataset>

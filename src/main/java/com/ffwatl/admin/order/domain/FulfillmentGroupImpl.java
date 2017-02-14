@@ -18,33 +18,33 @@ import java.util.Set;
 
 @Entity
 @Table(name = "fulfillment_groups")
-@NamedQueries({
+/*@NamedQueries({
         @NamedQuery(name = "find_unfulfilled_fulfillment_group_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
                 "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
                 "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
                 "INNER JOIN f.order.orderItems oo " +
-                /*
+                *//*
                 "INNER JOIN FETCH oo.orderItemPriceDetails " +
                 "LEFT JOIN FETCH oo.candidateItemOffers " +
-                "LEFT JOIN FETCH oo.orderItemQualifiers " +*/
+                "LEFT JOIN FETCH oo.orderItemQualifiers " +*//*
                 "WHERE f.status <> 'FULFILLED' AND f.status <> 'DELIVERED' ORDER BY f.order.submitDate ASC"),
         @NamedQuery(name = "find_unprocessed_fulfillment_group_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
                 "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
                 "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
                 "INNER JOIN f.order.orderItems oo " +
-          /*      "LEFT JOIN FETCH oo.orderItemPriceDetails " +
+          *//*      "LEFT JOIN FETCH oo.orderItemPriceDetails " +
                 "LEFT JOIN FETCH oo.candidateItemOffers " +
-                "LEFT JOIN FETCH oo.orderItemQualifiers " +*/
+                "LEFT JOIN FETCH oo.orderItemQualifiers " +*//*
                 "WHERE f.status = SUBMITED ORDER BY f.order.submitDate ASC"),
         @NamedQuery(name = "find_fulfillment_groups_by_status_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
                 "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
                 "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
                 "INNER JOIN f.order.orderItems oo " +
-             /*   "LEFT JOIN FETCH oo.orderItemPriceDetails " +
+             *//*   "LEFT JOIN FETCH oo.orderItemPriceDetails " +
                 "LEFT JOIN FETCH oo.candidateItemOffers " +
-                "LEFT JOIN FETCH oo.orderItemQualifiers " +*/
+                "LEFT JOIN FETCH oo.orderItemQualifiers " +*//*
                 "WHERE f.status =:status ORDER BY f.order.submitDate ASC")
-})
+})*/
 public class FulfillmentGroupImpl implements FulfillmentGroup{
 
     private static final long serialVersionUID = 1L;
@@ -64,6 +64,9 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
     @ManyToOne(targetEntity = FulfillmentOptionImpl.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "fulfillment_option_id")
     private FulfillmentOption fulfillmentOption;
+
+    @Column(name = "sale_fulfillment_price")
+    private int saleFulfillmentPrice;
 
     @Column(name = "retail_fulfillment_price")
     private int retailFulfillmentPrice;
@@ -87,6 +90,13 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
                cascade = CascadeType.ALL,
                orphanRemoval = true)
     private Set<FulfillmentGroupAdjustment> fulfillmentGroupAdjustments;
+
+    @OneToMany(mappedBy = "fulfillmentGroup",
+               fetch = FetchType.LAZY,
+               targetEntity = FulfillmentGroupItemImpl.class,
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private Set<FulfillmentGroupItem> fulfillmentGroupItems;
 
     @Column(name = "status")
     private String status;
@@ -115,8 +125,18 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
     }
 
     @Override
+    public Set<FulfillmentGroupItem> getFulfillmentGroupItems() {
+        return fulfillmentGroupItems;
+    }
+
+    @Override
     public int getRetailFulfillmentPrice() {
         return retailFulfillmentPrice;
+    }
+
+    @Override
+    public int getSaleFulfillmentPrice() {
+        return saleFulfillmentPrice;
     }
 
     @Override
@@ -177,6 +197,18 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
     }
 
     @Override
+    public FulfillmentGroup setFulfillmentGroupItems(Set<FulfillmentGroupItem> fulfillmentGroupItems) {
+        this.fulfillmentGroupItems = fulfillmentGroupItems;
+        return this;
+    }
+
+    @Override
+    public FulfillmentGroup addFulfillmentGroupItem(FulfillmentGroupItem fulfillmentGroupItem) {
+        fulfillmentGroupItems.add(fulfillmentGroupItem);
+        return this;
+    }
+
+    @Override
     public FulfillmentGroup setFulfillmentOption(FulfillmentOption fulfillmentOption) {
         this.fulfillmentOption = fulfillmentOption;
         return this;
@@ -185,6 +217,12 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
     @Override
     public FulfillmentGroup setRetailFulfillmentPrice(int retailFulfillmentPrice) {
         this.retailFulfillmentPrice = retailFulfillmentPrice;
+        return this;
+    }
+
+    @Override
+    public FulfillmentGroup setSaleFulfillmentPrice(int saleFulfillmentPrice) {
+        this.saleFulfillmentPrice = saleFulfillmentPrice;
         return this;
     }
 
@@ -249,6 +287,7 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
         FulfillmentGroupImpl that = (FulfillmentGroupImpl) o;
 
         if (getId() != that.getId()) return false;
+        if (getSaleFulfillmentPrice() != that.getSaleFulfillmentPrice()) return false;
         if (getRetailFulfillmentPrice() != that.getRetailFulfillmentPrice()) return false;
         if (getFulfillmentPrice() != that.getFulfillmentPrice()) return false;
         if (getOrder() != null ? !getOrder().equals(that.getOrder()) : that.getOrder() != null) return false;
@@ -271,6 +310,7 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
         result = 31 * result + (getOrder() != null ? getOrder().hashCode() : 0);
         result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
         result = 31 * result + (getFulfillmentOption() != null ? getFulfillmentOption().hashCode() : 0);
+        result = 31 * result + getSaleFulfillmentPrice();
         result = 31 * result + getRetailFulfillmentPrice();
         result = 31 * result + getFulfillmentPrice();
         result = 31 * result + (getType() != null ? getType().hashCode() : 0);

@@ -1,4 +1,4 @@
-package com.ffwatl.admin.currency;
+package com.ffwatl.admin.currency.domain;
 
 
 

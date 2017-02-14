@@ -2,6 +2,9 @@ package com.ffwatl.admin.order.domain;
 
 import com.ffwatl.admin.order.dao.OrderDao;
 import com.ffwatl.admin.order.dao.OrderItemDao;
+import com.ffwatl.common.FetchMode;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
@@ -9,23 +12,29 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.inject.Named;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-@Named
-@Rollback(value = false)
-@ContextConfiguration({"/spring/application-config.xml", "/spring/spring-security.xml" })
+/*@Named*/
+/*@Rollback(value = false)*/
+@ContextConfiguration({"/spring/spring-application-context.xml"})
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+        TransactionalTestExecutionListener.class,
+        DbUnitTestExecutionListener.class })
+@DatabaseSetup("/data.xml")
+/*@ExpectedDatabase("/data.xml")*/
 public class OrderTest {
 
     private static final Logger logger = LogManager.getLogger();
@@ -56,6 +65,13 @@ public class OrderTest {
         assertThat(orderItem_2, notNullValue());
         assertThat(orderItem_3, notNullValue());
         assertThat(order_1, notNullValue());
+    }
+
+    @Test
+    public void findByIdTest(){
+        Order order = orderDao.findOrderById(FetchMode.LAZY, 1);
+        assertThat(order, notNullValue());
+        System.err.println(order);
     }
 
     @Test

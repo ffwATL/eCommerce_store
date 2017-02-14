@@ -17,6 +17,7 @@
     http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
 
     <context:component-scan base-package="com.ffwatl"/>
+    <import resource="common-applicationContext-entity.xml"/>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
@@ -50,6 +51,8 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaDialect">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+
+           <!-- <ref bean="com.ffwatl.admin.order.domain.Order"/>-->
         </property>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>

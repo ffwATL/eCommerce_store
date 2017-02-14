@@ -1,5 +1,6 @@
 package com.ffwatl.admin.offer.domain;
 
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.offer.service.OfferDiscountType;
 import com.ffwatl.admin.offer.service.OfferType;
@@ -50,6 +51,8 @@ public interface Offer {
      */
     boolean isAutomaticallyAdded();
 
+    Currency getOfferCurrency();
+
     Offer setId(long id);
     Offer setName(String name);
     Offer setDescription(I18n description);
@@ -77,5 +80,6 @@ public interface Offer {
     Offer setQualifyingItemSubTotal(int qualifyingItemSubtotal);
     Offer setTotalitarianOffer(boolean totalitarianOffer);
     Offer setAutomaticallyAdded(boolean automaticallyAdded);
+    Offer setCurrency(Currency currency);
 
 }

@@ -6,6 +6,7 @@ import com.ffwatl.admin.catalog.domain.dto.FieldDTO;
 import com.ffwatl.admin.catalog.domain.dto.ProductAttributeDTO;
 import com.ffwatl.admin.catalog.domain.presenter.ClothesItemPresenter;
 import com.ffwatl.admin.user.service.UserService;
+import com.ffwatl.common.service.ConverterDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

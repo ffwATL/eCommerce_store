@@ -1,7 +1,7 @@
 package com.ffwatl.admin.user.service;
 
 
-import com.ffwatl.admin.catalog.service.ConverterDTO;
+import com.ffwatl.common.service.ConverterDTO;
 import com.ffwatl.admin.user.dao.UserProfileDao;
 import com.ffwatl.admin.user.domain.Role;
 import com.ffwatl.admin.user.domain.UserProfile;

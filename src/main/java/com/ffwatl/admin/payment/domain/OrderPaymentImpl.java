@@ -1,7 +1,7 @@
 package com.ffwatl.admin.payment.domain;
 
 
-import com.ffwatl.admin.currency.Currency;
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderImpl;
 import com.ffwatl.admin.payment.PaymentType;

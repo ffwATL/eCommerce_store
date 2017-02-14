@@ -19,7 +19,7 @@ public class UserImpl implements User {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name="psw_hash", nullable = false)

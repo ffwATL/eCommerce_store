@@ -1,5 +1,6 @@
 package com.ffwatl.admin.offer.domain;
 
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.offer.service.OfferDiscountType;
 import com.ffwatl.admin.offer.service.OfferType;
@@ -44,6 +45,7 @@ public class OfferImpl implements Offer {
     @Column(name = "end_date")
     private Date endDate;
 
+    @Column(name = "value")
     private int value;
 
     @Column(name = "valid_on_sale")
@@ -73,6 +75,9 @@ public class OfferImpl implements Offer {
 
     @Column(name = "automatically_added")
     private boolean automaticallyAdded;
+
+    @Column(name = "currency")
+    private Currency currency;
 
 
     @Override
@@ -153,6 +158,11 @@ public class OfferImpl implements Offer {
     @Override
     public boolean isAutomaticallyAdded() {
         return automaticallyAdded;
+    }
+
+    @Override
+    public Currency getOfferCurrency() {
+        return currency;
     }
 
     @Override
@@ -260,6 +270,12 @@ public class OfferImpl implements Offer {
     @Override
     public Offer setAutomaticallyAdded(boolean automaticallyAdded) {
         this.automaticallyAdded = automaticallyAdded;
+        return this;
+    }
+
+    @Override
+    public Offer setCurrency(Currency currency) {
+        this.currency = currency;
         return this;
     }
 

@@ -5,6 +5,7 @@ import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.ProductAttributeType;
 import com.ffwatl.admin.catalog.domain.ProductAttributeTypeImpl;
 import com.ffwatl.admin.catalog.domain.dto.ProductAttributeTypeDTO;
+import com.ffwatl.common.service.ConverterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

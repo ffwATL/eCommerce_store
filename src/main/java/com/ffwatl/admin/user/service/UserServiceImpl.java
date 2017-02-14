@@ -2,7 +2,7 @@ package com.ffwatl.admin.user.service;
 
 
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilter;
-import com.ffwatl.admin.catalog.service.ConverterDTO;
+import com.ffwatl.common.service.ConverterDTO;
 import com.ffwatl.admin.user.dao.UserDao;
 import com.ffwatl.admin.user.dao.UserRepository;
 import com.ffwatl.admin.user.domain.Address;

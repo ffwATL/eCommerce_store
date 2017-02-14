@@ -1,7 +1,7 @@
 package com.ffwatl.admin.offer.domain;
 
 
-import com.ffwatl.admin.currency.Currency;
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.order.domain.FulfillmentGroup;
 
 public interface FulfillmentGroupAdjustment {

@@ -5,6 +5,7 @@ import com.ffwatl.admin.catalog.dao.ColorDao;
 import com.ffwatl.admin.catalog.domain.Color;
 import com.ffwatl.admin.catalog.domain.ColorImpl;
 import com.ffwatl.admin.catalog.domain.dto.ColorDTO;
+import com.ffwatl.common.service.ConverterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

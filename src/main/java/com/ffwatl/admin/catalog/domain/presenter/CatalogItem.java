@@ -1,7 +1,7 @@
 package com.ffwatl.admin.catalog.domain.presenter;
 
 import com.ffwatl.admin.catalog.domain.*;
-import com.ffwatl.admin.currency.Currency;
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.catalog.domain.ProductDefault;
 

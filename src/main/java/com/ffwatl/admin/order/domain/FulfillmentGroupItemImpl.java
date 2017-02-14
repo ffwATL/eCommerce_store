@@ -22,6 +22,10 @@ public class FulfillmentGroupItemImpl implements FulfillmentGroupItem {
     @JoinColumn(name = "fulfillment_group_id")
     private FulfillmentGroup fulfillmentGroup;
 
+    @ManyToOne(targetEntity = OrderItemImpl.class)
+    @JoinColumn(name = "order_item_id")
+    private OrderItem orderItem;
+
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
@@ -73,6 +77,11 @@ public class FulfillmentGroupItemImpl implements FulfillmentGroupItem {
     }
 
     @Override
+    public OrderItem getOrderItem() {
+        return orderItem;
+    }
+
+    @Override
     public FulfillmentGroupItem setId(long id) {
         this.id= id;
         return this;
@@ -111,6 +120,12 @@ public class FulfillmentGroupItemImpl implements FulfillmentGroupItem {
     @Override
     public FulfillmentGroupItem setStatus(FulfillmentGroupStatusType status) {
         if(status!= null) this.status = status.getType();
+        return this;
+    }
+
+    @Override
+    public FulfillmentGroupItem setOrderItem(OrderItem orderItem) {
+        this.orderItem = orderItem;
         return this;
     }
 

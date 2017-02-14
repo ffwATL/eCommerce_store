@@ -1,6 +1,6 @@
 package com.ffwatl.admin.order.dao;
 
-import com.ffwatl.admin.currency.Currency;
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderLock;
 import com.ffwatl.admin.order.domain.OrderStatus;

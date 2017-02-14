@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ffwatl.admin.catalog.domain.*;
 import com.ffwatl.admin.catalog.domain.dto.CategoryDTO;
 import com.ffwatl.admin.catalog.domain.dto.ColorDTO;
-import com.ffwatl.admin.currency.Currency;
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.user.domain.User;

@@ -5,6 +5,7 @@ import com.ffwatl.admin.catalog.dao.BrandDao;
 import com.ffwatl.admin.catalog.domain.Brand;
 import com.ffwatl.admin.catalog.domain.BrandImpl;
 import com.ffwatl.admin.catalog.domain.dto.BrandDTO;
+import com.ffwatl.common.service.ConverterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -31,12 +31,16 @@ public interface FulfillmentGroup extends Serializable {
 
     Address getAddress();
 
+    Set<FulfillmentGroupItem> getFulfillmentGroupItems();
+
     /**
      * Returns the retail price for this fulfillmentGroup (ie shipping price).
      * Typically only a retail price would be set on a fulfillment group.
      * @return the retail price for this fulfillmentGroup.
      */
     int getRetailFulfillmentPrice();
+
+    int getSaleFulfillmentPrice();
 
     /**
      * Gets the price to charge for this fulfillmentGroup.
@@ -65,6 +69,10 @@ public interface FulfillmentGroup extends Serializable {
 
     FulfillmentGroup setAddress(Address address);
 
+    FulfillmentGroup setFulfillmentGroupItems(Set<FulfillmentGroupItem> fulfillmentGroupItems);
+
+    FulfillmentGroup addFulfillmentGroupItem(FulfillmentGroupItem fulfillmentGroupItem);
+
     FulfillmentGroup setFulfillmentOption(FulfillmentOption fulfillmentOption);
 
     /**
@@ -73,6 +81,8 @@ public interface FulfillmentGroup extends Serializable {
      * @return this object.
      */
     FulfillmentGroup setRetailFulfillmentPrice(int retailFulfillmentPrice);
+
+    FulfillmentGroup setSaleFulfillmentPrice(int saleFulfillmentPrice);
 
     /**
      * Sets the price to charge for this fulfillmentGroup.  Typically set internally by the pricing and
