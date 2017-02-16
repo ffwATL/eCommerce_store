@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <rules id="1"
+           rule_type="MIN_SPEND"
+           bound_value="30000"
+           field_name="retailPrice"
+           value_type="0"
+           excluded="false"
+            />
+
+
+</dataset>

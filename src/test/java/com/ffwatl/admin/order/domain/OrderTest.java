@@ -25,8 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-/*@Named*/
-/*@Rollback(value = false)*/
+
 @ContextConfiguration({"/spring/spring-application-context.xml"})
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,7 +33,6 @@ import static org.hamcrest.Matchers.notNullValue;
         TransactionalTestExecutionListener.class,
         DbUnitTestExecutionListener.class })
 @DatabaseSetup("/data.xml")
-/*@ExpectedDatabase("/data.xml")*/
 public class OrderTest {
 
     private static final Logger logger = LogManager.getLogger();

@@ -11,6 +11,7 @@ import java.util.Map;
  * An extendible enumeration of offer types.
  */
 public class OfferType implements Serializable, EnumerationType, Comparable<OfferType> {
+
     private static final long serialVersionUID = 1L;
 
     private static final Map<String, OfferType> TYPES = new LinkedHashMap<>();

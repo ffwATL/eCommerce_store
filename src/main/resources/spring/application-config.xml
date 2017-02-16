@@ -26,6 +26,10 @@
         <property name="password" value="root"/>
     </bean>
 
+    <bean id="localDateTimeFormatter" class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
+        <constructor-arg value="HH:mm:ss"/>
+    </bean>
+
     <!--<jdbc:embedded-database id="dataSource" type="HSQL">
         <jdbc:script location="classpath:db/sql/create-db.sql" />
         <jdbc:script location="classpath:db/sql/insert-data.sql" />

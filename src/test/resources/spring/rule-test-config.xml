@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+       <context:component-scan base-package="com.ffwatl"/>
+
+       <bean id="orderItem4Rule" class="com.ffwatl.admin.order.domain.OrderItemImpl">
+              <property name="id" value="1"/>
+              <property name="retailPrice" value="20000"/>
+              <property name="productName" ref="orderItem4RuleName"/>
+              <property name="order" ref="order4Rule"/>
+       </bean>
+
+       <bean id="orderItem4RuleName" class="com.ffwatl.admin.i18n.domain.I18n">
+              <property name="locale_en" value="Item with price 200UAH"/>
+       </bean>
+
+       <bean id="order4Rule" class="com.ffwatl.admin.order.domain.OrderImpl">
+              <property name="id" value="1"/>
+              <property name="orderNumber" value="0001"/>
+              <property name="orderItems" ref="orderItems"/>
+              <property name="currency" value="UAH"/>
+              <property name="total" value="20000"/>
+       </bean>
+
+       <util:list id="orderItems">
+              <ref bean="orderItem4Rule"/>
+       </util:list>
+       <bean id="promotableOrder4Rule" class="com.ffwatl.admin.offer.service.discount.PromotableOrderImpl">
+              <constructor-arg index="0" ref="order4Rule"/>
+              <constructor-arg index="1" ref="promotable_item_factory"/>
+              <constructor-arg index="2" value="true"/>
+       </bean>
+       <bean id="promotableOrderItem4Rule" class="com.ffwatl.admin.offer.service.discount.PromotableOrderItemImpl">
+              <constructor-arg index="0" ref="orderItem4Rule"/>
+              <constructor-arg index="1" ref="promotableOrder4Rule"/>
+              <constructor-arg index="2" ref="promotable_item_factory"/>
+              <constructor-arg index="3" value="true"/>
+       </bean>
+
+</beans>

@@ -11,6 +11,10 @@ public interface Rule {
 
     String getFieldName();
 
+    boolean isExcluded();
+
+    ValueType getFieldType();
+
     Rule setId(long id);
 
     Rule setType(String type);
@@ -19,4 +23,7 @@ public interface Rule {
 
     Rule setFieldName(String fieldName);
 
+    Rule setExcluded(boolean excluded);
+
+    Rule setFieldType(ValueType fieldType);
 }

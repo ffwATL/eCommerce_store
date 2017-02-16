@@ -17,18 +17,18 @@ public class PromotableFulfillmentGroupImpl implements PromotableFulfillmentGrou
 
     private FulfillmentGroup fulfillmentGroup;
     private PromotableOrder promotableOrder;
-    /*private PromotableItemFactory itemFactory;*/
+    private PromotableItemFactory itemFactory;
     private List<PromotableOrderItem> discountableOrderItems;
     private int adjustedPrice;
 
     private List<PromotableFulfillmentGroupAdjustment> candidateFulfillmentGroupAdjustments = new ArrayList<>();
 
     public PromotableFulfillmentGroupImpl(FulfillmentGroup fulfillmentGroup,
-                                          PromotableOrder promotableOrder/*,
-                                          PromotableItemFactory itemFactory*/) {
+                                          PromotableOrder promotableOrder,
+                                          PromotableItemFactory itemFactory) {
         this.fulfillmentGroup = fulfillmentGroup;
         this.promotableOrder = promotableOrder;
-        /*this.itemFactory = itemFactory;*/
+        this.itemFactory = itemFactory;
     }
 
 

@@ -21,6 +21,12 @@ public class RuleImpl implements Rule{
     @Column(name = "field_name")
     private String fieldName; // field name for which boundValue is applied
 
+    @Column(name = "excluded")
+    private boolean excluded; // if true then items with this boundValue will be excluded from the Offer
+
+    @Column(name = "value_type")
+    private ValueType fieldType;
+
     @Override
     public long getId() {
         return id;
@@ -39,6 +45,16 @@ public class RuleImpl implements Rule{
     @Override
     public String getFieldName() {
         return fieldName;
+    }
+
+    @Override
+    public boolean isExcluded() {
+        return excluded;
+    }
+
+    @Override
+    public ValueType getFieldType() {
+        return fieldType;
     }
 
     @Override
@@ -66,16 +82,31 @@ public class RuleImpl implements Rule{
     }
 
     @Override
+    public Rule setExcluded(boolean excluded) {
+        this.excluded = excluded;
+        return this;
+    }
+
+    @Override
+    public Rule setFieldType(ValueType fieldType) {
+        this.fieldType = fieldType;
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RuleImpl ruleImpl = (RuleImpl) o;
+        RuleImpl rule = (RuleImpl) o;
 
-        if (getType() != null ? !getType().equals(ruleImpl.getType()) : ruleImpl.getType() != null) return false;
-        if (getBoundValue() != null ? !getBoundValue().equals(ruleImpl.getBoundValue()) : ruleImpl.getBoundValue() != null)
+        if (isExcluded() != rule.isExcluded()) return false;
+        if (getType() != null ? !getType().equals(rule.getType()) : rule.getType() != null) return false;
+        if (getBoundValue() != null ? !getBoundValue().equals(rule.getBoundValue()) : rule.getBoundValue() != null)
             return false;
-        return !(getFieldName() != null ? !getFieldName().equals(ruleImpl.getFieldName()) : ruleImpl.getFieldName() != null);
+        if (getFieldName() != null ? !getFieldName().equals(rule.getFieldName()) : rule.getFieldName() != null)
+            return false;
+        return getFieldType() == rule.getFieldType();
 
     }
 
@@ -84,15 +115,20 @@ public class RuleImpl implements Rule{
         int result = getType() != null ? getType().hashCode() : 0;
         result = 31 * result + (getBoundValue() != null ? getBoundValue().hashCode() : 0);
         result = 31 * result + (getFieldName() != null ? getFieldName().hashCode() : 0);
+        result = 31 * result + (isExcluded() ? 1 : 0);
+        result = 31 * result + (getFieldType() != null ? getFieldType().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "RuleImpl{" +
-                "type='" + type + '\'' +
+                "id=" + id +
+                ", type='" + type + '\'' +
                 ", boundValue='" + boundValue + '\'' +
                 ", fieldName='" + fieldName + '\'' +
+                ", excluded=" + excluded +
+                ", fieldType=" + fieldType +
                 '}';
     }
 }

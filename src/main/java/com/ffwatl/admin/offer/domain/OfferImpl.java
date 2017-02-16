@@ -14,13 +14,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "offers")
-/*@NamedQueries(
-        {
-                @NamedQuery(name = "findAllOffers", query = "SELECT o FROM OfferImpl o"),
-                @NamedQuery(name = "findOffersByAutomaticDeliveryType",
-                        query = "SELECT o FROM OfferImpl o WHERE o.automaticallyAdded=true")
-        }
-)*/
 public class OfferImpl implements Offer {
 
     @Id
@@ -55,7 +48,7 @@ public class OfferImpl implements Offer {
     private int maxUsesByCustomer = 1;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
-                    mappedBy = "id", targetEntity = RuleImpl.class)
+                    /*mappedBy = "id", */targetEntity = RuleImpl.class)
     @MapKey(name="type")
     private Map<String, Rule> matchRules;
 

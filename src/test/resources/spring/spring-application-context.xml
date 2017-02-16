@@ -6,6 +6,11 @@
        <import resource="persistence-config.xml"/>
        <import resource="springMVC-config.xml"/>
        <import resource="spring-security.xml"/>
+       <import resource="rule-test-config.xml"/>
+
+       <bean id="localDateTimeFormatter" class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
+              <constructor-arg value="HH:mm:ss"/>
+       </bean>
 
        <bean id="mergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
               <property name="sourceList">
