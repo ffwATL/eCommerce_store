@@ -33,7 +33,7 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
     private OfferTimeZoneProcessor offerTimeZoneProcessor;
 
     @Resource(name = "offer_service_extension_manager")
-    private OfferServiceExtensionManager extensionManager;
+    protected OfferServiceExtensionManager extensionManager;
 
     protected CandidatePromotionItems couldOfferApplyToOrderItems(Offer offer, List<PromotableOrderItem> promotableOrderItems) {
         CandidatePromotionItems candidates = new CandidatePromotionItems();
@@ -221,7 +221,6 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
      * We were not able to meet all of the ItemCriteria for a promotion, but some of the items were
      * marked as qualifiers or targets.  This method removes those items from being used as targets or
      * qualifiers so they are eligible for other promotions.
-     * @param priceDetails
      */
     private void clearAllNonFinalizedQuantities(List<PromotableOrderItemPriceDetail> priceDetails) {
         for (PromotableOrderItemPriceDetail priceDetail : priceDetails) {
@@ -232,7 +231,6 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
     /**
      * Updates the finalQuanties for the PromotionDiscounts and PromotionQualifiers.
      * Called after we have confirmed enough qualifiers and targets for the promotion.
-     * @param priceDetails
      */
     private void finalizeQuantities(List<PromotableOrderItemPriceDetail> priceDetails) {
         for (PromotableOrderItemPriceDetail priceDetail : priceDetails) {
@@ -243,8 +241,6 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
     /**
      * Checks to see if the discountQty matches the detailQty.   If not, splits the
      * priceDetail.
-     *
-     * @param priceDetails
      */
     protected void splitDetailsIfNecessary(List<PromotableOrderItemPriceDetail> priceDetails) {
         for (PromotableOrderItemPriceDetail priceDetail : priceDetails) {
@@ -272,7 +268,6 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
      * If an offer does not fall within the timezone or timeperiod rule,
      * that offer will be removed.
      *
-     * @param offers
      * @return List of Offers within the timezone or timeperiod of the offer
      */
     private List<Offer> removeTimePeriodOffers(List<Offer> offers) {
@@ -365,8 +360,6 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
      * Private method that takes in a list of Offers and removes all Offers from the list that
      * does not apply to this customer.
      *
-     * @param offers
-     * @param customer
      * @return List of Offers that apply to this customer
      */
     private List<Offer> removeInvalidCustomerOffers(List<Offer> offers, User customer){
@@ -387,8 +380,6 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
      * Private method which executes the appliesToCustomerRules in the Offer to determine if this Offer
      * can be applied to the Customer.
      *
-     * @param offer
-     * @param customer
      * @return true if offer can be applied, otherwise false
      */
     protected boolean couldOfferApplyToCustomer(Offer offer, User customer) {

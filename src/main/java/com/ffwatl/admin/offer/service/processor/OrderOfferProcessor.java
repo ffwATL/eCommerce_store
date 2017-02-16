@@ -9,13 +9,10 @@ import com.ffwatl.admin.offer.service.discount.PromotableOrder;
 import com.ffwatl.admin.order.dao.OrderItemDao;
 
 import java.util.List;
-import java.util.Map;
 
 public interface OrderOfferProcessor {
 
     void filterOrderLevelOffer(PromotableOrder promotableOrder, List<PromotableCandidateOrderOffer> qualifiedOrderOffers, Offer offer);
-
-    Boolean executeExpression(String expression, Map<String, Object> vars);
 
     /**
      * Executes the appliesToOrderRules in the Offer to determine if this offer

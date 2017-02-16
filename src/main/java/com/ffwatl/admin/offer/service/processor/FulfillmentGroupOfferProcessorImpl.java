@@ -1,7 +1,11 @@
 package com.ffwatl.admin.offer.service.processor;
 
-/**
- * Created by ffw_ATL on 15-Feb-17.
- */
-public class FulfillmentGroupOfferProcessorImpl {
+
+import org.springframework.stereotype.Service;
+
+@Service("fulfillment_group_offer_processor")
+public class FulfillmentGroupOfferProcessorImpl /*extends OrderOfferProcessorImpl
+        implements FulfillmentGroupOfferProcessor*/ {
+
+
 }

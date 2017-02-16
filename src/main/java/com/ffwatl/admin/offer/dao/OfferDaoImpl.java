@@ -17,7 +17,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 
-@Repository
+@Repository("offer_dao")
 public class OfferDaoImpl implements OfferDao, FetchModeOption<Offer, OfferImpl> {
 
     @PersistenceContext
