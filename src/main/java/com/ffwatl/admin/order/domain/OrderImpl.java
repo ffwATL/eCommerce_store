@@ -10,6 +10,7 @@ import com.ffwatl.admin.payment.domain.OrderPaymentImpl;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.UserImpl;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 
 import java.util.*;
@@ -20,6 +21,19 @@ import java.util.*;
 public class OrderImpl implements Order {
 
     private static final long serialVersionUID = 1L;
+
+    @PostConstruct
+    public void init(){
+        if(orderItems != null){
+            for(OrderItem oi: orderItems){
+                oi.setOrder(this);
+            }
+        }
+
+        if(fulfillmentGroup != null){
+            fulfillmentGroup.setOrder(this);
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -261,7 +275,7 @@ public class OrderImpl implements Order {
     }
 
     @Override
-    public Order setFulfillmentGroups(FulfillmentGroup fulfillmentGroup) {
+    public Order setFulfillmentGroup(FulfillmentGroup fulfillmentGroup) {
         this.fulfillmentGroup = fulfillmentGroup;
         return this;
     }

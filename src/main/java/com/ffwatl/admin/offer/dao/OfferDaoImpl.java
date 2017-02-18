@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -111,10 +112,11 @@ public class OfferDaoImpl implements OfferDao, FetchModeOption<Offer, OfferImpl>
         Root<OfferImpl> root = criteria.from(OfferImpl.class);
 
         if(fetchMode == FetchMode.FETCHED){
-            root.fetch("matchRules"); //TODO: It may not working..
-            root.fetch("offerCodes");
+            root.fetch("matchRules", JoinType.LEFT); //TODO: It may not working..
+            root.fetch("offerCodes", JoinType.LEFT);
         }
 
+        criteria.distinct(true);
         criteria.select(root);
         return new CriteriaPropertyImpl<Offer, OfferImpl>()
                 .setCriteria(criteria)

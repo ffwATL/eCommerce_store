@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @Service("promotable_item_factory")
 public class PromotableItemFactoryImpl implements PromotableItemFactory{
 
+    @Override
     public PromotableOrder createPromotableOrder(Order order, boolean includeOrderAndItemAdjustments) {
         return new PromotableOrderImpl(order, this, includeOrderAndItemAdjustments);
     }

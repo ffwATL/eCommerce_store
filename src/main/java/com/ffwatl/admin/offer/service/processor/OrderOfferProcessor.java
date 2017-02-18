@@ -10,7 +10,7 @@ import com.ffwatl.admin.order.dao.OrderItemDao;
 
 import java.util.List;
 
-public interface OrderOfferProcessor {
+public interface OrderOfferProcessor  extends BaseProcessor{
 
     void filterOrderLevelOffer(PromotableOrder promotableOrder, List<PromotableCandidateOrderOffer> qualifiedOrderOffers, Offer offer);
 

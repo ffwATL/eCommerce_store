@@ -2,7 +2,7 @@ package com.ffwatl.admin.offer.service.discount;
 
 
 import com.ffwatl.admin.offer.domain.Offer;
-import com.ffwatl.admin.offer.service.OfferDiscountType;
+import com.ffwatl.admin.offer.service.type.OfferDiscountType;
 import com.ffwatl.common.currency.CurrencyUtil;
 import com.ffwatl.common.rule.Rule;
 
@@ -13,7 +13,7 @@ public class PromotableCandidateFulfillmentGroupOfferImpl implements PromotableC
 
     private static final long serialVersionUID = 1L;
 
-    private HashMap<Rule, List<PromotableOrderItem>> candidateQualifiersMap = new HashMap<Rule, List<PromotableOrderItem>>();
+    private HashMap<Rule, List<PromotableOrderItem>> candidateQualifiersMap = new HashMap<>();
     private Offer offer;
     private PromotableFulfillmentGroup promotableFulfillmentGroup;
 

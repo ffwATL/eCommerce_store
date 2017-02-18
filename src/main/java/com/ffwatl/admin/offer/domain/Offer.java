@@ -2,8 +2,8 @@ package com.ffwatl.admin.offer.domain;
 
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
-import com.ffwatl.admin.offer.service.OfferDiscountType;
-import com.ffwatl.admin.offer.service.OfferType;
+import com.ffwatl.admin.offer.service.type.OfferDiscountType;
+import com.ffwatl.admin.offer.service.type.OfferType;
 import com.ffwatl.common.rule.Rule;
 
 import java.util.Date;

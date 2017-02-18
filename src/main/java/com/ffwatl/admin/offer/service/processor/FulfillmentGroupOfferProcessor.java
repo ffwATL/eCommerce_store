@@ -2,6 +2,7 @@ package com.ffwatl.admin.offer.service.processor;
 
 
 import com.ffwatl.admin.offer.domain.Offer;
+import com.ffwatl.admin.offer.service.FulfillmentGroupOfferPotential;
 import com.ffwatl.admin.offer.service.discount.PromotableCandidateFulfillmentGroupOffer;
 import com.ffwatl.admin.offer.service.discount.PromotableOrder;
 
@@ -26,4 +27,5 @@ public interface FulfillmentGroupOfferProcessor {
      */
     boolean applyAllFulfillmentGroupOffers(List<PromotableCandidateFulfillmentGroupOffer> qualifiedFGOffers, PromotableOrder order);
 
+    List<FulfillmentGroupOfferPotential> removeTrailingNotCombinableFulfillmentGroupOffers(List<FulfillmentGroupOfferPotential> candidateOffers);
 }

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+       <bean id="categoryForNamedOrder" class="com.ffwatl.admin.catalog.domain.CategoryImpl">
+              <property name="id" value="10"/>
+              <property name="cat" value="BOTTOM"/>
+              <property name="level" value="4"/>
+              <property name="groupName">
+                     <bean class="com.ffwatl.admin.i18n.domain.I18n">
+                            <property name="locale_en" value="Jeans"/>
+                            <property name="locale_ru" value="Джинсы"/>
+                     </bean>
+              </property>
+       </bean>
+
+       <bean id="fulfillmentOptionForNamedOrder" class="com.ffwatl.admin.order.domain.FulfillmentOptionImpl">
+              <property name="id" value="1"/>
+              <property name="fulfillmentType" value="PHYSICAL_SHIP"/>
+              <property name="name">
+                     <bean class="com.ffwatl.admin.i18n.domain.I18n">
+                            <property name="locale_en" value="Nova Poshta Standart shipping"/>
+                     </bean>
+              </property>
+       </bean>
+
+       <bean id="fulfillmentGroupForNamedOrder" class="com.ffwatl.admin.order.domain.FulfillmentGroupImpl">
+              <property name="fulfillmentOption" ref="fulfillmentOptionForNamedOrder"/>
+              <property name="status" value="NEW"/>
+              <property name="retailFulfillmentPrice" value="3000"/>
+              <property name="type" value="PHYSICAL_SHIP"/>
+              <property name="fulfillmentPrice" value="3000"/>
+       </bean>
+
+       <bean id="orderItemPriceDetailForNamedOrder"
+             class="com.ffwatl.admin.order.domain.OrderItemPriceDetailImpl" scope="prototype">
+              <property name="id" value="12"/>
+              <property name="quantity" value="1"/>
+       </bean>
+
+       <bean id="orderItemForNamedOrder" class="com.ffwatl.admin.order.domain.OrderItemImpl" scope="prototype">
+              <property name="id" value="155"/>
+              <property name="productName">
+                     <bean class="com.ffwatl.admin.i18n.domain.I18n">
+                            <property name="locale_en" value="ASOS Skinny Jeans in grey"/>
+                            <property name="locale_ru" value="Зауженные джинсы АСОС"/>
+                     </bean>
+              </property>
+              <property name="originPrice" value="30000"/>
+              <property name="retailPrice" value="60000"/>
+              <property name="discountValue" value="0"/>
+              <property name="salePrice" value="0"/>
+              <property name="discountingAllowed" value="true"/>
+              <property name="quantity" value="2"/>
+              <property name="category" ref="categoryForNamedOrder"/>
+              <property name="orderItemPriceDetails" ref="orderItemPriceDetailForNamedOrder"/>
+              <property name="productId" value="100"/>
+       </bean>
+
+       <util:list id="orderItemsForNamedOrder" value-type="com.ffwatl.admin.order.domain.OrderItem">
+              <ref bean="orderItemForNamedOrder"/>
+       </util:list>
+
+       <util:set id="fulfillmentGroups" >
+              <ref bean="fulfillmentGroupForNamedOrder"/>
+       </util:set>
+
+       <bean id="namedOrderWithId" class="com.ffwatl.admin.order.domain.OrderImpl" scope="prototype">
+              <property name="id" value="123"/>
+              <property name="currency" value="UAH"/>
+              <property name="customer">
+                     <bean class="com.ffwatl.admin.user.domain.UserImpl">
+                            <property name="email" value="ghost-busters@gmail.com"/>
+                            <property name="id" value="107"/>
+                            <property name="createDt" value="02/15/2016"/>
+                            <property name="firstName" value="Ghost"/>
+                            <property name="lastName" value="Axydeleron"/>
+                            <property name="password" value="1234qweASD"/>                            
+                     </bean>
+              </property>
+              <property name="orderNumber" value="0xxx123"/>
+              <property name="name" value="named order"/>
+              <property name="orderItems" ref="orderItemsForNamedOrder"/>
+              <property name="subTotal" value="60000"/>
+              <property name="total" value="60000"/>
+              <property name="orderStatus" value="SUBMITTED"/>
+              <property name="fulfillmentGroup" ref="fulfillmentGroupForNamedOrder"/>
+       </bean>
+</beans>

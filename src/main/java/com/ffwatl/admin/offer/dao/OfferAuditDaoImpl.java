@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@Repository
+@Repository("offer_audit_dao")
 public class OfferAuditDaoImpl implements OfferAuditDao{
 
     @PersistenceContext

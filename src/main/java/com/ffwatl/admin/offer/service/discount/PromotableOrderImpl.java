@@ -320,7 +320,6 @@ public class PromotableOrderImpl implements PromotableOrder{
     @Override
     public String toString() {
         return "PromotableOrderImpl{" +
-                "itemFactory=" + itemFactory +
                 ", order=" + order +
                 ", allOrderItems=" + allOrderItems +
                 ", discountableOrderItems=" + discountableOrderItems +

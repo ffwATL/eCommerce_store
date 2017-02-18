@@ -3,7 +3,7 @@ package com.ffwatl.admin.offer.service.discount;
 
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.offer.domain.Offer;
-import com.ffwatl.admin.offer.service.OfferDiscountType;
+import com.ffwatl.admin.offer.service.type.OfferDiscountType;
 import com.ffwatl.common.currency.CurrencyUtil;
 
 public class PromotableFulfillmentGroupAdjustmentImpl implements PromotableFulfillmentGroupAdjustment {

@@ -2,9 +2,9 @@ package com.ffwatl.admin.offer.service.processor;
 
 
 import com.ffwatl.admin.offer.domain.Offer;
-import com.ffwatl.admin.offer.service.OfferRuleType;
+import com.ffwatl.admin.offer.service.type.OfferRuleType;
 import com.ffwatl.admin.offer.service.OfferServiceExtensionManager;
-import com.ffwatl.admin.offer.service.OfferType;
+import com.ffwatl.admin.offer.service.type.OfferType;
 import com.ffwatl.admin.offer.service.discount.CandidatePromotionItems;
 import com.ffwatl.admin.offer.service.discount.PromotableOrderItem;
 import com.ffwatl.admin.offer.service.discount.PromotableOrderItemPriceDetail;
@@ -72,10 +72,6 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
         return (collection == null || collection.size() == 0);
     }
 
-    private boolean hasPositiveValue(int money) {
-        return money > 0;
-    }
-
     private void checkForItemRequirements(Offer offer, CandidatePromotionItems candidates, Rule rule,
                                           List<PromotableOrderItem> promotableOrderItems, boolean isQualifier) {
         boolean matchFound = false;
@@ -102,23 +98,8 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
         }
     }
 
-    private boolean checkRuleOrderItemMeetBoundValue(Rule rule, Field field, OrderItem orderItem)
-            throws IllegalAccessException {
-        ValueType valueType = rule.getFieldType();
-
-        switch (valueType) {
-            case NUMBER: {
-                return field.getDouble(orderItem) >= Double.valueOf(rule.getBoundValue());
-            }
-            case STRING: {
-                return field.get(orderItem).equals(rule.getBoundValue());
-            }
-            default: return false;
-        }
-    }
-
     private boolean couldOrderItemMeetOfferRequirement(Rule rule, PromotableOrderItem promotableOrderItem) {
-        boolean appliesToItem = false;
+        boolean appliesToItem;
 
         if (rule != null && rule.getFieldName().trim().length() > 0) {
             HashMap<String, Object> vars = new HashMap<>();
@@ -126,15 +107,7 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
 
             OrderItem orderItem = promotableOrderItem.getOrderItem();
 
-            try {
-                Class<?> clazz = orderItem.getClass();
-                Field field = clazz.getDeclaredField(rule.getFieldName());
-                field.setAccessible(true);
-
-                appliesToItem = checkRuleOrderItemMeetBoundValue(rule, field, orderItem);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            appliesToItem = checkObjectMeetBoundValue(rule, orderItem);
 
         } else {
             appliesToItem = true;
@@ -222,7 +195,7 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
      * marked as qualifiers or targets.  This method removes those items from being used as targets or
      * qualifiers so they are eligible for other promotions.
      */
-    private void clearAllNonFinalizedQuantities(List<PromotableOrderItemPriceDetail> priceDetails) {
+    protected void clearAllNonFinalizedQuantities(List<PromotableOrderItemPriceDetail> priceDetails) {
         for (PromotableOrderItemPriceDetail priceDetail : priceDetails) {
             priceDetail.clearAllNonFinalizedQuantities();
         }
@@ -232,7 +205,7 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
      * Updates the finalQuanties for the PromotionDiscounts and PromotionQualifiers.
      * Called after we have confirmed enough qualifiers and targets for the promotion.
      */
-    private void finalizeQuantities(List<PromotableOrderItemPriceDetail> priceDetails) {
+    protected void finalizeQuantities(List<PromotableOrderItemPriceDetail> priceDetails) {
         for (PromotableOrderItemPriceDetail priceDetail : priceDetails) {
             priceDetail.finalizeQuantities();
         }
@@ -404,6 +377,31 @@ public abstract class AbstractBaseProcessor implements BaseProcessor {
         appliesToCustomer = StringUtils.isEmpty(email) || (emailEquals && !excluded) || (!emailEquals && excluded);
 
         return appliesToCustomer;
+    }
+
+    protected boolean checkObjectMeetBoundValue(Rule rule, Object object){
+        try {
+            Class<?> clazz = object.getClass();
+            Field field = clazz.getDeclaredField(rule.getFieldName());
+            field.setAccessible(true);
+
+            ValueType valueType = rule.getFieldType();
+
+            switch (valueType) {
+                case NUMBER: {
+                    return field.getDouble(object) >= Double.valueOf(rule.getBoundValue());
+                }
+                case STRING: {
+                    return field.get(object).equals(rule.getBoundValue());
+                }
+            }
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            logger.warn(e.getMessage());
+            logger.warn(e.getCause().toString());
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public OfferTimeZoneProcessor getOfferTimeZoneProcessor() {

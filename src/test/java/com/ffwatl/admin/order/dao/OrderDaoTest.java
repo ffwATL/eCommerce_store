@@ -120,7 +120,7 @@ public class OrderDaoTest {
         List<OrderStatus> statuses = new ArrayList<>();
         statuses.add(OrderStatus.CONFIRMED);
         statuses.add(OrderStatus.SUBMITTED);
-        List<Order> order = orderDao.findOrdersForCustomer(FetchMode.FETCHED, 1, OrderStatus.PAID);
+        List<Order> order = orderDao.findOrdersForCustomer(1, OrderStatus.PAID, FetchMode.FETCHED);
         System.err.println(order);
     }
 }

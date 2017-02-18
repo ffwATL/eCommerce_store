@@ -18,33 +18,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "fulfillment_groups")
-/*@NamedQueries({
-        @NamedQuery(name = "find_unfulfilled_fulfillment_group_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
-                "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
-                "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
-                "INNER JOIN f.order.orderItems oo " +
-                *//*
-                "INNER JOIN FETCH oo.orderItemPriceDetails " +
-                "LEFT JOIN FETCH oo.candidateItemOffers " +
-                "LEFT JOIN FETCH oo.orderItemQualifiers " +*//*
-                "WHERE f.status <> 'FULFILLED' AND f.status <> 'DELIVERED' ORDER BY f.order.submitDate ASC"),
-        @NamedQuery(name = "find_unprocessed_fulfillment_group_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
-                "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
-                "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
-                "INNER JOIN f.order.orderItems oo " +
-          *//*      "LEFT JOIN FETCH oo.orderItemPriceDetails " +
-                "LEFT JOIN FETCH oo.candidateItemOffers " +
-                "LEFT JOIN FETCH oo.orderItemQualifiers " +*//*
-                "WHERE f.status = SUBMITED ORDER BY f.order.submitDate ASC"),
-        @NamedQuery(name = "find_fulfillment_groups_by_status_asc", query = "SELECT f FROM FulfillmentGroupImpl f " +
-                "LEFT JOIN FETCH f.candidateFulfillmentGroupOffers " +
-                "LEFT JOIN FETCH f.fulfillmentGroupAdjustments " +
-                "INNER JOIN f.order.orderItems oo " +
-             *//*   "LEFT JOIN FETCH oo.orderItemPriceDetails " +
-                "LEFT JOIN FETCH oo.candidateItemOffers " +
-                "LEFT JOIN FETCH oo.orderItemQualifiers " +*//*
-                "WHERE f.status =:status ORDER BY f.order.submitDate ASC")
-})*/
 public class FulfillmentGroupImpl implements FulfillmentGroup{
 
     private static final long serialVersionUID = 1L;
@@ -290,7 +263,6 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
         if (getSaleFulfillmentPrice() != that.getSaleFulfillmentPrice()) return false;
         if (getRetailFulfillmentPrice() != that.getRetailFulfillmentPrice()) return false;
         if (getFulfillmentPrice() != that.getFulfillmentPrice()) return false;
-        if (getOrder() != null ? !getOrder().equals(that.getOrder()) : that.getOrder() != null) return false;
         if (getAddress() != null ? !getAddress().equals(that.getAddress()) : that.getAddress() != null) return false;
         if (getFulfillmentOption() != null ? !getFulfillmentOption().equals(that.getFulfillmentOption()) : that.getFulfillmentOption() != null)
             return false;
@@ -307,7 +279,7 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getOrder() != null ? getOrder().hashCode() : 0);
+
         result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
         result = 31 * result + (getFulfillmentOption() != null ? getFulfillmentOption().hashCode() : 0);
         result = 31 * result + getSaleFulfillmentPrice();
@@ -325,7 +297,7 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
     public String toString() {
         return "FulfillmentGroupImpl{" +
                 "id=" + id +
-                ", order=" + order +
+                ", order=" + (order != null ? order.getId(): null) +
                 ", address=" + address +
                 ", fulfillmentOption=" + fulfillmentOption +
                 ", retailFulfillmentPrice=" + retailFulfillmentPrice +

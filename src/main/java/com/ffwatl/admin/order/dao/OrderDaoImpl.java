@@ -36,14 +36,14 @@ public class OrderDaoImpl implements OrderDao{
 
 
     @Override
-    public Order findOrderById(final FetchMode fetchMode, final long id) {
+    public Order findOrderById(final long id, final FetchMode fetchMode) {
         List<Order> orders = findOrdersByIds(fetchMode, id);
         return orders.size() > 0 ? orders.get(0) : null;
     }
 
     @Override
     public Order findOrderById(final long id, final boolean refresh) {
-        Order order = findOrderById(FetchMode.FETCHED, id);
+        Order order = findOrderById(id, FetchMode.FETCHED);
 
         if(refresh){
             em.refresh(order);
@@ -66,8 +66,8 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public List<Order> findBatchOrders(final FetchMode fetchMode, final int start, final int maxResults,
-                                       final List<OrderStatus> statuses) {
+    public List<Order> findBatchOrders(final int start, final int maxResults, final List<OrderStatus> statuses,
+                                       final FetchMode fetchMode) {
         final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
         CriteriaQuery<Order> criteria = property.getCriteria();
 
@@ -83,8 +83,8 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public List<Order> findOrdersForCustomer(final FetchMode fetchMode, final long customerId,
-                                             final OrderStatus orderStatus) {
+    public List<Order> findOrdersForCustomer(final long customerId, final OrderStatus orderStatus,
+                                             final FetchMode fetchMode) {
         final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
         final CriteriaQuery<Order> criteria = property.getCriteria();
         final Root<OrderImpl> root = property.getRoot();
@@ -107,12 +107,12 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public List<Order> findOrdersForCustomer(FetchMode fetchMode, long customerId) {
-        return findOrdersForCustomer(fetchMode, customerId, null);
+    public List<Order> findOrdersForCustomer(long customerId, final FetchMode fetchMode) {
+        return findOrdersForCustomer(customerId, null, fetchMode);
     }
 
     @Override
-    public Order findNamedOrderForCustomer(final FetchMode fetchMode, final long customerId, final String name) {
+    public Order findNamedOrderForCustomer(final long customerId, final String name, final FetchMode fetchMode) {
         final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
         final CriteriaQuery<Order> criteria = property.getCriteria();
         final CriteriaBuilder cb = property.getBuilder();
@@ -131,7 +131,7 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public Order findCartForCustomer(final FetchMode fetchMode, final long customerId) {
+    public Order findCartForCustomer(final long customerId, final FetchMode fetchMode) {
         final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
         final CriteriaQuery<Order> criteria = property.getCriteria();
         final CriteriaBuilder cb = property.getBuilder();
@@ -158,7 +158,7 @@ public class OrderDaoImpl implements OrderDao{
     @Override
     public void delete(Order order) {
         if(!em.contains(order)){
-            order = findOrderById(FetchMode.FETCHED, order.getId());
+            order = findOrderById(order.getId(), FetchMode.FETCHED);
         }
         OrderPayment payment = order.getOrderPayment();
 
@@ -194,7 +194,7 @@ public class OrderDaoImpl implements OrderDao{
     }
 
     @Override
-    public Order findOrderByOrderNumber(FetchMode fetchMode, String orderNumber) {
+    public Order findOrderByOrderNumber(String orderNumber, final FetchMode fetchMode) {
         CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
         CriteriaQuery<Order> criteria = property.getCriteria();
 

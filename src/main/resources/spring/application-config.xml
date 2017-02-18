@@ -96,6 +96,18 @@
     </property>
     </bean>-->
 
+    <bean id="customDateFormatter" class="java.text.SimpleDateFormat">
+        <constructor-arg value="MM/dd/yyyy"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="propertyEditorRegistrars">
+            <list>
+                <ref bean="custom_date_editor_registrar"/>
+            </list>
+        </property>
+    </bean>
+
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <jpa:repositories base-package="com.ffwatl.admin" />

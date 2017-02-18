@@ -67,7 +67,7 @@ public class OrderTest {
 
     @Test
     public void findByIdTest(){
-        Order order = orderDao.findOrderById(FetchMode.LAZY, 1);
+        Order order = orderDao.findOrderById(1, FetchMode.LAZY);
         assertThat(order, notNullValue());
         System.err.println(order);
     }

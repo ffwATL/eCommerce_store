@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+       <context:component-scan base-package="com.ffwatl"/>
+
+       <bean id="rule_1" class="com.ffwatl.common.rule.RuleImpl">
+              <property name="id" value="1"/>
+              <property name="fieldName" value="subTotal"/>
+              <property name="excluded" value="false"/>
+              <property name="boundValue" value="30000"/>
+              <property name="fieldType" value="NUMBER"/>
+              <property name="type" value="MIN_SPEND"/>
+       </bean>
+
+       <bean id="offerForSaveTest" class="com.ffwatl.admin.offer.domain.OfferImpl">
+              <property name="name" value="externally saved order"/>
+              <property name="offerType" value="FULFILLMENT_GROUP"/>
+              <property name="startDate" value="08/09/2017"/>
+              <property name="endDate" value="08/16/2017"/>
+              <property name="validOnSale" value="false"/>
+              <property name="value" value="100"/>
+              <property name="discountType" value="PERCENT_OFF"/>
+              <property name="currency" value="UAH"/>
+              <property name="offerCodes" ref="offerCodes"/>
+              <property name="matchRules" ref="rulesMap"/>
+              <property name="automaticallyAdded" value="false"/>
+              <property name="combinableWithOtherOffers" value="false"/>
+              <property name="maxUsesPerCustomer" value="1"/>
+              <property name="qualifyingItemSubTotal" value="70000"/>
+              <property name="totalitarianOffer" value="false"/>
+       </bean>
+
+       <util:map id="rulesMap"
+                 value-type="com.ffwatl.common.rule.Rule"
+                 key-type="java.lang.String">
+              <entry key="rule 1" value-ref="rule_1"/>
+       </util:map>
+
+       <util:set id="offerCodes" value-type="com.ffwatl.admin.offer.domain.OfferCode">
+              <ref bean="codeSpring25"/>
+       </util:set>
+
+       <bean id="codeSpring25" class="com.ffwatl.admin.offer.domain.OfferCodeImpl">
+              <property name="active" value="true"/>
+              <property name="offerCode" value="SPRING25"/>
+              <property name="startDate" value="02/25/2008"/>
+       </bean>
+
+
+</beans>

@@ -15,13 +15,13 @@ public class OfferContext {
         OFFER_CONTEXT.set(offerContext);
     }
 
-    protected Boolean executePromotionCalculation = true;
+    protected boolean executePromotionCalculation = true;
 
-    public Boolean getExecutePromotionCalculation() {
+    public boolean getExecutePromotionCalculation() {
         return executePromotionCalculation;
     }
 
-    public void setExecutePromotionCalculation(Boolean executePromotionCalculation) {
+    public void setExecutePromotionCalculation(boolean executePromotionCalculation) {
         this.executePromotionCalculation = executePromotionCalculation;
     }
 }

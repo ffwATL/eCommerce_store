@@ -114,8 +114,6 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
 
         if (getId() != that.getId()) return false;
         if (getQuantity() != that.getQuantity()) return false;
-        if (getOrderItem() != null ? !getOrderItem().equals(that.getOrderItem()) : that.getOrderItem() != null)
-            return false;
         return !(getOrderItemPriceDetailAdjustments() != null ? !getOrderItemPriceDetailAdjustments().equals(that.getOrderItemPriceDetailAdjustments()) : that.getOrderItemPriceDetailAdjustments() != null);
 
     }
@@ -123,7 +121,6 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getOrderItem() != null ? getOrderItem().hashCode() : 0);
         result = 31 * result + (getOrderItemPriceDetailAdjustments() != null ? getOrderItemPriceDetailAdjustments().hashCode() : 0);
         result = 31 * result + getQuantity();
         return result;
@@ -133,7 +130,6 @@ public class OrderItemPriceDetailImpl implements OrderItemPriceDetail{
     public String toString() {
         return "OrderItemPriceDetailImpl{" +
                 "id=" + id +
-                ", orderItem=" + orderItem +
                 ", orderItemPriceDetailAdjustments=" + orderItemPriceDetailAdjustments +
                 ", quantity=" + quantity +
                 '}';

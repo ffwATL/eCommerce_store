@@ -122,7 +122,7 @@ public interface OfferService {
 
     /**
      * <p>Validates that the given code is underneath the max uses for that code. This method will also delegate to
-     * {@link #verifyMaxCustomerUsageThreshold(Customer, Offer)} for the code's offer and the passed in customer</p>
+     * {@link #verifyMaxCustomerUsageThreshold(User, Offer)} for the code's offer and the passed in customer</p>
      *
      * @param customer the customer attempting to use the code
      * @param code the code to check
@@ -153,7 +153,7 @@ public interface OfferService {
     /**
      * For a given order, give back a map of all {@link Offer}s that were retrieved from {@link OfferCode}s. More explicitly,
      * this will look at all of the offers that have been used by looking at a given {@link Order}'s adjustments and then
-     * match those up with the codes from {@link Order#getAddedOfferCodes()}.
+     * match those up with the codes from {@link Order#getOfferCode()}.
      *
      * @param order
      * @return a map from {@link Offer} to the {@link OfferCode} that was used to obtain it

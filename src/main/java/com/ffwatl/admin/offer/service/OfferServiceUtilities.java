@@ -49,7 +49,7 @@ public interface OfferServiceUtilities {
      * Return false if a totalitarian or non-combinable offer has already been applied or if this offer is
      * totalitarian or non-combinable  and this order already has adjustments applied.
      */
-    public boolean itemOfferCanBeApplied(PromotableCandidateItemOffer itemOffer,
+    boolean itemOfferCanBeApplied(PromotableCandidateItemOffer itemOffer,
                                          List<PromotableOrderItemPriceDetail> details);
 
     /**

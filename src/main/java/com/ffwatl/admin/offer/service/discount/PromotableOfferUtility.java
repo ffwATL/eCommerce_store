@@ -1,7 +1,7 @@
 package com.ffwatl.admin.offer.service.discount;
 
 
-import com.ffwatl.admin.offer.service.OfferDiscountType;
+import com.ffwatl.admin.offer.service.type.OfferDiscountType;
 
 /**
  * Provides shared code for the default implementations of PromotableOrderItemPriceDetailAdjustmentImpl and

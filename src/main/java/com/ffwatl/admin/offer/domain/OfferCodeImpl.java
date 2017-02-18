@@ -102,9 +102,6 @@ public class OfferCodeImpl implements OfferCode{
         OfferCodeImpl offerCode1 = (OfferCodeImpl) o;
 
         if (getId() != offerCode1.getId()) return false;
-        if (isActive() != offerCode1.isActive()) return false;
-        if (getOffer() != null ? !getOffer().equals(offerCode1.getOffer()) : offerCode1.getOffer() != null)
-            return false;
         if (getOfferCode() != null ? !getOfferCode().equals(offerCode1.getOfferCode()) : offerCode1.getOfferCode() != null)
             return false;
         if (getStartDate() != null ? !getStartDate().equals(offerCode1.getStartDate()) : offerCode1.getStartDate() != null)
@@ -116,11 +113,9 @@ public class OfferCodeImpl implements OfferCode{
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getOffer() != null ? getOffer().hashCode() : 0);
         result = 31 * result + (getOfferCode() != null ? getOfferCode().hashCode() : 0);
         result = 31 * result + (getStartDate() != null ? getStartDate().hashCode() : 0);
         result = 31 * result + (getEndDate() != null ? getEndDate().hashCode() : 0);
-        result = 31 * result + (isActive() ? 1 : 0);
         return result;
     }
 
@@ -128,7 +123,6 @@ public class OfferCodeImpl implements OfferCode{
     public String toString() {
         return "OfferCodeImpl{" +
                 "id=" + id +
-                ", offer=" + offer +
                 ", offerCode='" + offerCode + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +

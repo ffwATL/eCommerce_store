@@ -6,20 +6,18 @@ import com.ffwatl.admin.offer.domain.FulfillmentGroupAdjustment;
 import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.offer.domain.OrderAdjustment;
 import com.ffwatl.admin.offer.domain.OrderItemPriceDetailAdjustment;
-import com.ffwatl.admin.offer.service.OfferDiscountType;
-import com.ffwatl.admin.offer.service.OfferRuleType;
 import com.ffwatl.admin.offer.service.OfferServiceUtilities;
 import com.ffwatl.admin.offer.service.discount.*;
+import com.ffwatl.admin.offer.service.type.OfferDiscountType;
+import com.ffwatl.admin.offer.service.type.OfferRuleType;
 import com.ffwatl.admin.order.dao.OrderItemDao;
 import com.ffwatl.admin.order.domain.*;
 import com.ffwatl.common.rule.Rule;
-import com.ffwatl.common.rule.ValueType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Field;
 import java.util.*;
 
 @Service("order_offer_processor")
@@ -28,7 +26,7 @@ public class OrderOfferProcessorImpl extends AbstractBaseProcessor implements Or
     private static final Logger logger = LogManager.getLogger();
 
     @Resource(name = "promotable_item_factory")
-    private PromotableItemFactory promotableItemFactory;
+    protected  PromotableItemFactory promotableItemFactory;
 
     @Resource(name = "order_item_dao")
     private OrderItemDao orderItemDao;
@@ -37,7 +35,7 @@ public class OrderOfferProcessorImpl extends AbstractBaseProcessor implements Or
     private OfferDao offerDao;
 
     @Resource(name = "offer_service_utilities")
-    private OfferServiceUtilities offerServiceUtilities;
+    protected OfferServiceUtilities offerServiceUtilities;
 
 
     @Override
@@ -89,7 +87,7 @@ public class OrderOfferProcessorImpl extends AbstractBaseProcessor implements Or
      *
      * @return true if offer can be applied, otherwise false
      */
-    private boolean couldOfferApplyToOrder(Offer offer, PromotableOrder promotableOrder, PromotableOrderItem orderItem) {
+    protected boolean couldOfferApplyToOrder(Offer offer, PromotableOrder promotableOrder, PromotableOrderItem orderItem) {
         return couldOfferApplyToOrder(offer, promotableOrder, orderItem, null);
     }
 
@@ -99,7 +97,7 @@ public class OrderOfferProcessorImpl extends AbstractBaseProcessor implements Or
      *
      * @return true if offer can be applied, otherwise false
      */
-    private boolean couldOfferApplyToOrder(Offer offer, PromotableOrder promotableOrder,
+    protected boolean couldOfferApplyToOrder(Offer offer, PromotableOrder promotableOrder,
                                              PromotableFulfillmentGroup fulfillmentGroup) {
         return couldOfferApplyToOrder(offer, promotableOrder, null, fulfillmentGroup);
     }
@@ -110,7 +108,7 @@ public class OrderOfferProcessorImpl extends AbstractBaseProcessor implements Or
      *
      * @return true if offer can be applied, otherwise false
      */
-    private boolean couldOfferApplyToOrder(Offer offer, PromotableOrder promotableOrder,
+    protected boolean couldOfferApplyToOrder(Offer offer, PromotableOrder promotableOrder,
                                            PromotableOrderItem promotableOrderItem,
                                            PromotableFulfillmentGroup promotableFulfillmentGroup) {
         boolean appliesToItem;
@@ -134,29 +132,6 @@ public class OrderOfferProcessorImpl extends AbstractBaseProcessor implements Or
         }
 
         return appliesToItem;
-    }
-
-    private boolean checkObjectMeetBoundValue(Rule rule, Object object){
-        try {
-            Class<?> clazz = object.getClass();
-            Field field = clazz.getDeclaredField(rule.getFieldName());
-            field.setAccessible(true);
-
-            ValueType valueType = rule.getFieldType();
-
-            switch (valueType) {
-                case NUMBER: {
-                    return field.getDouble(object) >= Double.valueOf(rule.getBoundValue());
-                }
-                case STRING: {
-                    return field.get(object).equals(rule.getBoundValue());
-                }
-            }
-
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     private PromotableCandidateOrderOffer createCandidateOrderOffer(PromotableOrder promotableOrder,
@@ -387,7 +362,7 @@ public class OrderOfferProcessorImpl extends AbstractBaseProcessor implements Or
 
         List<OrderItem> orderItemList = offerServiceUtilities.buildOrderItemList(order);
 
-        for (OrderItem orderItem : orderItemList) {
+        /*for (OrderItem orderItem : orderItemList) {
             PromotableOrderItem promotableItem = promotableItemMap.get(orderItem);
             if (promotableItem == null) {
                 continue;
@@ -395,7 +370,7 @@ public class OrderOfferProcessorImpl extends AbstractBaseProcessor implements Or
             synchronizeItemPriceDetails(orderItem, promotableItem);
             synchronizeItemQualifiers(orderItem, promotableItem);
 
-        }
+        }*/
     }
 
     private Map<Long, PromotionQualifier> buildPromotableQualifiersMap(PromotableOrderItem item) {

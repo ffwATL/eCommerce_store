@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+    <offers id="1"
+            offer_name="Spring sale 30%"
+            offer_type="ORDER"
+            offer_discount_type="PERCENT_OFF"
+            start_date="1970-01-01"
+            end_date="1970-01-10"
+            value="30"
+            valid_on_sale="true"
+            max_uses_by_customer="1"
+            combinable_with_other_offers="false"
+            qualifying_item_subtotal="30000"
+            totalitarian_offer="false"
+            automatically_added="false"
+            currency="2"
+            />
+
+    <offers id="2"
+            offer_name="Spring sale 10%"
+            offer_type="ORDER"
+            offer_discount_type="PERCENT_OFF"
+            start_date="1970-01-01"
+            end_date="1970-01-10"
+            value="10"
+            valid_on_sale="true"
+            max_uses_by_customer="1"
+            combinable_with_other_offers="false"
+            qualifying_item_subtotal="30000"
+            totalitarian_offer="false"
+            automatically_added="true"
+            currency="2"
+            />
+
+    <offer_codes id="1"
+                 offer_id="1"
+                 offer_code="SPRING30"
+                 start_date="1970-01-01"
+                 end_date="1970-01-10"
+                 active="false"
+            />
+    <offer_codes id="2"
+                 offer_id="1"
+                 offer_code="SPRING15"
+                 start_date="1970-01-01"
+                 end_date="1970-01-10"
+                 active="false"
+            />
+    <offer_codes id="3"
+                 offer_id="1"
+                 offer_code="SPRING10"
+                 start_date="1970-01-01"
+                 end_date="1970-01-10"
+                 active="false"
+            />
+
+    <users id="1"
+           user_name="Jack Hamper"
+           email="jack.hamper@gmail.com"
+           psw_hash="zxeQSC(_^%123"
+           first_name="Jack"/>
+
+    <users id="2"
+           user_name="Danver Pahonskiy"
+           email="dan.pahonskiy@gmail.com"
+           psw_hash="aKhn1e3ADxk*$"
+           first_name="Danver"/>
+
+    <orders id="1"
+            order_name="named"
+            order_number="fp1001"
+            customer_id="1"
+            order_sub_total_value="0"
+            order_total_value="0"
+            total_fulfillment_charges="0"/>
+
+    <fulfillment_options id="1"
+                         locale_en_1="Nova Poshta shipping"
+                         fulfillment_type="PHYSICAL_SHIP"
+            />
+
+    <fulfillment_groups id="1"
+                        order_id="1"
+                        fulfillment_option_id="1"
+                        sale_fulfillment_price="0"
+                        retail_fulfillment_price="30"
+                        fulfillment_price="0"
+                        type="PHYSICAL_SHIP"
+                        status="NEW"
+            />
+
+    <items_group id="1"
+                 category_level="4"
+                 common_category="8"
+                 user_id="2"
+                 cat_description="Ho ho ho!"
+                 avg_weight="200"
+            />
+
+    <order_items id="1"
+                 product_id="1"
+                 order_id="1"
+                 locale_en="ASOS Snapback"
+                 origin_price="10000"
+                 retail_price="20000"
+                 sale_price="0"
+                 order_item_quantity="1"
+                 category_id="1"
+                 discounting_allowed="true"
+                 discount_value="0"
+            />
+
+</dataset>

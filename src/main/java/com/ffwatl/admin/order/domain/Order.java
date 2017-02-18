@@ -188,7 +188,7 @@ public interface Order extends Serializable{
 
     Order setOrderItems(List<OrderItem> orderItems);
 
-    Order setFulfillmentGroups(FulfillmentGroup fulfillmentGroup);
+    Order setFulfillmentGroup(FulfillmentGroup fulfillmentGroup);
 
     Order setCandidateOrderOffers(Set<CandidateOrderOffer> candidateOrderOffers);
 

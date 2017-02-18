@@ -7,6 +7,8 @@
        <import resource="springMVC-config.xml"/>
        <import resource="spring-security.xml"/>
        <import resource="rule-test-config.xml"/>
+       <import resource="offer/offer-test-config.xml"/>
+       <import resource="order/order-test-config.xml"/>
 
        <bean id="localDateTimeFormatter" class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
               <constructor-arg value="HH:mm:ss"/>
@@ -19,4 +21,21 @@
                      </list>
               </property>
        </bean>
+
+       <bean id="customDateFormatter" class="java.text.SimpleDateFormat">
+              <constructor-arg value="MM/dd/yyyy"/>
+       </bean>
+
+       <bean id="custom_date_editor_registrar" class="com.ffwatl.common.config.CustomDateEditorRegistrar">
+              <property name="dateFormat" ref="customDateFormatter"/>
+       </bean>
+
+       <bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+              <property name="propertyEditorRegistrars">
+                     <list>
+                            <ref bean="custom_date_editor_registrar"/>
+                     </list>
+              </property>
+       </bean>
+
 </beans>

@@ -5,6 +5,7 @@ import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.offer.domain.CandidateItemOffer;
 import com.ffwatl.admin.offer.domain.CandidateItemOfferImpl;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,15 @@ import java.util.Set;
 @Entity
 @Table(name = "order_items")
 public class OrderItemImpl implements OrderItem{
+
+    @PostConstruct
+    public void init(){
+        if(orderItemPriceDetails != null){
+            for(OrderItemPriceDetail oi: orderItemPriceDetails){
+                oi.setOrderItem(this);
+            }
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -363,7 +373,7 @@ public class OrderItemImpl implements OrderItem{
         return "OrderItemImpl{" +
                 "id=" + id +
                 ", productId=" + productId +
-                ", order=" + order.getOrderNumber() +
+                ", order=" + (order != null ? order.getOrderNumber(): null) +
                 ", productName=" + productName +
                 ", productAttributeType=" + productAttributeType +
                 ", color=" + color +
@@ -372,7 +382,7 @@ public class OrderItemImpl implements OrderItem{
                 ", salePrice=" + salePrice +
                 ", quantity=" + quantity +
                 ", orderItemPriceDetails=" + orderItemPriceDetails +
-                ", category=" + category +
+                /*", category=" + category +*/
                 ", candidateItemOffers=" + candidateItemOffers +
                 ", orderItemQualifiers=" + orderItemQualifiers +
                 ", discountingAllowed=" + discountingAllowed +

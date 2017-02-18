@@ -2,8 +2,8 @@ package com.ffwatl.admin.offer.domain;
 
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
-import com.ffwatl.admin.offer.service.OfferDiscountType;
-import com.ffwatl.admin.offer.service.OfferType;
+import com.ffwatl.admin.offer.service.type.OfferDiscountType;
+import com.ffwatl.admin.offer.service.type.OfferType;
 import com.ffwatl.common.rule.Rule;
 import com.ffwatl.common.rule.RuleImpl;
 
@@ -54,7 +54,7 @@ public class OfferImpl implements Offer {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH,
                     targetEntity = OfferCodeImpl.class)
-    @JoinColumn(name = "offer_codes_id")
+    @JoinColumn(name = "offer_id")
     private Set<OfferCode> offerCodes;
 
     @Column(name = "combinable_with_other_offers")

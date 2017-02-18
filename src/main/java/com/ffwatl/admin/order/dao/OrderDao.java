@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface OrderDao {
 
-    Order findOrderById(FetchMode fetchMode, long id);
+    Order findOrderById(long id, FetchMode fetchMode);
 
     Order findOrderById(long id, boolean refresh);
 
@@ -27,15 +27,15 @@ public interface OrderDao {
      * @param statuses
      * @return
      */
-    List<Order> findBatchOrders(FetchMode fetchMode, int start, int pageSize, List<OrderStatus> statuses);
+    List<Order> findBatchOrders(int start, int pageSize, List<OrderStatus> statuses, FetchMode fetchMode);
 
-    List<Order> findOrdersForCustomer(FetchMode fetchMode, long id, OrderStatus orderStatus);
+    List<Order> findOrdersForCustomer(long id, OrderStatus orderStatus, FetchMode fetchMode);
 
-    List<Order> findOrdersForCustomer(FetchMode fetchMode, long id);
+    List<Order> findOrdersForCustomer(long id, FetchMode fetchMode);
 
-    Order findNamedOrderForCustomer(FetchMode fetchMode, long customerId, String name);
+    Order findNamedOrderForCustomer(long customerId, String name, FetchMode fetchMode);
 
-    Order findCartForCustomer(FetchMode fetchMode, long customerId);
+    Order findCartForCustomer(long customerId, FetchMode fetchMode);
 
     Order save(Order order);
 
@@ -47,7 +47,7 @@ public interface OrderDao {
 
     Order createNewCartForCustomer(User customer, Currency currency);
 
-    Order findOrderByOrderNumber(FetchMode fetchMode, String orderNumber);
+    Order findOrderByOrderNumber(String orderNumber, FetchMode fetchMode);
 
 
     /**
