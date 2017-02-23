@@ -2,69 +2,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-4.2.xsd
-	http://www.springframework.org/schema/tx
-	http://www.springframework.org/schema/tx/spring-tx.xsd
-	http://www.springframework.org/schema/aop
-    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-    http://www.springframework.org/schema/jdbc
-    http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
+	">
+
+
+    <import resource="common-applicationContext-entity.xml"/>
+    <import resource="persistence.xml"/>
 
     <context:component-scan base-package="com.ffwatl"/>
-    <import resource="common-applicationContext-entity.xml"/>
-
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/atl3"/>
-        <property name="username" value="root"/>
-        <property name="password" value="root"/>
-    </bean>
-
-    <bean id="localDateTimeFormatter" class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
-        <constructor-arg value="HH:mm:ss"/>
-    </bean>
-
-    <!--<jdbc:embedded-database id="dataSource" type="HSQL">
-        <jdbc:script location="classpath:db/sql/create-db.sql" />
-        <jdbc:script location="classpath:db/sql/insert-data.sql" />
-    </jdbc:embedded-database>-->
-
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="20971520"/>
-    </bean>
-
-    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
-
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="packagesToScan" value="com.ffwatl" />
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.jdbc.batch_versioned_data">true</prop>
-                <prop key="hibernate.batch_fetch_style">padded</prop>
-            </props>
-        </property>
-        <property name="dataSource" ref="dataSource"/>
-        <property name="jpaDialect">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
-
-           <!-- <ref bean="com.ffwatl.admin.order.domain.Order"/>-->
-        </property>
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
-        </property>
-    </bean>
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
-    </bean>
 
     <bean id="settings" class="com.ffwatl.util.Settings">
         <constructor-arg index="0" type="java.lang.String" value="/storage/items/images/"/>
@@ -81,6 +29,13 @@
         </property>
     </bean>
 
+    <bean id="localDateTimeFormatter" class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
+        <constructor-arg value="HH:mm:ss"/>
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="20971520"/>
+    </bean>
     <!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.gmail.com" />
         <property name="port" value="587" />
@@ -96,22 +51,7 @@
     </property>
     </bean>-->
 
-    <bean id="customDateFormatter" class="java.text.SimpleDateFormat">
-        <constructor-arg value="MM/dd/yyyy"/>
-    </bean>
 
-    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
-        <property name="propertyEditorRegistrars">
-            <list>
-                <ref bean="custom_date_editor_registrar"/>
-            </list>
-        </property>
-    </bean>
-
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <jpa:repositories base-package="com.ffwatl.admin" />
-    <aop:aspectj-autoproxy />
     <context:annotation-config/>
 
 </beans>

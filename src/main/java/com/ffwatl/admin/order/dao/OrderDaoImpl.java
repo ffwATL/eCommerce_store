@@ -235,7 +235,7 @@ public class OrderDaoImpl implements OrderDao{
 
             orderItemFetch.fetch("orderItemQualifiers", JoinType.LEFT);
         }
-
+        criteria.distinct(true);
         criteria.select(root);
         return new CriteriaPropertyImpl<Order, OrderImpl>()
                 .setBuilder(builder)
