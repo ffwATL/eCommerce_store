@@ -1,6 +1,8 @@
 package com.ffwatl.admin.payment.domain.secure;
 
 
+import com.ffwatl.admin.payment.PaymentType;
+import com.ffwatl.admin.payment.service.SecureOrderPaymentService;
 import com.ffwatl.common.encryption.EncryptionModule;
 
 import javax.persistence.*;
@@ -10,7 +12,7 @@ import javax.persistence.*;
 public class CreditCardPaymentImpl implements CreditCardPayment{
 
     /**
-     * Rather than constructing directly, use {@link SecureOrderPaymentService#create(org.broadleafcommerce.core.payment.service.type.PaymentType)}
+     * Rather than constructing directly, use {@link SecureOrderPaymentService#create(PaymentType)}
      * so that the appropriate {@link EncryptionModule} can be hooked up to this entity
      */
     protected CreditCardPaymentImpl() {
@@ -30,10 +32,10 @@ public class CreditCardPaymentImpl implements CreditCardPayment{
     private String referenceNumber;
 
     @Column(name = "expiration_month", nullable = false)
-    private Integer expirationMonth;
+    private int expirationMonth;
 
     @Column(name = "expiration_year", nullable = false)
-    private Integer expirationYear;
+    private int expirationYear;
 
     @Column(name = "name_on_card", nullable = false)
     private String nameOnCard;
@@ -56,12 +58,12 @@ public class CreditCardPaymentImpl implements CreditCardPayment{
     }
 
     @Override
-    public Integer getExpirationMonth() {
+    public int getExpirationMonth() {
         return expirationMonth;
     }
 
     @Override
-    public Integer getExpirationYear() {
+    public int getExpirationYear() {
         return expirationYear;
     }
 
@@ -106,12 +108,12 @@ public class CreditCardPaymentImpl implements CreditCardPayment{
     }
 
     @Override
-    public void setExpirationMonth(Integer expirationMonth) {
+    public void setExpirationMonth(int expirationMonth) {
         this.expirationMonth = expirationMonth;
     }
 
     @Override
-    public void setExpirationYear(Integer expirationYear) {
+    public void setExpirationYear(int expirationYear) {
         this.expirationYear = expirationYear;
     }
 
@@ -132,21 +134,24 @@ public class CreditCardPaymentImpl implements CreditCardPayment{
 
         CreditCardPaymentImpl that = (CreditCardPaymentImpl) o;
 
+        if (getId() != that.getId()) return false;
+        if (getExpirationMonth() != that.getExpirationMonth()) return false;
+        if (getExpirationYear() != that.getExpirationYear()) return false;
         if (getPan() != null ? !getPan().equals(that.getPan()) : that.getPan() != null) return false;
         if (getReferenceNumber() != null ? !getReferenceNumber().equals(that.getReferenceNumber()) : that.getReferenceNumber() != null)
             return false;
-        if (getExpirationMonth() != null ? !getExpirationMonth().equals(that.getExpirationMonth()) : that.getExpirationMonth() != null)
-            return false;
-        return !(getExpirationYear() != null ? !getExpirationYear().equals(that.getExpirationYear()) : that.getExpirationYear() != null);
+        return !(getNameOnCard() != null ? !getNameOnCard().equals(that.getNameOnCard()) : that.getNameOnCard() != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = getPan() != null ? getPan().hashCode() : 0;
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getPan() != null ? getPan().hashCode() : 0);
         result = 31 * result + (getReferenceNumber() != null ? getReferenceNumber().hashCode() : 0);
-        result = 31 * result + (getExpirationMonth() != null ? getExpirationMonth().hashCode() : 0);
-        result = 31 * result + (getExpirationYear() != null ? getExpirationYear().hashCode() : 0);
+        result = 31 * result + getExpirationMonth();
+        result = 31 * result + getExpirationYear();
+        result = 31 * result + (getNameOnCard() != null ? getNameOnCard().hashCode() : 0);
         return result;
     }
 

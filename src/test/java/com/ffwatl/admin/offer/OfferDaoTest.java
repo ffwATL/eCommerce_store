@@ -9,7 +9,7 @@ import com.ffwatl.admin.offer.domain.OfferCode;
 import com.ffwatl.admin.offer.service.OfferService;
 import com.ffwatl.admin.offer.service.type.OfferDiscountType;
 import com.ffwatl.admin.offer.service.type.OfferType;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.rule.Rule;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;

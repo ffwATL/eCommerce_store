@@ -3,6 +3,7 @@ package com.ffwatl.admin.order.domain;
 
 import com.ffwatl.admin.catalog.domain.Category;
 import com.ffwatl.admin.catalog.domain.Color;
+import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.admin.catalog.domain.ProductAttributeType;
 import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.offer.domain.CandidateItemOffer;
@@ -24,7 +25,9 @@ public interface OrderItem extends Serializable {
 
     ProductAttributeType getProductAttributeType();
 
-    Color getOrderItemColor();
+    ProductAttribute getProductAttribute();
+
+    Color getColor();
 
     /**
      * Reference back to the containing order.
@@ -122,6 +125,8 @@ public interface OrderItem extends Serializable {
     OrderItem setProductName(I18n productName);
 
     OrderItem setProductAttributeType(ProductAttributeType productAttributeType);
+
+    OrderItem setProductAttribute(ProductAttribute productAttribute);
 
     OrderItem setColor(Color color);
 

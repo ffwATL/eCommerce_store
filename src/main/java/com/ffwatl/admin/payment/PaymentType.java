@@ -17,8 +17,8 @@ public class PaymentType implements Serializable, EnumerationType {
 
     private static final Map<String, PaymentType> TYPES = new LinkedHashMap<>();
 
-    private static final PaymentType COD = new PaymentType("C.O.D", new I18n().setLocale_en("Cash on delivery"));
-    private static final PaymentType CREDIT_CARD_PAYMENT = new PaymentType("CREDIT_CARD",
+    public static final PaymentType COD = new PaymentType("C.O.D", new I18n().setLocale_en("Cash on delivery"));
+    public static final PaymentType CREDIT_CARD_PAYMENT = new PaymentType("CREDIT_CARD",
             new I18n().setLocale_en("Credit card payment"));
 
     public static PaymentType getInstance(final String type){

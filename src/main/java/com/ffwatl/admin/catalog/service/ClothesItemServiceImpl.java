@@ -24,20 +24,25 @@ import java.util.stream.Collectors;
 public class ClothesItemServiceImpl implements ClothesItemService{
 
     private static final Logger logger = LogManager.getLogger("com.ffwatl.admin.web.controller.AddNewItemController");
+    private static final SizeDTOConverter sizeDTOConverter = new SizeDTOConverter();
+
     @Autowired
     private ClothesItemDao clothesItemDao;
+
     @Autowired
     private BrandService brandService;
+
     @Autowired
     private ColorService colorService;
+
     @Autowired
     private EuroSizeService euroSizeService;
+
     @Autowired
     private ItemGroupService itemGroupService;
+
     @Autowired
     private UserService userService;
-
-    private static final SizeDTOConverter sizeDTOConverter = new SizeDTOConverter();
 
 
     @Override
@@ -90,6 +95,7 @@ public class ClothesItemServiceImpl implements ClothesItemService{
         for(ProductAttribute s: presenter.getSize()){
             s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
         }
+
         item.setSize(sizeDTOConverter.transformList(presenter.getSize(), ConverterDTO.ENTITY_OBJECT));
         item.setItemGroup(itemGroupService.findById(presenter.getCategory().getId()));
         item.setColor(colorService.findById(presenter.getColor().getId()));
@@ -106,6 +112,7 @@ public class ClothesItemServiceImpl implements ClothesItemService{
         item.setRetailPrice(presenter.getRetailPrice());
         item.setCurrency(presenter.getCurrency());
         item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
+
         return item;
     }
 

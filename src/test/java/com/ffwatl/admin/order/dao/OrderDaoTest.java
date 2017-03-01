@@ -8,7 +8,7 @@ import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderStatus;
 import com.ffwatl.admin.user.service.UserService;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

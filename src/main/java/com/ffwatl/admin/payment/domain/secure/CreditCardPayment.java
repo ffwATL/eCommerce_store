@@ -1,6 +1,8 @@
 package com.ffwatl.admin.payment.domain.secure;
 
 
+import com.ffwatl.admin.payment.service.SecureOrderPaymentService;
+
 /**
  * Entity associated with sensitive, secured credit card data. This data is stored specifically in the blSecurePU persistence.
  * All fetches and creates should go through {@link SecureOrderPaymentService} in order to properly decrypt/encrypt the data
@@ -23,12 +25,12 @@ public interface CreditCardPayment extends Referenced{
     /**
      * @return the expirationMonth
      */
-    Integer getExpirationMonth();
+    int getExpirationMonth();
 
     /**
      * @return the expirationYear
      */
-    Integer getExpirationYear();
+    int getExpirationYear();
 
     /**
      * @return the nameOnCard
@@ -52,12 +54,12 @@ public interface CreditCardPayment extends Referenced{
     /**
      * @param expirationMonth the expirationMonth to set
      */
-    void setExpirationMonth(Integer expirationMonth);
+    void setExpirationMonth(int expirationMonth);
 
     /**
      * @param expirationYear the expirationYear to set
      */
-    void setExpirationYear(Integer expirationYear);
+    void setExpirationYear(int expirationYear);
 
     /**
      * @param nameOnCard the name on the card to set

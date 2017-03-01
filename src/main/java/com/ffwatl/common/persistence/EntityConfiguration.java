@@ -89,11 +89,16 @@ public class EntityConfiguration {
     }
 
     public <T> T createEntityInstance(String beanId, Class<T> resultClass) {
-        T bean = (T) applicationcontext.getBean(beanId);
+        T bean = applicationcontext.getBean(beanId, resultClass);
         if (logger.isDebugEnabled()) {
             logger.debug("Returning instance of class (" + bean.getClass().getName() + ") configured with bean id (" + beanId + ')');
         }
         return bean;
+    }
+
+    public <T> T createEntityInstance(Class<T> clazz){
+        String name = clazz.getName();
+        return applicationcontext.getBean(name, clazz);
     }
 
     public Resource[] getEntityContexts() {

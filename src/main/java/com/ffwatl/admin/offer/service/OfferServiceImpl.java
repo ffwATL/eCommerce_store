@@ -19,7 +19,7 @@ import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderItemPriceDetail;
 import com.ffwatl.admin.order.service.OrderService;
 import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class OfferServiceImpl implements OfferService {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    // should be called outside of Offer service after Offer service is executed
+    // should be called outside of Offer profile after Offer profile is executed
     @Resource(name = "customer_offer_dao")
     private CustomerOfferDao customerOfferDao;
 
@@ -139,7 +139,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public Order applyAndSaveOffersToOrder(List<Offer> offers, Order order) {
         /*
-        TODO rather than a threadlocal, we should update the "shouldPrice" boolean on the service API to
+        TODO rather than a threadlocal, we should update the "shouldPrice" boolean on the profile API to
         use a richer object to describe the parameters of the pricing call. This object would include
         the pricing boolean, but would also include a list of activities to include or exclude in the
         call

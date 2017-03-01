@@ -6,8 +6,8 @@ import com.ffwatl.admin.offer.domain.CandidateFulfillmentGroupOffer;
 import com.ffwatl.admin.offer.domain.CandidateFulfillmentGroupOfferImpl;
 import com.ffwatl.admin.offer.domain.FulfillmentGroupAdjustment;
 import com.ffwatl.admin.offer.domain.FulfillmentGroupAdjustmentImpl;
-import com.ffwatl.admin.order.service.FulfillmentGroupStatusType;
-import com.ffwatl.admin.order.service.FulfillmentType;
+import com.ffwatl.admin.order.service.type.FulfillmentGroupStatusType;
+import com.ffwatl.admin.order.service.type.FulfillmentType;
 import com.ffwatl.admin.user.domain.Address;
 import com.ffwatl.admin.user.domain.AddressImpl;
 

@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class serves to allow reuse of logic between the core offer service and related
- * offer service extensions. Changes here likely affect other modules including advanced
+ * This class serves to allow reuse of logic between the core offer profile and related
+ * offer profile extensions. Changes here likely affect other modules including advanced
  * offer and subscription.
  */
 public interface OfferServiceUtilities {

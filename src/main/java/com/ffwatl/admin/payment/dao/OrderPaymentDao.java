@@ -3,7 +3,7 @@ package com.ffwatl.admin.payment.dao;
 
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.payment.domain.OrderPayment;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 
 
 import java.util.List;

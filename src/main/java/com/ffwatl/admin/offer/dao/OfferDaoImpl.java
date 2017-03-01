@@ -1,7 +1,7 @@
 package com.ffwatl.admin.offer.dao;
 
 import com.ffwatl.admin.offer.domain.*;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.CriteriaProperty;
 import com.ffwatl.common.persistence.CriteriaPropertyImpl;
 import com.ffwatl.common.persistence.EntityConfiguration;

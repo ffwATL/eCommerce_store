@@ -12,7 +12,7 @@ public class ThreadLocalManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static Long count = 0L;
+    private static long count = 0L;
     private static final Object threadLock = new Object();
 
     private static final ThreadLocal<ThreadLocalManager> THREAD_LOCAL_MANAGER = new ThreadLocal<ThreadLocalManager>() {
@@ -32,7 +32,7 @@ public class ThreadLocalManager {
     private RuntimeException marker = null;
 
     public static void addThreadLocal(ThreadLocal threadLocal) {
-        Long position;
+        long position;
         synchronized (threadLock) {
             count++;
             position = count;

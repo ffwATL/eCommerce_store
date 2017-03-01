@@ -3,7 +3,7 @@ package com.ffwatl.admin.order.dao;
 
 import com.ffwatl.admin.order.domain.FulfillmentOption;
 import com.ffwatl.admin.order.domain.FulfillmentOptionImpl;
-import com.ffwatl.admin.order.service.FulfillmentType;
+import com.ffwatl.admin.order.service.type.FulfillmentType;
 import com.ffwatl.common.persistence.EntityConfiguration;
 import org.springframework.stereotype.Repository;
 

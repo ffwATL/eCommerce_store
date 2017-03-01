@@ -1,6 +1,6 @@
 package com.ffwatl.admin.order.domain;
 
-import com.ffwatl.admin.order.service.FulfillmentGroupStatusType;
+import com.ffwatl.admin.order.service.type.FulfillmentGroupStatusType;
 
 import javax.persistence.*;
 

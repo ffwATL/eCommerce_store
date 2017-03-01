@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private static final Logger logger = LogManager.getLogger("com.ffwatl.service.customUserDetailsService");
+    private static final Logger logger = LogManager.getLogger("com.ffwatl.profile.customUserDetailsService");
 
     @Autowired
     private UserService userService;

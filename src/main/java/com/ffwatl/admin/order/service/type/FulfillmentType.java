@@ -1,4 +1,4 @@
-package com.ffwatl.admin.order.service;
+package com.ffwatl.admin.order.service.type;
 
 import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.common.EnumerationType;

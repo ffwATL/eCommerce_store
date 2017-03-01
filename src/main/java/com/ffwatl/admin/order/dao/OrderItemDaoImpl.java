@@ -4,7 +4,8 @@ import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderItemImpl;
 import com.ffwatl.admin.order.domain.OrderItemPriceDetail;
 import com.ffwatl.admin.order.domain.OrderItemQualifier;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.admin.user.domain.Message;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.CriteriaProperty;
 import com.ffwatl.common.persistence.CriteriaPropertyImpl;
 import com.ffwatl.common.persistence.EntityConfiguration;
@@ -28,7 +29,7 @@ public class OrderItemDaoImpl implements OrderItemDao, FetchModeOption<OrderItem
     private EntityConfiguration entityConfiguration;
 
     @Override
-    public OrderItem findOrderItemById(final FetchMode fetchMode, final long id) {
+    public OrderItem findOrderItemById(final long id, final FetchMode fetchMode) {
         final CriteriaProperty<OrderItem, OrderItemImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
         CriteriaQuery<OrderItem> criteria = property.getCriteria();
         CriteriaBuilder cb = property.getBuilder();
@@ -47,7 +48,7 @@ public class OrderItemDaoImpl implements OrderItemDao, FetchModeOption<OrderItem
     @Override
     public void delete(OrderItem orderItem) {
         if (!em.contains(orderItem)) {
-            orderItem = findOrderItemById(FetchMode.FETCHED, orderItem.getId());
+            orderItem = findOrderItemById(orderItem.getId(), FetchMode.FETCHED);
         }
 
         em.remove(orderItem);
@@ -56,17 +57,22 @@ public class OrderItemDaoImpl implements OrderItemDao, FetchModeOption<OrderItem
 
     @Override
     public OrderItem create() {
-        return (OrderItem) entityConfiguration.createEntityInstance(OrderItem.class.getName());
+        return entityConfiguration.createEntityInstance(OrderItem.class);
+    }
+
+    @Override
+    public Message createPersonalMessage() {
+        return entityConfiguration.createEntityInstance(Message.class);
     }
 
     @Override
     public OrderItemPriceDetail createOrderItemPriceDetail() {
-        return (OrderItemPriceDetail) entityConfiguration.createEntityInstance(OrderItemPriceDetail.class.getName());
+        return entityConfiguration.createEntityInstance(OrderItemPriceDetail.class);
     }
 
     @Override
     public OrderItemQualifier createOrderItemQualifier() {
-        return (OrderItemQualifier) entityConfiguration.createEntityInstance(OrderItemQualifier.class.getName());
+        return entityConfiguration.createEntityInstance(OrderItemQualifier.class);
     }
 
     @Override
@@ -95,7 +101,7 @@ public class OrderItemDaoImpl implements OrderItemDao, FetchModeOption<OrderItem
             root.fetch("candidateItemOffers", JoinType.LEFT);
             root.fetch("orderItemQualifiers", JoinType.LEFT);
         }
-
+        criteria.distinct(true);
         criteria.select(root);
         return new CriteriaPropertyImpl<OrderItem, OrderItemImpl>()
                 .setBuilder(builder)

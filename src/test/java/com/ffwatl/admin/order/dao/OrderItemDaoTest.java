@@ -47,7 +47,7 @@ public class OrderItemDaoTest {
         assertThat(orderItem.getCategory(), nullValue());
         assertThat(orderItem.getOrder(), nullValue());
 
-        assertThat(orderItem.getOrderItemColor(), nullValue());
+        assertThat(orderItem.getColor(), nullValue());
 
         assertThat(orderItem.getDiscountValue(), Matchers.equalTo(0));
     }

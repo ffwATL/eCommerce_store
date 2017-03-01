@@ -12,7 +12,7 @@ import com.ffwatl.admin.offer.service.processor.OrderOfferProcessor;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.service.OrderService;
 import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 
 import java.util.List;
 import java.util.Map;

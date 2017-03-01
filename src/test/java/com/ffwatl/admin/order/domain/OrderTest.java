@@ -2,7 +2,7 @@ package com.ffwatl.admin.order.domain;
 
 import com.ffwatl.admin.order.dao.OrderDao;
 import com.ffwatl.admin.order.dao.OrderItemDao;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.apache.logging.log4j.LogManager;

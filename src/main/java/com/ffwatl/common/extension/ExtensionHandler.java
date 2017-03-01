@@ -1,7 +1,7 @@
 package com.ffwatl.common.extension;
 
 /**
- * <p>An extension handler represents a generic pattern used in BroadleafCommerce when an out-of-box service
+ * <p>An extension handler represents a generic pattern used in BroadleafCommerce when an out-of-box profile
  * with complex logic provides implementation hooks.</p>
  *
  * <p>The pattern is primarily used internally by Broadleaf as a mechanism to provide extension points for

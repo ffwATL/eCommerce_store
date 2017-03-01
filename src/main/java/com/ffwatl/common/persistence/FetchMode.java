@@ -1,4 +1,4 @@
-package com.ffwatl.common;
+package com.ffwatl.common.persistence;
 
 
 public enum FetchMode {

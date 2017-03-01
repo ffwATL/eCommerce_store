@@ -2,7 +2,7 @@ package com.ffwatl.admin.order.dao;
 
 
 import com.ffwatl.admin.order.domain.FulfillmentOption;
-import com.ffwatl.admin.order.service.FulfillmentType;
+import com.ffwatl.admin.order.service.type.FulfillmentType;
 
 import java.util.List;
 

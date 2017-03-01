@@ -41,6 +41,10 @@ public class OrderItemImpl implements OrderItem{
     @JoinColumn(name = "product_attribute_type_id")
     private ProductAttributeType productAttributeType;
 
+    @ManyToOne(targetEntity = ProductAttributeImpl.class, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "product_attr_id")
+    private ProductAttribute productAttribute;
+
     @ManyToOne(targetEntity = OrderItemColor.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_item_color_id")
     private Color color;
@@ -101,7 +105,12 @@ public class OrderItemImpl implements OrderItem{
     }
 
     @Override
-    public Color getOrderItemColor() {
+    public ProductAttribute getProductAttribute() {
+        return productAttribute;
+    }
+
+    @Override
+    public Color getColor() {
         return color;
     }
 
@@ -222,6 +231,12 @@ public class OrderItemImpl implements OrderItem{
     @Override
     public OrderItem setProductAttributeType(ProductAttributeType productAttributeType) {
         this.productAttributeType = productAttributeType;
+        return this;
+    }
+
+    @Override
+    public OrderItem setProductAttribute(ProductAttribute productAttribute) {
+        this.productAttribute = productAttribute;
         return this;
     }
 

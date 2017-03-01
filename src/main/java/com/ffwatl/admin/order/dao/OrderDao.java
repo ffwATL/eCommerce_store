@@ -5,7 +5,7 @@ import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderLock;
 import com.ffwatl.admin.order.domain.OrderStatus;
 import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 
 import java.util.List;
 

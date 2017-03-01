@@ -2,7 +2,7 @@ package com.ffwatl.admin.order.domain;
 
 
 import com.ffwatl.admin.i18n.domain.I18n;
-import com.ffwatl.admin.order.service.FulfillmentType;
+import com.ffwatl.admin.order.service.type.FulfillmentType;
 
 import java.io.Serializable;
 

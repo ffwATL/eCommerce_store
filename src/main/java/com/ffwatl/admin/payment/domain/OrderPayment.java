@@ -4,8 +4,10 @@ import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.payment.PaymentType;
 import com.ffwatl.admin.user.domain.Address;
+import com.ffwatl.admin.user.domain.User;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 public interface OrderPayment extends Serializable{
@@ -25,7 +27,9 @@ public interface OrderPayment extends Serializable{
     PaymentType getType();
 
 
+    LocalDateTime getDateTime();
 
+    User getCustomer();
 
     OrderPayment setId(long id);
 
@@ -40,4 +44,8 @@ public interface OrderPayment extends Serializable{
     OrderPayment setReferenceNumber(String referenceNumber);
 
     OrderPayment setType(PaymentType type);
+
+    OrderPayment setDateTime(LocalDateTime dateTime);
+
+    OrderPayment setCustomer(User customer);
 }

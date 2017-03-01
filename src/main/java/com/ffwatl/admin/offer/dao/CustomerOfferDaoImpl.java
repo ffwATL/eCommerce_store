@@ -4,7 +4,7 @@ package com.ffwatl.admin.offer.dao;
 import com.ffwatl.admin.offer.domain.CustomerOffer;
 import com.ffwatl.admin.offer.domain.CustomerOfferImpl;
 import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.CriteriaProperty;
 import com.ffwatl.common.persistence.CriteriaPropertyImpl;
 import com.ffwatl.common.persistence.EntityConfiguration;

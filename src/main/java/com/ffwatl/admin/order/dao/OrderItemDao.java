@@ -4,11 +4,12 @@ package com.ffwatl.admin.order.dao;
 import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderItemPriceDetail;
 import com.ffwatl.admin.order.domain.OrderItemQualifier;
-import com.ffwatl.common.FetchMode;
+import com.ffwatl.admin.user.domain.Message;
+import com.ffwatl.common.persistence.FetchMode;
 
 public interface OrderItemDao {
 
-    OrderItem findOrderItemById(FetchMode fetchMode, long id);
+    OrderItem findOrderItemById(long id, FetchMode fetchMode);
 
     OrderItem save(OrderItem orderItem);
 
@@ -16,7 +17,7 @@ public interface OrderItemDao {
 
     OrderItem create();
 
-    /*PersonalMessage createPersonalMessage();*/
+    Message createPersonalMessage();
 
     OrderItemPriceDetail createOrderItemPriceDetail();
 

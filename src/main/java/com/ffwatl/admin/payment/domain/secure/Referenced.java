@@ -1,6 +1,10 @@
 package com.ffwatl.admin.payment.domain.secure;
 
 
+import com.ffwatl.admin.order.domain.Order;
+import com.ffwatl.admin.payment.PaymentType;
+import com.ffwatl.admin.payment.domain.OrderPayment;
+import com.ffwatl.admin.payment.service.SecureOrderPaymentService;
 import com.ffwatl.common.encryption.EncryptionModule;
 
 public interface Referenced {
@@ -33,12 +37,12 @@ public interface Referenced {
 
     /**
      * Sets the encryption module used by to encrypt and decrypt the data saved in the blSecurePU persistence unit. This
-     * normally corresponds to the blEncryptionModule Spring bean which should be automatically set after invoking
-     * {@link SecureOrderPaymentService#findSecurePaymentInfo(String, org.broadleafcommerce.core.payment.service.type.PaymentType)}
-     * and {@link SecureOrderPaymentService#create(org.broadleafcommerce.core.payment.service.type.PaymentType)}.
+     * normally corresponds to the EncryptionModule Spring bean which should be automatically set after invoking
+     * {@link SecureOrderPaymentService#findSecurePaymentInfo(String, PaymentType)}
+     * and {@link SecureOrderPaymentService#create(PaymentType)}.
      *
-     * @see {@link SecureOrderPaymentService#findSecurePaymentInfo(String, org.broadleafcommerce.core.payment.service.type.PaymentType)}
-     * @see {@link SecureOrderPaymentService#create(org.broadleafcommerce.core.payment.service.type.PaymentType)}
+     * @see {@link SecureOrderPaymentService#findSecurePaymentInfo(String, PaymentType)}
+     * @see {@link SecureOrderPaymentService#create(PaymentType)}
      */
     void setEncryptionModule(EncryptionModule encryptionModule);
 
