@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Repository
+@Repository("fulfillment_option_dao")
 public class FulfillmentOptionDaoImpl implements FulfillmentOptionDao{
 
     @PersistenceContext

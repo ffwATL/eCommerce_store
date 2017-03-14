@@ -1,15 +1,21 @@
 package com.ffwatl.admin.order.service;
 
 
+import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.offer.domain.OfferCode;
 import com.ffwatl.admin.order.dao.OrderDao;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderStatus;
 import com.ffwatl.admin.order.service.call.OrderItemRequestDTO;
+import com.ffwatl.admin.order.service.exception.AddToCartException;
+import com.ffwatl.admin.order.service.exception.RemoveFromCartException;
+import com.ffwatl.admin.order.service.exception.UpdateCartException;
 import com.ffwatl.admin.payment.domain.OrderPayment;
 import com.ffwatl.admin.payment.domain.secure.Referenced;
 import com.ffwatl.admin.user.domain.User;
+import com.ffwatl.common.persistence.FetchMode;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,17 +27,15 @@ public interface OrderService {
      * that is on the current request, which can be grabbed by utilizing the CustomerState
      * utility class.
      *
-     * The default Broadleaf implementation of this method will provision a new Order in the
+     * The default implementation of this method will provision a new Order in the
      * database and set the current customer as the owner of the order. If the customer has an
      * email address associated with their profile, that will be copied as well. If the customer
      * is a new, anonymous customer, his username will be set to his database id.
      *
-     * @see org.broadleafcommerce.profile.web.core.CustomerState#getCustomer()
-     *
      * @param customer
      * @return the newly created order
      */
-    Order createNewCartForCustomer(User customer);
+    Order createNewCartForCustomer(User customer, Currency currency);
 
     /**
      * Creates a new Order for the given customer with the given name. Typically, this represents
@@ -54,7 +58,7 @@ public interface OrderService {
      * @param customer
      * @return the named order requested
      */
-    Order findNamedOrderForCustomer(String name, User customer);
+    Order findNamedOrderForCustomer(String name, User customer, FetchMode fetchMode);
 
     /**
      * Looks up an Order by its database id
@@ -62,7 +66,7 @@ public interface OrderService {
      * @param orderId
      * @return the requested Order
      */
-    Order findOrderById(long orderId);
+    Order findOrderById(long orderId, FetchMode fetchMode);
 
     /**
      * Looks up an Order by its database id
@@ -84,7 +88,7 @@ public interface OrderService {
      * @param customer
      * @return the current shopping cart for the customer
      */
-    Order findCartForCustomer(User customer);
+    Order findCartForCustomer(User customer, FetchMode fetchMode);
 
     /**
      * Looks up all Orders for the specified customer, regardless of current OrderStatus
@@ -92,7 +96,7 @@ public interface OrderService {
      * @param customer
      * @return the requested Orders
      */
-    List<Order> findOrdersForCustomer(User customer);
+    List<Order> findOrdersForCustomer(User customer, FetchMode fetchMode);
 
     /**
      * Looks up all Orders for the specified customer that are in the specified OrderStatus.
@@ -101,7 +105,7 @@ public interface OrderService {
      * @param status
      * @return the requested Orders
      */
-    List<Order> findOrdersForCustomer(User customer, OrderStatus status);
+    List<Order> findOrdersForCustomer(User customer, OrderStatus status, FetchMode fetchMode);
 
     /**
      * Looks up Orders and returns the order matching the given orderNumber
@@ -109,7 +113,7 @@ public interface OrderService {
      * @param orderNumber
      * @return the requested Order
      */
-    Order findOrderByOrderNumber(String orderNumber);
+    Order findOrderByOrderNumber(String orderNumber, FetchMode fetchMode);
 
     /**
      * Returns all OrderPayment objects that are associated with the given order
@@ -117,7 +121,7 @@ public interface OrderService {
      * @param order
      * @return the list of all OrderPayment objects
      */
-    List<OrderPayment> findPaymentsForOrder(Order order);
+    List<OrderPayment> findPaymentsForOrder(Order order, FetchMode fetchMode);
 
     /**
      * Associates a given OrderPayment with an Order and then saves the order. Note that it is acceptable for the
@@ -143,9 +147,9 @@ public interface OrderService {
      * @param order
      * @param priceOrder
      * @return the persisted Order, which will be a different instance than the Order passed in
-     * @throws PricingException
      */
-    Order save(Order order, Boolean priceOrder) /*throws PricingException*/;
+    @Transactional
+    Order save(Order order, boolean priceOrder);
 
     /**
      * Saves the given <b>order</b> while optionally repricing the order (meaning, going through the pricing workflow)
@@ -246,7 +250,7 @@ public interface OrderService {
      * @throws WorkflowException
      * @throws Throwable
      */
-    Order addItem(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) /*throws AddToCartException*/;
+    Order addItem(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws AddToCartException /*throws AddToCartException*/;
 
     /**
      * Initiates the addItem workflow that will attempt to add the given quantity of the specified item
@@ -274,7 +278,7 @@ public interface OrderService {
      * @throws WorkflowException
      * @throws Throwable
      */
-    Order addItemWithPriceOverrides(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) /*throws AddToCartException*/;
+    Order addItemWithPriceOverrides(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws AddToCartException /*throws AddToCartException*/;
 
     /**
      * Initiates the updateItem workflow that will attempt to update the item quantity for the specified
@@ -290,7 +294,7 @@ public interface OrderService {
      * @throws UpdateCartException
      * @throws RemoveFromCartException
      */
-    Order updateItemQuantity(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) /*throws UpdateCartException, RemoveFromCartException*/;
+    Order updateItemQuantity(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws UpdateCartException, RemoveFromCartException /*throws UpdateCartException, RemoveFromCartException*/;
 
     /**
      * Initiates the removeItem workflow that will attempt to remove the specified OrderItem from
@@ -303,7 +307,7 @@ public interface OrderService {
      * @return the order the item was added to
      * @throws RemoveFromCartException
      */
-    Order removeItem(long orderId, long orderItemId, boolean priceOrder) /*throws RemoveFromCartException*/;
+    Order removeItem(long orderId, long orderItemId, boolean priceOrder) throws RemoveFromCartException /*throws RemoveFromCartException*/;
 
     /**
      * Adds the passed in orderItem to the current cart for the same Customer that owns the
@@ -323,7 +327,7 @@ public interface OrderService {
      * @throws RemoveFromCartException
      * @throws AddToCartException
      */
-    Order addItemFromNamedOrder(Order namedOrder, OrderItem orderItem, boolean priceOrder) /*throws RemoveFromCartException, AddToCartException*/;
+    Order addItemFromNamedOrder(Order namedOrder, OrderItem orderItem, boolean priceOrder) throws RemoveFromCartException, AddToCartException /*throws RemoveFromCartException, AddToCartException*/;
 
     /**
      * Adds all orderItems to the current cart from the same Customer that owns the named
@@ -342,7 +346,7 @@ public interface OrderService {
      * @throws RemoveFromCartException
      * @throws AddToCartException
      */
-    Order addAllItemsFromNamedOrder(Order namedOrder, boolean priceOrder) /*throws RemoveFromCartException, AddToCartException*/;
+    Order addAllItemsFromNamedOrder(Order namedOrder, boolean priceOrder) throws AddToCartException, RemoveFromCartException /*throws RemoveFromCartException, AddToCartException*/;
 
     /**
      * Deletes the OrderPayment Info from the order.
@@ -368,7 +372,7 @@ public interface OrderService {
      * @return Order
      * @throws UpdateCartException
      */
-    Order updateProductOptionsForItem(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) /*throws UpdateCartException*/;
+    Order updateProductOptionsForItem(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws UpdateCartException /*throws UpdateCartException*/;
 
 
     /**

@@ -59,6 +59,7 @@ public class FulfillmentGroupServiceImpl  implements FulfillmentGroupService{
     }
 
     @Override
+    @Transactional
     public void delete(FulfillmentGroup fulfillmentGroup) {
         if (fulfillmentGroup != null) {
             fulfillmentGroupDao.delete(fulfillmentGroup);
@@ -223,5 +224,11 @@ public class FulfillmentGroupServiceImpl  implements FulfillmentGroupService{
                         .equals(orderItem))
                 .collect(Collectors.toList()));
         return fgis;
+    }
+
+    @Override
+    @Transactional
+    public void removeFulfillmentGroupItem(FulfillmentGroupItem fulfillmentGroupItem) {
+
     }
 }

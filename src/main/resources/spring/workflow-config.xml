@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- Add Item Workflow Configuration -->
+    <bean id="validateAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.add.ValidateAddRequestActivity"/>
+    <bean id="checkAddAvailabilityActivity" class="com.ffwatl.admin.order.service.workflow.CheckAvailabilityActivity"/>
+    <bean id="addOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.add.AddOrderItemActivity"/>
+    <bean id="addFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.add.AddFulfillmentGroupItemActivity"/>
+    <bean id="addWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity"/>
+
+    <bean id="addItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
+        <property name="processContextFactory">
+            <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
+        </property>
+        <property name="activities">
+            <list>
+                <ref bean="validateAddRequestActivity" />
+                <ref bean="checkAddAvailabilityActivity" />
+                <ref bean="addOrderItemActivity" />
+                <ref bean="addFulfillmentGroupItemActivity" />
+                <ref bean="addWorkflowVerifyFulfillmentGroupItemsActivity" />
+            </list>
+        </property>
+        <property name="defaultErrorHandler">
+            <bean class="com.ffwatl.admin.workflow.DefaultErrorHandler">
+                <property name="unloggedExceptionClasses">
+                    <list>
+                        <value>com.ffwatl.admin.catalog.exception.ProductAttributeIsNotAvailableException</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Update Item Workflow Configuration -->
+    <bean id="validateUpdateRequestActivity" class="com.ffwatl.admin.order.service.workflow.update.ValidateUpdateRequestActivity"/>
+    <bean id="checkUpdateAvailabilityActivity" class="com.ffwatl.admin.order.service.workflow.CheckAvailabilityActivity"/>
+    <bean id="updateOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.update.UpdateOrderItemActivity"/>
+    <bean id="updateFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.update.UpdateFulfillmentGroupItemActivity"/>
+    <bean id="updateWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity"/>
+
+    <bean id="updateItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
+        <property name="processContextFactory">
+            <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
+        </property>
+        <property name="activities">
+            <list>
+                <ref bean="validateUpdateRequestActivity" />
+                <ref bean="checkUpdateAvailabilityActivity" />
+                <ref bean="updateOrderItemActivity" />
+                <ref bean="updateFulfillmentGroupItemActivity" />
+                <ref bean="updateWorkflowVerifyFulfillmentGroupItemsActivity" />
+            </list>
+        </property>
+        <property name="defaultErrorHandler">
+            <bean class="com.ffwatl.admin.workflow.DefaultErrorHandler">
+                <property name="unloggedExceptionClasses">
+                    <list>
+                        <value>com.ffwatl.admin.catalog.exception.ProductAttributeIsNotAvailableException</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Remove Item Workflow Configuration -->
+    <bean id="validateRemoveRequestActivity" class="com.ffwatl.admin.order.service.workflow.remove.ValidateRemoveRequestActivity"/>
+    <bean id="removeFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.remove.RemoveFulfillmentGroupItemActivity"/>
+    <bean id="removeOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.remove.RemoveOrderItemActivity"/>
+    <bean id="removeWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity"/>
+
+    <bean id="removeItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
+        <property name="processContextFactory">
+            <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
+        </property>
+        <property name="activities">
+            <list>
+                <ref bean="validateRemoveRequestActivity" />
+                <ref bean="removeFulfillmentGroupItemActivity" />
+                <ref bean="removeOrderItemActivity" />
+                <ref bean="removeWorkflowVerifyFulfillmentGroupItemsActivity" />
+
+            </list>
+        </property>
+        <property name="defaultErrorHandler">
+            <bean class="com.ffwatl.admin.workflow.DefaultErrorHandler">
+                <property name="unloggedExceptionClasses">
+                    <list>
+                        <value>com.ffwatl.admin.catalog.exception.ProductAttributeIsNotAvailableException</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Checkout Workflow Configuration -->
+
+</beans>

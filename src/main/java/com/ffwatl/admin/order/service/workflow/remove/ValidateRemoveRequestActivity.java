@@ -23,10 +23,9 @@ public class ValidateRemoveRequestActivity extends BaseActivity<ProcessContext<C
 
         // Throw an exception if the user did not specify an order to add the item to
         if (request.getOrder() == null) {
-            throw new IllegalArgumentException("Order is required when updating item quantities");
+            throw new IllegalArgumentException("Order is required when removing item from the order");
         }
 
-        // Throw an exception if the user is trying to remove an order item that is part of a bundle
         OrderItem orderItem = null;
         for (OrderItem oi : request.getOrder().getOrderItems()) {
             if (oi.getId() == orderItemRequestDTO.getOrderItemId()) {

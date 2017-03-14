@@ -27,11 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
 
 @ContextConfiguration({"/spring/spring-application-context.xml"})
 @Transactional
@@ -149,6 +147,7 @@ public class OfferDaoTest {
 
     }
 
+
     @Test
     public void testFindOffersByAutomaticDeliveryType() throws Exception {
         List<Offer> list = offerDao.findOffersByAutomaticDeliveryType(FetchMode.FETCHED);
@@ -182,8 +181,16 @@ public class OfferDaoTest {
         logger.info("*****codeSpring25: " + codeSpring25);
     }
 
+    private void nothing() throws Error{
+
+    }
+
     @Test
     public void testOfferCodeDaoCrud() throws Exception {
+        Thread thread = new Thread("");
+        Object o = new Object();
+        nothing();
+
         OfferCode offerCode = offerCodeDao.findOfferCodeById(1);
 
         assertNotNull(offerCode);

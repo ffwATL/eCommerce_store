@@ -42,6 +42,9 @@ public class FulfillmentGroupItemDaoImpl implements FulfillmentGroupItemDao {
 
     @Override
     public void delete(FulfillmentGroupItem fulfillmentGroupItem) {
+        if(fulfillmentGroupItem != null && !em.contains(fulfillmentGroupItem)){
+            fulfillmentGroupItem = findFulfillmentGroupItemById(fulfillmentGroupItem.getId());
+        }
         em.remove(fulfillmentGroupItem);
     }
 

@@ -2,7 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
 
        <import resource="persistence-config.xml"/>
        <import resource="springMVC-config.xml"/>
@@ -12,6 +15,7 @@
        <import resource="order/order-test-config.xml"/>
 
        <context:component-scan base-package="com.ffwatl"/>
+
        <bean id="localDateTimeFormatter" class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
               <constructor-arg value="HH:mm:ss"/>
        </bean>

@@ -75,4 +75,6 @@ public interface FulfillmentGroupService {
      * @return the list of related FulfillmentGroupItems
      */
     List<FulfillmentGroupItem> getFulfillmentGroupItemsForOrderItem(Order order, OrderItem orderItem);
+
+    void removeFulfillmentGroupItem(FulfillmentGroupItem fulfillmentGroupItem);
 }

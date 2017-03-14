@@ -3,6 +3,7 @@ package com.ffwatl.admin.catalog.service;
 import com.ffwatl.admin.catalog.domain.Category;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.Product;
+import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.common.persistence.FetchMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,6 +101,11 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public List<Category> findCategoriesByDepthLevelAndName(int level, String name, FetchMode fetchMode) {
+        return null;
+    }
+
+    @Override
+    public ProductAttribute findProductAttributeById(long id, FetchMode fetchMode) {
         return null;
     }
 }

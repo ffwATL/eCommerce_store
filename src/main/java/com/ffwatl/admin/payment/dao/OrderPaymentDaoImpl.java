@@ -28,7 +28,9 @@ public class OrderPaymentDaoImpl implements OrderPaymentDao, FetchModeOption<Ord
 
     @Override
     public OrderPayment findPaymentById(long id, FetchMode fetchMode) throws IllegalArgumentException {
-        if(id < 1) throw new IllegalArgumentException("Wrong id is given: ID = " + id);
+        if(id < 1) {
+            throw new IllegalArgumentException("Wrong id is given: ID = " + id);
+        }
         CriteriaProperty<OrderPayment, OrderPaymentImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
 
         CriteriaQuery<OrderPayment> criteria = property.getCriteria();
@@ -47,7 +49,9 @@ public class OrderPaymentDaoImpl implements OrderPaymentDao, FetchModeOption<Ord
 
     @Override
     public List<OrderPayment> findPaymentsForOrder(Order order, FetchMode fetchMode) throws IllegalArgumentException{
-        if(order == null) throw new IllegalArgumentException("Wrong argument is given: order = null");
+        if(order == null) {
+            throw new IllegalArgumentException("Wrong argument is given: order = null");
+        }
         CriteriaProperty<OrderPayment, OrderPaymentImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
 
         CriteriaQuery<OrderPayment> criteria = property.getCriteria();

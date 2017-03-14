@@ -3,6 +3,7 @@ package com.ffwatl.admin.catalog.service;
 import com.ffwatl.admin.catalog.domain.Category;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.Product;
+import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.common.persistence.FetchMode;
 
 import java.util.List;
@@ -49,6 +50,6 @@ public interface CatalogService {
 
     List<Category> findCategoriesByDepthLevelAndName(int level, String name, FetchMode fetchMode);
 
-
+    ProductAttribute findProductAttributeById(long id, FetchMode fetchMode);
 
 }

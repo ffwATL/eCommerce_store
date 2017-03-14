@@ -13,21 +13,21 @@ import java.util.List;
  */
 public class CartOperationRequest {
 
-    protected OrderItemRequestDTO itemRequest;
+    private OrderItemRequestDTO itemRequest;
 
-    protected Order order;
+    private Order order;
 
-    protected boolean priceOrder;
-
-    // Set during the course of the workflow for use in subsequent workflow steps
-    protected OrderItem orderItem;
+    private boolean priceOrder;
 
     // Set during the course of the workflow for use in subsequent workflow steps
-    protected Integer orderItemQuantityDelta;
+    private OrderItem orderItem;
 
-    protected List<Long[]> multishipOptionsToDelete = new ArrayList<>();
-    protected List<FulfillmentGroupItem> fgisToDelete = new ArrayList<>();
-    protected List<OrderItem> oisToDelete = new ArrayList<>();
+    // Set during the course of the workflow for use in subsequent workflow steps
+    private Integer orderItemQuantityDelta;
+
+    private List<Long[]> multishipOptionsToDelete = new ArrayList<>();
+    private List<FulfillmentGroupItem> fgisToDelete = new ArrayList<>();
+    private List<OrderItem> oisToDelete = new ArrayList<>();
 
     public CartOperationRequest(Order order, OrderItemRequestDTO itemRequest, boolean priceOrder) {
         setOrder(order);
@@ -111,5 +111,19 @@ public class CartOperationRequest {
 
     public void setOisToDelete(List<OrderItem> oisToDelete) {
         this.oisToDelete = oisToDelete;
+    }
+
+    @Override
+    public String toString() {
+        return "CartOperationRequest{" +
+                "itemRequest=" + itemRequest +
+                ", order=" + order +
+                ", priceOrder=" + priceOrder +
+                ", orderItem=" + orderItem +
+                ", orderItemQuantityDelta=" + orderItemQuantityDelta +
+                ", multishipOptionsToDelete=" + multishipOptionsToDelete +
+                ", fgisToDelete=" + fgisToDelete +
+                ", oisToDelete=" + oisToDelete +
+                '}';
     }
 }

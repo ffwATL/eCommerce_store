@@ -7,6 +7,7 @@ import com.ffwatl.admin.order.service.call.OrderItemRequestDTO;
 import com.ffwatl.admin.user.domain.Message;
 import com.ffwatl.common.persistence.FetchMode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -14,6 +15,7 @@ import javax.annotation.Resource;
  * @author ffw_ATL.
  */
 @Service("order_item_service")
+@Transactional(readOnly = true)
 public class OrderItemServiceImpl implements OrderItemService {
 
     @Resource(name = "order_item_dao")
@@ -26,11 +28,13 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
+    @Transactional
     public OrderItem saveOrderItem(OrderItem orderItem) {
         return orderItemDao.save(orderItem);
     }
 
     @Override
+    @Transactional
     public void delete(OrderItem item) {
         orderItemDao.delete(item);
     }
