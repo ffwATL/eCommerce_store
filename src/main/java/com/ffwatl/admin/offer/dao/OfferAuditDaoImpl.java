@@ -41,11 +41,13 @@ public class OfferAuditDaoImpl implements OfferAuditDao{
     }
 
     @Override
-    public long countUsesByCustomer(long customerId, long offerId) {
+    public long countUsesByCustomer(long customerId, long offerId, int version) {
         return (long) em.createQuery("SELECT COUNT(o.customerId) FROM OfferAuditImpl o " +
-                "JOIN UserImpl u ON o.customerId=u.id WHERE o.customerId=:customerId AND o.offerId=:offerId")
+                "JOIN UserImpl u ON o.customerId=u.id WHERE o.customerId=:customerId " +
+                "AND o.offerId=:offerId AND o.offerVersion=:version")
                 .setParameter("customerId", customerId)
                 .setParameter("offerId", offerId)
+                .setParameter("version", version)
                 .getSingleResult();
     }
 }

@@ -14,6 +14,9 @@ public class OfferCodeImpl implements OfferCode{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "version")
+    private int version;
+
     @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = OfferImpl.class)
     private Offer offer;
 
@@ -26,11 +29,20 @@ public class OfferCodeImpl implements OfferCode{
     @Column(name = "end_date")
     private Date endDate;
 
+    @Column(name = "active")
     private boolean active;
+
+    @Column(name = "max_uses")
+    private int maxUses;
 
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public int getVersion() {
+        return version;
     }
 
     @Override
@@ -59,8 +71,19 @@ public class OfferCodeImpl implements OfferCode{
     }
 
     @Override
+    public int getMaxUses() {
+        return maxUses;
+    }
+
+    @Override
     public OfferCode setId(long id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public OfferCode setVersion(int version) {
+        this.version = version;
         return this;
     }
 
@@ -95,6 +118,12 @@ public class OfferCodeImpl implements OfferCode{
     }
 
     @Override
+    public OfferCode setMaxUses(int maxUses) {
+        this.maxUses = maxUses;
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -102,6 +131,8 @@ public class OfferCodeImpl implements OfferCode{
         OfferCodeImpl offerCode1 = (OfferCodeImpl) o;
 
         if (getId() != offerCode1.getId()) return false;
+        if(version != offerCode1.version) return false;
+        if(maxUses != offerCode1.maxUses) return false;
         if (getOfferCode() != null ? !getOfferCode().equals(offerCode1.getOfferCode()) : offerCode1.getOfferCode() != null)
             return false;
         if (getStartDate() != null ? !getStartDate().equals(offerCode1.getStartDate()) : offerCode1.getStartDate() != null)
@@ -113,6 +144,8 @@ public class OfferCodeImpl implements OfferCode{
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + version;
+        result = 31 * result + maxUses;
         result = 31 * result + (getOfferCode() != null ? getOfferCode().hashCode() : 0);
         result = 31 * result + (getStartDate() != null ? getStartDate().hashCode() : 0);
         result = 31 * result + (getEndDate() != null ? getEndDate().hashCode() : 0);
@@ -123,10 +156,12 @@ public class OfferCodeImpl implements OfferCode{
     public String toString() {
         return "OfferCodeImpl{" +
                 "id=" + id +
+                ", version=" + version +
                 ", offerCode='" + offerCode + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", active=" + active +
+                ", maxUses=" + maxUses +
                 '}';
     }
 }

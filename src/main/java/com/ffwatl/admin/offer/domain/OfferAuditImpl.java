@@ -29,6 +29,9 @@ public class OfferAuditImpl implements OfferAudit {
     @Column(name = "redeemed_date")
     private Date redeemedDate;
 
+    @Column(name = "offer_version")
+    private int offerVersion;
+
 
     @Override
     public long getId() {
@@ -58,6 +61,11 @@ public class OfferAuditImpl implements OfferAudit {
     @Override
     public Date getRedeemedDate() {
         return redeemedDate;
+    }
+
+    @Override
+    public int getOfferVersion() {
+        return offerVersion;
     }
 
     @Override
@@ -97,6 +105,12 @@ public class OfferAuditImpl implements OfferAudit {
     }
 
     @Override
+    public OfferAudit setOfferVersion(int offerVersion) {
+        this.offerVersion = offerVersion;
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -104,6 +118,7 @@ public class OfferAuditImpl implements OfferAudit {
         OfferAuditImpl that = (OfferAuditImpl) o;
 
         if (getId() != that.getId()) return false;
+        if (offerVersion != that.offerVersion) return false;
         if (getOfferId() != that.getOfferId()) return false;
         if (getOfferCodeId() != that.getOfferCodeId()) return false;
         if (getOrderId() != that.getOrderId()) return false;
@@ -115,6 +130,7 @@ public class OfferAuditImpl implements OfferAudit {
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + offerVersion;
         result = 31 * result + (int) (getOfferId() ^ (getOfferId() >>> 32));
         result = 31 * result + (int) (getOfferCodeId() ^ (getOfferCodeId() >>> 32));
         result = 31 * result + (int) (getOrderId() ^ (getOrderId() >>> 32));
@@ -132,6 +148,7 @@ public class OfferAuditImpl implements OfferAudit {
                 ", orderId=" + orderId +
                 ", customerId=" + customerId +
                 ", redeemedDate=" + redeemedDate +
+                ", offerVersion=" + offerVersion +
                 '}';
     }
 }

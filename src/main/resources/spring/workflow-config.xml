@@ -142,5 +142,43 @@
     </bean>
 
     <!-- Checkout Workflow Configuration -->
+    <bean id="verifyCustomerMaxOfferUsesActivity" class="com.ffwatl.admin.offer.service.workflow.VerifyCustomerMaxOfferCodeUsesActivity"/>
+
+    <bean id="validateAndConfirmPaymentActivity" class="com.ffwatl.admin.checkout.workflow.ValidateAndConfirmPaymentActivity">
+        <property name="rollbackHandler" ref="confirm_payments_rollback_handler" />
+    </bean>
+    <bean id="recordOfferUsageActivity" class="com.ffwatl.admin.offer.service.workflow.RecordOfferUsageActivity">
+        <property name="rollbackHandler" ref="record_offer_usage_rollback_handler" />
+    </bean>
+    <bean id="decrementInventoryActivity" class="com.ffwatl.admin.checkout.workflow.DecrementInventoryActivity">
+        <property name="rollbackHandler" ref="decrement_inventory_rollback_handler" />
+    </bean>
+    <bean id="completeOrderActivity" class="com.ffwatl.admin.checkout.workflow.CompleteOrderActivity">
+        <property name="rollbackHandler" ref="complete_order_rollback_handler" />
+    </bean>
+
+    <bean id="checkoutWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
+        <property name="processContextFactory">
+            <bean class="com.ffwatl.admin.checkout.workflow.CheckoutProcessContextFactory"/>
+        </property>
+        <property name="activities">
+            <list>
+                <ref bean="verifyCustomerMaxOfferUsesActivity" />
+                <ref bean="validateAndConfirmPaymentActivity" />
+                <ref bean="recordOfferUsageActivity" />
+                <ref bean="decrementInventoryActivity" />
+                <ref bean="completeOrderActivity" />
+            </list>
+        </property>
+        <property name="defaultErrorHandler">
+            <bean class="com.ffwatl.admin.workflow.DefaultErrorHandler">
+                <property name="unloggedExceptionClasses">
+                    <list>
+                        <value>com.ffwatl.admin.inventory.InventoryUnavailableException</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
 
 </beans>

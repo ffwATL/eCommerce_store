@@ -87,7 +87,7 @@ public class ItemGroupServiceImpl implements ItemGroupService{
 
     @Override
     public List<Category> findByCatNoChildren(@NotNull final CommonCategory cat) {
-        return itemGroupList2DTOList(categoryDao.findByCat(cat), Category.NO_CHILD);
+        return /*itemGroupList2DTOList(categoryDao.findByCat(cat), Category.NO_CHILD)*/ null;
     }
 
     /**
@@ -99,12 +99,12 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     public List<Category> findByLvlLazyWithoutChild(int lvl) {
-        return itemGroupList2DTOList(categoryDao.findByLvl(lvl), Category.NO_CHILD);
+        return /*itemGroupList2DTOList(categoryDao.findByLvl(lvl), Category.NO_CHILD)*/ null;
     }
 
     @Override
     public List<Category> findGenderGroup(){
-        return itemGroupList2DTOList(categoryDao.findByLvl(2), Category.NO_CHILD);
+        return /*itemGroupList2DTOList(categoryDao.findByLvl(2), Category.NO_CHILD);*/ null;
     }
 
     /**
@@ -117,7 +117,7 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     public List<Category> findByLvlEager(int lvl) {
-        return itemGroupList2DTOList(categoryDao.findByLvlFetchedChild(lvl), Category.FETCHED);
+        return null; /*itemGroupList2DTOList(categoryDao.findByLvlFetchedChild(lvl), Category.FETCHED);*/
     }
 
     @Override
@@ -125,7 +125,7 @@ public class ItemGroupServiceImpl implements ItemGroupService{
         return itemGroupList2DTOList(categoryDao.findAllUsed(), Category.NO_CHILD);
     }
 
-    private List<Category> itemGroupList2DTOList(List<CategoryImpl> list, boolean fetched){
+    private List<Category> itemGroupList2DTOList(List<Category> list, boolean fetched){
         List<Category> result = new ArrayList<>();
         for(Category i: list){
             result.add(new CategoryDTO(i, fetched));

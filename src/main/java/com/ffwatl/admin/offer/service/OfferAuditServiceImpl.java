@@ -38,12 +38,14 @@ public class OfferAuditServiceImpl implements OfferAuditService{
     }
 
     @Override
-    public long countUsesByCustomer(long customerId, long offerId) {
-        return offerAuditDao.countUsesByCustomer(customerId, offerId);
+    public long countUsesByCustomer(long customerId, long offerId, int version) {
+        return offerAuditDao.countUsesByCustomer(customerId, offerId, version);
     }
 
     @Override
-    public long countOfferCodeUses(long offerCodeId) {
+    public long countOfferCodeUses(long offerCodeId, int version) {
         return 0;
     }
+
+
 }

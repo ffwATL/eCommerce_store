@@ -28,10 +28,10 @@ public interface OfferAuditService {
     /**
      * Counts how many times the an offer has been used by a customer
      */
-    long countUsesByCustomer(long customerId, long offerId);
+    long countUsesByCustomer(long customerId, long offerId, int version);
 
     /**
      * Counts how many times the given offer code has been used in the system
      */
-    long countOfferCodeUses(long offerCodeId);
+    long countOfferCodeUses(long offerCodeId, int version);
 }

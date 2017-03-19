@@ -20,6 +20,11 @@
        <bean id="localDateTimeFormatter" class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
               <constructor-arg value="HH:mm:ss"/>
        </bean>
+       <bean id="orderNumberGenerator" class="com.ffwatl.admin.order.service.OrderNumberGenerator" scope="singleton">
+              <constructor-arg index="0" type="int">
+                     <bean factory-bean="order_number_service" factory-method="findLastOrderNumber"/>
+              </constructor-arg>
+       </bean>
 
        <bean id="mergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
               <property name="sourceList">

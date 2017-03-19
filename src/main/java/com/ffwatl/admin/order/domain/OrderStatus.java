@@ -7,5 +7,6 @@ public enum OrderStatus {
     CONFIRMED,
     PAID,
     FINISHED,
-    NAMED
+    NAMED,
+    CANCELLED
 }

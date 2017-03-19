@@ -8,6 +8,8 @@ public interface OfferCode extends Serializable{
 
     long getId();
 
+    int getVersion();
+
     Offer getOffer();
 
     String getOfferCode();
@@ -18,7 +20,11 @@ public interface OfferCode extends Serializable{
 
     boolean isActive();
 
+    int getMaxUses();
+
     OfferCode setId(long id);
+
+    OfferCode setVersion(int version);
 
     OfferCode setOffer(Offer offer);
 
@@ -29,4 +35,6 @@ public interface OfferCode extends Serializable{
     OfferCode setEndDate(Date endDate);
 
     OfferCode setActive(boolean active);
+
+    OfferCode setMaxUses(int maxUses);
 }

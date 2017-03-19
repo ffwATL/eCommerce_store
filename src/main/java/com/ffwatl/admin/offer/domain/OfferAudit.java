@@ -45,6 +45,8 @@ public interface OfferAudit extends Serializable{
      */
     Date getRedeemedDate();
 
+    int getOfferVersion();
+
 
     OfferAudit setId(long id);
 
@@ -57,4 +59,6 @@ public interface OfferAudit extends Serializable{
     OfferAudit setCustomerId(long customerId);
 
     OfferAudit setRedeemedDate(Date redeemedDate);
+
+    OfferAudit setOfferVersion(int offerVersion);
 }

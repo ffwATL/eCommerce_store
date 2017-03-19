@@ -10,6 +10,7 @@ import com.ffwatl.admin.order.service.call.FulfillmentGroupItemRequest;
 import com.ffwatl.admin.order.service.call.FulfillmentGroupRequest;
 import com.ffwatl.admin.order.service.type.FulfillmentGroupStatusType;
 import com.ffwatl.admin.order.service.type.FulfillmentType;
+import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.common.persistence.FetchMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +69,7 @@ public class FulfillmentGroupServiceImpl  implements FulfillmentGroupService{
 
     @Override
     @Transactional
-    public FulfillmentGroup addFulfillmentGroupToOrder(FulfillmentGroupRequest fgRequest, boolean priceOrder) {
+    public FulfillmentGroup addFulfillmentGroupToOrder(FulfillmentGroupRequest fgRequest, boolean priceOrder) throws PricingException {
         if(fgRequest == null) {
             throw new IllegalArgumentException("Can not add FulfillmentGroup to Order because of invalid FulfillmentGroupRequest: null");
         }
@@ -94,14 +95,14 @@ public class FulfillmentGroupServiceImpl  implements FulfillmentGroupService{
 
     @Override
     public FulfillmentGroup addItemToFulfillmentGroup(FulfillmentGroupItemRequest fulfillmentGroupItemRequest,
-                                                      boolean priceOrder) {
+                                                      boolean priceOrder) throws PricingException {
         return addItemToFulfillmentGroup(fulfillmentGroupItemRequest, priceOrder, true);
     }
 
     @Override
     @Transactional
     public FulfillmentGroup addItemToFulfillmentGroup(FulfillmentGroupItemRequest fulfillmentGroupItemRequest,
-                                                      boolean priceOrder, boolean save) {
+                                                      boolean priceOrder, boolean save) throws PricingException {
         if (priceOrder && !save) {
             throw new IllegalArgumentException("Pricing requires a save");
         }
@@ -172,7 +173,7 @@ public class FulfillmentGroupServiceImpl  implements FulfillmentGroupService{
 
     @Override
     @Transactional
-    public Order removeFulfillmentGroupFromOrder(Order order, boolean priceOrder) {
+    public Order removeFulfillmentGroupFromOrder(Order order, boolean priceOrder) throws PricingException {
         if(order != null && order.getFulfillmentGroup() != null){
             FulfillmentGroup fg = order.getFulfillmentGroup();
             order.setFulfillmentGroup(null);

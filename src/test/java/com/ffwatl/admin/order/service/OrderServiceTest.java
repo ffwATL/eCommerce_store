@@ -10,6 +10,7 @@ import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.service.call.OrderItemRequest;
 import com.ffwatl.admin.order.service.call.OrderItemRequestDTO;
 import com.ffwatl.admin.order.service.exception.AddToCartException;
+import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.service.UserService;
 import com.ffwatl.common.persistence.FetchMode;
@@ -44,6 +45,9 @@ public class OrderServiceTest {
     @Autowired
     private ProductService productService;
 
+    @Resource(name = "orderNumberGenerator")
+    private OrderNumberGenerator orderNumberGenerator;
+
     @Resource(name = "order_service")
     private OrderService orderService;
 
@@ -67,7 +71,13 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void addOrderItemTest() throws AddToCartException {
+    public void orderNumberGeneratorTest() {
+        Assert.assertEquals(1000, orderNumberGenerator.getCounter());
+        Assert.assertEquals(1001, orderNumberGenerator.getCounter());
+    }
+
+    @Test
+    public void addOrderItemTest() throws AddToCartException, PricingException {
         Product product = productService.findById(1);
         User customer = userService.findById(1);
         Order order = orderService.createNewCartForCustomer(customer, Currency.UAH);

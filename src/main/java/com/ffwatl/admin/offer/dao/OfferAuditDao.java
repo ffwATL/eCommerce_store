@@ -27,5 +27,5 @@ public interface OfferAuditDao {
     /**
      * Counts how many times the an offer has been used by a customer
      */
-    long countUsesByCustomer(long customerId, long offerId);
+    long countUsesByCustomer(long customerId, long offerId, int version);
 }

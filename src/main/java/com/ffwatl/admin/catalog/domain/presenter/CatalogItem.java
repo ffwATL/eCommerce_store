@@ -52,10 +52,6 @@ public class CatalogItem {
         return item.getColor();
     }
 
-    public int getDiscount() {
-        return item.getDiscount();
-    }
-
     public int getOriginPrice() {
         return item.getRetailPrice();
     }

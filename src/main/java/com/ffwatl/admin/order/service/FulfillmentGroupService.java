@@ -8,6 +8,7 @@ import com.ffwatl.admin.order.service.call.FulfillmentGroupItemRequest;
 import com.ffwatl.admin.order.service.call.FulfillmentGroupRequest;
 import com.ffwatl.admin.order.service.type.FulfillmentGroupStatusType;
 import com.ffwatl.admin.order.service.type.FulfillmentType;
+import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.common.persistence.FetchMode;
 
 import java.util.List;
@@ -25,13 +26,13 @@ public interface FulfillmentGroupService {
 
     void delete(FulfillmentGroup fulfillmentGroup);
 
-    FulfillmentGroup addFulfillmentGroupToOrder(FulfillmentGroupRequest fulfillmentGroupRequest, boolean priceOrder)/* throws PricingException*/;
+    FulfillmentGroup addFulfillmentGroupToOrder(FulfillmentGroupRequest fulfillmentGroupRequest, boolean priceOrder) throws PricingException/* throws PricingException*/;
 
-    FulfillmentGroup addItemToFulfillmentGroup(FulfillmentGroupItemRequest fulfillmentGroupItemRequest, boolean priceOrder) /*throws PricingException*/;
+    FulfillmentGroup addItemToFulfillmentGroup(FulfillmentGroupItemRequest fulfillmentGroupItemRequest, boolean priceOrder) throws PricingException /*throws PricingException*/;
 
-    FulfillmentGroup addItemToFulfillmentGroup(FulfillmentGroupItemRequest fulfillmentGroupItemRequest, boolean priceOrder, boolean save) /*throws PricingException*/;
+    FulfillmentGroup addItemToFulfillmentGroup(FulfillmentGroupItemRequest fulfillmentGroupItemRequest, boolean priceOrder, boolean save) throws PricingException /*throws PricingException*/;
 
-    Order removeFulfillmentGroupFromOrder(Order order, boolean priceOrder) /*throws PricingException*/;
+    Order removeFulfillmentGroupFromOrder(Order order, boolean priceOrder) throws PricingException /*throws PricingException*/;
 
     /**
      * Reads FulfillmentGroups whose status is not FULFILLED or DELIVERED.

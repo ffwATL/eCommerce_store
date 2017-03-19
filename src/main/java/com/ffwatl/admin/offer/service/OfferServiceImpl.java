@@ -18,6 +18,7 @@ import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderItemPriceDetail;
 import com.ffwatl.admin.order.service.OrderService;
+import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.common.persistence.FetchMode;
 import org.apache.logging.log4j.LogManager;
@@ -137,7 +138,7 @@ public class OfferServiceImpl implements OfferService {
      *
      */
     @Override
-    public Order applyAndSaveOffersToOrder(List<Offer> offers, Order order) {
+    public Order applyAndSaveOffersToOrder(List<Offer> offers, Order order) throws PricingException {
         /*
         TODO rather than a threadlocal, we should update the "shouldPrice" boolean on the profile API to
         use a richer object to describe the parameters of the pricing call. This object would include
@@ -292,12 +293,12 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Map<Offer, OfferCode> getOffersRetrievedFromCodes(List<OfferCode> codes, Set<Offer> appliedOffers) {
+    public Map<Offer, OfferCode> getOfferRetrievedFromCode(OfferCode code, Set<Offer> appliedOffers) {
         return null;
     }
 
     @Override
-    public Map<Offer, OfferCode> getOffersRetrievedFromCodes(Order order) {
+    public Map<Offer, OfferCode> getOfferRetrievedFromCode(Order order) {
         return null;
     }
 

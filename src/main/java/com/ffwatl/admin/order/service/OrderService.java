@@ -232,7 +232,7 @@ public interface OrderService {
      * specified ProductOptions for that given product.
      *
      * The minimum required parameters for OrderItemRequest are: productId and quantity or alternatively,
-     * skuId and quantity
+     * attributeId and quantity
      *
      * When priceOrder is false, the system will not reprice the order.   This is more performant in
      * cases such as bulk adds where the repricing could be done for the last item only.
@@ -259,7 +259,7 @@ public interface OrderService {
      * SKU can be specified directly or it can be determine based on a Product and potentially some
      * specified ProductOptions for that given product.
      *
-     * The minimum required parameters for OrderItemRequest are: productId and quantity or alternatively, skuId and quantity
+     * The minimum required parameters for OrderItemRequest are: productId and quantity or alternatively, attributeId and quantity
      *
      * When priceOrder is false, the system will not reprice the order.   This is more performant in
      * cases such as bulk adds where the repricing could be done for the last item only.

@@ -112,6 +112,12 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public ProductAttribute findProductAttributeById(long id, FetchMode fetchMode) {
-        return productAttributeService.findById(id);
+        ProductAttribute attribute = null;
+        try {
+             attribute = productAttributeService.findById(id, fetchMode);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return attribute;
     }
 }

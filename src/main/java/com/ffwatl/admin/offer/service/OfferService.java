@@ -11,6 +11,7 @@ import com.ffwatl.admin.offer.service.processor.ItemOfferProcessor;
 import com.ffwatl.admin.offer.service.processor.OrderOfferProcessor;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.service.OrderService;
+import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.common.persistence.FetchMode;
 
@@ -67,7 +68,7 @@ public interface OfferService {
      * @param order the order
      * @return the updated order
      */
-    Order applyAndSaveOffersToOrder(List<Offer> offers, Order order);
+    Order applyAndSaveOffersToOrder(List<Offer> offers, Order order) throws PricingException;
 
 
     /**
@@ -141,14 +142,10 @@ public interface OfferService {
     Set<Offer> getUniqueOffersFromOrder(Order order);
 
     /**
-     * Given a list of offer codes and a set of offers, return a map of of offer codes that are keyed by the offer that was
+     * Given a code and a set of offers, return a map of of offer codes that are keyed by the offer that was
      * applied to the order
-     *
-     * @param codes
-     * @param appliedOffers
-     * @return
      */
-    Map<Offer, OfferCode> getOffersRetrievedFromCodes(List<OfferCode> codes, Set<Offer> appliedOffers);
+    Map<Offer, OfferCode> getOfferRetrievedFromCode(OfferCode code, Set<Offer> appliedOffers);
 
     /**
      * For a given order, give back a map of all {@link Offer}s that were retrieved from {@link OfferCode}s. More explicitly,
@@ -158,7 +155,7 @@ public interface OfferService {
      * @param order
      * @return a map from {@link Offer} to the {@link OfferCode} that was used to obtain it
      */
-    Map<Offer, OfferCode> getOffersRetrievedFromCodes(Order order);
+    Map<Offer, OfferCode> getOfferRetrievedFromCode(Order order);
 
     OrderService getOrderService();
 }

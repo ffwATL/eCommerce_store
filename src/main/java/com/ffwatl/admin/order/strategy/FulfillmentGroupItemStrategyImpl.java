@@ -8,6 +8,7 @@ import com.ffwatl.admin.order.service.FulfillmentGroupService;
 import com.ffwatl.admin.order.service.OrderService;
 import com.ffwatl.admin.order.service.call.FulfillmentGroupItemRequest;
 import com.ffwatl.admin.order.service.workflow.CartOperationRequest;
+import com.ffwatl.admin.pricing.exception.PricingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class FulfillmentGroupItemStrategyImpl implements FulfillmentGroupItemStr
     private boolean removeEmptyFulfillmentGroups = true;
 
     @Override
-    public CartOperationRequest onItemAdded(CartOperationRequest request) {
+    public CartOperationRequest onItemAdded(CartOperationRequest request) throws PricingException {
         Order order = request.getOrder();
         OrderItem orderItem = request.getOrderItem();
         FulfillmentGroup nullFulfillmentTypeGroup = null;
@@ -63,12 +64,12 @@ public class FulfillmentGroupItemStrategyImpl implements FulfillmentGroupItemStr
         return request;
     }
 
-    private FulfillmentGroup addItemToFulfillmentGroup(Order order, OrderItem orderItem, FulfillmentGroup fulfillmentGroup) {
+    private FulfillmentGroup addItemToFulfillmentGroup(Order order, OrderItem orderItem, FulfillmentGroup fulfillmentGroup) throws PricingException {
         return this.addItemToFulfillmentGroup(order, orderItem, orderItem.getQuantity(), fulfillmentGroup);
     }
 
     private FulfillmentGroup addItemToFulfillmentGroup(Order order, OrderItem orderItem, int quantity,
-                                                       FulfillmentGroup fulfillmentGroup) {
+                                                       FulfillmentGroup fulfillmentGroup) throws PricingException {
         FulfillmentGroupItemRequest fulfillmentGroupItemRequest = new FulfillmentGroupItemRequest();
         fulfillmentGroupItemRequest.setOrder(order);
         fulfillmentGroupItemRequest.setOrderItem(orderItem);
@@ -156,7 +157,7 @@ public class FulfillmentGroupItemStrategyImpl implements FulfillmentGroupItemStr
     }
 
     @Override
-    public CartOperationRequest verify(CartOperationRequest request) {
+    public CartOperationRequest verify(CartOperationRequest request) throws PricingException {
         Order order = request.getOrder();
 
         if (isRemoveEmptyFulfillmentGroups() && order.getFulfillmentGroup() != null) {
