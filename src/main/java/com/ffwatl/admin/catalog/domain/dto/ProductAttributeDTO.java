@@ -1,9 +1,7 @@
 package com.ffwatl.admin.catalog.domain.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.ffwatl.admin.catalog.domain.ProductAttributeType;
-import com.ffwatl.admin.catalog.domain.Field;
-import com.ffwatl.admin.catalog.domain.ProductAttribute;
+import com.ffwatl.admin.catalog.domain.*;
 
 import java.util.List;
 
@@ -12,6 +10,9 @@ import java.util.List;
 public class ProductAttributeDTO implements ProductAttribute {
 
     private long id;
+
+    @JsonDeserialize(contentAs = ProductImpl.class)
+    private Product product;
 
     private int quantity;
 
@@ -24,6 +25,11 @@ public class ProductAttributeDTO implements ProductAttribute {
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public Product getProduct() {
+        return product;
     }
 
     @Override
@@ -44,6 +50,12 @@ public class ProductAttributeDTO implements ProductAttribute {
     @Override
     public ProductAttribute setId(long id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public ProductAttribute setProduct(Product product) {
+        this.product = product;
         return this;
     }
 

@@ -13,6 +13,7 @@ import com.ffwatl.admin.user.domain.AddressImpl;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -62,14 +63,14 @@ public class FulfillmentGroupImpl implements FulfillmentGroup{
                targetEntity = FulfillmentGroupAdjustmentImpl.class,
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    private Set<FulfillmentGroupAdjustment> fulfillmentGroupAdjustments;
+    private Set<FulfillmentGroupAdjustment> fulfillmentGroupAdjustments = new HashSet<>();
 
     @OneToMany(mappedBy = "fulfillmentGroup",
                fetch = FetchType.LAZY,
                targetEntity = FulfillmentGroupItemImpl.class,
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    private Set<FulfillmentGroupItem> fulfillmentGroupItems;
+    private Set<FulfillmentGroupItem> fulfillmentGroupItems = new HashSet<>();
 
     @Column(name = "status")
     private String status;

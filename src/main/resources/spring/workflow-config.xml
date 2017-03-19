@@ -3,6 +3,51 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="fixedPriceFulfillmentPricingProvider"
+          class="com.ffwatl.admin.pricing.fulfillment.FixedPriceFulfillmentPricingProvider" />
+
+    <bean id="fulfillmentPricingProviders" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <ref bean="fixedPriceFulfillmentPricingProvider" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Pricing Workflow configuration -->
+    <bean id="offerActivity" class="com.ffwatl.admin.pricing.workflow.OfferActivity" />
+    <bean id="fulfillmentItemPricingActivity" class="com.ffwatl.admin.pricing.workflow.FulfillmentItemPricingActivity" />
+    <bean id="fulfillmentGroupPricingActivity" class="com.ffwatl.admin.pricing.workflow.FulfillmentGroupPricingActivity" />
+    <bean id="shippingOfferActivity" class="com.ffwatl.admin.pricing.workflow.ShippingOfferActivity" />
+    <bean id="totalActivity" class="com.ffwatl.admin.pricing.workflow.TotalActivity" />
+    <bean id="adjustOrderPaymentsActivity" class="com.ffwatl.admin.pricing.workflow.AdjustOrderPaymentsActivity" />
+
+
+    <bean id="pricingWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
+        <property name="processContextFactory">
+            <bean class="com.ffwatl.admin.pricing.workflow.PricingProcessContextFactory"/>
+        </property>
+        <property name="activities">
+            <list>
+                <ref bean="offerActivity" />
+                <ref bean="fulfillmentItemPricingActivity" />
+                <ref bean="fulfillmentGroupPricingActivity" />
+                <ref bean="shippingOfferActivity" />
+                <ref bean="totalActivity" />
+                <ref bean="adjustOrderPaymentsActivity" />
+            </list>
+        </property>
+        <property name="defaultErrorHandler">
+            <bean class="com.ffwatl.admin.workflow.DefaultErrorHandler">
+                <property name="unloggedExceptionClasses">
+                    <list>
+                        <value>org.hibernate.exception.LockAcquisitionException</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
 
     <!-- Add Item Workflow Configuration -->
     <bean id="validateAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.add.ValidateAddRequestActivity"/>

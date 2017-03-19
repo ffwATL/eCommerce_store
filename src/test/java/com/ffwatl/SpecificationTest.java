@@ -3,24 +3,15 @@ package com.ffwatl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ffwatl.admin.catalog.dao.ItemRepository;
 import com.ffwatl.admin.catalog.domain.Category;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
-import com.ffwatl.admin.catalog.domain.ProductDefault;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
+import com.ffwatl.admin.catalog.domain.dto.CategoryDTO;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.ClothesGridFilter;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.ItemGridFilter;
-import com.ffwatl.admin.catalog.domain.dto.CategoryDTO;
-import com.ffwatl.admin.catalog.domain.presenter.ClothesItemPresenter;
 import com.ffwatl.admin.catalog.domain.presenter.ClothesOptionsPresenter;
-import com.ffwatl.admin.catalog.dao.ClothesItemRepository;
-import com.ffwatl.admin.catalog.dao.ItemRepository;
-import com.ffwatl.admin.catalog.service.BrandService;
-import com.ffwatl.admin.catalog.service.ClothesItemService;
-import com.ffwatl.admin.catalog.service.ClothesPaginationService;
-import com.ffwatl.admin.catalog.service.ItemGroupService;
-import com.ffwatl.admin.catalog.service.ColorService;
-import com.ffwatl.admin.catalog.service.EuroSizeService;
-import com.ffwatl.admin.catalog.service.ItemPaginationServiceImpl;
-import com.ffwatl.admin.catalog.service.ItemService;
+import com.ffwatl.admin.catalog.service.*;
 import com.ffwatl.util.Settings;
 import com.ffwatl.util.WebUtil;
 import org.junit.Ignore;
@@ -48,14 +39,13 @@ import java.util.Optional;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SpecificationTest {
 
-    @Autowired
-    private ClothesItemRepository clothesItemRepository;
+
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
     private ItemPaginationServiceImpl itemPaginationService;
     @Autowired
-    private ItemService itemService;
+    private ProductService productService;
     @Autowired
     private EuroSizeService euroSizeService;
 
@@ -128,7 +118,7 @@ public class SpecificationTest {
     @Test
     @Ignore
     public void imageReadTest(){
-        System.err.println("********" + itemService.findItemPresenterById(5));
+        System.err.println("********" + productService.findItemPresenterById(5));
     }
 
     public Optional<List<ClothesItemPresenter>> importItemsFromJsonUTF8(@NotNull File file) throws IOException {
@@ -146,7 +136,7 @@ public class SpecificationTest {
         }
     }
 
-    public void exportItemsToJsonUTF8(@NotNull File output){
+    /*public void exportItemsToJsonUTF8(@NotNull File output){
         List<ClothesItemPresenter> items = clothesItemService.findAll().get();
         try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(output), "UTF-8")){
             writer.write(new ObjectMapper().writeValueAsString(items));
@@ -154,7 +144,7 @@ public class SpecificationTest {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
+    }*/
     @Test
     @Ignore
     public void importItems() throws IOException {
@@ -199,8 +189,8 @@ public class SpecificationTest {
     @Ignore
     public void workingSpecTest(){
         ItemGridFilter cfc= new ClothesGridFilter(params);
-        Page<? extends ProductDefault> page = clothesPaginationService.findAllByFilter(cfc);
-        for(ProductDefault c: page.getContent()){
+        Page<? extends ProductImpl> page = clothesPaginationService.findAllByFilter(cfc);
+        for(ProductImpl c: page.getContent()){
             System.err.println("id: " + c.getId() + ", name: " + c.getProductName());
         }
         System.err.println("*** size: " + page.getNumberOfElements()+", total pages: "+page.getTotalPages());

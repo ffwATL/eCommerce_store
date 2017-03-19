@@ -19,6 +19,7 @@ import com.ffwatl.admin.payment.domain.OrderPayment;
 import com.ffwatl.admin.payment.domain.secure.Referenced;
 import com.ffwatl.admin.payment.service.SecureOrderPaymentService;
 import com.ffwatl.admin.pricing.PricingService;
+import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.workflow.ProcessContext;
 import com.ffwatl.admin.workflow.Processor;
@@ -195,7 +196,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order save(Order order, boolean priceOrder) {
+    public Order save(Order order, boolean priceOrder) throws PricingException {
         try {
             order = persist(order);
         } catch (RuntimeException ex) {
@@ -299,7 +300,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order save(Order order, boolean priceOrder, boolean repriceItems) {
+    public Order save(Order order, boolean priceOrder, boolean repriceItems) throws PricingException {
         return save(order, priceOrder);
     }
 

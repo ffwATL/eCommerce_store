@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
+@Service("user_service")
 public class UserServiceImpl extends ConverterDTO<User> implements UserService {
 
     @Autowired

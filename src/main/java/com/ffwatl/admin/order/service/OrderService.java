@@ -13,6 +13,7 @@ import com.ffwatl.admin.order.service.exception.RemoveFromCartException;
 import com.ffwatl.admin.order.service.exception.UpdateCartException;
 import com.ffwatl.admin.payment.domain.OrderPayment;
 import com.ffwatl.admin.payment.domain.secure.Referenced;
+import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.common.persistence.FetchMode;
 import org.springframework.transaction.annotation.Transactional;
@@ -149,7 +150,7 @@ public interface OrderService {
      * @return the persisted Order, which will be a different instance than the Order passed in
      */
     @Transactional
-    Order save(Order order, boolean priceOrder);
+    Order save(Order order, boolean priceOrder) throws PricingException;
 
     /**
      * Saves the given <b>order</b> while optionally repricing the order (meaning, going through the pricing workflow)
@@ -161,7 +162,7 @@ public interface OrderService {
      * @return the persisted Order, which will be a different instance than the Order passed in
      * @throws PricingException
      */
-    Order save(Order order, boolean priceOrder, boolean repriceItems) /*throws PricingException*/;
+    Order save(Order order, boolean priceOrder, boolean repriceItems) throws PricingException /*throws PricingException*/;
 
     /**
      * Deletes the given order. Note that the default Broadleaf implementation in

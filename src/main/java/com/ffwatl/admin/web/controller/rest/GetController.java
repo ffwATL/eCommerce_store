@@ -13,7 +13,7 @@ import com.ffwatl.admin.catalog.service.ItemGroupService;
 import com.ffwatl.admin.catalog.service.ColorService;
 import com.ffwatl.admin.catalog.service.EuroSizeService;
 import com.ffwatl.admin.catalog.service.ItemPaginationServiceImpl;
-import com.ffwatl.admin.catalog.service.ItemService;
+import com.ffwatl.admin.catalog.service.ProductService;
 import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +41,7 @@ public class GetController {
     @Autowired
     private BrandService brandService;
     @Autowired
-    private ItemService itemService;
+    private ProductService productService;
     @Autowired
     private ItemPaginationServiceImpl itemPaginationService;
     @Autowired
@@ -111,9 +111,9 @@ public class GetController {
     @RequestMapping(value = "/item/all")
     @ResponseBody
     public ResponseEntity<ProductCatalog> ajaxAllItems(@RequestParam Map<String, String> params){
-        Page<? extends ProductDefault> page = getPage(params.get("cat"), params);
+        Page<? extends ProductImpl> page = getPage(params.get("cat"), params);
         try {
-            ProductCatalog presenter = new ProductCatalog(fillItemCatalog((List<ProductDefault>) page.getContent()));
+            ProductCatalog presenter = new ProductCatalog(fillItemCatalog((List<ProductImpl>) page.getContent()));
             presenter.setPge(page.getNumber());
             presenter.setPgeSize(page.getNumberOfElements());
             presenter.setTotalPages(page.getTotalPages());
@@ -137,7 +137,7 @@ public class GetController {
     @RequestMapping(value = "/item/single")
     @ResponseBody
     public ResponseEntity<ProductUpdateImpl> ajaxSingleItem(@RequestParam long id){
-        return ResponseEntity.ok(itemService.findItemPresenterById(id));
+        return ResponseEntity.ok(productService.findItemPresenterById(id));
     }
 
     @RequestMapping(value = "/item/options/clothes")
@@ -151,7 +151,7 @@ public class GetController {
         return ResponseEntity.ok(presenter);
     }
 
-    private Page<? extends ProductDefault> getPage(String cat, Map<String, String> params){
+    private Page<? extends ProductImpl> getPage(String cat, Map<String, String> params){
         GridFilter filter;
         if(cat == null) filter = new ItemGridFilter(params);
         else if(cat.equals("Clothes") || cat.equals("Одежда")){
@@ -162,9 +162,9 @@ public class GetController {
         return itemPaginationService.findAll(filter);
     }
 
-    private List<CatalogItem> fillItemCatalog(List<ProductDefault> items){
+    private List<CatalogItem> fillItemCatalog(List<ProductImpl> items){
         List<CatalogItem> itemCatalogList = new ArrayList<>(items.size());
-        for(ProductDefault i: items){
+        for(ProductImpl i: items){
             CatalogItem catalog = new CatalogItem(i, settings.getPhotoUrl());
             itemCatalogList.add(catalog);
         }

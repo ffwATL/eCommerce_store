@@ -18,13 +18,18 @@ public class ProductAttributeImpl implements ProductAttribute {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(length = 2, nullable = false)
+    @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = ProductImpl.class)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @Column(length = 2, nullable = false, name = "quantity")
     private int quantity;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = FieldImpl.class, fetch = FetchType.EAGER)
     private List<Field> measurements;
 
     @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ProductAttributeTypeImpl.class)
+    @JoinColumn(name = "product_attr_type_id")
     private ProductAttributeType eu_size;
 
     /**
@@ -34,6 +39,11 @@ public class ProductAttributeImpl implements ProductAttribute {
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public Product getProduct() {
+        return product;
     }
 
     /**
@@ -66,6 +76,12 @@ public class ProductAttributeImpl implements ProductAttribute {
     @Override
     public ProductAttribute setId(long id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public ProductAttribute setProduct(Product product) {
+        this.product = product;
         return this;
     }
 

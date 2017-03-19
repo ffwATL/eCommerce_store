@@ -7,6 +7,8 @@ public interface ProductAttribute extends Comparable<ProductAttribute> {
 
     long getId();
 
+    Product getProduct();
+
     ProductAttributeType getEu_size();
 
     int getQuantity();
@@ -14,6 +16,8 @@ public interface ProductAttribute extends Comparable<ProductAttribute> {
     List<Field> getFields();
 
     ProductAttribute setId(long id);
+
+    ProductAttribute setProduct(Product product);
 
     ProductAttribute setQuantity(int quantity);
 

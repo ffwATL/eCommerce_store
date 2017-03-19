@@ -4,17 +4,19 @@ package com.ffwatl.admin.offer.dao;
 import com.ffwatl.admin.offer.domain.CustomerOffer;
 import com.ffwatl.admin.offer.domain.CustomerOfferImpl;
 import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.CriteriaProperty;
-import com.ffwatl.common.persistence.CriteriaPropertyImpl;
 import com.ffwatl.common.persistence.EntityConfiguration;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.FetchModeOption;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository("customer_offer_dao")
@@ -59,15 +61,11 @@ public class CustomerOfferDaoImpl implements CustomerOfferDao, FetchModeOption<C
 
     @Override
     public CriteriaProperty<CustomerOffer, CustomerOfferImpl> createOrderCriteriaQueryByFetchMode(FetchMode fetchMode) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        return buildCriteriaProperty(em.getCriteriaBuilder(), fetchMode, CustomerOffer.class, CustomerOfferImpl.class);
+    }
 
-        CriteriaQuery<CustomerOffer> criteria = cb.createQuery(CustomerOffer.class);
-        Root<CustomerOfferImpl> root = criteria.from(CustomerOfferImpl.class);
-
-        criteria.select(root);
-        return new CriteriaPropertyImpl<CustomerOffer, CustomerOfferImpl>()
-                .setBuilder(cb)
-                .setCriteria(criteria)
-                .setRoot(root);
+    @Override
+    public void addFetch(Root<CustomerOfferImpl> root) {
+        // nothing to add
     }
 }

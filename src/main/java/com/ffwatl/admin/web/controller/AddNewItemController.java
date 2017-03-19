@@ -1,42 +1,14 @@
 package com.ffwatl.admin.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ffwatl.admin.catalog.domain.presenter.ClothesItemPresenter;
-import com.ffwatl.admin.catalog.service.ClothesItemService;
-import com.ffwatl.admin.catalog.service.SizeService;
-import com.ffwatl.util.Settings;
-import com.ffwatl.util.WebUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.imgscalr.Scalr;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @SessionAttributes("loggedInUser")
 public class AddNewItemController {
 
-    @Autowired
-    private SizeService sizeService;
+    /*@Autowired
+    private ProductAttributeService sizeService;
     @Autowired
     private ClothesItemService clothesItemService;
     @Autowired
@@ -82,7 +54,7 @@ public class AddNewItemController {
                     clothesItem.getProductName().getLocale_en()+", id = "+id);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            /*throw e;*/
+            *//*throw e;*//*
             model.addAttribute("isError", true);
             model.addAttribute("errorMessage", e.getMessage());
             return "admin/new/result";
@@ -122,5 +94,5 @@ public class AddNewItemController {
             logger.error(e.getMessage());
             throw e;
         }
-    }
+    }*/
 }

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class SizeServiceImpl implements SizeService{
+@Service("product_attribute_service")
+public class ProductAttributeServiceImpl implements ProductAttributeService {
 
     @Autowired
     private SizeDao sizeDao;

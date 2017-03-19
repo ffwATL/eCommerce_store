@@ -3,15 +3,19 @@ package com.ffwatl.admin.catalog.domain;
 
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
-import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.user.domain.User;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 public interface Product {
 
     long getId();
+
+    List<ProductAttribute> getProductAttributes();
+
+    Brand getBrand();
 
     I18n getProductName();
 
@@ -39,8 +43,6 @@ public interface Product {
 
     int getQuantity();
 
-    int getDiscount();
-
     int getOriginPrice();
 
     int getRetailPrice();
@@ -53,10 +55,12 @@ public interface Product {
 
     Timestamp getLastChangeDate();
 
-    Offer getOffer();
-
 
     Product setId(long id);
+
+    Product setProductAttributes(List<ProductAttribute> productAttributes);
+
+    Product setBrand(Brand brand);
 
     Product setDescription(I18n description);
 
@@ -66,11 +70,7 @@ public interface Product {
 
     Product setItemName(I18n itemName);
 
-    Product setQuantity(int quantity);
-
     Product setColor(Color color);
-
-    Product setDiscount(int discount);
 
     Product setOriginPrice(int originPrice);
 
@@ -97,7 +97,5 @@ public interface Product {
     Product setVendorCode(String vendorCode);
 
     Product setGender(Gender gender);
-
-    Product setOffer(Offer offer);
 
 }

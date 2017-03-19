@@ -13,6 +13,7 @@
        <import resource="rule-test-config.xml"/>
        <import resource="offer/offer-test-config.xml"/>
        <import resource="order/order-test-config.xml"/>
+       <import resource="workflow-config.xml"/>
 
        <context:component-scan base-package="com.ffwatl"/>
 

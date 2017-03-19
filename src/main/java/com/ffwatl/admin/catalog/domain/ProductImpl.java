@@ -6,22 +6,35 @@ import com.ffwatl.admin.offer.domain.Offer;
 import com.ffwatl.admin.offer.domain.OfferImpl;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.UserImpl;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ffw_ATL
  */
 @Entity
 @Table(name = "items")
-@Inheritance( strategy = InheritanceType.JOINED )
-public class ProductDefault implements Product {
+public class ProductImpl implements Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            targetEntity = ProductAttributeImpl.class,
+            mappedBy = "product")
+    @Column(nullable = false)
+    private List<ProductAttribute> productAttributes;
+
+    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = BrandImpl.class)
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
     @ManyToOne(cascade = CascadeType.MERGE, targetEntity = CategoryImpl.class)
     @JoinColumn(name = "category_id")
@@ -38,15 +51,9 @@ public class ProductDefault implements Product {
     @Column(name = "vandor_code")
     private String vendorCode;
 
-    @Column(name = "quantity", nullable = false, length = 3)
-    private int quantity;
-
     @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ColorImpl.class)
     @JoinColumn(name = "color_id")
     private Color color;
-
-    @Column(name = "discount", length = 2)
-    private int discount = 0;
 
     @Embedded
     @AttributeOverrides({
@@ -96,38 +103,54 @@ public class ProductDefault implements Product {
     @JoinColumn(name = "added_by_user_id")
     private User addedBy;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = OfferImpl.class)
-    @JoinColumn(name = "offer_id")
-    private Offer offer;
+    @Column(name = "can_sell_without_attributes")
+    private boolean canSellWithoutOptions = false;
 
     @Override
     public long getId() {
         return id;
     }
+
+    @Override
+    public List<ProductAttribute> getProductAttributes() {
+        return productAttributes;
+    }
+
+    @Override
+    public Brand getBrand() {
+        return brand;
+    }
+
     @Override
     public User getAddedBy() {
         return addedBy;
     }
+
     @Override
     public Gender getGender() {
         return gender;
     }
+
     @Override
     public String getExtraNotes() {
         return extraNotes;
     }
+
     @Override
     public String getVendorCode() {
         return vendorCode;
     }
+
     @Override
     public boolean isUsed() {
         return isUsed;
     }
+
     @Override
     public I18n getDescription() {
         return description;
     }
+
     @Override
     public String getMetaInfo() {
         return metaInfo;
@@ -136,29 +159,36 @@ public class ProductDefault implements Product {
     public String getMetaKeys() {
         return metaKeys;
     }
+
     @Override
     public Currency getCurrency() {
         return currency;
     }
+
     @Override
     public Category getCategory() {
         return itemGroup;
     }
+
     @Override
     public I18n getProductName() {
         return itemName;
     }
+
     @Override
     public int getQuantity() {
+        int quantity = 0;
+        if(productAttributes != null){
+            for(ProductAttribute pa: productAttributes){
+                quantity += pa.getQuantity();
+            }
+        }
         return quantity;
     }
+
     @Override
     public Color getColor() {
         return color;
-    }
-    @Override
-    public int getDiscount() {
-        return discount;
     }
 
     @Override
@@ -187,15 +217,25 @@ public class ProductDefault implements Product {
         return lastChangeDate;
     }
 
-    @Override
-    public Offer getOffer() {
-        return this.offer;
-    }
+
     @Override
     public Product setId(long id) {
         this.id = id;
         return this;
     }
+
+    @Override
+    public Product setProductAttributes(List<ProductAttribute> productAttributes) {
+        this.productAttributes = productAttributes;
+        return this;
+    }
+
+    @Override
+    public Product setBrand(Brand brand) {
+        this.brand = brand;
+        return this;
+    }
+
     @Override
     public Product setDescription(I18n description) {
         this.description = description;
@@ -216,19 +256,10 @@ public class ProductDefault implements Product {
         this.itemName = itemName;
         return this;
     }
-    @Override
-    public Product setQuantity(int quantity) {
-        this.quantity = quantity;
-        return this;
-    }
+
     @Override
     public Product setColor(Color color) {
         this.color = color;
-        return this;
-    }
-    @Override
-    public Product setDiscount(int discount) {
-        this.discount = discount;
         return this;
     }
 
@@ -300,59 +331,52 @@ public class ProductDefault implements Product {
     }
 
     @Override
-    public Product setOffer(Offer offer) {
-        this.offer = offer;
-        return this;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProductDefault that = (ProductDefault) o;
+        ProductImpl product = (ProductImpl) o;
 
-        if (getId() != that.getId()) return false;
-        if (getQuantity() != that.getQuantity()) return false;
-        if (getDiscount() != that.getDiscount()) return false;
-        if (getOriginPrice() != that.getOriginPrice()) return false;
-        if (getRetailPrice() != that.getRetailPrice()) return false;
-        if (getSalePrice() != that.getSalePrice()) return false;
-        if (isActive() != that.isActive()) return false;
-        if (isUsed() != that.isUsed()) return false;
-        if (itemGroup != null ? !itemGroup.equals(that.itemGroup) : that.itemGroup != null) return false;
-        if (itemName != null ? !itemName.equals(that.itemName) : that.itemName != null) return false;
-        if (getVendorCode() != null ? !getVendorCode().equals(that.getVendorCode()) : that.getVendorCode() != null)
+        if (getId() != product.getId()) return false;
+        if (getOriginPrice() != product.getOriginPrice()) return false;
+        if (getRetailPrice() != product.getRetailPrice()) return false;
+        if (getSalePrice() != product.getSalePrice()) return false;
+        if (isUsed() != product.isUsed()) return false;
+        if (canSellWithoutOptions != product.canSellWithoutOptions) return false;
+        if (getProductAttributes() != null ? !getProductAttributes().equals(product.getProductAttributes()) : product.getProductAttributes() != null)
             return false;
-        if (getColor() != null ? !getColor().equals(that.getColor()) : that.getColor() != null) return false;
-        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+        if (!getBrand().equals(product.getBrand())) return false;
+        if (!itemGroup.equals(product.itemGroup)) return false;
+        if (!itemName.equals(product.itemName)) return false;
+        if (getVendorCode() != null ? !getVendorCode().equals(product.getVendorCode()) : product.getVendorCode() != null)
             return false;
-        if (getExtraNotes() != null ? !getExtraNotes().equals(that.getExtraNotes()) : that.getExtraNotes() != null)
+        if (getColor() != null ? !getColor().equals(product.getColor()) : product.getColor() != null) return false;
+        if (getDescription() != null ? !getDescription().equals(product.getDescription()) : product.getDescription() != null)
             return false;
-        if (getMetaInfo() != null ? !getMetaInfo().equals(that.getMetaInfo()) : that.getMetaInfo() != null)
+        if (getExtraNotes() != null ? !getExtraNotes().equals(product.getExtraNotes()) : product.getExtraNotes() != null)
             return false;
-        if (getMetaKeys() != null ? !getMetaKeys().equals(that.getMetaKeys()) : that.getMetaKeys() != null)
+        if (getMetaInfo() != null ? !getMetaInfo().equals(product.getMetaInfo()) : product.getMetaInfo() != null)
             return false;
-        if (getCurrency() != that.getCurrency()) return false;
-        if (getGender() != that.getGender()) return false;
-        if (getImportDate() != null ? !getImportDate().equals(that.getImportDate()) : that.getImportDate() != null)
+        if (getMetaKeys() != null ? !getMetaKeys().equals(product.getMetaKeys()) : product.getMetaKeys() != null)
             return false;
-        if (getLastChangeDate() != null ? !getLastChangeDate().equals(that.getLastChangeDate()) : that.getLastChangeDate() != null)
+        if (getCurrency() != product.getCurrency()) return false;
+        if (getGender() != product.getGender()) return false;
+        if (!getImportDate().equals(product.getImportDate())) return false;
+        if (getLastChangeDate() != null ? !getLastChangeDate().equals(product.getLastChangeDate()) : product.getLastChangeDate() != null)
             return false;
-        if (getAddedBy() != null ? !getAddedBy().equals(that.getAddedBy()) : that.getAddedBy() != null) return false;
-        return !(getOffer() != null ? !getOffer().equals(that.getOffer()) : that.getOffer() != null);
+        return !(getAddedBy() != null ? !getAddedBy().equals(product.getAddedBy()) : product.getAddedBy() != null);
 
     }
 
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (itemGroup != null ? itemGroup.hashCode() : 0);
-        result = 31 * result + (itemName != null ? itemName.hashCode() : 0);
+        result = 31 * result + (getProductAttributes() != null ? getProductAttributes().hashCode() : 0);
+        result = 31 * result + getBrand().hashCode();
+        result = 31 * result + itemGroup.hashCode();
+        result = 31 * result + itemName.hashCode();
         result = 31 * result + (getVendorCode() != null ? getVendorCode().hashCode() : 0);
-        result = 31 * result + getQuantity();
         result = 31 * result + (getColor() != null ? getColor().hashCode() : 0);
-        result = 31 * result + getDiscount();
         result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
         result = 31 * result + (getExtraNotes() != null ? getExtraNotes().hashCode() : 0);
         result = 31 * result + (getMetaInfo() != null ? getMetaInfo().hashCode() : 0);
@@ -360,27 +384,27 @@ public class ProductDefault implements Product {
         result = 31 * result + getOriginPrice();
         result = 31 * result + getRetailPrice();
         result = 31 * result + getSalePrice();
-        result = 31 * result + (getCurrency() != null ? getCurrency().hashCode() : 0);
-        result = 31 * result + (getGender() != null ? getGender().hashCode() : 0);
-        result = 31 * result + (isActive() ? 1 : 0);
+        result = 31 * result + getCurrency().hashCode();
+        result = 31 * result + getGender().hashCode();
         result = 31 * result + (isUsed() ? 1 : 0);
-        result = 31 * result + (getImportDate() != null ? getImportDate().hashCode() : 0);
+        result = 31 * result + getImportDate().hashCode();
         result = 31 * result + (getLastChangeDate() != null ? getLastChangeDate().hashCode() : 0);
         result = 31 * result + (getAddedBy() != null ? getAddedBy().hashCode() : 0);
-        result = 31 * result + (getOffer() != null ? getOffer().hashCode() : 0);
+        result = 31 * result + (canSellWithoutOptions ? 1 : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "ProductDefault{" +
+        return "ProductImpl{" +
                 "id=" + id +
+                ", productAttributes=" + productAttributes +
+                ", brand=" + brand +
                 ", itemGroup=" + itemGroup +
                 ", itemName=" + itemName +
                 ", vendorCode='" + vendorCode + '\'' +
-                ", quantity=" + quantity +
+                ", quantity=" + getQuantity() +
                 ", color=" + color +
-                ", discount=" + discount +
                 ", description=" + description +
                 ", extraNotes='" + extraNotes + '\'' +
                 ", metaInfo='" + metaInfo + '\'' +
@@ -395,7 +419,6 @@ public class ProductDefault implements Product {
                 ", importDate=" + importDate +
                 ", lastChangeDate=" + lastChangeDate +
                 ", addedBy=" + addedBy +
-                ", offer=" + offer +
                 '}';
     }
 }

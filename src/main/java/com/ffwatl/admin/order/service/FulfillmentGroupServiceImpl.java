@@ -120,13 +120,15 @@ public class FulfillmentGroupServiceImpl  implements FulfillmentGroupService{
 
         // 1) Find the order item's existing fulfillment group, if any
         FulfillmentGroup fg = order.getFulfillmentGroup();
-        Iterator<FulfillmentGroupItem> itr = fg.getFulfillmentGroupItems().iterator();
-        while (itr.hasNext()) {
-            FulfillmentGroupItem fgItem = itr.next();
-            if (fgItem.getOrderItem().equals(item)) {
-                // 2) remove item from it's existing fulfillment group
-                itr.remove();
-                fulfillmentGroupItemDao.delete(fgItem);
+        if(fg != null && fg.getFulfillmentGroupItems() != null){
+            Iterator<FulfillmentGroupItem> itr = fg.getFulfillmentGroupItems().iterator();
+            while (itr.hasNext()) {
+                FulfillmentGroupItem fgItem = itr.next();
+                if (fgItem.getOrderItem().equals(item)) {
+                    // 2) remove item from it's existing fulfillment group
+                    itr.remove();
+                    fulfillmentGroupItemDao.delete(fgItem);
+                }
             }
         }
 

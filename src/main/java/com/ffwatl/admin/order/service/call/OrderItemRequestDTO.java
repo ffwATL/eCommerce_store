@@ -54,6 +54,12 @@ public class OrderItemRequestDTO {
         setQuantity(quantity);
     }
 
+    public OrderItemRequestDTO(OrderItemRequest request){
+        this(request.getProduct().getId(), request.getQuantity(), request.getSku(), request.getCategory().getId());
+        this.productAttribute = request.getProductAttribute();
+        this.setProductName(request.getItemName());
+    }
+
     public String getSku() {
         return sku;
     }

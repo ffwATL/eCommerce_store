@@ -1,9 +1,9 @@
 package com.ffwatl.admin.web.controller.rest;
 
 
-import com.ffwatl.admin.catalog.domain.ProductDefault;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
 import com.ffwatl.admin.catalog.domain.presenter.ItemUpdatePresenter;
-import com.ffwatl.admin.catalog.service.ItemService;
+import com.ffwatl.admin.catalog.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class UpdateController {
     private static final Logger logger = LogManager.getLogger();
 
     @Autowired
-    private ItemService itemService;
+    private ProductService productService;
 
     /**
      * Method for update information about one single Product;
@@ -32,7 +32,7 @@ public class UpdateController {
     @ResponseBody
     public ResponseEntity<String> updateSingleItem(@RequestBody ItemUpdatePresenter update){
         try {
-            itemService.updateSingleItem(update);
+            productService.updateSingleItem(update);
         }catch (Exception e){
             logger.error("Error on single Product update. " + update.getItem());
             logger.error(e.getMessage());
@@ -48,9 +48,9 @@ public class UpdateController {
      */
     @RequestMapping(value = "/item/status")
     @ResponseBody
-    public ResponseEntity<String> changeItemStatus(@RequestBody ProductDefault item){
+    public ResponseEntity<String> changeItemStatus(@RequestBody ProductImpl item){
         try {
-            itemService.changeItemStatus(item);
+            productService.changeItemStatus(item);
         }catch (Exception e){
             logger.error("Error while changing item status. id = "+item.getId()+", isActive = "+item.isActive());
             logger.error(e.getMessage());
@@ -68,7 +68,7 @@ public class UpdateController {
     @ResponseBody
     public ResponseEntity<String> updateItems(@RequestBody ItemUpdatePresenter update){
         try{
-            itemService.updateItems(update);
+            productService.updateItems(update);
         }catch (Exception e){
             logger.error("Error on multi items update. " + update);
             logger.error(e.getMessage());

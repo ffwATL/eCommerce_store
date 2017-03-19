@@ -12,16 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProductClothesSpecification extends ProductDefaultSpecification<ProductClothes> {
+public class ProductClothesSpecification extends ProductDefaultSpecification<ProductImpl> {
 
 
     @SuppressWarnings("unchecked")
-    public Specification<ProductClothes> isSizeEquals(List<GridFilterRule> rules){
-        return new Specification<ProductClothes>() {
+    public Specification<ProductImpl> isSizeEquals(List<GridFilterRule> rules){
+        return new Specification<ProductImpl>() {
             @Override
-            public Predicate toPredicate(Root<ProductClothes> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<ProductImpl> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);
-                Join<ProductClothes, ProductAttribute> join_size = root.join("size", JoinType.LEFT);
+                Join<ProductImpl, ProductAttribute> join_size = root.join("size", JoinType.LEFT);
                 Join<ProductAttribute, ProductAttributeType> join_euSize = join_size.join("eu_size", JoinType.INNER);
                 List<Predicate> predicates = new ArrayList<>();
                 if(rules != null){
@@ -34,12 +34,12 @@ public class ProductClothesSpecification extends ProductDefaultSpecification<Pro
         ;
     };}
 
-    public Specification<ProductClothes> isColorEquals(List<GridFilterRule> rules){
-        return new Specification<ProductClothes>() {
+    public Specification<ProductImpl> isColorEquals(List<GridFilterRule> rules){
+        return new Specification<ProductImpl>() {
             @Override
-            public Predicate toPredicate(Root<ProductClothes> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<ProductImpl> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);
-                Join<ProductClothes, Color> colorJoin = root.join("color", JoinType.INNER);
+                Join<ProductImpl, Color> colorJoin = root.join("color", JoinType.INNER);
                 List<Predicate> predicates = new ArrayList<>();
                 if(rules != null){
                     for (GridFilterRule r: rules){
@@ -50,12 +50,12 @@ public class ProductClothesSpecification extends ProductDefaultSpecification<Pro
             }
         };
     }
-    public Specification<ProductClothes> isBrandEquals(List<GridFilterRule> rules){
-        return new Specification<ProductClothes>() {
+    public Specification<ProductImpl> isBrandEquals(List<GridFilterRule> rules){
+        return new Specification<ProductImpl>() {
             @Override
-            public Predicate toPredicate(Root<ProductClothes> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<ProductImpl> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);
-                Join<ProductClothes, BrandImpl> brandJoin = root.join("brand", JoinType.INNER);
+                Join<ProductImpl, BrandImpl> brandJoin = root.join("brand", JoinType.INNER);
                 List<Predicate> predicates = new ArrayList<>();
                 if(rules != null){
                     for(GridFilterRule r: rules){
@@ -67,10 +67,10 @@ public class ProductClothesSpecification extends ProductDefaultSpecification<Pro
         };
     }
 
-    public Specification<ProductClothes> isGenderEquals(List<GridFilterRule> rules){
-        return new Specification<ProductClothes>() {
+    public Specification<ProductImpl> isGenderEquals(List<GridFilterRule> rules){
+        return new Specification<ProductImpl>() {
             @Override
-            public Predicate toPredicate(Root<ProductClothes> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<ProductImpl> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);
                 List<Predicate> predicates = new ArrayList<>();
                 if(rules != null){

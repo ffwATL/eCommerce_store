@@ -1,12 +1,11 @@
 package com.ffwatl.admin.catalog.service;
 
 
-import com.ffwatl.admin.catalog.dao.ClothesItemRepository;
-import com.ffwatl.admin.catalog.domain.ProductClothes;
-import com.ffwatl.admin.catalog.domain.ProductDefault;
-import com.ffwatl.admin.catalog.domain.filter.specification.ProductClothesSpecification;
+import com.ffwatl.admin.catalog.dao.ItemRepository;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilter;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilterRule;
+import com.ffwatl.admin.catalog.domain.filter.specification.ProductClothesSpecification;
 import com.ffwatl.admin.web.service.PaginationService;
 import com.ffwatl.admin.web.service.SortProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +22,15 @@ import java.util.Map;
 public class ClothesPaginationServiceImpl extends PaginationService implements ClothesPaginationService {
 
     @Autowired
-    private ClothesItemRepository clothesItemRepository;
+    private ItemRepository clothesItemRepository;
 
     @Override
-    public Page<ProductClothes> findAllByFilter(GridFilter filter){
+    public Page<ProductImpl> findAllByFilter(GridFilter filter){
         SortProperties p = getProperties(filter.getSortOption());
         PageRequest request = new PageRequest(filter.getPge(), filter.getPgeSize(), p.getDirection(), p.getColumn());
         Map<String, List<GridFilterRule>> map = filter.getRules();
         ProductClothesSpecification spec = new ProductClothesSpecification();
-        Specifications<ProductClothes> res = Specifications
+        Specifications<ProductImpl> res = Specifications
                 .where(spec.isInPriceRange(map.get("originPrice")))
                 .and(spec.isInPriceRange(map.get("salePrice")));
         if(map.get("itemGroup") != null) res = res.and(spec.isGroupEquals(map.get("itemGroup")));
@@ -41,8 +40,8 @@ public class ClothesPaginationServiceImpl extends PaginationService implements C
         if(map.get("isActive") != null) res = res.and(spec.isActive(map.get("isActive")));
         if(map.get("isSale") != null) res = res.and(spec.isSale(map.get("isSale")));
         if(map.get("gender") != null) res = res.and(spec.isGenderEquals(map.get("gender")));
-        Page<ProductClothes> result = clothesItemRepository.findAll(res, request);
-        for(ProductDefault i: result.getContent()){
+        Page<ProductImpl> result = clothesItemRepository.findAll(res, request);
+        for(ProductImpl i: result.getContent()){
             i.getCategory().setChild(null);
         }
         return result;

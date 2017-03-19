@@ -2,7 +2,7 @@ package com.ffwatl.admin.offer.domain;
 
 
 import com.ffwatl.admin.catalog.domain.Product;
-import com.ffwatl.admin.catalog.domain.ProductDefault;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,7 +18,7 @@ public class OfferGroupImpl implements OfferGroup {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, targetEntity = ProductDefault.class)
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, targetEntity = ProductImpl.class)
     @JoinColumn(name = "item_id")
     private List<Product> items;
 

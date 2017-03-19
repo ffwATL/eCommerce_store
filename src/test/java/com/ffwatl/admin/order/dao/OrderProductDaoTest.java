@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
 @ContextConfiguration({"/spring/application-config.xml", "/spring/spring-security.xml" })
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
-public class OrderItemDaoTest {
+public class OrderProductDaoTest {
 
     @Resource(name = "order_item_dao")
     private OrderItemDao orderItemDao;

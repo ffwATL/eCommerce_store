@@ -29,7 +29,7 @@ public class CategoryImpl implements Serializable, Category {
     /**
      * CategoryImpl's depth level value.
      */
-    @Column(name = "category_level")
+    @Column(name = "level")
     private int level;
 
     /**
@@ -44,7 +44,7 @@ public class CategoryImpl implements Serializable, Category {
     @Embedded
     private I18n groupName;
 
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, targetEntity = UserImpl.class)
+    @OneToOne(cascade = CascadeType.MERGE, targetEntity = UserImpl.class)
     @JoinColumn(name = "user_id")
     private User createdBy;
 
@@ -55,7 +55,7 @@ public class CategoryImpl implements Serializable, Category {
     @Column(name="cat_description", length = 2048)
     private String description;
 
-    @Column(name = "avg_weight")
+    @Column(name = "weight")
     private int weight;
 
 

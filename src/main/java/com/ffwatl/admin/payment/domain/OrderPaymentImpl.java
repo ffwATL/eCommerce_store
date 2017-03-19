@@ -50,6 +50,12 @@ public class OrderPaymentImpl implements OrderPayment {
     @JoinColumn(name = "customer_id")
     private User customer;
 
+    @Column(name = "is_active")
+    private boolean isActive = true;
+
+    @Column(name = "is_confirmed")
+    private boolean isConfirmed = false;
+
 
     @Override
     public long getId() {
@@ -94,6 +100,16 @@ public class OrderPaymentImpl implements OrderPayment {
     @Override
     public User getCustomer() {
         return customer;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public boolean isConfirmed() {
+        return isConfirmed;
     }
 
     @Override
@@ -151,6 +167,18 @@ public class OrderPaymentImpl implements OrderPayment {
     }
 
     @Override
+    public OrderPayment setIsActive(boolean isActive) {
+        this.isActive = isActive;
+        return this;
+    }
+
+    @Override
+    public OrderPayment setIsConfirmed(boolean isConfirmed) {
+        this.isConfirmed = isConfirmed;
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -197,6 +225,8 @@ public class OrderPaymentImpl implements OrderPayment {
                 ", currency=" + currency +
                 ", dateTime=" + dateTime +
                 ", customer=" + customer +
+                ", isActive=" + isActive +
+                ", isConfirmed=" + isConfirmed +
                 '}';
     }
 }

@@ -1,17 +1,15 @@
 package com.ffwatl.admin.offer.dao;
 
 import com.ffwatl.admin.offer.domain.*;
-import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.CriteriaProperty;
-import com.ffwatl.common.persistence.CriteriaPropertyImpl;
 import com.ffwatl.common.persistence.EntityConfiguration;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.FetchModeOption;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
@@ -106,21 +104,12 @@ public class OfferDaoImpl implements OfferDao, FetchModeOption<Offer, OfferImpl>
 
     @Override
     public CriteriaProperty<Offer, OfferImpl> createOrderCriteriaQueryByFetchMode(FetchMode fetchMode) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Offer> criteria = cb.createQuery(Offer.class);
+        return buildCriteriaProperty(em.getCriteriaBuilder(), fetchMode, Offer.class, OfferImpl.class);
+    }
 
-        Root<OfferImpl> root = criteria.from(OfferImpl.class);
-
-        if(fetchMode == FetchMode.FETCHED){
-            root.fetch("matchRules", JoinType.LEFT); //TODO: It may not working..
-            root.fetch("offerCodes", JoinType.LEFT);
-        }
-
-        criteria.distinct(true);
-        criteria.select(root);
-        return new CriteriaPropertyImpl<Offer, OfferImpl>()
-                .setCriteria(criteria)
-                .setBuilder(cb)
-                .setRoot(root);
+    @Override
+    public void addFetch(Root<OfferImpl> root) {
+        root.fetch("matchRules", JoinType.LEFT); //TODO: add test for this stuff
+        root.fetch("offerCodes", JoinType.LEFT);
     }
 }

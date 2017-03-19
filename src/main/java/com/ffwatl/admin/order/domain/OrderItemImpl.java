@@ -390,7 +390,7 @@ public class OrderItemImpl implements OrderItem{
                 ", productId=" + productId +
                 ", order=" + (order != null ? order.getOrderNumber(): null) +
                 ", productName=" + productName +
-                ", productAttributeType=" + productAttributeType +
+                ", productAttribute=" + productAttribute +
                 ", color=" + color +
                 ", originPrice=" + originPrice +
                 ", retailPrice=" + retailPrice +

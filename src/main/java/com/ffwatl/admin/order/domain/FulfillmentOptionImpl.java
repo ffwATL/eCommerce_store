@@ -6,6 +6,7 @@ import com.ffwatl.admin.order.service.type.FulfillmentType;
 import javax.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "fulfillment_options")
 @NamedQueries({
         @NamedQuery(name = "find_all_fulfillment_options", query = "SELECT f FROM FulfillmentOptionImpl f"),

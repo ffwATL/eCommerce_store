@@ -1,7 +1,7 @@
 package com.ffwatl.admin.catalog.domain.filter.specification;
 
 
-import com.ffwatl.admin.catalog.domain.ProductDefault;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilterRule;
 import com.ffwatl.admin.catalog.domain.CategoryImpl;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,14 +10,14 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDefaultSpecification<T extends ProductDefault> {
+public class ProductDefaultSpecification<T extends ProductImpl> {
 
     public Specification<T> isGroupEquals(List<GridFilterRule> rules){
         return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);
-                Join<ProductDefault, CategoryImpl> join_itemGroup = root.join("itemGroup", JoinType.INNER);
+                Join<ProductImpl, CategoryImpl> join_itemGroup = root.join("itemGroup", JoinType.INNER);
                 List<Predicate> predicates = new ArrayList<>();
                 if(rules != null){
                     for (GridFilterRule r: rules){

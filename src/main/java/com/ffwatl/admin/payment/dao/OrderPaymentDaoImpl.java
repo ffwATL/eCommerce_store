@@ -4,17 +4,19 @@ package com.ffwatl.admin.payment.dao;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.payment.domain.OrderPayment;
 import com.ffwatl.admin.payment.domain.OrderPaymentImpl;
-import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.CriteriaProperty;
-import com.ffwatl.common.persistence.CriteriaPropertyImpl;
 import com.ffwatl.common.persistence.EntityConfiguration;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.FetchModeOption;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository("order_payment_dao")
@@ -77,23 +79,15 @@ public class OrderPaymentDaoImpl implements OrderPaymentDao, FetchModeOption<Ord
 
     @Override
     public CriteriaProperty<OrderPayment, OrderPaymentImpl> createOrderCriteriaQueryByFetchMode(FetchMode fetchMode) {
-        final CriteriaBuilder builder = em.getCriteriaBuilder();
+        return buildCriteriaProperty(em.getCriteriaBuilder(), fetchMode, OrderPayment.class, OrderPaymentImpl.class);
+    }
 
-        final CriteriaQuery<OrderPayment> criteria = builder.createQuery(OrderPayment.class);
-        final Root<OrderPaymentImpl> root = criteria.from(OrderPaymentImpl.class);
+    @Override
+    public void addFetch(Root<OrderPaymentImpl> root) {
+        Join<OrderPayment, Order> paymentOrderJoin = root.join("order", JoinType.INNER);
 
-        if(fetchMode == FetchMode.FETCHED){
-            Join<OrderPayment, Order> paymentOrderJoin = root.join("order", JoinType.INNER);
-
-            paymentOrderJoin.fetch("orderItems", JoinType.LEFT);
-            paymentOrderJoin.fetch("candidateOrderOffers", JoinType.LEFT);
-            paymentOrderJoin.fetch("orderAdjustments", JoinType.LEFT);
-        }
-
-        criteria.select(root);
-        return new CriteriaPropertyImpl<OrderPayment,OrderPaymentImpl>()
-                .setCriteria(criteria)
-                .setRoot(root)
-                .setBuilder(builder);
+        paymentOrderJoin.fetch("orderItems", JoinType.LEFT);
+        paymentOrderJoin.fetch("candidateOrderOffers", JoinType.LEFT);
+        paymentOrderJoin.fetch("orderAdjustments", JoinType.LEFT);
     }
 }

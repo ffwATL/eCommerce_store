@@ -31,6 +31,10 @@ public interface OrderPayment extends Serializable{
 
     User getCustomer();
 
+    boolean isActive();
+
+    boolean isConfirmed();
+
     OrderPayment setId(long id);
 
     OrderPayment setOrder(Order order);
@@ -48,4 +52,8 @@ public interface OrderPayment extends Serializable{
     OrderPayment setDateTime(LocalDateTime dateTime);
 
     OrderPayment setCustomer(User customer);
+
+    OrderPayment setIsActive(boolean isActive);
+
+    OrderPayment setIsConfirmed(boolean isConfirmed);
 }

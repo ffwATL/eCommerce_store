@@ -5,7 +5,7 @@ import com.ffwatl.admin.catalog.domain.Category;
 import com.ffwatl.admin.catalog.domain.CategoryImpl;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.dto.CategoryDTO;
-import com.ffwatl.admin.catalog.dao.ItemGroupDao;
+import com.ffwatl.admin.catalog.dao.CategoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ItemGroupServiceImpl implements ItemGroupService{
 
     @Autowired
-    private ItemGroupDao itemGroupDao;
+    private CategoryDao categoryDao;
 
     /**
      * Returns CategoryImpl object from DB by given id value;
@@ -31,7 +31,7 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     public Category findById(long id) {
-        return itemGroupDao.findById(id);
+        return categoryDao.findById(id);
     }
 
     /**
@@ -44,7 +44,7 @@ public class ItemGroupServiceImpl implements ItemGroupService{
     @Transactional
     public void save(Category itemGroup) {
         if(itemGroup == null) throw new IllegalArgumentException();
-        itemGroupDao.save((CategoryImpl) itemGroup);
+        categoryDao.save((CategoryImpl) itemGroup);
     }
 
     /**
@@ -67,7 +67,7 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     public Category findByName(@NotNull String name) {
-        List<CategoryImpl> list = itemGroupDao.findByName(name);
+        List<CategoryImpl> list = categoryDao.findByName(name);
         if(list.size() < 1) return null;
         return new CategoryDTO(list.get(0));
     }
@@ -80,14 +80,14 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     public Category findByLvlAndByNameFetchCollection(int lvl, @NotNull String name) {
-        return new CategoryDTO(itemGroupDao.findByLvlAndNameFetched(lvl, name), Category.FETCHED);
+        return new CategoryDTO(categoryDao.findByLvlAndNameFetched(lvl, name), Category.FETCHED);
     }
 
 
 
     @Override
     public List<Category> findByCatNoChildren(@NotNull final CommonCategory cat) {
-        return itemGroupList2DTOList(itemGroupDao.findByCat(cat), Category.NO_CHILD);
+        return itemGroupList2DTOList(categoryDao.findByCat(cat), Category.NO_CHILD);
     }
 
     /**
@@ -99,12 +99,12 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     public List<Category> findByLvlLazyWithoutChild(int lvl) {
-        return itemGroupList2DTOList(itemGroupDao.findByLvl(lvl), Category.NO_CHILD);
+        return itemGroupList2DTOList(categoryDao.findByLvl(lvl), Category.NO_CHILD);
     }
 
     @Override
     public List<Category> findGenderGroup(){
-        return itemGroupList2DTOList(itemGroupDao.findByLvl(2), Category.NO_CHILD);
+        return itemGroupList2DTOList(categoryDao.findByLvl(2), Category.NO_CHILD);
     }
 
     /**
@@ -117,12 +117,12 @@ public class ItemGroupServiceImpl implements ItemGroupService{
      */
     @Override
     public List<Category> findByLvlEager(int lvl) {
-        return itemGroupList2DTOList(itemGroupDao.findByLvlFetchedChild(lvl), Category.FETCHED);
+        return itemGroupList2DTOList(categoryDao.findByLvlFetchedChild(lvl), Category.FETCHED);
     }
 
     @Override
     public List<Category> findAllUsed() {
-        return itemGroupList2DTOList(itemGroupDao.findAllUsed(), Category.NO_CHILD);
+        return itemGroupList2DTOList(categoryDao.findAllUsed(), Category.NO_CHILD);
     }
 
     private List<Category> itemGroupList2DTOList(List<CategoryImpl> list, boolean fetched){

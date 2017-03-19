@@ -31,6 +31,6 @@ public class ColorDaoImpl implements ColorDao {
 
     @Override
     public List<ColorImpl> findAllUsed() {
-        return em.createQuery("SELECT DISTINCT i.color FROM ProductDefault i",ColorImpl.class).getResultList();
+        return em.createQuery("SELECT DISTINCT i.color FROM ProductImpl i",ColorImpl.class).getResultList();
     }
 }

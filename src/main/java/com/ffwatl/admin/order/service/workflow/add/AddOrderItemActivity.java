@@ -39,7 +39,7 @@ public class AddOrderItemActivity extends BaseActivity<ProcessContext<CartOperat
         Order order = request.getOrder();
 
         Product product = null;
-        if (orderItemRequestDTO.getProductId() < 0) {
+        if (orderItemRequestDTO.getProductId() > 0) {
             product = catalogService.findProductById(orderItemRequestDTO.getProductId(), FetchMode.FETCHED);
         }
         if(product == null) {

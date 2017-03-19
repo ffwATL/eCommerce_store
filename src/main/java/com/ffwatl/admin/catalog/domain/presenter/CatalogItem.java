@@ -3,7 +3,7 @@ package com.ffwatl.admin.catalog.domain.presenter;
 import com.ffwatl.admin.catalog.domain.*;
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
-import com.ffwatl.admin.catalog.domain.ProductDefault;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -16,12 +16,12 @@ public class CatalogItem {
     private String thumbnail_url;
     private List<ProductAttribute> size;
 
-    public CatalogItem(ProductDefault item, String photoUrl) {
+    public CatalogItem(ProductImpl item, String photoUrl) {
         if(item == null) throw  new IllegalArgumentException();
         this.item = item;
         this.photoUrl = photoUrl;
         this.thumbnail_url = getThumbnailUrl();
-        if(item instanceof ProductClothes) this.size = ((ProductClothes) item).getSize();
+        /*if(item instanceof ProductClothes) this.size = ((ProductClothes) item).getSize();*/
     }
 
     public List<ProductAttribute> getSize() {

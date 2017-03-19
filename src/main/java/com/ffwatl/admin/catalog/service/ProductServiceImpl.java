@@ -1,16 +1,16 @@
 package com.ffwatl.admin.catalog.service;
 
 
-import com.ffwatl.admin.catalog.domain.*;
-import com.ffwatl.admin.catalog.domain.ProductDefault;
-import com.ffwatl.admin.catalog.domain.ProductClothes;
-import com.ffwatl.admin.catalog.domain.presenter.ProductImage;
-import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.admin.catalog.domain.presenter.ClothesItemPresenter;
-import com.ffwatl.admin.catalog.domain.presenter.ProductUpdateImpl;
+import com.ffwatl.admin.catalog.dao.ProductDao;
+import com.ffwatl.admin.catalog.domain.Product;
+import com.ffwatl.admin.catalog.domain.ProductAttribute;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
 import com.ffwatl.admin.catalog.domain.presenter.ItemUpdatePresenter;
+import com.ffwatl.admin.catalog.domain.presenter.ProductImage;
+import com.ffwatl.admin.catalog.domain.presenter.ProductUpdateImpl;
+import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.dto.UserDTO;
-import com.ffwatl.admin.catalog.dao.ItemDao;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,15 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class ItemServiceImpl implements ItemService{
+@Service("product_service")
+public class ProductServiceImpl implements ProductService {
     private static final Logger logger = LogManager.getLogger("com.ffwatl.admin.web.controller.AddNewItemController");
     @Autowired
-    private ItemDao itemDao;
+    private ProductDao productDao;
     @Autowired
     private BrandService brandService;
     @Autowired
@@ -42,42 +41,61 @@ public class ItemServiceImpl implements ItemService{
     private Settings settings;
 
     @Override
-    public ProductDefault findById(long id) {
-        ProductDefault item = itemDao.findById(id);
+    public ProductImpl findById(long id) {
+        ProductImpl item = productDao.findById(id);
         item.getCategory().setChild(null);
         return item;
     }
 
     @Override
-    public List<ProductDefault> findAll() {
-        return itemDao.findAll();
+    public Product findById(long id, FetchMode fetchMode) {
+        if(id < 1) {
+            throw new IllegalArgumentException("Wrong Product ID given: " + id);
+        }
+        return productDao.findById(id, fetchMode);
+    }
+
+    @Override
+    public List<ProductImpl> findAll() {
+        return productDao.findAll();
+    }
+
+    @Override
+    public List<Product> findAll(FetchMode fetchMode) {
+        return productDao.findAll(fetchMode);
     }
 
     @Override
     @Transactional
-    public void save(ProductDefault item) {
+    public void save(ProductImpl item) {
         item.setColor(colorService.findById(item.getColor().getId()));
         item.setItemGroup(itemGroupService.findById(item.getCategory().getId()));
-        if(item instanceof ProductClothes){
-            ProductClothes i = (ProductClothes) item;
-            i.setBrand(brandService.findById(i.getBrand().getId()));
-            for (ProductAttribute s: i.getSize()){
-                s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
-            }
+
+        item.setBrand(brandService.findById(item.getBrand().getId()));
+        for (ProductAttribute s: item.getProductAttributes()){
+            s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
         }
-        itemDao.save(item);
+
+        productDao.save(item);
+    }
+
+    @Override
+    public Product save(Product product) {
+        return productDao.save(product);
+    }
+
+    @Override
+    public void remove(Product item) {
+        if(item == null) {
+            throw new IllegalArgumentException("Null Product is given");
+        }
+        productDao.remove(item);
     }
 
     @Override
     @Transactional
-    public void remove(ProductDefault item) {
-        itemDao.remove(item);
-    }
-
-    @Override
-    @Transactional
-    public void changeItemStatus(ProductDefault item){
-        ProductDefault item_1 = findById(item.getId());
+    public void changeItemStatus(ProductImpl item){
+        ProductImpl item_1 = findById(item.getId());
         item_1.setActive(item.isActive());
     }
 
@@ -85,7 +103,7 @@ public class ItemServiceImpl implements ItemService{
     @Transactional
     public void updateSingleItem(ItemUpdatePresenter update){
         Product freshItem = update.getItem();
-        ProductDefault item = findById(freshItem.getId());
+        ProductImpl item = findById(freshItem.getId());
         if(item == null) {
             throw new IllegalArgumentException("Probably wrong Product id. Product not found :( [id]="+freshItem.getId() );
         }
@@ -94,7 +112,7 @@ public class ItemServiceImpl implements ItemService{
         item.setItemName(freshItem.getProductName());
         item.setActive(freshItem.isActive());
         item.setSalePrice(freshItem.getSalePrice());
-        item.setDiscount(freshItem.getDiscount());
+
         item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
     }
 
@@ -106,9 +124,9 @@ public class ItemServiceImpl implements ItemService{
         int priceValue = map.get("priceValue") != null ? Integer.valueOf(map.get("priceValue")) : 0;
         int discount = map.get("discount") != null ? Integer.valueOf(map.get("discount")) : -1;
         for (long id: ids){
-            ProductDefault item = findById(id);
+            ProductImpl item = findById(id);
             item.setSalePrice(item.getSalePrice() + priceValue);
-            if(discount > -1) item.setDiscount(discount);
+
             if(map.get("isActive") != null) item.setActive(Boolean.valueOf(map.get("isActive")));
             item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
         }
@@ -116,7 +134,7 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public ProductUpdateImpl findItemPresenterById(long id) {
-        ProductDefault item = itemDao.findById(id);
+        /*ProductImpl item = productDao.findById(id);
         if(item == null){
             System.err.println("Product == null");
             throw new IllegalArgumentException();
@@ -124,7 +142,7 @@ public class ItemServiceImpl implements ItemService{
         item.getCategory().setChild(null);
         ProductUpdateImpl presenter = item2Presenter(item);
 
-        if(item instanceof ProductClothes){
+        if(item instanceof ProductImpl){
             ClothesItemPresenter cPresenter = new ClothesItemPresenter(presenter);
             cPresenter.setBrand(((ProductClothes) item).getBrand());
             Collections.sort(((ProductClothes) item).getSize());
@@ -134,7 +152,8 @@ public class ItemServiceImpl implements ItemService{
             return cPresenter;
         }
         logger.info("not clothes");
-        return presenter;
+        return presenter;*/
+        return null;
     }
 
     private UserDTO user2Presenter(User u){
@@ -150,7 +169,7 @@ public class ItemServiceImpl implements ItemService{
         return userDTO;
     }
 
-    private ProductUpdateImpl item2Presenter(ProductDefault item){
+    private ProductUpdateImpl item2Presenter(ProductImpl item){
         String photoDir = settings.getPhotoDir()+"item_"+item.getId();
         String url = settings.getPhotoUrl() +"item_"+item.getId()+"/";
 
@@ -158,7 +177,7 @@ public class ItemServiceImpl implements ItemService{
 
         presenter.setAddedBy(user2Presenter(item.getAddedBy()));
         presenter.setId(item.getId());
-        presenter.setDiscount(item.getDiscount());
+
         presenter.setItemGroup(item.getCategory());
         presenter.setSalePrice(item.getSalePrice());
         presenter.setActive(item.isActive());
@@ -176,15 +195,19 @@ public class ItemServiceImpl implements ItemService{
 
     private List<ProductImage> urlImages(String directory, String end, String url) {
         List<ProductImage> textFiles = new ArrayList<>();
-        for (File file : new File(directory).listFiles()) {
-            if (file.getName().endsWith(end)) {
-                ProductImage image = new ProductImage();
-                image.setSize(file.length());
-                image.setName(file.getName());
-                image.setUrl(url+file.getName());
-                textFiles.add(image);
+        File[] files = new File(directory).listFiles();
+        if(files != null){
+            for (File file : files) {
+                if (file.getName().endsWith(end)) {
+                    ProductImage image = new ProductImage();
+                    image.setSize(file.length());
+                    image.setName(file.getName());
+                    image.setUrl(url+file.getName());
+                    textFiles.add(image);
+                }
             }
         }
+
         return textFiles;
     }
 }

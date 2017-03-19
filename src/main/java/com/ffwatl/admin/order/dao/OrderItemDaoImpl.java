@@ -5,10 +5,9 @@ import com.ffwatl.admin.order.domain.OrderItemImpl;
 import com.ffwatl.admin.order.domain.OrderItemPriceDetail;
 import com.ffwatl.admin.order.domain.OrderItemQualifier;
 import com.ffwatl.admin.user.domain.Message;
-import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.CriteriaProperty;
-import com.ffwatl.common.persistence.CriteriaPropertyImpl;
 import com.ffwatl.common.persistence.EntityConfiguration;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.FetchModeOption;
 import org.springframework.stereotype.Repository;
 
@@ -87,25 +86,17 @@ public class OrderItemDaoImpl implements OrderItemDao, FetchModeOption<OrderItem
 
     @Override
     public CriteriaProperty<OrderItem, OrderItemImpl> createOrderCriteriaQueryByFetchMode(final FetchMode fetchMode){
-        final CriteriaBuilder builder = em.getCriteriaBuilder();
+        return buildCriteriaProperty(em.getCriteriaBuilder(), fetchMode, OrderItem.class, OrderItemImpl.class);
+    }
 
-        final CriteriaQuery<OrderItem> criteria = builder.createQuery(OrderItem.class);
-        final Root<OrderItemImpl> root = criteria.from(OrderItemImpl.class);
+    @Override
+    public void addFetch(Root<OrderItemImpl> root) {
+        Fetch<OrderItem, OrderItemPriceDetail> orderItemFetch = root.fetch("orderItemPriceDetails",
+                JoinType.LEFT);
 
-        if(fetchMode == FetchMode.FETCHED){
-            Fetch<OrderItem, OrderItemPriceDetail> orderItemFetch = root.fetch("orderItemPriceDetails",
-                    JoinType.LEFT);
+        orderItemFetch.fetch("orderItemPriceDetailAdjustments", JoinType.LEFT);
 
-            orderItemFetch.fetch("orderItemPriceDetailAdjustments", JoinType.LEFT);
-
-            root.fetch("candidateItemOffers", JoinType.LEFT);
-            root.fetch("orderItemQualifiers", JoinType.LEFT);
-        }
-        criteria.distinct(true);
-        criteria.select(root);
-        return new CriteriaPropertyImpl<OrderItem, OrderItemImpl>()
-                .setBuilder(builder)
-                .setCriteria(criteria)
-                .setRoot(root);
+        root.fetch("candidateItemOffers", JoinType.LEFT);
+        root.fetch("orderItemQualifiers", JoinType.LEFT);
     }
 }

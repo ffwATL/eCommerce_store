@@ -3,7 +3,7 @@ package com.ffwatl.admin.catalog.domain.presenter;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ffwatl.admin.catalog.domain.Product;
-import com.ffwatl.admin.catalog.domain.ProductDefault;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class ItemUpdatePresenter implements Serializable{
     private long [] identifiers;
 
     private Map<String, String> options;
-    @JsonDeserialize(as=ProductDefault.class)
+    @JsonDeserialize(as=ProductImpl.class)
     private Product item;
 
     public Product getItem() {

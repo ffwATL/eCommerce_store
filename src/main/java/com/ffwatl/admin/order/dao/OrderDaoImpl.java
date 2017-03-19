@@ -7,10 +7,7 @@ import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderStatus;
 import com.ffwatl.admin.payment.domain.OrderPayment;
 import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.common.persistence.FetchMode;
-import com.ffwatl.common.persistence.CriteriaProperty;
-import com.ffwatl.common.persistence.CriteriaPropertyImpl;
-import com.ffwatl.common.persistence.EntityConfiguration;
+import com.ffwatl.common.persistence.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +21,7 @@ import java.util.UUID;
 
 
 @Repository("order_dao")
-public class OrderDaoImpl implements OrderDao{
+public class OrderDaoImpl implements OrderDao, FetchModeOption<Order, OrderImpl>{
 
     private static final String ORDER_LOCK_KEY = UUID.randomUUID().toString();
 
@@ -216,31 +213,23 @@ public class OrderDaoImpl implements OrderDao{
         return false;
     }
 
-    private CriteriaProperty<Order, OrderImpl> createOrderCriteriaQueryByFetchMode(final FetchMode fetchMode){
-        final CriteriaBuilder builder = em.getCriteriaBuilder();
+    public CriteriaProperty<Order, OrderImpl> createOrderCriteriaQueryByFetchMode(final FetchMode fetchMode){
+        return buildCriteriaProperty(em.getCriteriaBuilder(), fetchMode, Order.class, OrderImpl.class);
+    }
 
-        final CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
-        final Root<OrderImpl> root = criteria.from(OrderImpl.class);
+    @Override
+    public void addFetch(Root<OrderImpl> root) {
+        Fetch<Order, OrderItem> orderItemFetch = root.fetch("orderItems", JoinType.LEFT);
 
-        if(fetchMode == FetchMode.FETCHED){
-            Fetch<Order, OrderItem> orderItemFetch = root.fetch("orderItems", JoinType.LEFT);
+        root.fetch("candidateOrderOffers", JoinType.LEFT);
+        root.fetch("orderAdjustments", JoinType.LEFT);
 
-            root.fetch("candidateOrderOffers", JoinType.LEFT);
-            root.fetch("orderAdjustments", JoinType.LEFT);
+        orderItemFetch.fetch("candidateItemOffers", JoinType.LEFT);
 
-            orderItemFetch.fetch("candidateItemOffers", JoinType.LEFT);
+        orderItemFetch.fetch("orderItemPriceDetails", JoinType.LEFT)
+                .fetch("orderItemPriceDetailAdjustments", JoinType.LEFT);
 
-            orderItemFetch.fetch("orderItemPriceDetails", JoinType.LEFT)
-                    .fetch("orderItemPriceDetailAdjustments", JoinType.LEFT);
-
-            orderItemFetch.fetch("orderItemQualifiers", JoinType.LEFT);
-        }
-        criteria.distinct(true);
-        criteria.select(root);
-        return new CriteriaPropertyImpl<Order, OrderImpl>()
-                .setBuilder(builder)
-                .setCriteria(criteria)
-                .setRoot(root);
+        orderItemFetch.fetch("orderItemQualifiers", JoinType.LEFT);
     }
 
 }

@@ -15,6 +15,7 @@
               </property>
        </bean>
 
+
        <bean id="fulfillmentOptionForNamedOrder" class="com.ffwatl.admin.order.domain.FulfillmentOptionImpl">
               <property name="id" value="1"/>
               <property name="fulfillmentType" value="PHYSICAL_SHIP"/>

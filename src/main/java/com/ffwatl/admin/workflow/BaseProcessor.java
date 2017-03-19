@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.core.OrderComparator;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +18,7 @@ import java.util.*;
  *
  * @author ffw_ATL.
  */
-public abstract class BaseProcessor implements Processor {
+public abstract class BaseProcessor implements Processor, BeanNameAware {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -26,6 +27,7 @@ public abstract class BaseProcessor implements Processor {
     private String beanName;
     protected ErrorHandler defaultErrorHandler;
     private boolean autoRollbackOnError = true;
+
 
     /**
      * Called after the properties have been set, Ensures the list of activities

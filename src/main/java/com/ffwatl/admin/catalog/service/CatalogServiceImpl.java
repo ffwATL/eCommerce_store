@@ -8,6 +8,7 @@ import com.ffwatl.common.persistence.FetchMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,6 +18,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CatalogServiceImpl implements CatalogService {
 
+    @Resource(name = "product_service")
+    private ProductService productService;
+
+    @Resource(name = "product_attribute_service")
+    private ProductAttributeService productAttributeService;
 
 
     @Override
@@ -26,12 +32,12 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public Product saveProduct(Product product) {
-        return null;
+        return productService.save(product);
     }
 
     @Override
     public Product findProductById(long id, FetchMode fetchMode) {
-        return null;
+        return productService.findById(id);
     }
 
     @Override
@@ -106,6 +112,6 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public ProductAttribute findProductAttributeById(long id, FetchMode fetchMode) {
-        return null;
+        return productAttributeService.findById(id);
     }
 }

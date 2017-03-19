@@ -1,10 +1,9 @@
 package com.ffwatl.admin.catalog.service;
 
-import com.ffwatl.admin.catalog.dao.ClothesItemDao;
+import com.ffwatl.admin.catalog.dao.ProductDao;
 import com.ffwatl.admin.catalog.domain.*;
 import com.ffwatl.admin.catalog.domain.dto.FieldDTO;
 import com.ffwatl.admin.catalog.domain.dto.ProductAttributeDTO;
-import com.ffwatl.admin.catalog.domain.presenter.ClothesItemPresenter;
 import com.ffwatl.admin.user.service.UserService;
 import com.ffwatl.common.service.ConverterDTO;
 import org.apache.logging.log4j.LogManager;
@@ -13,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,7 +23,7 @@ public class ClothesItemServiceImpl implements ClothesItemService{
     private static final SizeDTOConverter sizeDTOConverter = new SizeDTOConverter();
 
     @Autowired
-    private ClothesItemDao clothesItemDao;
+    private ProductDao clothesProductDao;
 
     @Autowired
     private BrandService brandService;
@@ -46,44 +42,45 @@ public class ClothesItemServiceImpl implements ClothesItemService{
 
 
     @Override
-    public ProductClothes findById(long id) {
-        return clothesItemDao.findById(id);
+    public ProductImpl findById(long id) {
+        return clothesProductDao.findById(id);
     }
 
     @Override
-    public Optional<List<ClothesItemPresenter>> findAll() {
-        List<ClothesItemPresenter> list = new ArrayList<>();
-        List<ProductClothes> clothesItemList = clothesItemDao.findAll();
+    public Optional<List<ProductImpl>> findAll() {
+        /*List<ClothesItemPresenter> list = new ArrayList<>();
+        List<ProductClothes> clothesItemList = clothesProductDao.findAll();
         list.addAll(clothesItemList.stream().map(ClothesItemPresenter::new).collect(Collectors.toList()));
-        return Optional.of(list);
+        return Optional.of(list);*/
+        return Optional.empty();
     }
 
     @Override
     @Transactional
     public void removeById(long id) {
-        clothesItemDao.remove(findById(id));
+        clothesProductDao.remove(findById(id));
     }
 
     @Override
     @Transactional
     public long save(Optional<ClothesItemPresenter> optional, String email){
         if(!optional.isPresent()) throw new IllegalArgumentException("Items data is empty :(");
-        ProductClothes item = presenter2Item(optional.get(), email);
-        clothesItemDao.save(item);
+        ProductImpl item = presenter2Item(optional.get(), email);
+        clothesProductDao.save(item);
         return item.getId();
     }
 
     @Override
     @Transactional
     public void save(Optional<List<ClothesItemPresenter>> optionals){
-        for(ClothesItemPresenter item: optionals.get()){
-            clothesItemDao.save(presenter2Item(item, item.getAddedBy().getEmail()));
-        }
+        /*for(ClothesItemPresenter item: optionals.get()){
+            clothesProductDao.save(presenter2Item(item, item.getAddedBy().getEmail()));
+        }*/
     }
 
-    private ProductClothes presenter2Item(ClothesItemPresenter presenter, String email){
-        ProductClothes item;
-        if(!presenter.isEdit()) {
+    private ProductImpl presenter2Item(ClothesItemPresenter presenter, String email){
+        ProductImpl item;
+        /*if(!presenter.isEdit()) {
             item = new ProductClothes();
             item.setImportDate(new Date());
             item.setAddedBy(userService.findByEmail(email));
@@ -111,9 +108,9 @@ public class ClothesItemServiceImpl implements ClothesItemService{
         item.setSalePrice(presenter.getSalePrice());
         item.setRetailPrice(presenter.getRetailPrice());
         item.setCurrency(presenter.getCurrency());
-        item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
+        item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));*/
 
-        return item;
+        return null;
     }
 
     private static class SizeDTOConverter extends ConverterDTO<ProductAttribute>{
