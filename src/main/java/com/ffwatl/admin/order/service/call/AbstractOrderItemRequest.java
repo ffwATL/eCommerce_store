@@ -4,9 +4,6 @@ import com.ffwatl.admin.catalog.domain.Category;
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.order.domain.Order;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *  Only the product is required to add an item to an order.
  *
@@ -28,35 +25,22 @@ public abstract class AbstractOrderItemRequest {
     protected int quantity;
     protected int salePriceOverride;
     protected int retailPriceOverride;
-
-    protected Map<String,String> itemAttributes = new HashMap<>();
+    private boolean incrementOrderItemQuantity;
 
     public String getSku() {
         return sku;
     }
 
-    public void setSku(String sku) {
-        this.sku = sku;
+    public boolean isIncrementOrderItemQuantity() {
+        return incrementOrderItemQuantity;
     }
 
     public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     public Product getProduct() {
         return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 
     public Order getOrder() {
@@ -67,28 +51,42 @@ public abstract class AbstractOrderItemRequest {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Map<String, String> getItemAttributes() {
-        return itemAttributes;
-    }
-
-    public void setItemAttributes(Map<String, String> itemAttributes) {
-        this.itemAttributes = itemAttributes;
-    }
-
     public int getSalePriceOverride() {
         return salePriceOverride;
     }
 
-    public void setSalePriceOverride(int salePriceOverride) {
-        this.salePriceOverride = salePriceOverride;
-    }
-
     public int getRetailPriceOverride() {
         return retailPriceOverride;
+    }
+
+
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public void setIncrementOrderItemQuantity(boolean incrementOrderItemQuantity) {
+        this.incrementOrderItemQuantity = incrementOrderItemQuantity;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setSalePriceOverride(int salePriceOverride) {
+        this.salePriceOverride = salePriceOverride;
     }
 
     public void setRetailPriceOverride(int retailPriceOverride) {
@@ -97,7 +95,6 @@ public abstract class AbstractOrderItemRequest {
 
     protected void copyProperties(AbstractOrderItemRequest newRequest) {
         newRequest.setCategory(category);
-        newRequest.setItemAttributes(itemAttributes);
         newRequest.setProduct(product);
         newRequest.setQuantity(quantity);
         newRequest.setSku(sku);
@@ -113,10 +110,10 @@ public abstract class AbstractOrderItemRequest {
 
         AbstractOrderItemRequest that = (AbstractOrderItemRequest) o;
 
+        if (incrementOrderItemQuantity != that.isIncrementOrderItemQuantity()) return false;
         if (getQuantity() != that.getQuantity()) return false;
         if (getSalePriceOverride() != that.getSalePriceOverride()) return false;
         if (getRetailPriceOverride() != that.getRetailPriceOverride()) return false;
-        if (getSku() != null ? !getSku().equals(that.getSku()) : that.getSku() != null) return false;
         if (getCategory() != null ? !getCategory().equals(that.getCategory()) : that.getCategory() != null)
             return false;
         if (getProduct() != null ? !getProduct().equals(that.getProduct()) : that.getProduct() != null) return false;
@@ -126,13 +123,13 @@ public abstract class AbstractOrderItemRequest {
 
     @Override
     public int hashCode() {
-        int result = getSku() != null ? getSku().hashCode() : 0;
-        result = 31 * result + (getCategory() != null ? getCategory().hashCode() : 0);
+        int result = getCategory() != null ? getCategory().hashCode() : 0;
         result = 31 * result + (getProduct() != null ? getProduct().hashCode() : 0);
         result = 31 * result + (getOrder() != null ? getOrder().hashCode() : 0);
         result = 31 * result + getQuantity();
         result = 31 * result + getSalePriceOverride();
         result = 31 * result + getRetailPriceOverride();
+        result = 31 * result + (isIncrementOrderItemQuantity() ? 1 : 0);
         return result;
     }
 }

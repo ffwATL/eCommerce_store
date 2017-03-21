@@ -6,7 +6,6 @@ import com.ffwatl.admin.catalog.service.CatalogService;
 import com.ffwatl.admin.catalog.service.ProductService;
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.order.domain.Order;
-import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.service.call.OrderItemRequest;
 import com.ffwatl.admin.order.service.call.OrderItemRequestDTO;
 import com.ffwatl.admin.order.service.exception.AddToCartException;
@@ -17,7 +16,9 @@ import com.ffwatl.common.persistence.FetchMode;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -60,6 +61,9 @@ public class OrderServiceTest {
     @Resource(name = "user_service")
     private UserService userService;
 
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
 
     @Test
     public void datasetTest(){
@@ -78,27 +82,82 @@ public class OrderServiceTest {
 
     @Test
     public void addOrderItemTest() throws AddToCartException, PricingException {
-        Product product = productService.findById(1);
-        User customer = userService.findById(1);
+
+    }
+
+    private OrderItemRequest buildOrderItemRequestWithNewOrder(long productId, long customerId,
+                                                               long attrId, int requestedQuantity,
+                                                               boolean incrementOrderItemQuantity) throws PricingException {
+        Product product = productService.findById(productId);
+        User customer = userService.findById(customerId);
         Order order = orderService.createNewCartForCustomer(customer, Currency.UAH);
-        ProductAttribute productAttribute = catalogService.findProductAttributeById(1, FetchMode.LAZY);
+        ProductAttribute productAttribute = catalogService.findProductAttributeById(attrId, FetchMode.LAZY);
+
+        order = orderService.save(order, false);
 
         OrderItemRequest request = new OrderItemRequest();
         request.setCategory(product.getCategory());
-        request.setQuantity(3);
+        request.setQuantity(requestedQuantity);
         request.setOrder(order);
         request.setItemName(product.getProductName());
         request.setProduct(product);
         request.setProductAttribute(productAttribute);
+        request.setColor(product.getColor());
+        request.setRetailPriceOverride(product.getRetailPrice());
+        request.setSalePriceOverride(product.getSalePrice());
+        request.setIncrementOrderItemQuantity(true);
 
-        orderService.save(order, false);
+        return request;
+    }
 
-        OrderItem orderItem = orderItemService.createOrderItem(request);
-        Assert.assertEquals(1, order.getId());
+    public void inventoryTest(long productId, long customerId,
+                              long attrId, int requestedQuantity,
+                              boolean incrementOrderItemQuantity, int expectedQuantity) throws AddToCartException, PricingException {
 
-        orderService.addItem(1, new OrderItemRequestDTO(request), false);
+        OrderItemRequest request = buildOrderItemRequestWithNewOrder(productId, customerId, attrId,
+                requestedQuantity, incrementOrderItemQuantity);
 
-        System.err.println(order);
+        orderService.addItem(request.getOrder().getId(), new OrderItemRequestDTO(request), false);
+        ProductAttribute attribute = catalogService.findProductAttributeById(attrId, FetchMode.LAZY);
+
+        Assert.assertEquals(expectedQuantity, attribute.getQuantity());
+
+    }
+
+    @Test
+    public void decrementInventoryNormalTest() throws PricingException, AddToCartException {
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 1;
+        int requestedQuantity = 3;
+        boolean incrementOrderItemQuantity = true;
+
+        int expectedQuantity = 0;
+
+        inventoryTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+    }
+
+    @Test
+    public void decrementInventoryUnavailableTest() throws AddToCartException, PricingException {
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 2;
+        int requestedQuantity = 4;
+        boolean incrementOrderItemQuantity = true;
+        int expectedQuantity = 2;
+
+        Exception e = new Exception();
+
+        try{
+            inventoryTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+        }catch (AddToCartException ex){
+            e = ex;
+            ProductAttribute attribute = catalogService.findProductAttributeById(productAttributeId, FetchMode.LAZY);
+            Assert.assertEquals(expectedQuantity, attribute.getQuantity());
+        }
+
+        Assert.assertTrue(e instanceof AddToCartException);
+
     }
 
 }

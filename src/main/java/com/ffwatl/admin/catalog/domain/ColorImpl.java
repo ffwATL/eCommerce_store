@@ -5,7 +5,7 @@ import com.ffwatl.admin.i18n.domain.I18n;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "colors")
+@Table(name = "color")
 public class ColorImpl implements Color {
 
     @Id

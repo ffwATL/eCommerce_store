@@ -2,6 +2,10 @@
     <brand id="1"
            name="ASOS"/>
 
+    <color id="1"
+           locale_en="Khaki"
+           hex="00000"/>
+
     <items_group id="1"
                  level="4"
                  common_category="4"
@@ -23,6 +27,7 @@
            category_id="1"
            brand_id="1"
            can_sell_without_attributes="false"
+           color_id="1"
             />
 
     <product_attribute_types id="1"

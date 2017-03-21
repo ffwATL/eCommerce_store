@@ -25,7 +25,7 @@ public class UpdateInventoryActivity extends BaseActivity<ProcessContext<CartOpe
         CartOperationRequest request = context.getSeedData();
         OrderItemRequestDTO orderItemRequestDTO = request.getItemRequest();
 
-        Integer requestedQuantity = request.getOrderItemQuantityDelta();
+        Integer requestedQuantity = orderItemRequestDTO.getQuantity();
         ProductAttribute attribute = orderItemRequestDTO.getProductAttribute();
 
         // map to hold attributes and quantity purchased

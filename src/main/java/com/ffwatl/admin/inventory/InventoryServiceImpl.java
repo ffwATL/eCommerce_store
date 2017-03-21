@@ -56,7 +56,7 @@ public class InventoryServiceImpl implements InventoryService {
         if(attribute == null) {
             throw new IllegalArgumentException("Given ProductAttribute is null");
         }
-        attribute = catalogService.findProductAttributeById(attribute.getId(),FetchMode.LAZY);
+        attribute = catalogService.findProductAttributeById(attribute.getId(), FetchMode.LAZY);
 
         int availableQuantity = attribute.getQuantity();
 

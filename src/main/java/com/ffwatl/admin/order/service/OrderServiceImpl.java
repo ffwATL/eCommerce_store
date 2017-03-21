@@ -341,7 +341,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Order addItem(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws AddToCartException {
         // Don't allow overrides from this method.
         orderItemRequestDTO.setOverrideRetailPrice(0);
@@ -379,6 +379,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @SuppressWarnings("unchecked")
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Order addItemWithPriceOverrides(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws AddToCartException {
         Order order = findOrderById(orderId, FetchMode.FETCHED);
         preValidateCartOperation(order);

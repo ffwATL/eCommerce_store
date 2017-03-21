@@ -26,11 +26,13 @@ public class OrderImpl implements Order {
     public void init(){
         if(orderItems != null){
             for(OrderItem oi: orderItems){
-                oi.setOrder(this);
+                if(oi.getOrder() == null){
+                    oi.setOrder(this);
+                }
             }
         }
 
-        if(fulfillmentGroup != null){
+        if(fulfillmentGroup != null && fulfillmentGroup.getOrder() == null){
             fulfillmentGroup.setOrder(this);
         }
     }
@@ -64,7 +66,7 @@ public class OrderImpl implements Order {
                cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(mappedBy = "order", targetEntity = FulfillmentGroupImpl.class)
+    @OneToOne(mappedBy = "order", targetEntity = FulfillmentGroupImpl.class, cascade = CascadeType.ALL)
     private FulfillmentGroup fulfillmentGroup;
 
     @OneToMany(mappedBy = "order",
