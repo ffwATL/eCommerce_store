@@ -51,7 +51,10 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .setQuantity(item.getQuantity())
                 .setOverrideRetailPrice(item.getRetailPrice())
                 .setOverrideSalePrice(item.getSalePrice())
-                .setItemAttribute(item.getProductAttribute());
+                .setItemAttribute(item.getProductAttribute())
+                .setCategoryId(item.getCategory().getId())
+                .setOrderItemId(item.getId())
+                .setProductId(item.getProductId());
     }
 
     @Override
@@ -63,6 +66,10 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .setSalePrice(itemRequest.getSalePriceOverride())
                 .setRetailPrice(itemRequest.getRetailPriceOverride())
                 .setProductAttribute(itemRequest.getProductAttribute())
-                .setCategory(itemRequest.getCategory());
+                .setCategory(itemRequest.getCategory())
+                .setColor(itemRequest.getColor())
+                .setProductAttribute(itemRequest.getProductAttribute())
+                .setProductAttributeType(itemRequest.getProductAttribute().getEu_size())
+                .setProductId(itemRequest.getProduct().getId());
     }
 }

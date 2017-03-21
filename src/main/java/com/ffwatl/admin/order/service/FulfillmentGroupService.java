@@ -11,6 +11,7 @@ import com.ffwatl.admin.order.service.type.FulfillmentType;
 import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.common.persistence.FetchMode;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -78,4 +79,6 @@ public interface FulfillmentGroupService {
     List<FulfillmentGroupItem> getFulfillmentGroupItemsForOrderItem(Order order, OrderItem orderItem);
 
     void removeFulfillmentGroupItem(FulfillmentGroupItem fulfillmentGroupItem);
+
+    void removeFulfillmentGroupItems(Collection<FulfillmentGroupItem> fulfillmentGroupItems);
 }

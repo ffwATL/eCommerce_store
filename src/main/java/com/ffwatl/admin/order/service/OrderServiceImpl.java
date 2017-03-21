@@ -452,7 +452,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @SuppressWarnings("unchecked")
-    @Transactional(rollbackFor = {UpdateCartException.class, RemoveFromCartException.class})
+    @Transactional(rollbackFor = {UpdateCartException.class, RemoveFromCartException.class},
+            isolation = Isolation.READ_COMMITTED)
     public Order updateItemQuantity(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder)
             throws UpdateCartException, RemoveFromCartException {
         preValidateCartOperation(findOrderById(orderId, FetchMode.FETCHED));

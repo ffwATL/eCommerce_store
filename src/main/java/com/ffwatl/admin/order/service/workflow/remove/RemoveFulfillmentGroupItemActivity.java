@@ -25,9 +25,7 @@ public class RemoveFulfillmentGroupItemActivity extends BaseActivity<ProcessCont
 
         request = fgItemStrategy.onItemRemoved(request);
 
-        /*for(FulfillmentGroupItem fgi: request.getFgisToDelete()){
-            fulfillmentGroupService.removeFulfillmentGroupItem(fgi);
-        }*/
+        fulfillmentGroupService.removeFulfillmentGroupItems(request.getFgisToDelete());
 
         context.setSeedData(request);
         return context;

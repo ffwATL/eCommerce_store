@@ -36,6 +36,7 @@ public class OrderItemRequestDTO {
     private ProductAttribute productAttribute;
     private List<OrderItemRequestDTO> childOrderItems = new ArrayList<>();
     private long parentOrderItemId;
+    private boolean incrementOrderItemQuantity;
 
     public OrderItemRequestDTO() {}
 
@@ -104,7 +105,9 @@ public class OrderItemRequestDTO {
         return parentOrderItemId;
     }
 
-
+    public boolean isIncrementOrderItemQuantity() {
+        return incrementOrderItemQuantity;
+    }
 
     public OrderItemRequestDTO setSku(String sku) {
         this.sku = sku;
@@ -158,6 +161,12 @@ public class OrderItemRequestDTO {
 
     public OrderItemRequestDTO setParentOrderItemId(long parentOrderItemId) {
         this.parentOrderItemId = parentOrderItemId;
+        return this;
+    }
+
+
+    public OrderItemRequestDTO setIncrementOrderItemQuantity(boolean incrementOrderItemQuantity) {
+        this.incrementOrderItemQuantity = incrementOrderItemQuantity;
         return this;
     }
 

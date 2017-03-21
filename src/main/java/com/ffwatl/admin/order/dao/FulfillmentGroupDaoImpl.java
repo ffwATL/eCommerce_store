@@ -2,6 +2,7 @@ package com.ffwatl.admin.order.dao;
 
 import com.ffwatl.admin.order.domain.FulfillmentGroup;
 import com.ffwatl.admin.order.domain.FulfillmentGroupImpl;
+import com.ffwatl.admin.order.domain.FulfillmentGroupItem;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.service.type.FulfillmentGroupStatusType;
 import com.ffwatl.common.persistence.FetchMode;

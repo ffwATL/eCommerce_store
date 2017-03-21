@@ -1,4 +1,4 @@
-package com.ffwatl.admin.checkout.workflow;
+package com.ffwatl.admin.order.service.workflow;
 
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.admin.inventory.InventoryRollback;
@@ -10,29 +10,29 @@ import com.ffwatl.admin.workflow.state.RollbackFailureException;
 import com.ffwatl.admin.workflow.state.RollbackHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Map;
 
 /**
- * Decrements inventory that was put on by the {@link DecrementInventoryCheckoutActivity}
- *
  * @author ffw_ATL.
  */
-@Component("decrement_inventory_rollback_handler")
-public class DecrementInventoryRollbackHandler implements RollbackHandler<CheckoutSeed> {
+@Component("update_inventory_rollback_handler")
+@Scope("prototype")
+public class UpdateInventoryRollbackHandler implements RollbackHandler<CartOperationRequest> {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Resource(name = "inventory_service")
     private InventoryService inventoryService;
 
-
     @Override
-    public void rollbackState(Activity<? extends ProcessContext<CheckoutSeed>> activity,
-                              ProcessContext<CheckoutSeed> processContext,
+    public void rollbackState(Activity<? extends ProcessContext<CartOperationRequest>> activity,
+                              ProcessContext<CartOperationRequest> processContext,
                               Map<String, Object> stateConfiguration) throws RollbackFailureException {
+
         if(!shouldExecute(stateConfiguration)){
             return;
         }
@@ -83,6 +83,7 @@ public class DecrementInventoryRollbackHandler implements RollbackHandler<Checko
                 throw rfe;
             }
         }
+
     }
 
     /**

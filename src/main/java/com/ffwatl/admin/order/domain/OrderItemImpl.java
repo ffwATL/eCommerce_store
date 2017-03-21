@@ -397,7 +397,6 @@ public class OrderItemImpl implements OrderItem{
                 ", salePrice=" + salePrice +
                 ", quantity=" + quantity +
                 ", orderItemPriceDetails=" + orderItemPriceDetails +
-                /*", category=" + category +*/
                 ", candidateItemOffers=" + candidateItemOffers +
                 ", orderItemQualifiers=" + orderItemQualifiers +
                 ", discountingAllowed=" + discountingAllowed +

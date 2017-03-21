@@ -1,6 +1,7 @@
 package com.ffwatl.admin.checkout.workflow;
 
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
+import com.ffwatl.admin.inventory.InventoryRollback;
 import com.ffwatl.admin.inventory.InventoryService;
 import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.workflow.BaseActivity;
@@ -17,12 +18,12 @@ import java.util.Map;
  *
  * @author ffw_ATL.
  */
-public class DecrementInventoryActivity extends BaseActivity<ProcessContext<CheckoutSeed>> {
+public class DecrementInventoryCheckoutActivity extends BaseActivity<ProcessContext<CheckoutSeed>> {
 
     @Resource(name = "inventory_service")
     private InventoryService inventoryService;
 
-    public DecrementInventoryActivity() {
+    public DecrementInventoryCheckoutActivity() {
         super();
         super.setAutomaticallyRegisterRollbackHandler(false);
     }
@@ -66,12 +67,12 @@ public class DecrementInventoryActivity extends BaseActivity<ProcessContext<Chec
             inventoryService.decrementInventory(attrInventoryMap);
 
             if (getRollbackHandler() != null && !getAutomaticallyRegisterRollbackHandler()) {
-                rollbackState.put(DecrementInventoryRollbackHandler.ROLLBACK_INVENTORY_DECREMENTED, attrInventoryMap);
-                rollbackState.put(DecrementInventoryRollbackHandler.ROLLBACK_ORDER_ID, seed.getOrder().getId());
+                rollbackState.put(InventoryRollback.ROLLBACK_INVENTORY_DECREMENTED, attrInventoryMap);
+                rollbackState.put(InventoryRollback.ROLLBACK_ORDER_ID, seed.getOrder().getId());
             }
 
             // add the rollback state that was used in the rollback handler
-            rollbackState.put(DecrementInventoryRollbackHandler.EXTENDED_ROLLBACK_STATE, contextualInfo.get(InventoryService.ROLLBACK_STATE_KEY));
+            rollbackState.put(InventoryRollback.EXTENDED_ROLLBACK_STATE, contextualInfo.get(InventoryService.ROLLBACK_STATE_KEY));
         }
 
         return context;

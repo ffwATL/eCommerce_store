@@ -52,7 +52,7 @@ public interface ActivityStateManager {
     /**
      * Register a RollbackHandler instance and some arbitrary state items with the
      * StateManager. Can be used in conjunction with rollbackRegionState() to limit the scope of a rollback.
-     * Note, Broadleaf does not try to wrap the RollbackHandler execution in a database transaction. Therefore,
+     * Note, the application does not try to wrap the RollbackHandler execution in a database transaction. Therefore,
      * if the RollbackHandler implementation requires a database transaction (i.e. it's updating the database), then
      * the implementer must supply it. The easiest way to achieve this is to register the RollbackHandler
      * as a Spring bean and either use <aop> declaration in the app context xml, or use @Transactional

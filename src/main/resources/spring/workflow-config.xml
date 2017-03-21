@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <bean id="fixedPriceFulfillmentPricingProvider"
           class="com.ffwatl.admin.pricing.fulfillment.FixedPriceFulfillmentPricingProvider" />
@@ -15,12 +15,29 @@
     </bean>
 
     <!-- Pricing Workflow configuration -->
-    <bean id="offerActivity" class="com.ffwatl.admin.pricing.workflow.OfferActivity" />
-    <bean id="fulfillmentItemPricingActivity" class="com.ffwatl.admin.pricing.workflow.FulfillmentItemPricingActivity" />
-    <bean id="fulfillmentGroupPricingActivity" class="com.ffwatl.admin.pricing.workflow.FulfillmentGroupPricingActivity" />
-    <bean id="shippingOfferActivity" class="com.ffwatl.admin.pricing.workflow.ShippingOfferActivity" />
-    <bean id="totalActivity" class="com.ffwatl.admin.pricing.workflow.TotalActivity" />
-    <bean id="adjustOrderPaymentsActivity" class="com.ffwatl.admin.pricing.workflow.AdjustOrderPaymentsActivity" />
+    <bean id="offerActivity" class="com.ffwatl.admin.pricing.workflow.OfferActivity">
+        <property name="order" value="1000"/>
+    </bean>
+
+    <bean id="fulfillmentItemPricingActivity" class="com.ffwatl.admin.pricing.workflow.FulfillmentItemPricingActivity">
+        <property name="order" value="2000"/>
+    </bean>
+
+    <bean id="fulfillmentGroupPricingActivity" class="com.ffwatl.admin.pricing.workflow.FulfillmentGroupPricingActivity">
+        <property name="order" value="3000"/>
+    </bean>
+
+    <bean id="shippingOfferActivity" class="com.ffwatl.admin.pricing.workflow.ShippingOfferActivity">
+        <property name="order" value="4000"/>
+    </bean>
+
+    <bean id="totalActivity" class="com.ffwatl.admin.pricing.workflow.TotalActivity">
+        <property name="order" value="5000"/>
+    </bean>
+
+    <bean id="adjustOrderPaymentsActivity" class="com.ffwatl.admin.pricing.workflow.AdjustOrderPaymentsActivity">
+        <property name="order" value="6000"/>
+    </bean>
 
 
     <bean id="pricingWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
@@ -50,11 +67,30 @@
 
 
     <!-- Add Item Workflow Configuration -->
-    <bean id="validateAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.add.ValidateAddRequestActivity"/>
-    <bean id="checkAddAvailabilityActivity" class="com.ffwatl.admin.order.service.workflow.CheckAvailabilityActivity"/>
-    <bean id="addOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.add.AddOrderItemActivity"/>
-    <bean id="addFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.add.AddFulfillmentGroupItemActivity"/>
-    <bean id="addWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity"/>
+    <bean id="validateAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.add.ValidateAddRequestActivity">
+        <property name="order" value="1000"/>
+    </bean>
+
+    <bean id="checkAddAvailabilityActivity" class="com.ffwatl.admin.order.service.workflow.CheckAvailabilityActivity">
+        <property name="order" value="2000"/>
+    </bean>
+
+    <bean id="addInventoryActivity" class="com.ffwatl.admin.order.service.workflow.UpdateInventoryActivity">
+        <property name="order" value="3000"/>
+        <property name="rollbackHandler" ref="update_inventory_rollback_handler"/>
+    </bean>
+
+    <bean id="addOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.add.AddOrderItemActivity">
+        <property name="order" value="4000"/>
+    </bean>
+
+    <bean id="addFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.add.AddFulfillmentGroupItemActivity">
+        <property name="order" value="5000"/>
+    </bean>
+
+    <bean id="addWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity">
+        <property name="order" value="6000"/>
+    </bean>
 
     <bean id="addItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
@@ -64,6 +100,7 @@
             <list>
                 <ref bean="validateAddRequestActivity" />
                 <ref bean="checkAddAvailabilityActivity" />
+                <ref bean="addInventoryActivity"/>
                 <ref bean="addOrderItemActivity" />
                 <ref bean="addFulfillmentGroupItemActivity" />
                 <ref bean="addWorkflowVerifyFulfillmentGroupItemsActivity" />
@@ -81,11 +118,30 @@
     </bean>
 
     <!-- Update Item Workflow Configuration -->
-    <bean id="validateUpdateRequestActivity" class="com.ffwatl.admin.order.service.workflow.update.ValidateUpdateRequestActivity"/>
-    <bean id="checkUpdateAvailabilityActivity" class="com.ffwatl.admin.order.service.workflow.CheckAvailabilityActivity"/>
-    <bean id="updateOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.update.UpdateOrderItemActivity"/>
-    <bean id="updateFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.update.UpdateFulfillmentGroupItemActivity"/>
-    <bean id="updateWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity"/>
+    <bean id="validateUpdateRequestActivity" class="com.ffwatl.admin.order.service.workflow.update.ValidateUpdateRequestActivity">
+        <property name="order" value="1000"/>
+    </bean>
+
+    <bean id="checkUpdateAvailabilityActivity" class="com.ffwatl.admin.order.service.workflow.CheckAvailabilityActivity">
+        <property name="order" value="2000"/>
+    </bean>
+
+    <bean id="updateInventoryActivity" class="com.ffwatl.admin.order.service.workflow.UpdateInventoryActivity">
+        <property name="order" value="3000"/>
+        <property name="rollbackHandler" ref="update_inventory_rollback_handler"/>
+    </bean>
+
+    <bean id="updateOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.update.UpdateOrderItemActivity">
+        <property name="order" value="4000"/>
+    </bean>
+
+    <bean id="updateFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.update.UpdateFulfillmentGroupItemActivity">
+        <property name="order" value="5000"/>
+    </bean>
+
+    <bean id="updateWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity">
+        <property name="order" value="6000"/>
+    </bean>
 
     <bean id="updateItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
@@ -95,6 +151,7 @@
             <list>
                 <ref bean="validateUpdateRequestActivity" />
                 <ref bean="checkUpdateAvailabilityActivity" />
+                <ref bean="updateInventoryActivity"/>
                 <ref bean="updateOrderItemActivity" />
                 <ref bean="updateFulfillmentGroupItemActivity" />
                 <ref bean="updateWorkflowVerifyFulfillmentGroupItemsActivity" />
@@ -112,10 +169,26 @@
     </bean>
 
     <!-- Remove Item Workflow Configuration -->
-    <bean id="validateRemoveRequestActivity" class="com.ffwatl.admin.order.service.workflow.remove.ValidateRemoveRequestActivity"/>
-    <bean id="removeFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.remove.RemoveFulfillmentGroupItemActivity"/>
-    <bean id="removeOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.remove.RemoveOrderItemActivity"/>
-    <bean id="removeWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity"/>
+    <bean id="validateRemoveRequestActivity" class="com.ffwatl.admin.order.service.workflow.remove.ValidateRemoveRequestActivity">
+        <property name="order" value="1000"/>
+    </bean>
+
+    <bean  id="removeFulfillmentGroupItemActivity" class="com.ffwatl.admin.order.service.workflow.remove.RemoveFulfillmentGroupItemActivity">
+        <property name="order" value="2000"/>
+    </bean>
+
+    <bean id="removeOrderItemActivity" class="com.ffwatl.admin.order.service.workflow.remove.RemoveOrderItemActivity">
+        <property name="order" value="3000"/>
+    </bean>
+
+    <bean id="decrementOrderItemQuantityActivity" class="com.ffwatl.admin.order.service.workflow.UpdateInventoryActivity">
+        <property name="order" value="4000"/>
+        <property name="rollbackHandler" ref="update_inventory_rollback_handler"/>
+    </bean>
+
+    <bean id="removeWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity">
+        <property name="order" value="5000"/>
+    </bean>
 
     <bean id="removeItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
@@ -124,10 +197,10 @@
         <property name="activities">
             <list>
                 <ref bean="validateRemoveRequestActivity" />
+                <ref bean="decrementOrderItemQuantityActivity"/>
                 <ref bean="removeFulfillmentGroupItemActivity" />
                 <ref bean="removeOrderItemActivity" />
                 <ref bean="removeWorkflowVerifyFulfillmentGroupItemsActivity" />
-
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -150,7 +223,7 @@
     <bean id="recordOfferUsageActivity" class="com.ffwatl.admin.offer.service.workflow.RecordOfferUsageActivity">
         <property name="rollbackHandler" ref="record_offer_usage_rollback_handler" />
     </bean>
-    <bean id="decrementInventoryActivity" class="com.ffwatl.admin.checkout.workflow.DecrementInventoryActivity">
+    <bean id="decrementInventoryCheckoutActivity" class="com.ffwatl.admin.checkout.workflow.DecrementInventoryCheckoutActivity">
         <property name="rollbackHandler" ref="decrement_inventory_rollback_handler" />
     </bean>
     <bean id="completeOrderActivity" class="com.ffwatl.admin.checkout.workflow.CompleteOrderActivity">
@@ -166,7 +239,7 @@
                 <ref bean="verifyCustomerMaxOfferUsesActivity" />
                 <ref bean="validateAndConfirmPaymentActivity" />
                 <ref bean="recordOfferUsageActivity" />
-                <ref bean="decrementInventoryActivity" />
+                <!--<ref bean="decrementInventoryCheckoutActivity" />-->
                 <ref bean="completeOrderActivity" />
             </list>
         </property>

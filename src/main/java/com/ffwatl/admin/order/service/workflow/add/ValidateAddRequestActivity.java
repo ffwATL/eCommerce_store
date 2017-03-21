@@ -18,14 +18,13 @@ public class ValidateAddRequestActivity extends BaseActivity<ProcessContext<Cart
     @Resource(name = "catalog_service")
     private CatalogService catalogService;
 
-
     @Override
     public ProcessContext<CartOperationRequest> execute(ProcessContext<CartOperationRequest> context) throws Exception {
         CartOperationRequest request = context.getSeedData();
         OrderItemRequestDTO orderItemRequestDTO = request.getItemRequest();
 
         // Quantity was not specified or was equal to zero. We will not throw an exception,
-        // but we will preven the workflow from continuing to execute
+        // but we will prevent the workflow from continuing to execute
         if (orderItemRequestDTO.getQuantity() == 0) {
             context.stopProcess();
             return context;

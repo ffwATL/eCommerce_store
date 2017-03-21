@@ -1,10 +1,12 @@
 package com.ffwatl.admin.order.service.workflow.add;
 
 import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.Color;
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.catalog.service.CatalogService;
 import com.ffwatl.admin.order.domain.Order;
 import com.ffwatl.admin.order.domain.OrderItem;
+import com.ffwatl.admin.order.domain.OrderItemColor;
 import com.ffwatl.admin.order.service.OrderItemService;
 import com.ffwatl.admin.order.service.OrderService;
 import com.ffwatl.admin.order.service.call.OrderItemRequest;
@@ -38,6 +40,7 @@ public class AddOrderItemActivity extends BaseActivity<ProcessContext<CartOperat
         // Order has been verified in a previous activity -- the values in the request can be trusted
         Order order = request.getOrder();
 
+
         Product product = null;
         if (orderItemRequestDTO.getProductId() > 0) {
             product = catalogService.findProductById(orderItemRequestDTO.getProductId(), FetchMode.FETCHED);
@@ -46,6 +49,7 @@ public class AddOrderItemActivity extends BaseActivity<ProcessContext<CartOperat
             throw new IllegalArgumentException("Can't find a product requested with id: " + orderItemRequestDTO.getProductId());
         }
         Category category = product.getCategory();
+        Color color = product.getColor();
 
         OrderItem item;
 
@@ -56,6 +60,11 @@ public class AddOrderItemActivity extends BaseActivity<ProcessContext<CartOperat
         itemRequest.setItemName(orderItemRequestDTO.getItemName());
         itemRequest.setOrder(order);
         itemRequest.setCategory(category);
+        itemRequest.setProductAttribute(orderItemRequestDTO.getProductAttribute());
+        itemRequest.setColor(new OrderItemColor()
+                .setColor(color.getColor())
+                .setHex(color.getHex()));
+        itemRequest.setProduct(product);
 
         item = orderItemService.createOrderItem(itemRequest);
 

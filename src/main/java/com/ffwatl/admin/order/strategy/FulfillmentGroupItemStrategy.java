@@ -10,9 +10,9 @@ public interface FulfillmentGroupItemStrategy {
 
     CartOperationRequest onItemAdded(CartOperationRequest request) throws PricingException /*throws PricingException*/;
 
-    CartOperationRequest onItemUpdated(CartOperationRequest request) /*throws PricingException*/;
+    CartOperationRequest onItemUpdated(CartOperationRequest request) throws PricingException;
 
-    CartOperationRequest onItemRemoved(CartOperationRequest request) /*throws PricingException*/;
+    CartOperationRequest onItemRemoved(CartOperationRequest request) throws PricingException;
 
     CartOperationRequest verify(CartOperationRequest request) throws PricingException /*throws PricingException*/;
 

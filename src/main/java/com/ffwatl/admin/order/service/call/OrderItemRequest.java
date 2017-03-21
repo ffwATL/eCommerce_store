@@ -1,5 +1,6 @@
 package com.ffwatl.admin.order.service.call;
 
+import com.ffwatl.admin.catalog.domain.Color;
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.admin.i18n.domain.I18n;
 
@@ -10,6 +11,7 @@ public class OrderItemRequest extends AbstractOrderItemRequest {
 
     private I18n itemName;
     private ProductAttribute productAttribute;
+    private Color color;
 
     public OrderItemRequest() {
         super();
@@ -38,6 +40,9 @@ public class OrderItemRequest extends AbstractOrderItemRequest {
         return productAttribute;
     }
 
+    public Color getColor() {
+        return color;
+    }
 
     public void setItemName(I18n itemName) {
         this.itemName = itemName;
@@ -45,5 +50,9 @@ public class OrderItemRequest extends AbstractOrderItemRequest {
 
     public void setProductAttribute(ProductAttribute productAttribute) {
         this.productAttribute = productAttribute;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }

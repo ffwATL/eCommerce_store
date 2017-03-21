@@ -13,10 +13,12 @@ import com.ffwatl.admin.order.service.type.FulfillmentType;
 import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.common.persistence.FetchMode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -230,8 +232,18 @@ public class FulfillmentGroupServiceImpl  implements FulfillmentGroupService{
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void removeFulfillmentGroupItem(FulfillmentGroupItem fulfillmentGroupItem) {
+        fulfillmentGroupItemDao.delete(fulfillmentGroupItem);
+    }
 
+    @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void removeFulfillmentGroupItems(Collection<FulfillmentGroupItem> fulfillmentGroupItems) {
+        if(fulfillmentGroupItems == null) {
+            throw new IllegalArgumentException("Given Collection<FulfillmentGroupItem> is null");
+        }
+
+        fulfillmentGroupItems.forEach(this::removeFulfillmentGroupItem);
     }
 }
