@@ -48,6 +48,11 @@ public class ProductAttributeDTO implements ProductAttribute {
     }
 
     @Override
+    public int getVersion() {
+        return 0;
+    }
+
+    @Override
     public ProductAttribute setId(long id) {
         this.id = id;
         return this;
@@ -75,6 +80,11 @@ public class ProductAttributeDTO implements ProductAttribute {
     public ProductAttribute setEu_size(ProductAttributeType eu_size) {
         this.eu_size = eu_size;
         return this;
+    }
+
+    @Override
+    public ProductAttribute setVersion(int version) {
+        return null;
     }
 
     @Override

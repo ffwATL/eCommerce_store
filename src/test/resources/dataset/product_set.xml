@@ -49,18 +49,21 @@
                         product_id="1"
                         quantity="3"
                         product_attr_type_id="1"
+                        version="0"
             />
 
     <product_attributes id="2"
                         product_id="1"
                         quantity="2"
                         product_attr_type_id="2"
+                        version="0"
             />
 
     <product_attributes id="3"
                         product_id="1"
                         quantity="5"
                         product_attr_type_id="3"
+                        version="0"
             />
 
     <users id="1"

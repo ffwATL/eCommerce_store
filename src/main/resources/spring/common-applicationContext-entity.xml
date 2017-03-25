@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
        <bean id="com.ffwatl.admin.order.domain.Order" class="com.ffwatl.admin.order.domain.OrderImpl" scope="prototype"/>
        <bean id="com.ffwatl.admin.order.domain.OrderItem" class="com.ffwatl.admin.order.domain.OrderItemImpl" scope="prototype"/>
@@ -22,4 +22,6 @@
        <bean id="com.ffwatl.admin.offer.domain.OrderItemPriceDetailAdjustment" class="com.ffwatl.admin.offer.domain.OrderItemPriceDetailAdjustmentImpl" scope="prototype"/>
        <bean id="com.ffwatl.admin.offer.domain.OrderAdjustment" class="com.ffwatl.admin.offer.domain.OrderAdjustmentImpl" scope="prototype"/>
        <bean id="com.ffwatl.admin.offer.domain.FulfillmentGroupAdjustment" class="com.ffwatl.admin.offer.domain.FulfillmentGroupAdjustmentImpl" scope="prototype"/>
+
+
 </beans>

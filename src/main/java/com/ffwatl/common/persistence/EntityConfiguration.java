@@ -98,7 +98,14 @@ public class EntityConfiguration {
 
     public <T> T createEntityInstance(Class<T> clazz){
         String name = clazz.getName();
-        return applicationcontext.getBean(name, clazz);
+        T bean;
+
+        try{
+            bean = applicationcontext.getBean(name, clazz);
+        }catch (Exception e){
+            bean = webApplicationContext.getBean(name, clazz);
+        }
+        return bean;
     }
 
     public Resource[] getEntityContexts() {

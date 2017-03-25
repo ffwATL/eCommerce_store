@@ -15,6 +15,8 @@ public interface ProductAttribute extends Comparable<ProductAttribute> {
 
     List<Field> getFields();
 
+    int getVersion();
+
     ProductAttribute setId(long id);
 
     ProductAttribute setProduct(Product product);
@@ -24,4 +26,6 @@ public interface ProductAttribute extends Comparable<ProductAttribute> {
     ProductAttribute setFields(List<Field> measurements);
 
     ProductAttribute setEu_size(ProductAttributeType eu_size);
+
+    ProductAttribute setVersion(int version);
 }

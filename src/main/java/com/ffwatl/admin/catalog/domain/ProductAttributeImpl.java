@@ -25,12 +25,16 @@ public class ProductAttributeImpl implements ProductAttribute {
     @Column(length = 2, nullable = false, name = "quantity")
     private int quantity;
 
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = FieldImpl.class, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = FieldImpl.class, fetch = FetchType.LAZY)
     private List<Field> measurements;
 
     @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ProductAttributeTypeImpl.class)
     @JoinColumn(name = "product_attr_type_id")
     private ProductAttributeType eu_size;
+
+    @Column(name = "version")
+    @Version
+    private int version;
 
     /**
      * Returns current ProductAttributeImpl Id;
@@ -74,6 +78,11 @@ public class ProductAttributeImpl implements ProductAttribute {
     }
 
     @Override
+    public int getVersion() {
+        return version;
+    }
+
+    @Override
     public ProductAttribute setId(long id) {
         this.id = id;
         return this;
@@ -104,6 +113,12 @@ public class ProductAttributeImpl implements ProductAttribute {
     }
 
     @Override
+    public ProductAttribute setVersion(int version) {
+        this.version = version;
+        return this;
+    }
+
+    @Override
     public String toString() {
         return "ProductAttribute{" +
                 "id=" + id +
@@ -117,13 +132,27 @@ public class ProductAttributeImpl implements ProductAttribute {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductAttribute size = (ProductAttribute) o;
-        return getId() == size.getId();
+
+        ProductAttributeImpl that = (ProductAttributeImpl) o;
+
+        if (getId() != that.getId()) return false;
+        if (getQuantity() != that.getQuantity()) return false;
+        if (getVersion() != that.getVersion()) return false;
+        if (getProduct() != null ? !getProduct().equals(that.getProduct()) : that.getProduct() != null) return false;
+        if (measurements != null ? !measurements.equals(that.measurements) : that.measurements != null) return false;
+        return !(getEu_size() != null ? !getEu_size().equals(that.getEu_size()) : that.getEu_size() != null);
+
     }
 
     @Override
     public int hashCode() {
-        return getFields().hashCode();
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getProduct() != null ? getProduct().hashCode() : 0);
+        result = 31 * result + getQuantity();
+        result = 31 * result + (measurements != null ? measurements.hashCode() : 0);
+        result = 31 * result + (getEu_size() != null ? getEu_size().hashCode() : 0);
+        result = 31 * result + getVersion();
+        return result;
     }
 
     @Override

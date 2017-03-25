@@ -8,7 +8,7 @@ import com.ffwatl.admin.workflow.ProcessContext;
 /**
  * @author ffw_ATL.
  */
-public class AdjustOrderPaymentsActivity extends BaseActivity<ProcessContext<Order>> {
+public class AdjustOrderPaymentActivity extends BaseActivity<ProcessContext<Order>> {
 
     @Override
     public ProcessContext<Order> execute(ProcessContext<Order> context) throws Exception {
@@ -18,7 +18,7 @@ public class AdjustOrderPaymentsActivity extends BaseActivity<ProcessContext<Ord
         int appliedPaymentsWithoutThirdPartyOrCC = 0;
         OrderPayment payment = order.getOrderPayment();
 
-        if (payment.isActive()) {
+        if (payment != null && payment.isActive()) {
             if (!payment.isConfirmed())  {
                 unconfirmedThirdPartyOrCreditCard = payment;
             } else if (payment.getAmount() != 0) {

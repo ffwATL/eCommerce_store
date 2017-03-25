@@ -171,6 +171,8 @@ public interface Order extends Serializable{
      */
     boolean getHasOrderAdjustments();
 
+    int getVersion();
+
 
     Order setId(long id);
 
@@ -203,6 +205,8 @@ public interface Order extends Serializable{
     Order setOfferCode(OfferCode addedOfferCode);
 
     Order setCurrency(Currency currency);
+
+    Order setVersion(int version);
 
     /**
      * Adds an {@link OrderItem} to the list of {@link OrderItem}s already associated with this {@link Order}

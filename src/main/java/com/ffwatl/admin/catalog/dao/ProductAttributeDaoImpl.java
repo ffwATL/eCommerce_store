@@ -9,6 +9,7 @@ import com.ffwatl.common.persistence.FetchModeOption;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
@@ -35,7 +36,13 @@ public class ProductAttributeDaoImpl implements ProductAttributeDao,FetchModeOpt
         criteria.where(property.getBuilder().equal(root.get("id"), id));
         List<ProductAttribute> result = em.createQuery(criteria).getResultList();
 
-        return result != null && result.size() > 0 ? result.get(0) : null;
+        if(result == null || result.size() < 1){
+            return null;
+        }
+        ProductAttribute attribute = result.get(0);
+        em.lock(attribute, LockModeType.OPTIMISTIC);
+
+        return attribute;
     }
 
     @Override

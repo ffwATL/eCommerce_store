@@ -7,7 +7,12 @@ import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.domain.OrderStatus;
 import com.ffwatl.admin.payment.domain.OrderPayment;
 import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.common.persistence.*;
+import com.ffwatl.common.persistence.CriteriaProperty;
+import com.ffwatl.common.persistence.EntityConfiguration;
+import com.ffwatl.common.persistence.FetchMode;
+import com.ffwatl.common.persistence.FetchModeOption;
+import com.ffwatl.common.schedule.OrderSingleTimeTimerTask;
+import com.ffwatl.common.schedule.SingleTimeTimerTask;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Repository;
 
@@ -34,7 +39,12 @@ public class OrderDaoImpl implements OrderDao, FetchModeOption<Order, OrderImpl>
 
     @Override
     public Order findOrderById(final long id, final FetchMode fetchMode) {
-        List<Order> orders = findOrdersByIds(fetchMode, id);
+        final CriteriaProperty<Order, OrderImpl> property = createOrderCriteriaQueryByFetchMode(fetchMode);
+        CriteriaQuery<Order> criteria = property.getCriteria();
+
+        criteria.where(property.getBuilder().equal(property.getRoot().get("id"), id));
+
+        List<Order> orders = em.createQuery(criteria).getResultList();
         return orders.size() > 0 ? orders.get(0) : null;
     }
 
@@ -158,8 +168,9 @@ public class OrderDaoImpl implements OrderDao, FetchModeOption<Order, OrderImpl>
             order = findOrderById(order.getId(), FetchMode.FETCHED);
         }
         OrderPayment payment = order.getOrderPayment();
-
-        payment.setOrder(null);
+        if(payment != null){
+            payment.setOrder(null);
+        }
 
         em.remove(order);
     }
@@ -173,6 +184,11 @@ public class OrderDaoImpl implements OrderDao, FetchModeOption<Order, OrderImpl>
     @Override
     public Order create() {
         return ((Order) entityConfiguration.createEntityInstance("com.ffwatl.admin.order.domain.Order"));
+    }
+
+    @Override
+    public SingleTimeTimerTask createOrderSingleTimeTimerTask(long id) {
+        return  entityConfiguration.createEntityInstance(OrderSingleTimeTimerTask.class).setKey(id);
     }
 
     @Override

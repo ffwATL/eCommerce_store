@@ -24,7 +24,7 @@ public class OrderImpl implements Order {
 
     @PostConstruct
     public void init(){
-        if(orderItems != null){
+        /*if(orderItems != null){
             for(OrderItem oi: orderItems){
                 if(oi.getOrder() == null){
                     oi.setOrder(this);
@@ -34,7 +34,7 @@ public class OrderImpl implements Order {
 
         if(fulfillmentGroup != null && fulfillmentGroup.getOrder() == null){
             fulfillmentGroup.setOrder(this);
-        }
+        }*/
     }
 
     @Id
@@ -82,6 +82,10 @@ public class OrderImpl implements Order {
                cascade = { CascadeType.ALL },
                orphanRemoval = true)
     private Set<OrderAdjustment> orderAdjustments = new HashSet<>();
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     @Column(name = "submit_date")
     private Date submitDate;
@@ -229,6 +233,11 @@ public class OrderImpl implements Order {
     }
 
     @Override
+    public int getVersion() {
+        return version;
+    }
+
+    @Override
     public Order setId(long id) {
         this.id = id;
         return this;
@@ -325,6 +334,12 @@ public class OrderImpl implements Order {
     }
 
     @Override
+    public Order setVersion(int version) {
+        this.version = version;
+        return this;
+    }
+
+    @Override
     public Order addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         return this;
@@ -388,6 +403,7 @@ public class OrderImpl implements Order {
         OrderImpl order = (OrderImpl) o;
 
         if (getId() != order.getId()) return false;
+        if (version != order.version) return false;
         if (getSubTotal() != order.getSubTotal()) return false;
         if (getTotal() != order.getTotal()) return false;
         if (getTotalFulfillmentCharges() != order.getTotalFulfillmentCharges()) return false;
@@ -418,6 +434,7 @@ public class OrderImpl implements Order {
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + version;
         result = 31 * result + (getOrderNumber() != null ? getOrderNumber().hashCode() : 0);
         result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         result = 31 * result + getSubTotal();
@@ -455,6 +472,7 @@ public class OrderImpl implements Order {
                 ", orderPayment=" + orderPayment +
                 ", offerCode=" + offerCode +
                 ", currency=" + currency +
+                ", version=" + version+
                 '}';
     }
 }

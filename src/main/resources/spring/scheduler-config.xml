@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="spring-application-context.xml"/>
+
+    <context:component-scan base-package="com.ffwatl.common.schedule"/>
+
+    <bean id="orderSingleTimeTimerTaskManager" class="com.ffwatl.common.schedule.SingleTimeTimerTaskManagerImpl"/>
+
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="4"/>
+        <property name="maxPoolSize" value="10"/>
+        <property name="queueCapacity" value="60"/>
+    </bean>
+
+    <context:annotation-config/>
+
+</beans>

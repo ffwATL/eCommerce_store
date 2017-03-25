@@ -31,7 +31,6 @@ public class SequenceProcessor extends BaseProcessor {
     }
 
     @Override
-
     public ProcessContext<?> doActivities(Object seedData) throws WorkflowException {
         LOGGER.debug(getBeanName() + " processor is running..");
 

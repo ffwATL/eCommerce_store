@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * @author ffw_ATL.
  */
-@ContextConfiguration({"/spring/spring-application-context.xml"})
+@ContextConfiguration({"/spring/scheduler-config.xml"})
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
@@ -85,6 +85,7 @@ public class OrderServiceTest {
 
     }
 
+
     private OrderItemRequest buildOrderItemRequestWithNewOrder(long productId, long customerId,
                                                                long attrId, int requestedQuantity,
                                                                boolean incrementOrderItemQuantity) throws PricingException {
@@ -93,7 +94,7 @@ public class OrderServiceTest {
         Order order = orderService.createNewCartForCustomer(customer, Currency.UAH);
         ProductAttribute productAttribute = catalogService.findProductAttributeById(attrId, FetchMode.LAZY);
 
-        order = orderService.save(order, false);
+        /*order = orderService.save(order, false);*/
 
         OrderItemRequest request = new OrderItemRequest();
         request.setCategory(product.getCategory());
@@ -105,14 +106,15 @@ public class OrderServiceTest {
         request.setColor(product.getColor());
         request.setRetailPriceOverride(product.getRetailPrice());
         request.setSalePriceOverride(product.getSalePrice());
-        request.setIncrementOrderItemQuantity(true);
+        request.setIncrementOrderItemQuantity(incrementOrderItemQuantity);
 
         return request;
     }
 
-    public void inventoryTest(long productId, long customerId,
-                              long attrId, int requestedQuantity,
-                              boolean incrementOrderItemQuantity, int expectedQuantity) throws AddToCartException, PricingException {
+
+    public OrderItemRequest inventoryQuantityTest(long productId, long customerId,
+                                      long attrId, int requestedQuantity,
+                                      boolean incrementOrderItemQuantity, int expectedQuantity) throws AddToCartException, PricingException {
 
         OrderItemRequest request = buildOrderItemRequestWithNewOrder(productId, customerId, attrId,
                 requestedQuantity, incrementOrderItemQuantity);
@@ -121,11 +123,12 @@ public class OrderServiceTest {
         ProductAttribute attribute = catalogService.findProductAttributeById(attrId, FetchMode.LAZY);
 
         Assert.assertEquals(expectedQuantity, attribute.getQuantity());
+        return request;
 
     }
 
     @Test
-    public void decrementInventoryNormalTest() throws PricingException, AddToCartException {
+    public void decrementInventoryNormalTest() throws PricingException, AddToCartException, InterruptedException {
         long productId = 1;
         long customerId = 1;
         long productAttributeId = 1;
@@ -134,7 +137,8 @@ public class OrderServiceTest {
 
         int expectedQuantity = 0;
 
-        inventoryTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+        inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+
     }
 
     @Test
@@ -149,7 +153,7 @@ public class OrderServiceTest {
         Exception e = new Exception();
 
         try{
-            inventoryTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+            inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
         }catch (AddToCartException ex){
             e = ex;
             ProductAttribute attribute = catalogService.findProductAttributeById(productAttributeId, FetchMode.LAZY);

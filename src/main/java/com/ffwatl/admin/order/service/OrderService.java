@@ -16,6 +16,7 @@ import com.ffwatl.admin.payment.domain.secure.Referenced;
 import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.common.persistence.FetchMode;
+import com.ffwatl.common.schedule.SingleTimeTimerTask;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -360,6 +361,8 @@ public interface OrderService {
 
     void deleteOrder(Order cart);
 
+    void deleteOrder(long id);
+
     Order removeInactiveItems(long orderId, boolean priceOrder) /*throws RemoveFromCartException*/;
 
     /**
@@ -405,4 +408,6 @@ public interface OrderService {
      * @return whether or not the lock was released
      */
     boolean releaseLock(Order order);
+
+    SingleTimeTimerTask createOrderSingleTimeTimerTask(long orderId);
 }

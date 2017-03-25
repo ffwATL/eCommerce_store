@@ -26,6 +26,7 @@ import com.ffwatl.admin.workflow.Processor;
 import com.ffwatl.admin.workflow.WorkflowException;
 import com.ffwatl.common.extension.ExtensionResultHolder;
 import com.ffwatl.common.persistence.FetchMode;
+import com.ffwatl.common.schedule.SingleTimeTimerTask;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -137,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findNamedOrderForCustomer(String name, User customer, FetchMode fetchMode) {
-        checkValueIsNotNull(customer, "User");
+        checkValueIsNotNull(customer, CUSTOMER_OBJECT);
         return orderDao.findNamedOrderForCustomer(customer.getId(), name, fetchMode);
     }
 
@@ -153,19 +154,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findCartForCustomer(User customer, FetchMode fetchMode) {
-        checkValueIsNotNull(customer, "User");
+        checkValueIsNotNull(customer, CUSTOMER_OBJECT);
         return orderDao.findCartForCustomer(customer.getId(), fetchMode);
     }
 
     @Override
     public List<Order> findOrdersForCustomer(User customer, FetchMode fetchMode) {
-        checkValueIsNotNull(customer, "User");
+        checkValueIsNotNull(customer, CUSTOMER_OBJECT);
         return orderDao.findOrdersForCustomer(customer.getId(), fetchMode);
     }
 
     @Override
     public List<Order> findOrdersForCustomer(User customer, OrderStatus status, FetchMode fetchMode) {
-        checkValueIsNotNull(customer, "User");
+        checkValueIsNotNull(customer, CUSTOMER_OBJECT);
         return orderDao.findOrdersForCustomer(customer.getId(), status, fetchMode);
     }
 
@@ -235,11 +236,11 @@ public class OrderServiceImpl implements OrderService {
                             if (logger.isInfoEnabled()) {
                                 logger.info("Problem acquiring lock during pricing call. Retry limit exceeded at (" + retryCount + "). Throwing exception.");
                             }
-                            /*if (ex instanceof PricingException) {
+                            if (ex instanceof PricingException) {
                                 throw (PricingException) ex;
                             } else {
                                 throw new PricingException(ex);
-                            }*/
+                            }
                         } else {
                             order = findOrderById(order.getId(), FetchMode.FETCHED);
                             retryCount++;
@@ -273,7 +274,7 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     private void rollbackAllOrderItemsForOrder(Order order){
         for(OrderItem orderItem: order.getOrderItems()){
             ProductAttribute orderedAttribute = orderItem.getProductAttribute();
@@ -402,7 +403,7 @@ public class OrderServiceImpl implements OrderService {
             int numAdditionRequests = priceOrder ? (1 + orderItemRequestDTO.getChildOrderItems().size()) : -1;
             int currentAddition = 1;
 
-            CartOperationRequest cartOpRequest = new CartOperationRequest(findOrderById(orderId, FetchMode.FETCHED),
+            CartOperationRequest cartOpRequest = new CartOperationRequest(order,
                     orderItemRequestDTO, currentAddition == numAdditionRequests);
             ProcessContext<CartOperationRequest> context = (ProcessContext<CartOperationRequest>) addItemWorkflow.doActivities(cartOpRequest);
 
@@ -567,13 +568,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void deleteOrder(Order cart) {
         checkValueIsNotNull(cart, CART_OBJECT);
         if(cart.getCustomer() != null){
             rollbackAllOrderItemsForOrder(cart);
         }
         orderDao.delete(cart);
+    }
+
+    @Override
+    @Transactional/*(isolation = Isolation.READ_COMMITTED)*/
+    public void deleteOrder(long id) {
+        if(id < 1){
+            throw new IllegalArgumentException("Bad order ID is given: "+ id);
+        }
+        Order order = orderDao.findOrderById(id, FetchMode.FETCHED);
+        deleteOrder(order);
     }
 
     @Override
@@ -641,5 +652,13 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public boolean releaseLock(Order order) {
         return orderDao.releaseLock(order);
+    }
+
+    @Override
+    public SingleTimeTimerTask createOrderSingleTimeTimerTask(long orderId) {
+        if(orderId < 1) {
+            throw new IllegalArgumentException("Wrong Order ID is given: "+ orderId);
+        }
+        return orderDao.createOrderSingleTimeTimerTask(orderId);
     }
 }

@@ -30,7 +30,7 @@ public class OrderItemImpl implements OrderItem{
     @Column(name = "product_id")
     private long productId;
 
-    @ManyToOne(targetEntity = OrderImpl.class)
+    @ManyToOne(targetEntity = OrderImpl.class, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "order_id")
     private Order order;
 
