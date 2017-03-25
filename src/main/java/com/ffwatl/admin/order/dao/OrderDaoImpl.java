@@ -11,8 +11,8 @@ import com.ffwatl.common.persistence.CriteriaProperty;
 import com.ffwatl.common.persistence.EntityConfiguration;
 import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.FetchModeOption;
-import com.ffwatl.common.schedule.OrderSingleTimeTimerTask;
 import com.ffwatl.common.schedule.SingleTimeTimerTask;
+import com.ffwatl.common.schedule.SingleTimeTimerTaskFactory;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +35,9 @@ public class OrderDaoImpl implements OrderDao, FetchModeOption<Order, OrderImpl>
 
     @Resource(name = "entity_configuration")
     private EntityConfiguration entityConfiguration;
+
+    @Resource(name = "orderSingleTimeTimerTaskFactory")
+    private SingleTimeTimerTaskFactory singleTimeTimerTaskFactory;
 
 
     @Override
@@ -188,7 +191,7 @@ public class OrderDaoImpl implements OrderDao, FetchModeOption<Order, OrderImpl>
 
     @Override
     public SingleTimeTimerTask createOrderSingleTimeTimerTask(long id) {
-        return  entityConfiguration.createEntityInstance(OrderSingleTimeTimerTask.class).setKey(id);
+        return  singleTimeTimerTaskFactory.getInstance(id);
     }
 
     @Override

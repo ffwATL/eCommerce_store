@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * It is highly recommended to use entity ID as a key for the {@link #taskMap};
  *
  * Note that for every different key-type (i.e {@link com.ffwatl.admin.order.domain.Order},
- * {@link com.ffwatl.admin.catalog.domain.ProductAttribute}, etc. you should create another prototype
+ * {@link com.ffwatl.admin.catalog.domain.ProductAttribute} and etc. you should create another prototype
  * of this bean to avoid HashMap collision.
  *
  * @author ffw_ATL.
@@ -60,7 +60,6 @@ public class SingleTimeTimerTaskManagerImpl implements SingleTimeTimerTaskManage
     public void updateTask(Long key, SingleTimeTimerTask task) {
         cancelTask(key);
         addTask(key, task);
-        System.err.println("Tasks are pending: " + taskMap);
     }
 
 }

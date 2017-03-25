@@ -35,6 +35,8 @@
         </constructor-arg>
     </bean>
 
+    <bean id="orderSingleTimeTimerTaskFactory" class="com.ffwatl.common.schedule.OrderSingleTimeTimerTaskFactory"/>
+
     <bean id="localDateTimeFormatter" class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
         <constructor-arg value="HH:mm:ss"/>
     </bean>

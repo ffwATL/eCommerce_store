@@ -26,16 +26,18 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * @author ffw_ATL.
  */
 @ContextConfiguration({"/spring/scheduler-config.xml"})
-@Transactional
+/*@Transactional*/
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class,
@@ -66,6 +68,7 @@ public class OrderServiceTest {
 
 
     @Test
+    @Transactional(readOnly = true)
     public void datasetTest(){
         List list = productService.findAll();
         Assert.assertNotNull(list);
@@ -80,12 +83,9 @@ public class OrderServiceTest {
         Assert.assertEquals(1001, orderNumberGenerator.getCounter());
     }
 
-    @Test
-    public void addOrderItemTest() throws AddToCartException, PricingException {
-
-    }
 
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     private OrderItemRequest buildOrderItemRequestWithNewOrder(long productId, long customerId,
                                                                long attrId, int requestedQuantity,
                                                                boolean incrementOrderItemQuantity) throws PricingException {
@@ -111,7 +111,7 @@ public class OrderServiceTest {
         return request;
     }
 
-
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public OrderItemRequest inventoryQuantityTest(long productId, long customerId,
                                       long attrId, int requestedQuantity,
                                       boolean incrementOrderItemQuantity, int expectedQuantity) throws AddToCartException, PricingException {
@@ -128,6 +128,7 @@ public class OrderServiceTest {
     }
 
     @Test
+    @Transactional
     public void decrementInventoryNormalTest() throws PricingException, AddToCartException, InterruptedException {
         long productId = 1;
         long customerId = 1;
@@ -142,6 +143,7 @@ public class OrderServiceTest {
     }
 
     @Test
+    @Transactional
     public void decrementInventoryUnavailableTest() throws AddToCartException, PricingException {
         long productId = 1;
         long customerId = 1;
@@ -162,6 +164,25 @@ public class OrderServiceTest {
 
         Assert.assertTrue(e instanceof AddToCartException);
 
+    }
+
+    @Test
+    public void orderSingleTimeTimerTaskTest() throws AddToCartException, PricingException {
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 1;
+        int requestedQuantity = 3;
+        boolean incrementOrderItemQuantity = true;
+
+        int expectedQuantity = 3;
+
+        inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+
+        LocalDateTime end = LocalDateTime.now().plusSeconds(15);
+
+        while (LocalDateTime.now().isBefore(end)){
+            // do nothing
+        }
     }
 
 }

@@ -29,7 +29,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="com.ffwatl.common.schedule.OrderSingleTimeTimerTask" class="com.ffwatl.common.schedule.OrderSingleTimeTimerTask" scope="prototype"/>
+    <bean id="orderSingleTimeTimerTaskFactory" class="com.ffwatl.common.schedule.OrderSingleTimeTimerTaskFactory"/>
 
     <bean id="mergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
