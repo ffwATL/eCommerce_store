@@ -72,12 +72,6 @@
 
 
     <!-- Add Item Workflow Configuration -->
-    <bean id="clearCartScheduleAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.ClearCartScheduleActivity">
-        <property name="order" value="500"/>
-        <property name="secondsDelay" value="20"/>
-        <property name="rollbackHandler" ref="clear_cart_schedule_rollback_handler"/>
-    </bean>
-
     <bean id="validateAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.add.ValidateAddRequestActivity">
         <property name="order" value="1000"/>
     </bean>
@@ -102,6 +96,11 @@
     <bean id="addWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity">
         <property name="order" value="6000"/>
     </bean>
+    <bean id="clearCartScheduleAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.ClearCartScheduleActivity">
+        <property name="order" value="7000"/>
+        <property name="secondsDelay" value="20"/>
+        <property name="rollbackHandler" ref="clear_cart_schedule_rollback_handler"/>
+    </bean>
 
     <bean id="addItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
@@ -109,13 +108,13 @@
         </property>
         <property name="activities">
             <list>
-                <ref bean="clearCartScheduleAddRequestActivity"/>
                 <ref bean="validateAddRequestActivity" />
                 <ref bean="checkAddAvailabilityActivity" />
                 <ref bean="decrementInventoryActivity"/>
                 <ref bean="addOrderItemActivity" />
-                <ref bean="addFulfillmentGroupItemActivity" />
-                <ref bean="addWorkflowVerifyFulfillmentGroupItemsActivity" />
+                <!--<ref bean="addFulfillmentGroupItemActivity" />
+                <ref bean="addWorkflowVerifyFulfillmentGroupItemsActivity" />-->
+                <ref bean="clearCartScheduleAddRequestActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -155,6 +154,12 @@
         <property name="order" value="6000"/>
     </bean>
 
+    <bean id="clearCartScheduleUpdateRequestActivity" class="com.ffwatl.admin.order.service.workflow.ClearCartScheduleActivity">
+        <property name="order" value="7000"/>
+        <property name="secondsDelay" value="20"/>
+        <property name="rollbackHandler" ref="clear_cart_schedule_rollback_handler"/>
+    </bean>
+
     <bean id="updateItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
             <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
@@ -167,6 +172,7 @@
                 <ref bean="updateOrderItemActivity" />
                 <ref bean="updateFulfillmentGroupItemActivity" />
                 <ref bean="updateWorkflowVerifyFulfillmentGroupItemsActivity" />
+                <ref bean="clearCartScheduleUpdateRequestActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -202,6 +208,12 @@
         <property name="order" value="5000"/>
     </bean>
 
+    <bean id="clearCartScheduleRemoveRequestActivity" class="com.ffwatl.admin.order.service.workflow.ClearCartScheduleActivity">
+        <property name="order" value="6000"/>
+        <property name="secondsDelay" value="20"/>
+        <property name="rollbackHandler" ref="clear_cart_schedule_rollback_handler"/>
+    </bean>
+
     <bean id="removeItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
             <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
@@ -213,6 +225,7 @@
                 <ref bean="removeFulfillmentGroupItemActivity" />
                 <ref bean="removeOrderItemActivity" />
                 <ref bean="removeWorkflowVerifyFulfillmentGroupItemsActivity" />
+                <ref bean="clearCartScheduleRemoveRequestActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">
