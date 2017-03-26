@@ -13,8 +13,11 @@ import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.service.UserService;
 import com.ffwatl.common.persistence.FetchMode;
+import com.ffwatl.common.schedule.service.SingleTimeTimerTaskService;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,20 +33,21 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * @author ffw_ATL.
  */
 @ContextConfiguration({"/spring/scheduler-config.xml"})
-/*@Transactional*/
+@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
-        TransactionalTestExecutionListener.class,
-        DbUnitTestExecutionListener.class })
+        DbUnitTestExecutionListener.class,
+        TransactionalTestExecutionListener.class })
 @DatabaseSetup("/dataset/product_set.xml")
 public class OrderServiceTest {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Autowired
     private ProductService productService;
@@ -63,12 +67,14 @@ public class OrderServiceTest {
     @Resource(name = "user_service")
     private UserService userService;
 
+    @Resource(name = "order_single_time_timer_task_service")
+    private SingleTimeTimerTaskService taskService;
+
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
 
     @Test
-    @Transactional(readOnly = true)
     public void datasetTest(){
         List list = productService.findAll();
         Assert.assertNotNull(list);
@@ -83,7 +89,61 @@ public class OrderServiceTest {
         Assert.assertEquals(1001, orderNumberGenerator.getCounter());
     }
 
+    @Test
+    public void decrementInventoryNormalTest() throws PricingException, AddToCartException, InterruptedException {
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 1;
+        int requestedQuantity = 3;
+        boolean incrementOrderItemQuantity = true;
 
+        int expectedQuantity = 0;
+
+        inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+
+    }
+
+    @Test
+    public void decrementInventoryUnavailableTest() throws AddToCartException, PricingException {
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 2;
+        int requestedQuantity = 4;
+        boolean incrementOrderItemQuantity = true;
+        int expectedQuantity = 2;
+
+        Exception e = new Exception();
+
+        try{
+            inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+        }catch (AddToCartException ex){
+            e = ex;
+            ProductAttribute attribute = catalogService.findProductAttributeById(productAttributeId, FetchMode.LAZY);
+            Assert.assertEquals(expectedQuantity, attribute.getQuantity());
+            Assert.assertEquals(0, taskService.getPendingTasksSize());
+        }
+
+        Assert.assertTrue(e instanceof AddToCartException);
+        System.err.println(orderService.findOrderById(1, FetchMode.FETCHED));
+
+    }
+
+    @Test
+    @Transactional(propagation =Propagation.NOT_SUPPORTED )
+    public void orderSingleTimeTimerTaskTest() throws AddToCartException, PricingException, InterruptedException {
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 1;
+        int requestedQuantity = 3;
+        boolean incrementOrderItemQuantity = true;
+        long delayMilliseconds = 30000;
+
+        int expectedQuantity = 3;
+
+        inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
+        LOGGER.info("Waiting for a scheduler. {} seconds remaining..", (delayMilliseconds / 1000));
+        Thread.sleep(delayMilliseconds);
+    }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     private OrderItemRequest buildOrderItemRequestWithNewOrder(long productId, long customerId,
@@ -111,10 +171,10 @@ public class OrderServiceTest {
         return request;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public OrderItemRequest inventoryQuantityTest(long productId, long customerId,
-                                      long attrId, int requestedQuantity,
-                                      boolean incrementOrderItemQuantity, int expectedQuantity) throws AddToCartException, PricingException {
+    @Transactional
+    private OrderItemRequest inventoryQuantityTest(long productId, long customerId,
+                                                   long attrId, int requestedQuantity,
+                                                   boolean incrementOrderItemQuantity, int expectedQuantity) throws AddToCartException, PricingException {
 
         OrderItemRequest request = buildOrderItemRequestWithNewOrder(productId, customerId, attrId,
                 requestedQuantity, incrementOrderItemQuantity);
@@ -125,64 +185,6 @@ public class OrderServiceTest {
         Assert.assertEquals(expectedQuantity, attribute.getQuantity());
         return request;
 
-    }
-
-    @Test
-    @Transactional
-    public void decrementInventoryNormalTest() throws PricingException, AddToCartException, InterruptedException {
-        long productId = 1;
-        long customerId = 1;
-        long productAttributeId = 1;
-        int requestedQuantity = 3;
-        boolean incrementOrderItemQuantity = true;
-
-        int expectedQuantity = 0;
-
-        inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
-
-    }
-
-    @Test
-    @Transactional
-    public void decrementInventoryUnavailableTest() throws AddToCartException, PricingException {
-        long productId = 1;
-        long customerId = 1;
-        long productAttributeId = 2;
-        int requestedQuantity = 4;
-        boolean incrementOrderItemQuantity = true;
-        int expectedQuantity = 2;
-
-        Exception e = new Exception();
-
-        try{
-            inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
-        }catch (AddToCartException ex){
-            e = ex;
-            ProductAttribute attribute = catalogService.findProductAttributeById(productAttributeId, FetchMode.LAZY);
-            Assert.assertEquals(expectedQuantity, attribute.getQuantity());
-        }
-
-        Assert.assertTrue(e instanceof AddToCartException);
-
-    }
-
-    @Test
-    public void orderSingleTimeTimerTaskTest() throws AddToCartException, PricingException {
-        long productId = 1;
-        long customerId = 1;
-        long productAttributeId = 1;
-        int requestedQuantity = 3;
-        boolean incrementOrderItemQuantity = true;
-
-        int expectedQuantity = 3;
-
-        inventoryQuantityTest(productId, customerId, productAttributeId, requestedQuantity, incrementOrderItemQuantity, expectedQuantity);
-
-        LocalDateTime end = LocalDateTime.now().plusSeconds(15);
-
-        while (LocalDateTime.now().isBefore(end)){
-            // do nothing
-        }
     }
 
 }

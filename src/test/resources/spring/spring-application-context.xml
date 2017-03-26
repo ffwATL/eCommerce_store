@@ -7,13 +7,13 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <import resource="persistence-config.xml"/>
+    <import resource="persistence-test-config.xml"/>
     <import resource="springMVC-config.xml"/>
     <import resource="spring-security.xml"/>
     <import resource="rule-test-config.xml"/>
     <import resource="offer/offer-test-config.xml"/>
     <import resource="order/order-test-config.xml"/>
-    <import resource="workflow-config.xml"/>
+    <import resource="order/workflow-test-config.xml"/>
 
 
 
@@ -29,8 +29,6 @@
         </constructor-arg>
     </bean>
 
-    <bean id="orderSingleTimeTimerTaskFactory" class="com.ffwatl.common.schedule.OrderSingleTimeTimerTaskFactory"/>
-
     <bean id="mergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
@@ -43,14 +41,14 @@
         <constructor-arg value="MM/dd/yyyy"/>
     </bean>
 
-    <bean id="custom_date_editor_registrar" class="com.ffwatl.common.config.CustomDateEditorRegistrar">
+    <bean id="customDateEditorRegistrar" class="com.ffwatl.common.config.CustomDateEditorRegistrar">
         <property name="dateFormat" ref="customDateFormatter"/>
     </bean>
 
     <bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
         <property name="propertyEditorRegistrars">
             <list>
-                <ref bean="custom_date_editor_registrar"/>
+                <ref bean="customDateEditorRegistrar"/>
             </list>
         </property>
     </bean>

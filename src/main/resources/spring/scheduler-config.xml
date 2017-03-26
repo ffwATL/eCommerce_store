@@ -8,7 +8,7 @@
 
     <context:component-scan base-package="com.ffwatl.common.schedule"/>
 
-    <bean id="orderSingleTimeTimerTaskManager" class="com.ffwatl.common.schedule.SingleTimeTimerTaskManagerImpl"/>
+    <bean id="orderSingleTimeTimerTaskManager" class="com.ffwatl.common.schedule.manager.SingleTimeTimerTaskManagerImpl"/>
 
 
     <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">

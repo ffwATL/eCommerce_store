@@ -39,7 +39,9 @@ public class UpdateInventoryActivity extends BaseActivity<ProcessContext<CartOpe
             }
             // Register the map with the rollback state object early on; this allows the extension handlers
             // to incrementally add state while decrementing but still throw an exception
-            ActivityStateManagerImpl.getStateManager().registerState(this, context, getRollbackRegion(), getRollbackHandler(), rollbackState);
+            ActivityStateManagerImpl
+                    .getStateManager()
+                    .registerState(this, context, getRollbackRegion(), getRollbackHandler(), rollbackState);
         }
 
         if (!attrInventoryMap.isEmpty()) {

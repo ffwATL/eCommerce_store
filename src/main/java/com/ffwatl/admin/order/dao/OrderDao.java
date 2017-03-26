@@ -6,7 +6,6 @@ import com.ffwatl.admin.order.domain.OrderLock;
 import com.ffwatl.admin.order.domain.OrderStatus;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.common.persistence.FetchMode;
-import com.ffwatl.common.schedule.SingleTimeTimerTask;
 
 import java.util.List;
 
@@ -45,8 +44,6 @@ public interface OrderDao {
     Order submitOrder(Order cartOrder);
 
     Order create();
-
-    SingleTimeTimerTask createOrderSingleTimeTimerTask(long id);
 
     Order createNewCartForCustomer(User customer, Currency currency);
 

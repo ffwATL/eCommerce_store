@@ -53,7 +53,7 @@ public class OrderImpl implements Order {
     @Column(name = "order_total_value")
     private int total;
 
-    @ManyToOne(targetEntity = UserImpl.class, optional = false)
+    @ManyToOne(targetEntity = UserImpl.class, optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "customer_id")
     private User customer;
 

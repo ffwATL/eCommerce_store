@@ -1,4 +1,6 @@
-package com.ffwatl.common.schedule;
+package com.ffwatl.common.schedule.manager;
+
+import com.ffwatl.common.schedule.service.SingleTimeTimerTask;
 
 import java.sql.Date;
 import java.time.ZoneId;
@@ -20,17 +22,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SingleTimeTimerTaskManagerImpl implements SingleTimeTimerTaskManager {
 
-    private Map<Long, SingleTimeTimerTask> taskMap = new ConcurrentHashMap<>();
+    private volatile Map<Long, SingleTimeTimerTask> taskMap = new ConcurrentHashMap<>();
 
     @Override
-    public void addTask(Long key, SingleTimeTimerTask task) {
-        SingleTimeTimerTask prev = taskMap.putIfAbsent(key, task);
-
-        if(prev != null) {
-            throw new IllegalArgumentException("Task is already added. Please remove the task firstly and retry.");
-        }
-
-        scheduleTimerTask(task);
+    public SingleTimeTimerTask addTask(Long key, SingleTimeTimerTask task) {
+        removeAndCancelTaskIfExist(key);
+        return scheduleTimerTask(key, task);
     }
 
     @Override
@@ -38,18 +35,8 @@ public class SingleTimeTimerTaskManagerImpl implements SingleTimeTimerTaskManage
         return taskMap.remove(key);
     }
 
-    private void scheduleTimerTask(SingleTimeTimerTask task) {
-       /* ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.initialize();
-        scheduler.schedule(task, Date.from(task.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant()));*/
-        Timer timer = new Timer();
-        timer.schedule(task, Date.from(task.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant()));
-        task.setTimer(timer);
-    }
-
     @Override
-    public void cancelTask(Long key) {
-        SingleTimeTimerTask task = removeTask(key);
+    public void cancelTask(SingleTimeTimerTask task) {
         if(task != null) {
             task.getTimer().cancel();
             task.cancel();
@@ -57,9 +44,29 @@ public class SingleTimeTimerTaskManagerImpl implements SingleTimeTimerTaskManage
     }
 
     @Override
-    public void updateTask(Long key, SingleTimeTimerTask task) {
-        cancelTask(key);
-        addTask(key, task);
+    public SingleTimeTimerTask removeAndCancelTaskIfExist(Long key){
+        SingleTimeTimerTask prev = taskMap.remove(key);
+        cancelTask(prev);
+        return prev;
+    }
+
+    @Override
+    public int getPendingTasksSize() {
+        return taskMap.size();
+    }
+
+    private SingleTimeTimerTask scheduleTimerTask(Long key, SingleTimeTimerTask task) {
+        Timer timer = new Timer();
+        timer.schedule(task, Date.from(task.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant()));
+
+        task.setTimer(timer);
+
+        SingleTimeTimerTask prev = taskMap.put(key, task);
+
+        if(prev != null) {
+            cancelTask(prev);
+        }
+        return prev;
     }
 
 }

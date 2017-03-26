@@ -52,8 +52,9 @@ public class UpdateInventoryRollbackHandler implements RollbackHandler<CartOpera
             try {
                 inventoryService.incrementInventory(inventoryToIncrement);
             } catch (Exception ex) {
-                RollbackFailureException rfe = new RollbackFailureException("An unexpected error occured in the error handler of the checkout workflow trying to compensate for inventory. This happend for order ID: " +
-                        orderId + ". This should be corrected manually!", ex);
+                RollbackFailureException rfe = new RollbackFailureException("An unexpected error occurred in " +
+                        "the error handler of the checkout workflow trying to compensate for inventory. " +
+                        "This happened for order ID: " + orderId + ". This should be corrected manually!", ex);
                 rfe.setActivity(activity);
                 rfe.setProcessContext(processContext);
                 rfe.setStateItems(stateConfiguration);
@@ -65,18 +66,21 @@ public class UpdateInventoryRollbackHandler implements RollbackHandler<CartOpera
             try {
                 inventoryService.decrementInventory(inventoryToDecrement);
             } catch (InventoryUnavailableException e) {
-                //This is an awkward, unlikely state.  I just added some inventory, but something happened, and I want to remove it, but it's already gone!
-                RollbackFailureException rfe = new RollbackFailureException("While trying roll back (decrement) inventory, we found that there was none left decrement.", e);
+                //This is an awkward, unlikely state.  I just added some inventory, but something happened,
+                // and I want to remove it, but it's already gone!
+                RollbackFailureException rfe = new RollbackFailureException("While trying roll back (decrement) " +
+                        "inventory, we found that there was none left decrement.", e);
                 rfe.setActivity(activity);
                 rfe.setProcessContext(processContext);
                 rfe.setStateItems(stateConfiguration);
                 throw rfe;
             } catch (RuntimeException ex) {
-                LOGGER.error("An unexpected error occured in the error handler of the checkout workflow trying to compensate for inventory. This happend for order ID: " +
+                LOGGER.error("An unexpected error occurred in the error handler of the checkout " +
+                        "workflow trying to compensate for inventory. This happened for order ID: " +
                         orderId + ". This should be corrected manually!", ex);
-                RollbackFailureException rfe = new RollbackFailureException("An unexpected error occured in the error handler of the checkout workflow " +
-                        "trying to compensate for inventory. This happend for order ID: " +
-                        orderId + ". This should be corrected manually!", ex);
+                RollbackFailureException rfe = new RollbackFailureException("An unexpected error occurred " +
+                        "in the error handler of the checkout workflow trying to compensate for inventory. " +
+                        "This happened for order ID: " + orderId + ". This should be corrected manually!", ex);
                 rfe.setActivity(activity);
                 rfe.setProcessContext(processContext);
                 rfe.setStateItems(stateConfiguration);

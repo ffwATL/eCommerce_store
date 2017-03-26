@@ -75,7 +75,8 @@ public class SequenceProcessor extends BaseProcessor {
                                 errorHandler.handleError(context, th);
                             }
                         } catch (RuntimeException | WorkflowException e) {
-                            LOGGER.error("An exception was caught while attempting to handle an activity generated exception", e);
+                            LOGGER.error("An exception was caught while attempting to handle an " +
+                                    "activity generated exception", e);
                             throw e;
                         }
                     }

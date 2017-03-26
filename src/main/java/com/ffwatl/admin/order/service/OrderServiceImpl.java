@@ -26,7 +26,6 @@ import com.ffwatl.admin.workflow.Processor;
 import com.ffwatl.admin.workflow.WorkflowException;
 import com.ffwatl.common.extension.ExtensionResultHolder;
 import com.ffwatl.common.persistence.FetchMode;
-import com.ffwatl.common.schedule.SingleTimeTimerTask;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -342,7 +341,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED/*, propagation = Propagation.REQUIRES_NEW*/)
     public Order addItem(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws AddToCartException {
         // Don't allow overrides from this method.
         orderItemRequestDTO.setOverrideRetailPrice(0);
@@ -652,13 +651,5 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public boolean releaseLock(Order order) {
         return orderDao.releaseLock(order);
-    }
-
-    @Override
-    public SingleTimeTimerTask createOrderSingleTimeTimerTask(long orderId) {
-        if(orderId < 1) {
-            throw new IllegalArgumentException("Wrong Order ID is given: "+ orderId);
-        }
-        return orderDao.createOrderSingleTimeTimerTask(orderId);
     }
 }

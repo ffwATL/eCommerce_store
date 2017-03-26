@@ -59,6 +59,7 @@ public class ActivityStateManagerImpl implements ActivityStateManager {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void rollbackAllState() throws RollbackFailureException {
         RollbackStateLocal rollbackStateLocal = getRollbackStateLocal();
         Stack<StateContainer> containers = stateMap.get(rollbackStateLocal.getThreadId() + "_" + rollbackStateLocal.getWorkflowId());
@@ -72,6 +73,7 @@ public class ActivityStateManagerImpl implements ActivityStateManager {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void rollbackRegionState(String region) throws RollbackFailureException {
         RollbackStateLocal rollbackStateLocal = getRollbackStateLocal();
         Stack<StateContainer> containers = stateMap.get(rollbackStateLocal.getThreadId() + "_" + rollbackStateLocal.getWorkflowId());
