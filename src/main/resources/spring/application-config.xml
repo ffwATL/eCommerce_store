@@ -11,6 +11,7 @@
     <import resource="common-applicationContext-entity.xml"/>
     <import resource="persistence.xml"/>
     <import resource="workflow-config.xml"/>
+    <import resource="scheduler-config.xml"/>
 
     <context:component-scan base-package="com.ffwatl"/>
 
@@ -44,6 +45,8 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="20971520"/>
     </bean>
+
+    <bean class="com.ffwatl.admin.workflow.annotation.RetryOnFailAnnotationBeanPostProcessor"/>
 
     <context:annotation-config/>
 

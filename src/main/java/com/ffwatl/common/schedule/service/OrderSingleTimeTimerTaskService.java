@@ -4,6 +4,7 @@ import com.ffwatl.admin.order.service.OrderService;
 import com.ffwatl.common.schedule.manager.SingleTimeTimerTaskManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ public class OrderSingleTimeTimerTaskService implements SingleTimeTimerTaskServi
 
     @Resource(name = "order_service")
     private OrderService orderService;
+
+    @Value("${order.deleteCartNumberOfTrying}")
+    private int deleteCartNumberOfTrying;
 
 
     @PostConstruct
@@ -59,6 +63,8 @@ public class OrderSingleTimeTimerTaskService implements SingleTimeTimerTaskServi
 
     public class SingleTimerTask extends SingleTimeTimerTask{
 
+        private int numberOfTrying;
+
         public SingleTimerTask(Long key) {
             super(key);
         }
@@ -71,10 +77,15 @@ public class OrderSingleTimeTimerTaskService implements SingleTimeTimerTaskServi
                     try {
                         orderService.deleteOrder(getKey());
                         logger.info("Removed an expired order with id = {}", getKey());
-                    } catch (Exception e) {
-                        logger.error("An error is occurred when tried to delete order with ID {} ", getKey(), e);
-                    } finally {
                         taskManager.removeTask(getKey());
+                    } catch (Exception e) {
+                        if(numberOfTrying < deleteCartNumberOfTrying) {
+                            numberOfTrying++;
+                            logger.warn("Exception is caught when tried to delete order with ID {}. {} tries are left.", getKey(), (deleteCartNumberOfTrying-numberOfTrying));
+                            run();
+                        }else {
+                            logger.error("An error is occurred when tried to delete order with ID {} ", getKey(), e);
+                        }
                     }
 
                 }

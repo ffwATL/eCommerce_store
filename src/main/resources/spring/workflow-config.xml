@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/mvc"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-
-    <bean
-            class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="application.properties"/>
     </bean>
 
@@ -74,12 +71,16 @@
     </bean>
 
 
-    <!-- Add Item Workflow Configuration -->
-    <bean id="clearCartScheduleAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.ClearCartScheduleActivity">
-        <property name="order" value="500"/>
-        <property name="minutesDelay" value="${order.cartExpired}"/>
+    <!-- Cart auto clear schedule activity-->
 
+    <bean id="clearCartScheduleActivity" class="com.ffwatl.admin.order.service.workflow.ClearCartScheduleActivity">
+        <property name="order" value="7000"/>
+        <property name="secondsDelay" value="20"/>
+        <property name="rollbackHandler" ref="clear_cart_schedule_rollback_handler"/>
     </bean>
+
+
+    <!-- Add Item Workflow Configuration -->
     <bean id="validateAddRequestActivity" class="com.ffwatl.admin.order.service.workflow.add.ValidateAddRequestActivity">
         <property name="order" value="1000"/>
     </bean>
@@ -111,13 +112,13 @@
         </property>
         <property name="activities">
             <list>
-                <ref bean="clearCartScheduleAddRequestActivity"/>
                 <ref bean="validateAddRequestActivity" />
                 <ref bean="checkAddAvailabilityActivity" />
                 <ref bean="decrementInventoryActivity"/>
                 <ref bean="addOrderItemActivity" />
-                <ref bean="addFulfillmentGroupItemActivity" />
-                <ref bean="addWorkflowVerifyFulfillmentGroupItemsActivity" />
+                <!--<ref bean="addFulfillmentGroupItemActivity" />
+                <ref bean="addWorkflowVerifyFulfillmentGroupItemsActivity" />-->
+                <ref bean="clearCartScheduleActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -157,6 +158,8 @@
         <property name="order" value="6000"/>
     </bean>
 
+
+
     <bean id="updateItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
             <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
@@ -164,11 +167,12 @@
         <property name="activities">
             <list>
                 <ref bean="validateUpdateRequestActivity" />
-               <!-- <ref bean="checkUpdateAvailabilityActivity" />-->
+                <!-- <ref bean="checkUpdateAvailabilityActivity" />-->
                 <ref bean="updateInventoryActivity"/>
                 <ref bean="updateOrderItemActivity" />
-                <ref bean="updateFulfillmentGroupItemActivity" />
-                <ref bean="updateWorkflowVerifyFulfillmentGroupItemsActivity" />
+                <!--<ref bean="updateFulfillmentGroupItemActivity" />
+                <ref bean="updateWorkflowVerifyFulfillmentGroupItemsActivity" />-->
+                <ref bean="clearCartScheduleActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -212,9 +216,10 @@
             <list>
                 <ref bean="validateRemoveRequestActivity" />
                 <ref bean="incrementInventoryActivity"/>
-                <ref bean="removeFulfillmentGroupItemActivity" />
+                <!-- <ref bean="removeFulfillmentGroupItemActivity" />-->
                 <ref bean="removeOrderItemActivity" />
-                <ref bean="removeWorkflowVerifyFulfillmentGroupItemsActivity" />
+                <!--<ref bean="removeWorkflowVerifyFulfillmentGroupItemsActivity" />-->
+                <ref bean="clearCartScheduleActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -267,5 +272,4 @@
             </bean>
         </property>
     </bean>
-
 </beans>

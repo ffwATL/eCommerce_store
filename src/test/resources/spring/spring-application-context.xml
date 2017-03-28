@@ -2,10 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <import resource="persistence-test-config.xml"/>
     <import resource="springMVC-config.xml"/>
@@ -14,6 +15,7 @@
     <import resource="offer/offer-test-config.xml"/>
     <import resource="order/order-test-config.xml"/>
     <import resource="order/workflow-test-config.xml"/>
+    <import resource="scheduler-config.xml"/>
 
 
 
@@ -53,6 +55,9 @@
         </property>
     </bean>
 
-    <context:annotation-config/>
+    <bean class="com.ffwatl.admin.workflow.annotation.RetryOnFailAnnotationBeanPostProcessor"/>
+
+
+    <aop:aspectj-autoproxy/>
 
 </beans>
