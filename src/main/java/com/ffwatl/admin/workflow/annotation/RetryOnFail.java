@@ -14,5 +14,5 @@ public @interface RetryOnFail {
 
     int numOfTries() default 6;
 
-    Class<? extends Exception> retryOn();
+    Class<? extends Exception>[] cause();
 }

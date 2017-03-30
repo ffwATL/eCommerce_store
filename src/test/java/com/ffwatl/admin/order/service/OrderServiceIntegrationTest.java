@@ -6,9 +6,11 @@ import com.ffwatl.admin.catalog.service.CatalogService;
 import com.ffwatl.admin.catalog.service.ProductService;
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.order.domain.Order;
+import com.ffwatl.admin.order.domain.OrderItem;
 import com.ffwatl.admin.order.service.call.OrderItemRequest;
 import com.ffwatl.admin.order.service.call.OrderItemRequestDTO;
 import com.ffwatl.admin.order.service.exception.AddToCartException;
+import com.ffwatl.admin.order.service.exception.RemoveFromCartException;
 import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.service.UserService;
@@ -45,7 +47,7 @@ import java.util.List;
         DbUnitTestExecutionListener.class,
         TransactionalTestExecutionListener.class })
 @DatabaseSetup("/dataset/product_set.xml")
-public class OrderServiceTest {
+public class OrderServiceIntegrationTest {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -60,9 +62,6 @@ public class OrderServiceTest {
 
     @Resource(name = "catalog_service")
     private CatalogService catalogService;
-
-    @Resource(name = "order_item_service")
-    private OrderItemService orderItemService;
 
     @Resource(name = "user_service")
     private UserService userService;
@@ -158,17 +157,75 @@ public class OrderServiceTest {
 
         OrderItemRequest orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
                 customerId, productAttributeId, requestedQuantity_1, incrementOrderItemQuantity, orderId);
-        handleOrderItemRequest(orderItemRequest);
+        handleAddOrderItemRequest(orderItemRequest);
 
         Thread.sleep(10000);
 
         LOGGER.info("########### 10 seconds passed");
         orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
                 customerId, productAttribute_2Id, requestedQuantity_2, incrementOrderItemQuantity, orderItemRequest.getOrder().getId());
-        handleOrderItemRequest(orderItemRequest);
+        handleAddOrderItemRequest(orderItemRequest);
         LOGGER.info("########### request handled");
 
         Thread.sleep(delayMilliseconds);
+    }
+
+    @Test
+    @Transactional
+    public void removeFromCartTest() throws AddToCartException, PricingException, RemoveFromCartException, InterruptedException {
+        long orderId = 1;
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 1;
+        long productAttribute_2Id = 3;
+        int requestedQuantity_1 = 2;
+        int requestedQuantity_2 = 3;
+        boolean incrementOrderItemQuantity = true;
+        int expectedQuantity = 3;
+
+        // create OrderItemRequest for the first productAttribute. It creates a new order for
+        // the given customer.
+        OrderItemRequest orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttributeId, requestedQuantity_1, incrementOrderItemQuantity, orderId);
+        // execute "Add order item" for the above request
+        handleAddOrderItemRequest(orderItemRequest);
+
+        // check if the operation succeeded
+        checkProductAttributeQuantity(productAttributeId, 1);
+
+        // create OrderItemRequest for the second productAttribute
+        orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttribute_2Id, requestedQuantity_2, incrementOrderItemQuantity, orderItemRequest.getOrder().getId());
+        // execute "Add order item" for the above request
+        handleAddOrderItemRequest(orderItemRequest);
+
+        LOGGER.info("2 order item added. Waiting 5 sec..");
+        Thread.sleep(5000);
+
+        OrderItem orderItem = orderItemRequest.getOrder().getOrderItems().get(0);
+
+        Assert.assertNotNull(orderItem);
+        ProductAttribute productAttribute = orderItem.getProductAttribute();
+        Assert.assertNotNull(productAttribute);
+
+        LOGGER.info("Removing order item with ID = {}", orderItem.getId());
+
+        // to test remove behavior we need to change flag 'IncrementOrderItemQuantity'
+        // in our OrderItemRequest to 'false' state.
+        orderItemRequest.setIncrementOrderItemQuantity(false);
+
+        // execute remove OrderItem operation for the first OrderItem we added to the order.
+        handleRemoveOrderItemRequest(orderItemRequest, orderItem.getId());
+        LOGGER.info("Removed successfully!");
+
+        // finally we need to check whether the operation was canceled and ProductAttribute quantity rolled back
+        checkProductAttributeQuantity(productAttribute.getId(), expectedQuantity);
+    }
+
+    private void checkProductAttributeQuantity(long attrId, int expectedQuantity){
+        ProductAttribute attribute = catalogService.findProductAttributeById(attrId, FetchMode.LAZY);
+        Assert.assertEquals(expectedQuantity, attribute.getQuantity());
+        LOGGER.info("Assert passed! Expected quantity {}, actual quantity {}", expectedQuantity, attribute.getQuantity());
     }
 
     private Order findOrderById(long id, User customer){
@@ -222,8 +279,14 @@ public class OrderServiceTest {
         return request;
     }
 
-    private void handleOrderItemRequest(OrderItemRequest request) throws AddToCartException {
+    private void handleAddOrderItemRequest(OrderItemRequest request) throws AddToCartException {
         orderService.addItem(request.getOrder().getId(), new OrderItemRequestDTO(request), false);
     }
+
+    private void handleRemoveOrderItemRequest(OrderItemRequest request, long orderItemId) throws RemoveFromCartException {
+        orderService.removeItem(request.getOrder().getId(), orderItemId, false);
+    }
+
+
 
 }

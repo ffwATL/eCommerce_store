@@ -30,6 +30,7 @@ public class ValidateRemoveRequestActivity extends BaseActivity<ProcessContext<C
         for (OrderItem oi : request.getOrder().getOrderItems()) {
             if (oi.getId() == orderItemRequestDTO.getOrderItemId()) {
                 orderItem = oi;
+                break;
             }
         }
 

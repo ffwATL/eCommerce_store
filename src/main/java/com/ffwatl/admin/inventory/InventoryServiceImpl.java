@@ -85,11 +85,12 @@ public class InventoryServiceImpl implements InventoryService {
         }
         attribute = catalogService.findProductAttributeById(attribute.getId(), FetchMode.LAZY);
 
+        if(attribute == null) {
+            throw new IllegalArgumentException("There is no such ProductAttribute");
+        }
+
         int availableQuantity = attribute.getQuantity();
 
-        if(availableQuantity < requestedQuantity) {
-            throw new InventoryUnavailableException(attribute.getId(), requestedQuantity, availableQuantity);
-        }
         attribute.setQuantity(availableQuantity + requestedQuantity);
     }
 

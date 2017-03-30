@@ -6,6 +6,7 @@ import com.ffwatl.admin.workflow.state.ActivityStateManagerImpl;
 import com.ffwatl.admin.workflow.state.RollbackStateLocal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.exception.LockAcquisitionException;
 
 import javax.annotation.Resource;
 import javax.persistence.OptimisticLockException;
@@ -33,7 +34,7 @@ public class SequenceProcessor extends BaseProcessor {
     }
 
     @Override
-    @RetryOnFail(numOfTries = 6, retryOn = OptimisticLockException.class)
+    @RetryOnFail(numOfTries = 6, cause = {OptimisticLockException.class, LockAcquisitionException.class})
     public ProcessContext<?> doActivities(Object seedData) throws WorkflowException {
         LOGGER.debug(getBeanName() + " processor is running..");
 

@@ -15,7 +15,7 @@ public interface InventoryService {
      * Used as a key in the context map methods below. This is used for the current order that should be used to evaluate
      * the methods below
      */
-    public static String ORDER_KEY = "ORDER";
+    String ORDER_KEY = "ORDER";
 
     /**
      * Used as a key in the context map methods below. This key is normally populated from the {@link DecrementInventoryCheckoutActivity}
@@ -23,7 +23,7 @@ public interface InventoryService {
      * designed such that when it is used, non-read operations (decrement and increment) can add what actually happened
      * so that it can be reversed.
      */
-    public static String ROLLBACK_STATE_KEY = "ROLLBACK_STATE";
+    String ROLLBACK_STATE_KEY = "ROLLBACK_STATE";
 
     int retrieveQuantityAvailable(ProductAttribute attribute);
 
@@ -33,9 +33,9 @@ public interface InventoryService {
 
     void decrementInventory(ProductAttribute attribute, int quantity) throws InventoryUnavailableException;
 
-    void decrementInventory(Map<ProductAttribute, Integer> skuQuantities) throws InventoryUnavailableException;
+    void decrementInventory(Map<ProductAttribute, Integer> attrQuantities) throws InventoryUnavailableException;
 
     void incrementInventory(ProductAttribute attribute, int quantity) throws InventoryUnavailableException;
 
-    void incrementInventory(Map<ProductAttribute, Integer> skuQuantities) throws InventoryUnavailableException;
+    void incrementInventory(Map<ProductAttribute, Integer> attrQuantities) throws InventoryUnavailableException;
 }

@@ -20,13 +20,12 @@ public class RemoveOrderItemActivity extends BaseActivity<ProcessContext<CartOpe
     public ProcessContext<CartOperationRequest> execute(ProcessContext<CartOperationRequest> context) throws Exception {
         CartOperationRequest request = context.getSeedData();
 
-
         OrderItem orderItem = request.getOrderItem();
         request.getOisToDelete().add(orderItem);
 
-        /*for(OrderItem oi: request.getOisToDelete()){
+        for(OrderItem oi: request.getOisToDelete()){
             orderItemService.delete(oi);
-        }*/
+        }
 
         return context;
     }

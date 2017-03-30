@@ -1,6 +1,5 @@
 package com.ffwatl.admin.workflow.annotation;
 
-import com.ffwatl.admin.workflow.annotation.RetryOnFail;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -63,15 +62,25 @@ public class RetryOnFailAnnotationBeanPostProcessor implements BeanPostProcessor
                 }
 
                 int numOfTries = annotation.numOfTries();
-                Class<? extends Exception> retryOn = annotation.retryOn();
+                Class<? extends Exception>[] cause = annotation.cause();
 
                 while (true) {
                     try {
                         return method.invoke(bean, args);
                     } catch (Exception e) {
-                        if(numOfTries > 0 && e.getCause().getClass().getName().equals(retryOn.getName())) {
-                            numOfTries -= 1;
-                        }else {
+                        boolean validCause = false;
+
+                        if(numOfTries > 0){
+                            for (Class<? extends Exception> c: cause){
+                                if(e.getCause().getClass().getName().equals(c.getName())){
+                                    numOfTries -= 1;
+                                    validCause = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(!validCause){
                             throw e.getCause();
                         }
                     }
@@ -88,8 +97,7 @@ public class RetryOnFailAnnotationBeanPostProcessor implements BeanPostProcessor
             extractInterface(superClazz, classArrayList);
         }
 
-        Class<?>[] interfaces = clazz.getInterfaces();
-        for(Class<?> c: interfaces) {
+        for(Class<?> c: clazz.getInterfaces()) {
             extractInterface(c, classArrayList);
             classArrayList.add(c);
         }

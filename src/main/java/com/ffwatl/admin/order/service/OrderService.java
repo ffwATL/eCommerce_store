@@ -170,7 +170,8 @@ public interface OrderService {
      *
      * @param order
      */
-    void cancelOrder(Order order);
+    @Transactional
+    void cancelOrder(Order order, boolean needFetch);
 
     /**
      * Adds the given OfferCode to the order. Optionally prices the order as well.
@@ -358,7 +359,8 @@ public interface OrderService {
      */
     void removePaymentFromOrder(Order order, OrderPayment paymentInfo);
 
-    void deleteOrder(Order cart);
+    @Transactional
+    void deleteOrder(Order cart, boolean needFetch);
 
     void deleteOrder(long id);
 

@@ -3,6 +3,7 @@ package com.ffwatl.admin.order.service.workflow;
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.admin.inventory.InventoryRollback;
 import com.ffwatl.admin.inventory.InventoryService;
+import com.ffwatl.admin.order.domain.OrderStatus;
 import com.ffwatl.admin.order.service.call.OrderItemRequestDTO;
 import com.ffwatl.admin.workflow.BaseActivity;
 import com.ffwatl.admin.workflow.ProcessContext;
@@ -24,6 +25,11 @@ public class UpdateInventoryActivity extends BaseActivity<ProcessContext<CartOpe
     public ProcessContext<CartOperationRequest> execute(ProcessContext<CartOperationRequest> context) throws Exception {
         CartOperationRequest request = context.getSeedData();
         OrderItemRequestDTO orderItemRequestDTO = request.getItemRequest();
+
+        // It means we have a wishlist and we need to remove orderItem without processing inventory
+        if(request.getOrder().getOrderStatus() == OrderStatus.NAMED){
+            return context;
+        }
 
         Integer requestedQuantity = orderItemRequestDTO.getQuantity();
         ProductAttribute attribute = orderItemRequestDTO.getProductAttribute();

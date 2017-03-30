@@ -7,6 +7,8 @@ import com.ffwatl.admin.order.service.workflow.CartOperationRequest;
 import com.ffwatl.admin.workflow.BaseActivity;
 import com.ffwatl.admin.workflow.ProcessContext;
 
+import java.util.List;
+
 /**
  * @author ffw_ATL.
  */
@@ -17,19 +19,20 @@ public class UpdateOrderItemActivity extends BaseActivity<ProcessContext<CartOpe
         CartOperationRequest request = context.getSeedData();
         OrderItemRequestDTO orderItemRequestDTO = request.getItemRequest();
         Order order = request.getOrder();
+        List<OrderItem> orderItemList = order.getOrderItems();
 
         OrderItem orderItem = null;
-        for (OrderItem oi : order.getOrderItems()) {
+        for (OrderItem oi : orderItemList) {
             if (oi.getId() == orderItemRequestDTO.getOrderItemId()) {
                 orderItem = oi;
             }
         }
 
-        if (orderItem == null || !order.getOrderItems().contains(orderItem)) {
+        if (orderItem == null || !orderItemList.contains(orderItem)) {
             throw new IllegalArgumentException("Order Item (" + orderItemRequestDTO.getOrderItemId() + ") not found in Order (" + order.getId() + ")");
         }
 
-        OrderItem itemFromOrder = order.getOrderItems().get(order.getOrderItems().indexOf(orderItem));
+        OrderItem itemFromOrder = orderItemList.get(orderItemList.indexOf(orderItem));
         if (orderItemRequestDTO.getQuantity() >= 0) {
             request.setOrderItemQuantityDelta(orderItemRequestDTO.getQuantity() - itemFromOrder.getQuantity());
             itemFromOrder.setQuantity(orderItemRequestDTO.getQuantity());

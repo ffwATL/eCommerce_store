@@ -29,10 +29,8 @@ import com.ffwatl.common.persistence.FetchMode;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -89,6 +87,9 @@ public class OrderServiceImpl implements OrderService {
     @Resource(name = "removeItemWorkflow")
     private Processor removeItemWorkflow;
 
+    @Resource(name = "cancelOrderWorkflow")
+    private Processor cancelOrderWorkflow;
+
     private int pricingRetryCountForLockFailure = 3;
 
     private long pricingRetryWaitIntervalForLockFailure = 500L;
@@ -102,9 +103,11 @@ public class OrderServiceImpl implements OrderService {
     private static final String ORDER_ITEM = "OrderItem";
     private static final String PRODUCT_ATTR = "ProductAttribute";
 
+
     @Override
     @Transactional
     public Order createNewCartForCustomer(User customer, Currency currency) {
+        Number n = 20;
         return orderDao.createNewCartForCustomer(customer, currency);
     }
 
@@ -195,7 +198,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Order save(Order order, boolean priceOrder) throws PricingException {
         try {
             order = persist(order);
@@ -203,63 +206,10 @@ public class OrderServiceImpl implements OrderService {
             logger.error("Exception is occurred while saving order. " + ex.getMessage());
             throw ex;
         }
+
         //make any pricing changes - possibly retrying with the persisted state if there's a lock failure
         if (priceOrder) {
-            int retryCount = 0;
-            boolean isValid = false;
-
-            while (!isValid) {
-                try {
-                    order = pricingService.executePricing(order);
-                    isValid = true;
-                } catch (Exception ex) {
-                    boolean isValidCause = false;
-                    Throwable cause = ex;
-
-                    while (!isValidCause) {
-                        if (cause.getClass().equals(LockAcquisitionException.class)) {
-                            isValidCause = true;
-                        }
-                        cause = cause.getCause();
-                        if (cause == null) {
-                            break;
-                        }
-                    }
-
-                    if (isValidCause) {
-                        if (logger.isInfoEnabled()) {
-                            logger.info("Problem acquiring lock during pricing call - attempting to price again.");
-                        }
-                        isValid = false;
-                        if (retryCount >= pricingRetryCountForLockFailure) {
-                            if (logger.isInfoEnabled()) {
-                                logger.info("Problem acquiring lock during pricing call. Retry limit exceeded at (" + retryCount + "). Throwing exception.");
-                            }
-                            if (ex instanceof PricingException) {
-                                throw (PricingException) ex;
-                            } else {
-                                throw new PricingException(ex);
-                            }
-                        } else {
-                            order = findOrderById(order.getId(), FetchMode.FETCHED);
-                            retryCount++;
-                        }
-                        try {
-                            Thread.sleep(pricingRetryWaitIntervalForLockFailure);
-                        } catch (Throwable e) {
-                            //do nothing
-                        }
-                    } else {
-                        /*if (ex instanceof PricingException) {
-                            throw (PricingException) ex;
-                        } else {
-                            throw new PricingException(ex);
-                        }*/
-                        throw ex;
-                    }
-                }
-            }
-
+            order = pricingService.executePricing(order);
             try {
                 order = persist(order);
                 if (extensionManager != null) {
@@ -273,31 +223,6 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    private void rollbackAllOrderItemsForOrder(Order order){
-        for(OrderItem orderItem: order.getOrderItems()){
-            ProductAttribute orderedAttribute = orderItem.getProductAttribute();
-            ProductAttribute attribute = catalogService.findProductAttributeById(orderedAttribute.getId(), FetchMode.LAZY);
-            attribute.setQuantity(attribute.getQuantity() + orderedAttribute.getQuantity());
-        }
-    }
-
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
-    private void rollbackOrderItemForOrder(OrderItem orderItem) {
-        checkValueIsNotNull(orderItem, ORDER_ITEM);
-        long productAttrId = orderItem.getProductAttribute().getId();
-
-        ProductAttribute productAttribute = catalogService.findProductAttributeById(productAttrId, FetchMode.LAZY);
-        checkValueIsNotNull(productAttribute, PRODUCT_ATTR);
-
-        int orderedQty = orderItem.getQuantity();
-        int remainingQty = productAttribute.getQuantity();
-
-        productAttribute.setQuantity(orderedQty + remainingQty);
-        orderItemService.delete(orderItem);
-    }
-
     @Override
     @Transactional
     public Order save(Order order, boolean priceOrder, boolean repriceItems) throws PricingException {
@@ -306,12 +231,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void cancelOrder(Order order) {
+    @SuppressWarnings("unchecked")
+    public void cancelOrder(Order order, boolean needFetch) {
         checkValueIsNotNull(order, ORDER_OBJECT);
-        if(order.getOrderStatus() != OrderStatus.NAMED){
-            rollbackAllOrderItemsForOrder(order);
+        if(needFetch) {
+            order = orderDao.findOrderById(order.getId(), FetchMode.FETCHED);
         }
-        orderDao.delete(order);
+
+        CartOperationRequest cartOpRequest = new CartOperationRequest(order, null, false);
+
+        try {
+            ProcessContext<CartOperationRequest> context = (ProcessContext<CartOperationRequest>) cancelOrderWorkflow.doActivities(cartOpRequest);
+        } catch (WorkflowException e) {
+            logger.error("Could not remove Order", getCartOperationExceptionRootCause(e));
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -457,14 +392,17 @@ public class OrderServiceImpl implements OrderService {
             isolation = Isolation.READ_COMMITTED)
     public Order updateItemQuantity(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder)
             throws UpdateCartException, RemoveFromCartException {
-        preValidateCartOperation(findOrderById(orderId, FetchMode.FETCHED));
-        preValidateUpdateQuantityOperation(findOrderById(orderId, FetchMode.FETCHED), orderItemRequestDTO);
+        Order order = findOrderById(orderId, FetchMode.FETCHED);
+
+        preValidateCartOperation(order);
+        preValidateUpdateQuantityOperation(order, orderItemRequestDTO);
+
         if (orderItemRequestDTO.getQuantity() == 0) {
             return removeItem(orderId, orderItemRequestDTO.getOrderItemId(), priceOrder);
         }
 
         try {
-            CartOperationRequest cartOpRequest = new CartOperationRequest(findOrderById(orderId, FetchMode.FETCHED), orderItemRequestDTO, priceOrder);
+            CartOperationRequest cartOpRequest = new CartOperationRequest(order, orderItemRequestDTO, priceOrder);
             ProcessContext<CartOperationRequest> context = (ProcessContext<CartOperationRequest>) updateItemWorkflow.doActivities(cartOpRequest);
             /*context.getSeedData().getOrder().getOrderMessages().addAll(((ActivityMessages) context).getActivityMessages());*/
             return context.getSeedData().getOrder();
@@ -474,21 +412,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @SuppressWarnings("unchecked")
-    private Order removeItemInternal(long orderId, long orderItemId, boolean priceOrder) throws WorkflowException {
-        OrderItemRequestDTO orderItemRequestDTO = new OrderItemRequestDTO();
-        orderItemRequestDTO.setOrderItemId(orderItemId);
-
-        Order order = findOrderById(orderId, FetchMode.FETCHED);
+    private Order removeItemInternal(Order order, OrderItem orderItem, boolean priceOrder) throws WorkflowException {
+        OrderItemRequestDTO orderItemRequestDTO = new OrderItemRequestDTO()
+                .setOrderItemId(orderItem.getId())
+                .setItemAttribute(orderItem.getProductAttribute())
+                .setQuantity(orderItem.getQuantity());
 
         CartOperationRequest cartOpRequest = new CartOperationRequest(order, orderItemRequestDTO, priceOrder);
         ProcessContext<CartOperationRequest> context = (ProcessContext<CartOperationRequest>) removeItemWorkflow.doActivities(cartOpRequest);
 
-        // It means we have a wishlist and need to remove orderItem without any rollbacks
-        if(order.getOrderStatus() == OrderStatus.NAMED) {
-            return order;
-        }
-
-        rollbackOrderItemForOrder(context.getSeedData().getOrderItem());
         /*context.getSeedData().getOrder().getOrderMessages().addAll(((ActivityMessages) context).getActivityMessages());*/
         return context.getSeedData().getOrder();
     }
@@ -499,10 +431,13 @@ public class OrderServiceImpl implements OrderService {
         /*preValidateCartOperation(findOrderById(orderId, FetchMode.LAZY));*/
         try {
             OrderItem oi = orderItemService.findOrderItemById(orderItemId, FetchMode.LAZY);
+
             if (oi == null) {
                 throw new WorkflowException(new ItemNotFoundException());
             }
-            return removeItemInternal(orderId, orderItemId, priceOrder);
+            Order order = findOrderById(orderId, FetchMode.FETCHED);
+
+            return removeItemInternal(order, oi, priceOrder);
         } catch (WorkflowException e) {
             throw new RemoveFromCartException("Could not remove from cart", getCartOperationExceptionRootCause(e));
         }
@@ -524,7 +459,7 @@ public class OrderServiceImpl implements OrderService {
         cartOrder = addItem(cartOrder.getId(), orderItemRequest, priceOrder);
 
         if (namedOrder.getOrderItems().size() == 0 && deleteEmptyNamedOrders) {
-            cancelOrder(namedOrder);
+            cancelOrder(namedOrder, true);
         }
 
         return cartOrder;
@@ -548,7 +483,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if (deleteEmptyNamedOrders) {
-            cancelOrder(namedOrder);
+            cancelOrder(namedOrder, true);
         }
 
         return cartOrder;
@@ -568,22 +503,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void deleteOrder(Order cart) {
+    public void deleteOrder(Order cart, boolean needFetch) {
         checkValueIsNotNull(cart, CART_OBJECT);
-        if(cart.getCustomer() != null){
-            rollbackAllOrderItemsForOrder(cart);
+        if(needFetch){
+            cart = orderDao.findOrderById(cart.getId(), FetchMode.FETCHED);
         }
-        orderDao.delete(cart);
+        cancelOrder(cart, false);
     }
 
     @Override
-    @Transactional/*(isolation = Isolation.READ_COMMITTED)*/
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void deleteOrder(long id) {
         if(id < 1){
             throw new IllegalArgumentException("Bad order ID is given: "+ id);
         }
         Order order = orderDao.findOrderById(id, FetchMode.FETCHED);
-        deleteOrder(order);
+        deleteOrder(order, false);
     }
 
     @Override
