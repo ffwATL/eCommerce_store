@@ -11,6 +11,7 @@ import com.ffwatl.admin.order.service.call.OrderItemRequest;
 import com.ffwatl.admin.order.service.call.OrderItemRequestDTO;
 import com.ffwatl.admin.order.service.exception.AddToCartException;
 import com.ffwatl.admin.order.service.exception.RemoveFromCartException;
+import com.ffwatl.admin.order.service.exception.UpdateCartException;
 import com.ffwatl.admin.pricing.exception.PricingException;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.service.UserService;
@@ -74,6 +75,7 @@ public class OrderServiceIntegrationTest {
 
 
     @Test
+    @Transactional
     public void datasetTest(){
         List list = productService.findAll();
         Assert.assertNotNull(list);
@@ -119,7 +121,8 @@ public class OrderServiceIntegrationTest {
             e = ex;
             ProductAttribute attribute = catalogService.findProductAttributeById(productAttributeId, FetchMode.LAZY);
             Assert.assertEquals(expectedQuantity, attribute.getQuantity());
-            Assert.assertEquals(0, taskService.getPendingTasksSize());
+
+            Assert.assertTrue(taskService.getPendingTasksSize() > 0);
         }
 
         Assert.assertTrue(e instanceof AddToCartException);
@@ -144,7 +147,7 @@ public class OrderServiceIntegrationTest {
 
     @Test
     @Transactional(propagation =Propagation.NOT_SUPPORTED )
-    public void orderItemUpdateTimerTaskTest() throws InterruptedException, PricingException, AddToCartException {
+    public void orderAddItemTimerTaskTest() throws InterruptedException, PricingException, AddToCartException {
         long orderId = 1;
         long productId = 1;
         long customerId = 1;
@@ -172,7 +175,7 @@ public class OrderServiceIntegrationTest {
 
     @Test
     @Transactional
-    public void removeFromCartTest() throws AddToCartException, PricingException, RemoveFromCartException, InterruptedException {
+    public void removeOrderItemFromCartTest() throws AddToCartException, PricingException, RemoveFromCartException, InterruptedException {
         long orderId = 1;
         long productId = 1;
         long customerId = 1;
@@ -220,6 +223,128 @@ public class OrderServiceIntegrationTest {
 
         // finally we need to check whether the operation was canceled and ProductAttribute quantity rolled back
         checkProductAttributeQuantity(productAttribute.getId(), expectedQuantity);
+    }
+
+    @Test
+    @Transactional
+    public void incrementItemQuantityPositiveCaseTest() throws AddToCartException, PricingException {
+        long orderId = 1;
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 1;
+        int requestedQuantity_1 = 2;
+
+        boolean incrementOrderItemQuantity = true;
+        int expectedQuantity = 1;
+
+        // create OrderItemRequest for the first productAttribute. It creates a new order for
+        // the given customer.
+        OrderItemRequest orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttributeId, requestedQuantity_1, incrementOrderItemQuantity, orderId);
+        // execute "Add order item" for the above request
+        handleAddOrderItemRequest(orderItemRequest);
+
+        OrderItem orderItem = orderItemRequest.getOrder().getOrderItems().get(0);
+
+        Assert.assertNotNull(orderItem);
+        ProductAttribute productAttribute = orderItem.getProductAttribute();
+        Assert.assertNotNull(productAttribute);
+
+        checkProductAttributeQuantity(productAttribute.getId(), expectedQuantity);
+
+        // we need to refresh order ID because it may be different than initial
+        orderId = orderItemRequest.getOrder().getId();
+        requestedQuantity_1 = 1;
+        expectedQuantity = 0;
+
+        orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttributeId, requestedQuantity_1, incrementOrderItemQuantity, orderId);
+        // execute "Add order item" for the above request
+        handleAddOrderItemRequest(orderItemRequest);
+
+        checkProductAttributeQuantity(productAttribute.getId(), expectedQuantity);
+    }
+
+    @Test
+    @Transactional
+    public void decrementItemQuantityPositiveCaseTest() throws AddToCartException, PricingException, UpdateCartException, RemoveFromCartException {
+        long orderId = 0;
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 1;
+        int requestedQuantity_1 = 2;
+
+        boolean incrementOrderItemQuantity = true;
+        int expectedQuantity = 1;
+
+        // create OrderItemRequest for the first productAttribute. It creates a new order for
+        // the given customer.
+        OrderItemRequest orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttributeId, requestedQuantity_1, incrementOrderItemQuantity, orderId);
+        // execute "Add order item" for the above request
+        handleAddOrderItemRequest(orderItemRequest);
+
+        OrderItem orderItem = orderItemRequest.getOrder().getOrderItems().get(0);
+
+        Assert.assertNotNull(orderItem);
+        ProductAttribute productAttribute = orderItem.getProductAttribute();
+        Assert.assertNotNull(productAttribute);
+
+        checkProductAttributeQuantity(productAttribute.getId(), expectedQuantity);
+
+        // we need to refresh order ID because it may be different than initial
+        orderId = orderItemRequest.getOrder().getId();
+        requestedQuantity_1 = 1;
+        incrementOrderItemQuantity = false;
+        expectedQuantity = 2;
+
+        orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttributeId, requestedQuantity_1, incrementOrderItemQuantity, orderId);
+        handleUpdateOrderItemQuantityRequest(orderItemRequest, orderItem.getId());
+
+        checkProductAttributeQuantity(productAttributeId, expectedQuantity);
+
+        requestedQuantity_1 = 1;
+        incrementOrderItemQuantity = false;
+        expectedQuantity = 3;
+
+        orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttributeId, requestedQuantity_1, incrementOrderItemQuantity, orderId);
+        handleUpdateOrderItemQuantityRequest(orderItemRequest, orderItem.getId());
+
+        checkProductAttributeQuantity(productAttributeId, expectedQuantity);
+    }
+
+    @Test
+    @Transactional
+    public void cancelOrderPositiveCaseTest() throws AddToCartException, PricingException, InterruptedException {
+        long orderId = 1;
+        long productId = 1;
+        long customerId = 1;
+        long productAttributeId = 1;
+        long productAttribute_2Id = 3;
+        int requestedQuantity_1 = 2;
+        int requestedQuantity_2 = 3;
+        boolean incrementOrderItemQuantity = true;
+        int expectedQuantity = 3;
+
+        // create OrderItemRequest for the first productAttribute. It creates a new order for
+        // the given customer.
+        OrderItemRequest orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttributeId, requestedQuantity_1, incrementOrderItemQuantity, orderId);
+        // execute "Add order item" for the above request
+        handleAddOrderItemRequest(orderItemRequest);
+
+        // create OrderItemRequest for the second productAttribute
+        orderItemRequest = buildOrderItemRequestWithNewOrder(productId,
+                customerId, productAttribute_2Id, requestedQuantity_2, incrementOrderItemQuantity, orderItemRequest.getOrder().getId());
+        // execute "Add order item" for the above request
+        handleAddOrderItemRequest(orderItemRequest);
+
+        handleCancelOrderRequest(orderItemRequest);
+
+        checkProductAttributeQuantity(productAttributeId, expectedQuantity);
+        checkProductAttributeQuantity(productAttribute_2Id, 5);
     }
 
     private void checkProductAttributeQuantity(long attrId, int expectedQuantity){
@@ -287,6 +412,12 @@ public class OrderServiceIntegrationTest {
         orderService.removeItem(request.getOrder().getId(), orderItemId, false);
     }
 
+    private void handleUpdateOrderItemQuantityRequest(OrderItemRequest request, long orderItemId) throws RemoveFromCartException, UpdateCartException {
+        orderService.updateItemQuantity(request.getOrder().getId(), new OrderItemRequestDTO(request).setOrderItemId(orderItemId), false);
+    }
 
+    private void handleCancelOrderRequest(OrderItemRequest request){
+        orderService.cancelOrder(request.getOrder(), true);
+    }
 
 }

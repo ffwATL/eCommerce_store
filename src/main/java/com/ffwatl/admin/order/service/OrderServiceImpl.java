@@ -31,6 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -241,12 +242,22 @@ public class OrderServiceImpl implements OrderService {
         CartOperationRequest cartOpRequest = new CartOperationRequest(order, null, false);
 
         try {
-            ProcessContext<CartOperationRequest> context = (ProcessContext<CartOperationRequest>) cancelOrderWorkflow.doActivities(cartOpRequest);
+            cancelOrderWorkflow.doActivities(cartOpRequest);
         } catch (WorkflowException e) {
             logger.error("Could not remove Order", getCartOperationExceptionRootCause(e));
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void finallyDeleteOrder(Order order, boolean needFetch) {
+        checkValueIsNotNull(order, ORDER_OBJECT);
+        if(needFetch){
+            order = findOrderById(order.getId(), FetchMode.FETCHED);
+        }
+        orderDao.delete(order);
     }
 
     @Override
@@ -321,7 +332,6 @@ public class OrderServiceImpl implements OrderService {
 
         OrderItem item = findMatchingItem(order, orderItemRequestDTO);
         if (item != null) {
-            orderItemRequestDTO.setQuantity(item.getQuantity() + orderItemRequestDTO.getQuantity());
             orderItemRequestDTO.setOrderItemId(item.getId());
             try {
                 return updateItemQuantity(orderId, orderItemRequestDTO, priceOrder);
@@ -517,7 +527,9 @@ public class OrderServiceImpl implements OrderService {
         if(id < 1){
             throw new IllegalArgumentException("Bad order ID is given: "+ id);
         }
+        logger.info("Getting order with id: {}", id);
         Order order = orderDao.findOrderById(id, FetchMode.FETCHED);
+
         deleteOrder(order, false);
     }
 

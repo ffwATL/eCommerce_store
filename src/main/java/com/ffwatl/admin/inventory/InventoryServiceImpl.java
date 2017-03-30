@@ -3,6 +3,8 @@ package com.ffwatl.admin.inventory;
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.admin.catalog.service.CatalogService;
 import com.ffwatl.common.persistence.FetchMode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +19,10 @@ import java.util.Map;
 @Transactional(readOnly = true)
 public class InventoryServiceImpl implements InventoryService {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     @Resource(name = "catalog_service")
     private CatalogService catalogService;
-
-    @Resource(name = "inventory_service_extension_manager")
-    private InventoryServiceExtensionManager extensionManager;
 
 
     @Override
@@ -61,6 +62,8 @@ public class InventoryServiceImpl implements InventoryService {
         int availableQuantity = attribute.getQuantity();
 
         if(availableQuantity < requestedQuantity) {
+            LOGGER.error("Could not update quantity for this product attribute: id = {}, requested = {}, " +
+                            "available = {}", attribute.getId(), requestedQuantity, availableQuantity);
             throw new InventoryUnavailableException(attribute.getId(), requestedQuantity, availableQuantity);
         }
         attribute.setQuantity(availableQuantity - requestedQuantity);

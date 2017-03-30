@@ -170,8 +170,9 @@ public interface OrderService {
      *
      * @param order
      */
-    @Transactional
     void cancelOrder(Order order, boolean needFetch);
+
+    void finallyDeleteOrder(Order order, boolean needFetch);
 
     /**
      * Adds the given OfferCode to the order. Optionally prices the order as well.

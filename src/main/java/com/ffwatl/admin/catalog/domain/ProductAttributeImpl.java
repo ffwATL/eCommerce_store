@@ -1,6 +1,7 @@
 package com.ffwatl.admin.catalog.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class ProductAttributeImpl implements ProductAttribute {
     private int quantity;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = FieldImpl.class, fetch = FetchType.LAZY)
-    private List<Field> measurements;
+    private List<Field> measurements = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ProductAttributeTypeImpl.class)
     @JoinColumn(name = "product_attr_type_id")
@@ -119,16 +120,6 @@ public class ProductAttributeImpl implements ProductAttribute {
     }
 
     @Override
-    public String toString() {
-        return "ProductAttribute{" +
-                "id=" + id +
-                ", quantity=" + quantity +
-                ", measurements=" + measurements +
-                ", eu_size=" + eu_size +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -138,7 +129,6 @@ public class ProductAttributeImpl implements ProductAttribute {
         if (getId() != that.getId()) return false;
         if (getQuantity() != that.getQuantity()) return false;
         if (getVersion() != that.getVersion()) return false;
-        if (getProduct() != null ? !getProduct().equals(that.getProduct()) : that.getProduct() != null) return false;
         if (measurements != null ? !measurements.equals(that.measurements) : that.measurements != null) return false;
         return !(getEu_size() != null ? !getEu_size().equals(that.getEu_size()) : that.getEu_size() != null);
 
@@ -147,12 +137,22 @@ public class ProductAttributeImpl implements ProductAttribute {
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getProduct() != null ? getProduct().hashCode() : 0);
         result = 31 * result + getQuantity();
         result = 31 * result + (measurements != null ? measurements.hashCode() : 0);
         result = 31 * result + (getEu_size() != null ? getEu_size().hashCode() : 0);
         result = 31 * result + getVersion();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductAttributeImpl{" +
+                "id=" + id +
+                ", quantity=" + quantity +
+                ", measurements=" + measurements +
+                ", eu_size=" + eu_size +
+                ", version=" + version +
+                '}';
     }
 
     @Override

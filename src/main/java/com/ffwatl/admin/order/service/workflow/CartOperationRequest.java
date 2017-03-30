@@ -67,34 +67,12 @@ public class CartOperationRequest {
         this.orderItem = orderItem;
     }
 
-    /**
-     * @deprecated in favor of {@link #getOrderItem()}. Keeping this method for backwards compatibility
-     */
-    public OrderItem getAddedOrderItem() {
-        return orderItem;
-    }
-
-    /**
-     * @deprecated in favor of {@link #setOrderItem(OrderItem)}. Keeping this method for backwards compatibility
-     */
-    public void setAddedOrderItem(OrderItem addedOrderItem) {
-        this.orderItem = addedOrderItem;
-    }
-
     public Integer getOrderItemQuantityDelta() {
         return orderItemQuantityDelta;
     }
 
     public void setOrderItemQuantityDelta(Integer orderItemQuantityDelta) {
         this.orderItemQuantityDelta = orderItemQuantityDelta;
-    }
-
-    public List<Long[]> getMultishipOptionsToDelete() {
-        return multishipOptionsToDelete;
-    }
-
-    public void setMultishipOptionsToDelete(List<Long[]> multishipOptionsToDelete) {
-        this.multishipOptionsToDelete = multishipOptionsToDelete;
     }
 
     public List<FulfillmentGroupItem> getFgisToDelete() {
