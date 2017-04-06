@@ -172,6 +172,13 @@ public interface OrderService {
      */
     void cancelOrder(Order order, boolean needFetch);
 
+    /**
+     * Deletes the given <b>Order</b> directly through {@link OrderDao} without any inventory actions.
+     *
+     * @param order {@link Order} to delete;
+     * @param needFetch if true getting a new, fresh <b>Order</b> version
+     *                  from {@link javax.persistence.EntityManager}.
+     */
     void finallyDeleteOrder(Order order, boolean needFetch);
 
     /**
@@ -196,7 +203,7 @@ public interface OrderService {
      * @return the modified Order
      * @throws PricingException
      */
-    Order removeOfferCode(Order order, OfferCode offerCode, boolean priceOrder) /*throws PricingException*/;
+    Order removeOfferCode(Order order, OfferCode offerCode, boolean priceOrder) throws PricingException;
 
     /**
      * Removes all offer codes for the given order. Optionally prices the order as well.
@@ -212,8 +219,6 @@ public interface OrderService {
      * The null order is the default order for all customers when they initially
      * enter the site. Upon the first addition of a product to a cart, a non-null order
      * will be provisioned for the user.
-     *
-     * @see org.broadleafcommerce.core.order.domain.NullOrderImpl for more information
      *
      * @return a shared, static, unmodifiable NullOrder
      */
@@ -360,7 +365,6 @@ public interface OrderService {
      */
     void removePaymentFromOrder(Order order, OrderPayment paymentInfo);
 
-    @Transactional
     void deleteOrder(Order cart, boolean needFetch);
 
     void deleteOrder(long id);

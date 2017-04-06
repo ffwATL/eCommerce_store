@@ -31,7 +31,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -202,13 +201,16 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public Order save(Order order, boolean priceOrder) throws PricingException {
         try {
-            order = persist(order);
+            if(priceOrder){
+                order = pricingService.executePricing(order);
+            }
+            /*order = persist(order);*/
         } catch (RuntimeException ex) {
             logger.error("Exception is occurred while saving order. " + ex.getMessage());
             throw ex;
         }
 
-        //make any pricing changes - possibly retrying with the persisted state if there's a lock failure
+        /*//make any pricing changes - possibly retrying with the persisted state if there's a lock failure
         if (priceOrder) {
             order = pricingService.executePricing(order);
             try {
@@ -217,10 +219,11 @@ public class OrderServiceImpl implements OrderService {
                     extensionManager.getProxy().attachAdditionalDataToOrder(order, true);
                 }
             } catch (RuntimeException ex) {
+                ex.printStackTrace();
                 logger.error(ex.getMessage());
                 throw ex;
             }
-        }
+        }*/
         return order;
     }
 
@@ -251,7 +254,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    /*@Transactional(propagation = Propagation.REQUIRES_NEW)*/
+    @Transactional
     public void finallyDeleteOrder(Order order, boolean needFetch) {
         checkValueIsNotNull(order, ORDER_OBJECT);
         if(needFetch){
@@ -266,7 +270,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order removeOfferCode(Order order, OfferCode offerCode, boolean priceOrder) {
+    public Order removeOfferCode(Order order, OfferCode offerCode, boolean priceOrder) throws PricingException {
         return null;
     }
 
@@ -287,11 +291,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED/*, propagation = Propagation.REQUIRES_NEW*/)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Order addItem(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws AddToCartException {
         // Don't allow overrides from this method.
-        orderItemRequestDTO.setOverrideRetailPrice(0);
-        orderItemRequestDTO.setOverrideSalePrice(0);
+        /*orderItemRequestDTO.setOverrideRetailPrice(0);
+        orderItemRequestDTO.setOverrideSalePrice(0);*/
         return addItemWithPriceOverrides(orderId, orderItemRequestDTO, priceOrder);
     }
     private boolean itemMatches(long productId, ProductAttribute productAttribute, OrderItemRequestDTO item2) {
@@ -407,9 +411,9 @@ public class OrderServiceImpl implements OrderService {
         preValidateCartOperation(order);
         preValidateUpdateQuantityOperation(order, orderItemRequestDTO);
 
-        if (orderItemRequestDTO.getQuantity() == 0) {
+       /* if (!orderItemRequestDTO.isIncrementOrderItemQuantity() && orderItemRequestDTO.getQuantity() == 0) {
             return removeItem(orderId, orderItemRequestDTO.getOrderItemId(), priceOrder);
-        }
+        }*/
 
         try {
             CartOperationRequest cartOpRequest = new CartOperationRequest(order, orderItemRequestDTO, priceOrder);

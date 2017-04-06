@@ -55,4 +55,13 @@ public class OrderItemRequest extends AbstractOrderItemRequest {
     public void setColor(Color color) {
         this.color = color;
     }
+
+    @Override
+    public String toString() {
+        return "OrderItemRequest{" +
+                "itemName=" + itemName +
+                ", productAttribute=" + productAttribute +
+                ", color=" + color +
+                '}' + super.toString();
+    }
 }

@@ -52,11 +52,11 @@
         <property name="activities">
             <list>
                 <!--<ref bean="offerActivity" />-->
-                <ref bean="fulfillmentItemPricingActivity" />
+               <!-- <ref bean="fulfillmentItemPricingActivity" />
                 <ref bean="fulfillmentGroupPricingActivity" />
-                <ref bean="shippingOfferActivity" />
+                <ref bean="shippingOfferActivity" />-->
                 <ref bean="totalActivity" />
-                <ref bean="adjustOrderPaymentsActivity" />
+                <!--<ref bean="adjustOrderPaymentsActivity" />-->
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -106,6 +106,10 @@
         <property name="order" value="6000"/>
     </bean>
 
+    <bean id="addWorkflowPriceOrderIfNecessaryActivity" class="com.ffwatl.admin.order.service.workflow.PriceOrderIfNecessaryActivity">
+        <property name="order" value="7000"/>
+    </bean>
+
     <bean id="addItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
             <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
@@ -113,9 +117,9 @@
         <property name="activities">
             <list>
                 <ref bean="validateAddRequestActivity" />
-                <ref bean="checkAddAvailabilityActivity" />
                 <ref bean="decrementInventoryActivity"/>
                 <ref bean="addOrderItemActivity" />
+                <ref bean="addWorkflowPriceOrderIfNecessaryActivity"/>
                 <ref bean="clearCartScheduleActivity"/>
             </list>
         </property>
@@ -156,6 +160,10 @@
         <property name="order" value="6000"/>
     </bean>
 
+    <bean id="updateWorkflowPriceOrderIfNecessaryActivity" class="com.ffwatl.admin.order.service.workflow.PriceOrderIfNecessaryActivity">
+        <property name="order" value="7000"/>
+    </bean>
+
 
 
     <bean id="updateItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
@@ -167,6 +175,7 @@
                 <ref bean="validateUpdateRequestActivity" />
                 <ref bean="updateInventoryActivity"/>
                 <ref bean="updateOrderItemActivity" />
+                <ref bean="updateWorkflowPriceOrderIfNecessaryActivity"/>
                 <ref bean="clearCartScheduleActivity"/>
             </list>
         </property>
@@ -203,15 +212,20 @@
         <property name="order" value="5000"/>
     </bean>
 
+    <bean id="removeWorkflowPriceOrderIfNecessaryActivity" class="com.ffwatl.admin.order.service.workflow.PriceOrderIfNecessaryActivity">
+        <property name="order" value="6000"/>
+    </bean>
+
     <bean id="removeItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
             <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
         </property>
         <property name="activities">
             <list>
-                <ref bean="validateRemoveRequestActivity"/>
+                <ref bean="validateRemoveRequestActivity" />
                 <ref bean="incrementInventoryActivity"/>
-                <ref bean="removeOrderItemActivity"/>
+                <ref bean="removeOrderItemActivity" />
+                <ref bean="removeWorkflowPriceOrderIfNecessaryActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -241,6 +255,10 @@
         <property name="rollbackHandler" ref="complete_order_rollback_handler" />
     </bean>
 
+    <bean id="removeClearCartScheduleActivity" class="com.ffwatl.admin.checkout.workflow.RemoveClearCartScheduleActivity">
+        <property name="order" value="6000"/>
+    </bean>
+
     <bean id="checkoutWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
             <bean class="com.ffwatl.admin.checkout.workflow.CheckoutProcessContextFactory"/>
@@ -252,6 +270,7 @@
                 <ref bean="recordOfferUsageActivity" />
                 <!--<ref bean="decrementInventoryCheckoutActivity" />-->
                 <ref bean="completeOrderActivity" />
+                <ref bean="removeClearCartScheduleActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">

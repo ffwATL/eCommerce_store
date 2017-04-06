@@ -14,7 +14,12 @@ public class TotalActivity extends BaseActivity<ProcessContext<Order>> {
         Order order = context.getSeedData();
 
         int total = 0;
-        total += order.getSubTotal();
+
+        int subtotal = order.calculateSubTotal();
+
+        order.setSubTotal(subtotal);
+
+        total += subtotal;
         total -= order.getOrderAdjustmentsValue();
         total += order.getTotalFulfillmentCharges();
 

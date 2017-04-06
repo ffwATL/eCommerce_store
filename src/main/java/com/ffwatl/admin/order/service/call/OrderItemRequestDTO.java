@@ -60,6 +60,8 @@ public class OrderItemRequestDTO {
         this.productAttribute = request.getProductAttribute();
         this.setProductName(request.getItemName());
         this.incrementOrderItemQuantity = request.isIncrementOrderItemQuantity();
+        setOverrideSalePrice(request.getSalePriceOverride());
+        setOverrideRetailPrice(request.getRetailPriceOverride());
     }
 
     public String getSku() {

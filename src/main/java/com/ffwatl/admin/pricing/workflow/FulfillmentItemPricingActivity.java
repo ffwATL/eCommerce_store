@@ -43,9 +43,13 @@ public class FulfillmentItemPricingActivity extends BaseActivity<ProcessContext<
     private int calculateTotalPriceForAllFulfillmentItems(Order order) {
         int totalAllItemsAmount = 0;
         FulfillmentGroup fulfillmentGroup = order.getFulfillmentGroup();
-        for (FulfillmentGroupItem fgItem : fulfillmentGroup.getFulfillmentGroupItems()) {
-            totalAllItemsAmount += fgItem.getTotalItemAmount();
+
+        if(fulfillmentGroup != null){
+            for (FulfillmentGroupItem fgItem : fulfillmentGroup.getFulfillmentGroupItems()) {
+                totalAllItemsAmount += fgItem.getTotalItemAmount();
+            }
         }
+
         return totalAllItemsAmount;
     }
 
@@ -58,12 +62,15 @@ public class FulfillmentItemPricingActivity extends BaseActivity<ProcessContext<
         int orderAdjAmt = order.getOrderAdjustmentsValue();
         FulfillmentGroup fulfillmentGroup = order.getFulfillmentGroup();
 
-        for (FulfillmentGroupItem fgItem : fulfillmentGroup.getFulfillmentGroupItems()) {
-            int fgItemAmount = fgItem.getTotalItemAmount();
-            int proratedAdjAmt = totalAllItems == 0 ? totalAllItems : (orderAdjAmt * fgItemAmount / totalAllItems);
-            fgItem.setProratedOrderAdjustmentAmount(proratedAdjAmt);
-            returnAmount += fgItem.getProratedOrderAdjustmentAmount();
+        if(fulfillmentGroup != null){
+            for (FulfillmentGroupItem fgItem : fulfillmentGroup.getFulfillmentGroupItems()) {
+                int fgItemAmount = fgItem.getTotalItemAmount();
+                int proratedAdjAmt = totalAllItems == 0 ? totalAllItems : (orderAdjAmt * fgItemAmount / totalAllItems);
+                fgItem.setProratedOrderAdjustmentAmount(proratedAdjAmt);
+                returnAmount += fgItem.getProratedOrderAdjustmentAmount();
+            }
         }
+
         return returnAmount;
     }
 
@@ -73,6 +80,8 @@ public class FulfillmentItemPricingActivity extends BaseActivity<ProcessContext<
      */
     private void populateItemTotalAmount(Order order, Map<OrderItem, FulfillmentGroupItem> partialOrderItemMap) {
         FulfillmentGroup fulfillmentGroup = order.getFulfillmentGroup();
+
+        if(fulfillmentGroup == null) return;
 
         for (FulfillmentGroupItem fgItem : fulfillmentGroup.getFulfillmentGroupItems()) {
             OrderItem orderItem = fgItem.getOrderItem();

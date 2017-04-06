@@ -132,4 +132,18 @@ public abstract class AbstractOrderItemRequest {
         result = 31 * result + (isIncrementOrderItemQuantity() ? 1 : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractOrderItemRequest{" +
+                "sku='" + sku + '\'' +
+                ", category=" + category +
+                ", product=" + product +
+                ", order=" + order +
+                ", quantity=" + quantity +
+                ", salePriceOverride=" + salePriceOverride +
+                ", retailPriceOverride=" + retailPriceOverride +
+                ", incrementOrderItemQuantity=" + incrementOrderItemQuantity +
+                '}';
+    }
 }

@@ -4,9 +4,7 @@ import com.ffwatl.common.schedule.service.SingleTimeTimerTask;
 
 import java.sql.Date;
 import java.time.ZoneId;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,6 +51,11 @@ public class SingleTimeTimerTaskManagerImpl implements SingleTimeTimerTaskManage
     @Override
     public int getPendingTasksSize() {
         return taskMap.size();
+    }
+
+    @Override
+    public void clearAllTasks() {
+        taskMap.keySet().forEach(this::removeAndCancelTaskIfExist);
     }
 
     private SingleTimeTimerTask scheduleTimerTask(Long key, SingleTimeTimerTask task) {

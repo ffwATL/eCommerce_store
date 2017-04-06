@@ -128,7 +128,7 @@ public class ProductAttributeImpl implements ProductAttribute {
 
         if (getId() != that.getId()) return false;
         if (getQuantity() != that.getQuantity()) return false;
-        if (getVersion() != that.getVersion()) return false;
+        /*if (getVersion() != that.getVersion()) return false;*/
         if (measurements != null ? !measurements.equals(that.measurements) : that.measurements != null) return false;
         return !(getEu_size() != null ? !getEu_size().equals(that.getEu_size()) : that.getEu_size() != null);
 
@@ -140,7 +140,7 @@ public class ProductAttributeImpl implements ProductAttribute {
         result = 31 * result + getQuantity();
         result = 31 * result + (measurements != null ? measurements.hashCode() : 0);
         result = 31 * result + (getEu_size() != null ? getEu_size().hashCode() : 0);
-        result = 31 * result + getVersion();
+        /*result = 31 * result + getVersion();*/
         return result;
     }
 

@@ -13,4 +13,6 @@ public interface SingleTimeTimerTaskService {
 
     int getPendingTasksSize();
 
+    void clearAllTasks();
+
 }

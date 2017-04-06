@@ -57,6 +57,11 @@ public class OrderSingleTimeTimerTaskService implements SingleTimeTimerTaskServi
         return taskManager.getPendingTasksSize();
     }
 
+    @Override
+    public void clearAllTasks() {
+        taskManager.clearAllTasks();
+    }
+
     public class SingleTimerTask extends SingleTimeTimerTask{
 
         public SingleTimerTask(Long key) {

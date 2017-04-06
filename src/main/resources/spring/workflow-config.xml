@@ -74,7 +74,7 @@
     <!-- Cart auto clear schedule activity-->
 
     <bean id="clearCartScheduleActivity" class="com.ffwatl.admin.order.service.workflow.ClearCartScheduleActivity">
-        <property name="order" value="7000"/>
+        <property name="order" value="100000"/>
         <property name="minutesDelay" value="${order.cartExpired}"/>
         <property name="rollbackHandler" ref="clear_cart_schedule_rollback_handler"/>
     </bean>
@@ -106,6 +106,10 @@
         <property name="order" value="6000"/>
     </bean>
 
+    <bean id="addWorkflowPriceOrderIfNecessaryActivity" class="com.ffwatl.admin.order.service.workflow.PriceOrderIfNecessaryActivity">
+        <property name="order" value="7000"/>
+    </bean>
+
     <bean id="addItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
             <bean class="com.ffwatl.admin.order.service.workflow.CartOperationProcessContextFactory"/>
@@ -115,6 +119,7 @@
                 <ref bean="validateAddRequestActivity" />
                 <ref bean="decrementInventoryActivity"/>
                 <ref bean="addOrderItemActivity" />
+                <ref bean="addWorkflowPriceOrderIfNecessaryActivity"/>
                 <ref bean="clearCartScheduleActivity"/>
             </list>
         </property>
@@ -155,6 +160,10 @@
         <property name="order" value="6000"/>
     </bean>
 
+    <bean id="updateWorkflowPriceOrderIfNecessaryActivity" class="com.ffwatl.admin.order.service.workflow.PriceOrderIfNecessaryActivity">
+        <property name="order" value="7000"/>
+    </bean>
+
 
 
     <bean id="updateItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
@@ -166,6 +175,7 @@
                 <ref bean="validateUpdateRequestActivity" />
                 <ref bean="updateInventoryActivity"/>
                 <ref bean="updateOrderItemActivity" />
+                <ref bean="updateWorkflowPriceOrderIfNecessaryActivity"/>
                 <ref bean="clearCartScheduleActivity"/>
             </list>
         </property>
@@ -201,6 +211,9 @@
     <bean id="removeWorkflowVerifyFulfillmentGroupItemsActivity" class="com.ffwatl.admin.order.service.workflow.VerifyFulfillmentGroupItemsActivity">
         <property name="order" value="5000"/>
     </bean>
+    <bean id="removeWorkflowPriceOrderIfNecessaryActivity" class="com.ffwatl.admin.order.service.workflow.PriceOrderIfNecessaryActivity">
+        <property name="order" value="6000"/>
+    </bean>
 
     <bean id="removeItemWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
         <property name="processContextFactory">
@@ -211,6 +224,7 @@
                 <ref bean="validateRemoveRequestActivity" />
                 <ref bean="incrementInventoryActivity"/>
                 <ref bean="removeOrderItemActivity" />
+                <ref bean="removeWorkflowPriceOrderIfNecessaryActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">
@@ -225,19 +239,32 @@
     </bean>
 
     <!-- Checkout Workflow Configuration -->
-    <bean id="verifyCustomerMaxOfferUsesActivity" class="com.ffwatl.admin.offer.service.workflow.VerifyCustomerMaxOfferCodeUsesActivity"/>
+    <bean id="verifyCustomerMaxOfferUsesActivity" class="com.ffwatl.admin.offer.service.workflow.VerifyCustomerMaxOfferCodeUsesActivity">
+        <property name="order" value="1000"/>
+    </bean>
 
     <bean id="validateAndConfirmPaymentActivity" class="com.ffwatl.admin.checkout.workflow.ValidateAndConfirmPaymentActivity">
         <property name="rollbackHandler" ref="confirm_payments_rollback_handler" />
+        <property name="order" value="2000"/>
     </bean>
+
     <bean id="recordOfferUsageActivity" class="com.ffwatl.admin.offer.service.workflow.RecordOfferUsageActivity">
         <property name="rollbackHandler" ref="record_offer_usage_rollback_handler" />
+        <property name="order" value="3000"/>
     </bean>
+
     <bean id="decrementInventoryCheckoutActivity" class="com.ffwatl.admin.checkout.workflow.DecrementInventoryCheckoutActivity">
         <property name="rollbackHandler" ref="decrement_inventory_rollback_handler" />
+        <property name="order" value="4000"/>
     </bean>
+
     <bean id="completeOrderActivity" class="com.ffwatl.admin.checkout.workflow.CompleteOrderActivity">
         <property name="rollbackHandler" ref="complete_order_rollback_handler" />
+        <property name="order" value="5000"/>
+    </bean>
+
+    <bean id="removeClearCartScheduleActivity" class="com.ffwatl.admin.checkout.workflow.RemoveClearCartScheduleActivity">
+        <property name="order" value="6000"/>
     </bean>
 
     <bean id="checkoutWorkflow" class="com.ffwatl.admin.workflow.SequenceProcessor">
@@ -250,6 +277,7 @@
                 <ref bean="validateAndConfirmPaymentActivity" />
                 <ref bean="recordOfferUsageActivity" />
                 <ref bean="completeOrderActivity" />
+                <ref bean="removeClearCartScheduleActivity"/>
             </list>
         </property>
         <property name="defaultErrorHandler">

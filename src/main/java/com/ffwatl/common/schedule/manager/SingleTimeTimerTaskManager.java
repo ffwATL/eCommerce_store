@@ -16,4 +16,6 @@ public interface SingleTimeTimerTaskManager {
     SingleTimeTimerTask removeAndCancelTaskIfExist(Long key);
 
     int getPendingTasksSize();
+
+    void clearAllTasks();
 }

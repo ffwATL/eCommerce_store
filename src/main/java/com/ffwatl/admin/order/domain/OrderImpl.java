@@ -53,7 +53,7 @@ public class OrderImpl implements Order {
     @Column(name = "order_total_value")
     private int total;
 
-    @ManyToOne(targetEntity = UserImpl.class, optional = false, cascade = CascadeType.REFRESH)
+    @ManyToOne(targetEntity = UserImpl.class/*, optional = false, cascade = CascadeType.REFRESH*/)
     @JoinColumn(name = "customer_id")
     private User customer;
 
@@ -63,7 +63,8 @@ public class OrderImpl implements Order {
     @OneToMany(mappedBy = "order",
                fetch = FetchType.LAZY,
                targetEntity = OrderItemImpl.class,
-               cascade = CascadeType.ALL)
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(mappedBy = "order", targetEntity = FulfillmentGroupImpl.class, cascade = CascadeType.ALL)
