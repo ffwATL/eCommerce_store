@@ -62,6 +62,7 @@ public class RetryOnFailAnnotationBeanPostProcessor implements BeanPostProcessor
                 }
 
                 int numOfTries = annotation.numOfTries();
+                long sleepTime = annotation.sleepTime();
                 Class<? extends Exception>[] cause = annotation.cause();
 
                 while (true) {
@@ -75,6 +76,10 @@ public class RetryOnFailAnnotationBeanPostProcessor implements BeanPostProcessor
                                 if(e.getCause().getClass().getName().equals(c.getName())){
                                     numOfTries -= 1;
                                     validCause = true;
+
+                                    if(sleepTime > 0) {
+                                        Thread.sleep(sleepTime);
+                                    }
                                     break;
                                 }
                             }

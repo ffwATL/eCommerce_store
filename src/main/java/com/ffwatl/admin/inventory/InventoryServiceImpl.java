@@ -39,7 +39,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public boolean isAvailable(ProductAttribute attribute, int quantity) {
-        if(attribute == null){
+        if(attribute == null || quantity < 1){
             return false;
         }
         attribute = catalogService.findProductAttributeById(attribute.getId(),FetchMode.LAZY);
@@ -48,25 +48,33 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public boolean checkBasicAvailablility(ProductAttribute attribute) {
-        return !(attribute == null || attribute.getQuantity() < 1);
+        return attribute != null && attribute.getQuantity() > 1;
     }
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public void decrementInventory(ProductAttribute attribute, int requestedQuantity) throws InventoryUnavailableException {
-        if(attribute == null) {
-            throw new IllegalArgumentException("Given ProductAttribute is null");
+        if(attribute == null || requestedQuantity < 1) {
+            throw new IllegalArgumentException("Wrong parameters is given. Attribute: "+
+                    attribute + ", requestedQuantity = " + requestedQuantity);
         }
-        attribute = catalogService.findProductAttributeById(attribute.getId(), FetchMode.LAZY);
+        ProductAttribute freshAttribute = catalogService.findProductAttributeById(attribute.getId(), FetchMode.LAZY);
 
-        int availableQuantity = attribute.getQuantity();
+        if(freshAttribute == null) {
+            throw new IllegalArgumentException("There is no such ProductAttribute. Requested id: "+ attribute.getId());
+        }
+
+        int availableQuantity = freshAttribute.getQuantity();
 
         if(availableQuantity < requestedQuantity) {
             LOGGER.error("Could not update quantity for this product attribute: id = {}, requested = {}, " +
-                            "available = {}", attribute.getId(), requestedQuantity, availableQuantity);
-            throw new InventoryUnavailableException(attribute.getId(), requestedQuantity, availableQuantity);
+                            "available = {}", freshAttribute.getId(), requestedQuantity, availableQuantity);
+            throw new InventoryUnavailableException(freshAttribute.getId(), requestedQuantity, availableQuantity);
         }
-        attribute.setQuantity(availableQuantity - requestedQuantity);
+        int remainQuantity = availableQuantity - requestedQuantity;
+
+        freshAttribute.setQuantity(remainQuantity);
+        attribute.setQuantity(remainQuantity);
     }
 
     @Override
@@ -83,18 +91,21 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public void incrementInventory(ProductAttribute attribute, int requestedQuantity) throws InventoryUnavailableException {
-        if(attribute == null) {
-            throw new IllegalArgumentException("Given ProductAttribute is null");
+        if(attribute == null || requestedQuantity < 1) {
+            throw new IllegalArgumentException("Wrong parameters is given. Attribute: "+
+                    attribute + ", requestedQuantity = " + requestedQuantity);
         }
-        attribute = catalogService.findProductAttributeById(attribute.getId(), FetchMode.LAZY);
+        ProductAttribute freshAttribute = catalogService.findProductAttributeById(attribute.getId(), FetchMode.LAZY);
 
-        if(attribute == null) {
-            throw new IllegalArgumentException("There is no such ProductAttribute");
+        if(freshAttribute == null) {
+            throw new IllegalArgumentException("There is no such ProductAttribute. Requested id: "+ attribute.getId());
         }
 
-        int availableQuantity = attribute.getQuantity();
+        int availableQuantity = freshAttribute.getQuantity();
+        int remainQuantity = availableQuantity + requestedQuantity;
 
-        attribute.setQuantity(availableQuantity + requestedQuantity);
+        freshAttribute.setQuantity(remainQuantity);
+        attribute.setQuantity(remainQuantity);
     }
 
     @Override
@@ -103,7 +114,7 @@ public class InventoryServiceImpl implements InventoryService {
         if(attrQuantities == null) {
             throw new IllegalArgumentException("Given Map<ProductAttribute, Integer> is: null");
         }
-        for(ProductAttribute attr: attrQuantities.keySet()){
+        for(ProductAttribute attr: attrQuantities.keySet()) {
             incrementInventory(attr, attrQuantities.get(attr));
         }
     }

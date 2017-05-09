@@ -26,19 +26,27 @@ import java.util.Map;
 
 @Service("product_service")
 public class ProductServiceImpl implements ProductService {
+
     private static final Logger logger = LogManager.getLogger("com.ffwatl.admin.web.controller.AddNewItemController");
+
     @Autowired
     private ProductDao productDao;
+
     @Autowired
     private BrandService brandService;
+
     @Autowired
     private ColorService colorService;
+
     @Autowired
     private EuroSizeService euroSizeService;
+
     @Autowired
     private ItemGroupService itemGroupService;
+
     @Autowired
     private Settings settings;
+
 
     @Override
     public ProductImpl findById(long id) {

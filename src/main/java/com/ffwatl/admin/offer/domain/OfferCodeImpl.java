@@ -18,6 +18,7 @@ public class OfferCodeImpl implements OfferCode{
     private int version;
 
     @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = OfferImpl.class)
+    @JoinColumn(name = "offer_id")
     private Offer offer;
 
     @Column(name = "offer_code")

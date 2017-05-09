@@ -1,9 +1,13 @@
 package com.ffwatl.common.rule;
 
 
+import com.ffwatl.admin.offer.domain.Offer;
+
 public interface Rule {
 
     long getId();
+
+    Offer getOffer();
 
     String getType();
 
@@ -16,6 +20,8 @@ public interface Rule {
     ValueType getFieldType();
 
     Rule setId(long id);
+
+    Rule setOffer(Offer offer);
 
     Rule setType(String type);
 

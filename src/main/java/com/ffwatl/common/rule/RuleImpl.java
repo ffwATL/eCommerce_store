@@ -1,6 +1,9 @@
 package com.ffwatl.common.rule;
 
 
+import com.ffwatl.admin.offer.domain.Offer;
+import com.ffwatl.admin.offer.domain.OfferImpl;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +14,10 @@ public class RuleImpl implements Rule{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+
+    @ManyToOne(targetEntity = OfferImpl.class)
+    @JoinColumn(name = "offer_id")
+    private Offer offer;
 
     @Column(name = "rule_type")
     private String type; // type of this rule, ie target for which this rule is valid
@@ -30,6 +37,11 @@ public class RuleImpl implements Rule{
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public Offer getOffer() {
+        return offer;
     }
 
     @Override
@@ -60,6 +72,12 @@ public class RuleImpl implements Rule{
     @Override
     public Rule setId(long id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public Rule setOffer(Offer offer) {
+        this.offer = offer;
         return this;
     }
 

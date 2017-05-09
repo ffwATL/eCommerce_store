@@ -89,8 +89,6 @@ public class OrderServiceIntegrationTest {
         List list = productService.findAll();
         Assert.assertNotNull(list);
         Assert.assertEquals(1, list.size());
-
-        System.err.println(list);
     }
 
     @Test
