@@ -1,7 +1,7 @@
 package com.ffwatl.admin.web.controller;
 
 
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.service.ItemGroupService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,28 +34,28 @@ public class OverviewController {
                 if(c.getName().equals("app")) cookie = c.getValue();
             }
         }
-        List<Category> result = itemGroupService.findByLvlLazyWithoutChild(1);
+        List<ProductCategory> result = itemGroupService.findByLvlLazyWithoutChild(1);
         resolveI18n(lang != null ? lang : cookie, result);
         model.addAttribute("globalCategories", result);
         return "admin/overview/itemOverview";
     }
 
-    private void resolveI18n(String lang, List<Category> list){
+    private void resolveI18n(String lang, List<ProductCategory> list){
         switch (lang) {
             case "en":
-                for (Category i : list) {
+                for (ProductCategory i : list) {
                     String l = i.getGroupName().getLocale_en();
                     i.getGroupName().setLocale_ru(l);
                     i.getGroupName().setLocale_ua(l);
                 }
             case "ru":
-                for (Category i : list) {
+                for (ProductCategory i : list) {
                     String l = i.getGroupName().getLocale_ru();
                     i.getGroupName().setLocale_en(l);
                     i.getGroupName().setLocale_ua(l);
                 }
             case "ua":
-                for (Category i : list) {
+                for (ProductCategory i : list) {
                     String l = i.getGroupName().getLocale_ua();
                     i.getGroupName().setLocale_en(l);
                     i.getGroupName().setLocale_ru(l);

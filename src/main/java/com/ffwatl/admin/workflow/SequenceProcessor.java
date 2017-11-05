@@ -36,7 +36,7 @@ public class SequenceProcessor extends BaseProcessor {
     @Override
     @RetryOnFail(numOfTries = 6, cause = {OptimisticLockException.class, LockAcquisitionException.class})
     public ProcessContext<?> doActivities(Object seedData) throws WorkflowException {
-        LOGGER.debug(getBeanName() + " processor is running..");
+        LOGGER.debug("{} processor is running..", getBeanName());
 
         ProcessContext<?> context;
 
@@ -55,7 +55,7 @@ public class SequenceProcessor extends BaseProcessor {
             for (Activity<ProcessContext<?>> activity : activities) {
                 if (activity.shouldExecute(context)) {
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("running activity:" + activity.getBeanName() + " using arguments:" + context);
+                        LOGGER.debug("running activity: {} using arguments: {}", activity.getBeanName(), context);
                     }
 
                     try {

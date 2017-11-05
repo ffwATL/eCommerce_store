@@ -204,7 +204,7 @@ public class OrderServiceImpl implements OrderService {
             if(priceOrder){
                 order = pricingService.executePricing(order);
             }
-            /*order = persist(order);*/
+            order = persist(order);
         } catch (RuntimeException ex) {
             logger.error("Exception is occurred while saving order. " + ex.getMessage());
             throw ex;
@@ -254,7 +254,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    /*@Transactional(propagation = Propagation.REQUIRES_NEW)*/
     @Transactional
     public void finallyDeleteOrder(Order order, boolean needFetch) {
         checkValueIsNotNull(order, ORDER_OBJECT);
@@ -293,17 +292,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public Order addItem(long orderId, OrderItemRequestDTO orderItemRequestDTO, boolean priceOrder) throws AddToCartException {
-        // Don't allow overrides from this method.
-        /*orderItemRequestDTO.setOverrideRetailPrice(0);
-        orderItemRequestDTO.setOverrideSalePrice(0);*/
         return addItemWithPriceOverrides(orderId, orderItemRequestDTO, priceOrder);
     }
     private boolean itemMatches(long productId, ProductAttribute productAttribute, OrderItemRequestDTO item2) {
         // Must match on id and attribute
-        if (productId > 0 && item2 != null) {
-            if (productId == item2.getProductId()) {
-                return compareAttributes(productAttribute, item2.getProductAttribute());
-            }
+        if (productId > 0 && item2 != null && productId == item2.getProductId()) {
+            return compareAttributes(productAttribute, item2.getProductAttribute());
         }
         return false;
     }

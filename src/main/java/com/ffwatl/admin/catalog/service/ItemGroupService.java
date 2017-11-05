@@ -1,31 +1,31 @@
 package com.ffwatl.admin.catalog.service;
 
 
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 
 import java.util.List;
 
 public interface ItemGroupService {
 
-    Category findById(long id);
+    ProductCategory findById(long id);
 
-    void save(Category itemGroup);
+    void save(ProductCategory itemGroup);
 
-    void save(List<? extends Category> list);
+    void save(List<? extends ProductCategory> list);
 
-    Category findByName(String name);
+    ProductCategory findByName(String name);
 
-    Category findByLvlAndByNameFetchCollection(int lvl, String name);
+    ProductCategory findByLvlAndByNameFetchCollection(int lvl, String name);
 
-    List<Category> findByCatNoChildren(CommonCategory cat);
+    List<ProductCategory> findByCatNoChildren(CommonCategory cat);
 
-    List<Category> findByLvlLazyWithoutChild(int lvl);
+    List<ProductCategory> findByLvlLazyWithoutChild(int lvl);
 
-    List<Category> findByLvlEager(int lvl);
+    List<ProductCategory> findByLvlEager(int lvl);
 
-    List<Category> findAllUsed();
+    List<ProductCategory> findAllUsed();
 
-    List<Category> findGenderGroup();
+    List<ProductCategory> findGenderGroup();
 
 }

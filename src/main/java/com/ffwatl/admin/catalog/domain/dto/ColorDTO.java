@@ -23,7 +23,7 @@ public class ColorDTO implements Color {
     }
 
     @Override
-    public I18n getColor() {
+    public I18n getColorName() {
         return color;
     }
 
@@ -40,7 +40,7 @@ public class ColorDTO implements Color {
     }
 
     @Override
-    public Color setColor(I18n color) {
+    public Color setColorName(I18n color) {
         this.color = color;
         return this;
     }
@@ -53,7 +53,7 @@ public class ColorDTO implements Color {
         ColorDTO colorDTO = (ColorDTO) o;
 
         if (getId() != colorDTO.getId()) return false;
-        if (getColor() != null ? !getColor().equals(colorDTO.getColor()) : colorDTO.getColor() != null) return false;
+        if (getColorName() != null ? !getColorName().equals(colorDTO.getColorName()) : colorDTO.getColorName() != null) return false;
         return !(getHex() != null ? !getHex().equals(colorDTO.getHex()) : colorDTO.getHex() != null);
 
     }
@@ -61,7 +61,7 @@ public class ColorDTO implements Color {
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getColor() != null ? getColor().hashCode() : 0);
+        result = 31 * result + (getColorName() != null ? getColorName().hashCode() : 0);
         result = 31 * result + (getHex() != null ? getHex().hashCode() : 0);
         return result;
     }

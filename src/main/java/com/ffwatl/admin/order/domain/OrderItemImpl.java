@@ -37,7 +37,7 @@ public class OrderItemImpl implements OrderItem{
     @Embedded
     private I18n productName;
 
-    @ManyToOne(targetEntity = ProductAttributeTypeImpl.class)
+    @ManyToOne(targetEntity = ProductAttributeType.class)
     @JoinColumn(name = "product_attribute_type_id")
     private ProductAttributeType productAttributeType;
 
@@ -65,9 +65,9 @@ public class OrderItemImpl implements OrderItem{
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<OrderItemPriceDetail> orderItemPriceDetails = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = CategoryImpl.class, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = ProductCategoryImpl.class, optional = false)
     @JoinColumn(name = "category_id")
-    private Category category;
+    private ProductCategory productCategory;
 
     @OneToMany(mappedBy = "orderItem", targetEntity = CandidateItemOfferImpl.class,
                fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -145,8 +145,8 @@ public class OrderItemImpl implements OrderItem{
     }
 
     @Override
-    public Category getCategory() {
-        return category;
+    public ProductCategory getProductCategory() {
+        return productCategory;
     }
 
     @Override
@@ -283,8 +283,8 @@ public class OrderItemImpl implements OrderItem{
     }
 
     @Override
-    public OrderItem setCategory(Category category) {
-        this.category = category;
+    public OrderItem setCategory(ProductCategory productCategory) {
+        this.productCategory = productCategory;
         return this;
     }
 

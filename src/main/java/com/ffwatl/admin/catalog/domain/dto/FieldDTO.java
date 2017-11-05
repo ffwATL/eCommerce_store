@@ -1,16 +1,15 @@
 package com.ffwatl.admin.catalog.domain.dto;
 
 import com.ffwatl.admin.catalog.domain.Field;
-
+import com.ffwatl.admin.catalog.domain.FieldType;
 
 
 public class FieldDTO implements Field {
 
     private long id;
-
     private String name;
-
     private String value;
+    private FieldType fieldType;
 
     @Override
     public long getId() {
@@ -25,6 +24,11 @@ public class FieldDTO implements Field {
     @Override
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public FieldType getFieldType() {
+        return fieldType;
     }
 
     @Override
@@ -46,23 +50,29 @@ public class FieldDTO implements Field {
     }
 
     @Override
+    public Field setFieldType(FieldType fieldType) {
+        this.fieldType = fieldType;
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         FieldDTO fieldDTO = (FieldDTO) o;
 
-        if (getId() != fieldDTO.getId()) return false;
         if (getName() != null ? !getName().equals(fieldDTO.getName()) : fieldDTO.getName() != null) return false;
-        return !(getValue() != null ? !getValue().equals(fieldDTO.getValue()) : fieldDTO.getValue() != null);
+        if (getValue() != null ? !getValue().equals(fieldDTO.getValue()) : fieldDTO.getValue() != null) return false;
+        return getFieldType() == fieldDTO.getFieldType();
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        int result = getName() != null ? getName().hashCode() : 0;
         result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
+        result = 31 * result + (getFieldType() != null ? getFieldType().hashCode() : 0);
         return result;
     }
 
@@ -72,6 +82,7 @@ public class FieldDTO implements Field {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", value='" + value + '\'' +
+                ", fieldType=" + fieldType +
                 '}';
     }
 }

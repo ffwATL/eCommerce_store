@@ -21,7 +21,7 @@ public interface OrderItemService {
 
     /**
      * Creates an OrderItemRequestDTO object that most closely resembles the given OrderItem.
-     * That is, it will copy the SKU and quantity and attempt to copy the product and category
+     * That is, it will copy the SKU and quantity and attempt to copy the product and productCategory
      * if they exist.
      *
      * @param item the item to copy

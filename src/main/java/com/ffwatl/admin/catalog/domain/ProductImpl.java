@@ -2,12 +2,8 @@ package com.ffwatl.admin.catalog.domain;
 
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
-import com.ffwatl.admin.offer.domain.Offer;
-import com.ffwatl.admin.offer.domain.OfferImpl;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.UserImpl;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -18,7 +14,7 @@ import java.util.List;
  * @author ffw_ATL
  */
 @Entity
-@Table(name = "items")
+@Table(name = "product")
 public class ProductImpl implements Product {
 
     @Id
@@ -36,30 +32,30 @@ public class ProductImpl implements Product {
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
-    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = CategoryImpl.class)
+    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ProductCategoryImpl.class)
     @JoinColumn(name = "category_id")
-    private Category itemGroup;
+    private ProductCategory productCategory;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "locale_en", column = @Column(name = "locale_en_1")),
-            @AttributeOverride(name = "locale_ru", column = @Column(name = "locale_ru_1")),
-            @AttributeOverride(name = "locale_ua", column = @Column(name = "locale_ua_1"))
+            @AttributeOverride(name = "locale_en", column = @Column(name = "p_name_en")),
+            @AttributeOverride(name = "locale_ru", column = @Column(name = "p_name_ru")),
+            @AttributeOverride(name = "locale_ua", column = @Column(name = "p_name_ua"))
     })
-    private I18n itemName;
+    private I18n productName;
 
-    @Column(name = "vandor_code")
+    @Column(name = "vendor_code")
     private String vendorCode;
 
-    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ColorImpl.class)
+    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ColorImpl.class, optional = false)
     @JoinColumn(name = "color_id")
     private Color color;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "locale_en", column = @Column(name = "locale_en_2")),
-            @AttributeOverride(name = "locale_ru", column = @Column(name = "locale_ru_2")),
-            @AttributeOverride(name = "locale_ua", column = @Column(name = "locale_ua_2"))
+            @AttributeOverride(name = "locale_en", column = @Column(name = "desc_en")),
+            @AttributeOverride(name = "locale_ru", column = @Column(name = "desc_ru")),
+            @AttributeOverride(name = "locale_ua", column = @Column(name = "desc_ua"))
     })
     private I18n description;
 
@@ -84,8 +80,6 @@ public class ProductImpl implements Product {
     @Column(name = "currency")
     private Currency currency;
 
-    @Column(name = "gender")
-    private Gender gender;
 
     @Column(name = "active")
     private boolean isActive;
@@ -106,6 +100,9 @@ public class ProductImpl implements Product {
     @Column(name = "can_sell_without_attributes")
     private boolean canSellWithoutOptions = false;
 
+    @Column(name = "gender")
+    private Gender gender;
+
     @Override
     public long getId() {
         return id;
@@ -124,11 +121,6 @@ public class ProductImpl implements Product {
     @Override
     public User getAddedBy() {
         return addedBy;
-    }
-
-    @Override
-    public Gender getGender() {
-        return gender;
     }
 
     @Override
@@ -166,13 +158,13 @@ public class ProductImpl implements Product {
     }
 
     @Override
-    public Category getCategory() {
-        return itemGroup;
+    public ProductCategory getProductCategory() {
+        return productCategory;
     }
 
     @Override
     public I18n getProductName() {
-        return itemName;
+        return productName;
     }
 
     @Override
@@ -217,6 +209,10 @@ public class ProductImpl implements Product {
         return lastChangeDate;
     }
 
+    @Override
+    public Gender getGender() {
+        return gender;
+    }
 
     @Override
     public Product setId(long id) {
@@ -247,13 +243,13 @@ public class ProductImpl implements Product {
         return this;
     }
     @Override
-    public Product setItemGroup(Category itemGroup) {
-        this.itemGroup = itemGroup;
+    public Product setCategory(ProductCategory productCategory) {
+        this.productCategory = productCategory;
         return this;
     }
     @Override
-    public Product setItemName(I18n itemName) {
-        this.itemName = itemName;
+    public Product setProductName(I18n productName) {
+        this.productName = productName;
         return this;
     }
 
@@ -324,6 +320,7 @@ public class ProductImpl implements Product {
         this.vendorCode = vendorCode;
         return this;
     }
+
     @Override
     public Product setGender(Gender gender) {
         this.gender = gender;
@@ -338,59 +335,28 @@ public class ProductImpl implements Product {
         ProductImpl product = (ProductImpl) o;
 
         if (getId() != product.getId()) return false;
-        if (getOriginPrice() != product.getOriginPrice()) return false;
-        if (getRetailPrice() != product.getRetailPrice()) return false;
-        if (getSalePrice() != product.getSalePrice()) return false;
         if (isUsed() != product.isUsed()) return false;
         if (canSellWithoutOptions != product.canSellWithoutOptions) return false;
-        if (getProductAttributes() != null ? !getProductAttributes().equals(product.getProductAttributes()) : product.getProductAttributes() != null)
-            return false;
         if (!getBrand().equals(product.getBrand())) return false;
-        if (!itemGroup.equals(product.itemGroup)) return false;
-        if (!itemName.equals(product.itemName)) return false;
+        if (!getProductCategory().equals(product.getProductCategory())) return false;
+        if (!getProductName().equals(product.getProductName())) return false;
         if (getVendorCode() != null ? !getVendorCode().equals(product.getVendorCode()) : product.getVendorCode() != null)
             return false;
-        if (getColor() != null ? !getColor().equals(product.getColor()) : product.getColor() != null) return false;
-        if (getDescription() != null ? !getDescription().equals(product.getDescription()) : product.getDescription() != null)
-            return false;
-        if (getExtraNotes() != null ? !getExtraNotes().equals(product.getExtraNotes()) : product.getExtraNotes() != null)
-            return false;
-        if (getMetaInfo() != null ? !getMetaInfo().equals(product.getMetaInfo()) : product.getMetaInfo() != null)
-            return false;
-        if (getMetaKeys() != null ? !getMetaKeys().equals(product.getMetaKeys()) : product.getMetaKeys() != null)
-            return false;
-        if (getCurrency() != product.getCurrency()) return false;
-        if (getGender() != product.getGender()) return false;
-        if (!getImportDate().equals(product.getImportDate())) return false;
-        if (getLastChangeDate() != null ? !getLastChangeDate().equals(product.getLastChangeDate()) : product.getLastChangeDate() != null)
-            return false;
-        return !(getAddedBy() != null ? !getAddedBy().equals(product.getAddedBy()) : product.getAddedBy() != null);
-
+        if (!getColor().equals(product.getColor())) return false;
+        return getGender() == product.getGender();
     }
 
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getProductAttributes() != null ? getProductAttributes().hashCode() : 0);
         result = 31 * result + getBrand().hashCode();
-        result = 31 * result + itemGroup.hashCode();
-        result = 31 * result + itemName.hashCode();
+        result = 31 * result + getProductCategory().hashCode();
+        result = 31 * result + getProductName().hashCode();
         result = 31 * result + (getVendorCode() != null ? getVendorCode().hashCode() : 0);
-        result = 31 * result + (getColor() != null ? getColor().hashCode() : 0);
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        result = 31 * result + (getExtraNotes() != null ? getExtraNotes().hashCode() : 0);
-        result = 31 * result + (getMetaInfo() != null ? getMetaInfo().hashCode() : 0);
-        result = 31 * result + (getMetaKeys() != null ? getMetaKeys().hashCode() : 0);
-        result = 31 * result + getOriginPrice();
-        result = 31 * result + getRetailPrice();
-        result = 31 * result + getSalePrice();
-        result = 31 * result + getCurrency().hashCode();
-        result = 31 * result + getGender().hashCode();
+        result = 31 * result + getColor().hashCode();
         result = 31 * result + (isUsed() ? 1 : 0);
-        result = 31 * result + getImportDate().hashCode();
-        result = 31 * result + (getLastChangeDate() != null ? getLastChangeDate().hashCode() : 0);
-        result = 31 * result + (getAddedBy() != null ? getAddedBy().hashCode() : 0);
         result = 31 * result + (canSellWithoutOptions ? 1 : 0);
+        result = 31 * result + getGender().hashCode();
         return result;
     }
 
@@ -398,27 +364,23 @@ public class ProductImpl implements Product {
     public String toString() {
         return "ProductImpl{" +
                 "id=" + id +
-                ", productAttributes=" + productAttributes +
                 ", brand=" + brand +
-                ", itemGroup=" + itemGroup +
-                ", itemName=" + itemName +
+                ", productCategory=" + productCategory +
+                ", productName=" + productName +
                 ", vendorCode='" + vendorCode + '\'' +
-                ", quantity=" + getQuantity() +
                 ", color=" + color +
                 ", description=" + description +
-                ", extraNotes='" + extraNotes + '\'' +
-                ", metaInfo='" + metaInfo + '\'' +
-                ", metaKeys='" + metaKeys + '\'' +
                 ", originPrice=" + originPrice +
                 ", retailPrice=" + retailPrice +
                 ", salePrice=" + salePrice +
                 ", currency=" + currency +
-                ", gender=" + gender +
                 ", isActive=" + isActive +
                 ", isUsed=" + isUsed +
                 ", importDate=" + importDate +
                 ", lastChangeDate=" + lastChangeDate +
                 ", addedBy=" + addedBy +
+                ", canSellWithoutOptions=" + canSellWithoutOptions +
+                ", gender=" + gender +
                 '}';
     }
 }

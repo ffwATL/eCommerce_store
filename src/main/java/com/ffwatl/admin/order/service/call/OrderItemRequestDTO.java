@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Only the product and quantity are required to add an item to an order.
  *
- * The category can be inferred from the product's default category.
+ * The productCategory can be inferred from the product's default productCategory.
  *
  * The sku can be inferred from either the passed in attributes as they are compared to the product's options or
  * the sku can be determined from the product's default sku.
@@ -56,7 +56,7 @@ public class OrderItemRequestDTO {
     }
 
     public OrderItemRequestDTO(OrderItemRequest request){
-        this(request.getProduct().getId(), request.getQuantity(), request.getSku(), request.getCategory().getId());
+        this(request.getProduct().getId(), request.getQuantity(), request.getSku(), request.getProductCategory().getId());
         this.productAttribute = request.getProductAttribute();
         this.setProductName(request.getItemName());
         this.incrementOrderItemQuantity = request.isIncrementOrderItemQuantity();

@@ -6,6 +6,7 @@ import com.ffwatl.admin.catalog.domain.ColorImpl;
 
 import java.util.List;
 
+
 public interface ColorDao {
 
     Color findById(long id);

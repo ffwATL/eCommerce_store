@@ -2,8 +2,8 @@ package com.ffwatl.admin.catalog.domain.filter.specification;
 
 
 import com.ffwatl.admin.catalog.domain.ProductImpl;
+import com.ffwatl.admin.catalog.domain.ProductCategoryImpl;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilterRule;
-import com.ffwatl.admin.catalog.domain.CategoryImpl;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -17,7 +17,7 @@ public class ProductDefaultSpecification<T extends ProductImpl> {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);
-                Join<ProductImpl, CategoryImpl> join_itemGroup = root.join("itemGroup", JoinType.INNER);
+                Join<ProductImpl, ProductCategoryImpl> join_itemGroup = root.join("itemGroup", JoinType.INNER);
                 List<Predicate> predicates = new ArrayList<>();
                 if(rules != null){
                     for (GridFilterRule r: rules){

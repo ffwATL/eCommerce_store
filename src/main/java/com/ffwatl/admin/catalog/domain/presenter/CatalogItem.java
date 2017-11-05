@@ -36,8 +36,8 @@ public class CatalogItem {
         return item.getCurrency();
     }
 
-    public Category getItemGroup() {
-        return item.getCategory();
+    public ProductCategory getItemGroup() {
+        return item.getProductCategory();
     }
 
     public I18n getItemName() {
@@ -49,7 +49,7 @@ public class CatalogItem {
     }
 
     public Color getColor() {
-        return item.getColor();
+        return /*item.getColorName()*/ null;
     }
 
     public int getOriginPrice() {

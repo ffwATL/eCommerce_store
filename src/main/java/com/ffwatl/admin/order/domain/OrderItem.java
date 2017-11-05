@@ -1,7 +1,7 @@
 package com.ffwatl.admin.order.domain;
 
 
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.Color;
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.admin.catalog.domain.ProductAttributeType;
@@ -67,7 +67,7 @@ public interface OrderItem extends Serializable {
      */
     Set<OrderItemPriceDetail> getOrderItemPriceDetails();
 
-    Category getCategory();
+    ProductCategory getProductCategory();
 
     Set<CandidateItemOffer> getCandidateItemOffers();
 
@@ -142,7 +142,7 @@ public interface OrderItem extends Serializable {
 
     OrderItem setOrderItemPriceDetails(Set<OrderItemPriceDetail> orderItemPriceDetails);
 
-    OrderItem setCategory(Category category);
+    OrderItem setCategory(ProductCategory productCategory);
 
     OrderItem setCandidateItemOffers(Set<CandidateItemOffer> candidateItemOffers);
 

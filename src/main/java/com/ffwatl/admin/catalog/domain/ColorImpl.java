@@ -13,7 +13,7 @@ public class ColorImpl implements Color {
     private long id;
 
     @Embedded
-    private I18n color;
+    private I18n colorName;
 
     @Column(name = "hex", length = 30)
     private String hex;
@@ -29,8 +29,8 @@ public class ColorImpl implements Color {
     }
 
     @Override
-    public I18n getColor() {
-        return color;
+    public I18n getColorName() {
+        return colorName;
     }
 
     @Override
@@ -46,8 +46,8 @@ public class ColorImpl implements Color {
     }
 
     @Override
-    public Color setColor(I18n color) {
-        this.color = color;
+    public Color setColorName(I18n color) {
+        this.colorName = color;
         return this;
     }
 
@@ -59,7 +59,7 @@ public class ColorImpl implements Color {
         ColorImpl color1 = (ColorImpl) o;
 
         if (getId() != color1.getId()) return false;
-        if (getColor() != null ? !getColor().equals(color1.getColor()) : color1.getColor() != null) return false;
+        if (getColorName() != null ? !getColorName().equals(color1.getColorName()) : color1.getColorName() != null) return false;
         return !(getHex() != null ? !getHex().equals(color1.getHex()) : color1.getHex() != null);
 
     }
@@ -67,7 +67,7 @@ public class ColorImpl implements Color {
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getColor() != null ? getColor().hashCode() : 0);
+        result = 31 * result + (getColorName() != null ? getColorName().hashCode() : 0);
         result = 31 * result + (getHex() != null ? getHex().hashCode() : 0);
         return result;
     }
@@ -76,7 +76,7 @@ public class ColorImpl implements Color {
     public String toString() {
         return "ColorImpl{" +
                 "id=" + id +
-                ", color=" + color +
+                ", colorName=" + colorName +
                 ", hex='" + hex + '\'' +
                 '}';
     }

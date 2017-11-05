@@ -1,12 +1,13 @@
 package com.ffwatl.admin.catalog.domain;
 
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author ffw_ATL
- * Entity class for handling Product attribute information (ie size). It contain such info as:
+ * Entity class for handling Product attribute information (ie size). It contains such info as:
  * - items which this instance belong to;
  * - quantity of this size;
  * - reference to measurement fields objects where main measurement information is placed.
@@ -23,15 +24,18 @@ public class ProductAttributeImpl implements ProductAttribute {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = AttributeNameImpl.class)
+    @JoinColumn(name = "attribute_name_id")
+    private AttributeName attributeName;
+
     @Column(length = 2, nullable = false, name = "quantity")
     private int quantity;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = FieldImpl.class, fetch = FetchType.LAZY)
-    private List<Field> measurements = new ArrayList<>();
+    private List<Field> fields = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = ProductAttributeTypeImpl.class)
-    @JoinColumn(name = "product_attr_type_id")
-    private ProductAttributeType eu_size;
+    @Column(name = "attribute_type")
+    private ProductAttributeType productAttributeType;
 
     @Column(name = "version")
     @Version
@@ -51,13 +55,18 @@ public class ProductAttributeImpl implements ProductAttribute {
         return product;
     }
 
+    @Override
+    public AttributeName getAttributeName() {
+        return attributeName;
+    }
+
     /**
-     * Returns ProductAttributeTypeImpl object. That object contains name of EU size value (S,M or W32 L32 or UK7);
-     * @return ProductAttributeTypeImpl object.
+     * Returns ProductAttributeType object. That object contains name of EU size value (S,M or W32 L32 or UK7);
+     * @return ProductAttributeType object.
      */
     @Override
-    public ProductAttributeType getEu_size() {
-        return eu_size;
+    public ProductAttributeType getProductAttributeType() {
+        return productAttributeType;
     }
 
     /**
@@ -75,7 +84,7 @@ public class ProductAttributeImpl implements ProductAttribute {
      */
     @Override
     public List<Field> getFields() {
-        return measurements;
+        return fields;
     }
 
     @Override
@@ -96,6 +105,12 @@ public class ProductAttributeImpl implements ProductAttribute {
     }
 
     @Override
+    public ProductAttribute setAttributeName(AttributeName attributeName) {
+        this.attributeName = attributeName;
+        return this;
+    }
+
+    @Override
     public ProductAttribute setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
@@ -103,13 +118,13 @@ public class ProductAttributeImpl implements ProductAttribute {
 
     @Override
     public ProductAttribute setFields(List<Field> measurements) {
-        this.measurements = measurements;
+        this.fields = measurements;
         return this;
     }
 
     @Override
-    public ProductAttribute setEu_size(ProductAttributeType eu_size) {
-        this.eu_size = eu_size;
+    public ProductAttribute setProductAttributeType(ProductAttributeType productAttrType) {
+        this.productAttributeType = productAttrType;
         return this;
     }
 
@@ -127,19 +142,21 @@ public class ProductAttributeImpl implements ProductAttribute {
         ProductAttributeImpl that = (ProductAttributeImpl) o;
 
         if (getId() != that.getId()) return false;
-        if (getQuantity() != that.getQuantity()) return false;
         if (getVersion() != that.getVersion()) return false;
-        if (measurements != null ? !measurements.equals(that.measurements) : that.measurements != null) return false;
-        return !(getEu_size() != null ? !getEu_size().equals(that.getEu_size()) : that.getEu_size() != null);
-
+        if (getProduct() != null ? !getProduct().equals(that.getProduct()) : that.getProduct() != null) return false;
+        if (getAttributeName() != null ? !getAttributeName().equals(that.getAttributeName()) : that.getAttributeName() != null)
+            return false;
+        if (getFields() != null ? !getFields().equals(that.getFields()) : that.getFields() != null) return false;
+        return getProductAttributeType() == that.getProductAttributeType();
     }
 
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + getQuantity();
-        result = 31 * result + (measurements != null ? measurements.hashCode() : 0);
-        result = 31 * result + (getEu_size() != null ? getEu_size().hashCode() : 0);
+        result = 31 * result + (getProduct() != null ? getProduct().hashCode() : 0);
+        result = 31 * result + (getAttributeName() != null ? getAttributeName().hashCode() : 0);
+        result = 31 * result + (getFields() != null ? getFields().hashCode() : 0);
+        result = 31 * result + (getProductAttributeType() != null ? getProductAttributeType().hashCode() : 0);
         result = 31 * result + getVersion();
         return result;
     }
@@ -148,16 +165,20 @@ public class ProductAttributeImpl implements ProductAttribute {
     public String toString() {
         return "ProductAttributeImpl{" +
                 "id=" + id +
+                ", product=" + product +
+                ", attributeName=" + attributeName +
                 ", quantity=" + quantity +
-                ", measurements=" + measurements +
-                ", eu_size=" + eu_size +
+                ", fields=" + fields +
+                ", productAttributeType=" + productAttributeType +
                 ", version=" + version +
                 '}';
     }
 
     @Override
     public int compareTo(ProductAttribute o) {
-        if(o == null) return 1;
-        return this.eu_size.compareTo(o.getEu_size());
+        if(o == null) {
+            return 1;
+        }
+        return this.attributeName.compareTo(o.getAttributeName());
     }
 }

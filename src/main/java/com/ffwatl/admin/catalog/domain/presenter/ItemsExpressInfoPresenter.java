@@ -2,9 +2,9 @@ package com.ffwatl.admin.catalog.domain.presenter;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.Color;
-import com.ffwatl.admin.catalog.domain.dto.CategoryDTO;
+import com.ffwatl.admin.catalog.domain.dto.ProductCategoryDTO;
 import com.ffwatl.admin.catalog.domain.dto.ColorDTO;
 
 import java.io.Serializable;
@@ -15,12 +15,12 @@ import java.util.List;
  */
 public class ItemsExpressInfoPresenter implements Serializable{
 
-    @JsonDeserialize(as=CategoryDTO.class)
-    private List<Category> itemGroup;
+    @JsonDeserialize(as=ProductCategoryDTO.class)
+    private List<ProductCategory> itemGroup;
     @JsonDeserialize(as=ColorDTO.class)
     private List<Color> color;
 
-    public List<Category> getItemGroup() {
+    public List<ProductCategory> getItemGroup() {
         return itemGroup;
     }
 
@@ -28,7 +28,7 @@ public class ItemsExpressInfoPresenter implements Serializable{
         return color;
     }
 
-    public ItemsExpressInfoPresenter setItemGroup(List<Category> itemGroup) {
+    public ItemsExpressInfoPresenter setItemGroup(List<ProductCategory> itemGroup) {
         this.itemGroup = itemGroup;
         return this;
     }

@@ -29,9 +29,6 @@ public class ClothesItemServiceImpl implements ClothesItemService{
     private BrandService brandService;
 
     @Autowired
-    private ColorService colorService;
-
-    @Autowired
     private EuroSizeService euroSizeService;
 
     @Autowired
@@ -90,12 +87,12 @@ public class ClothesItemServiceImpl implements ClothesItemService{
             item.setSize(sizeDTOConverter.transformList(presenter.getSize(), ConverterDTO.ENTITY_OBJECT));
         }
         for(ProductAttribute s: presenter.getSize()){
-            s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
+            s.setProductAttributeType(euroSizeService.findById(s.getProductAttributeType().getId()));
         }
 
         item.setSize(sizeDTOConverter.transformList(presenter.getSize(), ConverterDTO.ENTITY_OBJECT));
-        item.setItemGroup(itemGroupService.findById(presenter.getCategory().getId()));
-        item.setColor(colorService.findById(presenter.getColor().getId()));
+        item.setProductCategory(itemGroupService.findById(presenter.getProductCategory().getId()));
+        item.setColorName(colorService.findById(presenter.getColorName().getId()));
         item.setBrand(brandService.findById(presenter.getBrand().getId()));
         item.setQuantity(presenter.getQuantity());
         item.setId(presenter.getId());
@@ -104,7 +101,7 @@ public class ClothesItemServiceImpl implements ClothesItemService{
         item.setDiscount(presenter.getDiscount());
         item.setExtraNotes(presenter.getExtraNotes());
         item.setDescription(presenter.getDescription());
-        item.setItemName(presenter.getProductName());
+        item.setProductName(presenter.getProductName());
         item.setSalePrice(presenter.getSalePrice());
         item.setRetailPrice(presenter.getRetailPrice());
         item.setCurrency(presenter.getCurrency());
@@ -124,7 +121,7 @@ public class ClothesItemServiceImpl implements ClothesItemService{
                     .collect(Collectors.toList());
             return new ProductAttributeImpl()
                     .setId(old.getId())
-                    .setEu_size(old.getEu_size())
+                    .setProductAttributeType(old.getProductAttributeType())
                     .setQuantity(old.getQuantity())
                     .setFields(fields);
         }
@@ -138,7 +135,7 @@ public class ClothesItemServiceImpl implements ClothesItemService{
                     .collect(Collectors.toList());
             return new ProductAttributeDTO()
                     .setId(old.getId())
-                    .setEu_size(old.getEu_size())
+                    .setProductAttributeType(old.getProductAttributeType())
                     .setQuantity(old.getQuantity())
                     .setFields(fields);
         }

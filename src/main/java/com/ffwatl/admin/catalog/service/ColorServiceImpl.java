@@ -52,7 +52,7 @@ public class ColorServiceImpl extends ConverterDTO<Color> implements ColorServic
     public ColorImpl transformDTO2Entity(Color old) {
         return (ColorImpl) new ColorImpl()
                 .setId(old.getId())
-                .setColor(old.getColor())
+                .setColorName(old.getColorName())
                 .setHex(old.getHex());
     }
 
@@ -60,7 +60,7 @@ public class ColorServiceImpl extends ConverterDTO<Color> implements ColorServic
     public Color transformEntity2DTO(Color old) {
         return new ColorDTO()
                 .setId(old.getId())
-                .setColor(old.getColor())
+                .setColorName(old.getColorName())
                 .setHex(old.getHex());
     }
 }

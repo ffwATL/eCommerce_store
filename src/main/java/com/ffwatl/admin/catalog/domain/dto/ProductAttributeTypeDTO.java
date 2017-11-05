@@ -1,13 +1,8 @@
 package com.ffwatl.admin.catalog.domain.dto;
 
-import com.ffwatl.admin.catalog.domain.CommonCategory;
-import com.ffwatl.admin.catalog.domain.ProductAttributeType;
-import com.ffwatl.admin.i18n.domain.I18n;
+public class ProductAttributeTypeDTO/* implements ProductAttributeType*/ {
 
-
-public class ProductAttributeTypeDTO implements ProductAttributeType {
-
-    private long id;
+    /*private long id;
 
     private I18n name;
 
@@ -82,5 +77,5 @@ public class ProductAttributeTypeDTO implements ProductAttributeType {
                 ", name=" + name +
                 ", cat=" + cat +
                 '}';
-    }
+    }*/
 }

@@ -5,7 +5,7 @@ import com.ffwatl.admin.catalog.domain.*;
 
 import java.util.List;
 
-
+//FIXME: Add DTO classes, otherwise it will fails on serialization attempt
 
 public class ProductAttributeDTO implements ProductAttribute {
 
@@ -16,11 +16,16 @@ public class ProductAttributeDTO implements ProductAttribute {
 
     private int quantity;
 
+    private AttributeName attributeName;
+
     @JsonDeserialize(contentAs=FieldDTO.class)
-    private List<Field> measurements;
+    private List<Field> fields;
 
     @JsonDeserialize(as=ProductAttributeTypeDTO.class)
-    private ProductAttributeType eu_size;
+    private ProductAttributeType attributeType;
+
+
+
 
     @Override
     public long getId() {
@@ -33,8 +38,13 @@ public class ProductAttributeDTO implements ProductAttribute {
     }
 
     @Override
-    public ProductAttributeType getEu_size() {
-        return eu_size;
+    public AttributeName getAttributeName() {
+        return attributeName;
+    }
+
+    @Override
+    public ProductAttributeType getProductAttributeType() {
+        return attributeType;
     }
 
     @Override
@@ -44,7 +54,7 @@ public class ProductAttributeDTO implements ProductAttribute {
 
     @Override
     public List<Field> getFields() {
-        return measurements;
+        return fields;
     }
 
     @Override
@@ -65,20 +75,25 @@ public class ProductAttributeDTO implements ProductAttribute {
     }
 
     @Override
+    public ProductAttribute setAttributeName(AttributeName name) {
+        this.attributeName = name;
+        return this;
+    }
+    @Override
     public ProductAttribute setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
     }
 
     @Override
-    public ProductAttribute setFields(List<Field> measurements) {
-        this.measurements = measurements;
+    public ProductAttribute setFields(List<Field> fields) {
+        this.fields = fields;
         return this;
     }
 
     @Override
-    public ProductAttribute setEu_size(ProductAttributeType eu_size) {
-        this.eu_size = eu_size;
+    public ProductAttribute setProductAttributeType(ProductAttributeType attributeType) {
+        this.attributeType = attributeType;
         return this;
     }
 
@@ -90,7 +105,7 @@ public class ProductAttributeDTO implements ProductAttribute {
     @Override
     public int compareTo(ProductAttribute o) {
         if(o == null) return 1;
-        return this.eu_size.compareTo(o.getEu_size());
+        return this.attributeType.compareTo(o.getProductAttributeType());
     }
 
     @Override
@@ -102,8 +117,8 @@ public class ProductAttributeDTO implements ProductAttribute {
 
         if (getId() != that.getId()) return false;
         if (getQuantity() != that.getQuantity()) return false;
-        if (measurements != null ? !measurements.equals(that.measurements) : that.measurements != null) return false;
-        return !(getEu_size() != null ? !getEu_size().equals(that.getEu_size()) : that.getEu_size() != null);
+        if (fields != null ? !fields.equals(that.fields) : that.fields != null) return false;
+        return !(getProductAttributeType() != null ? !getProductAttributeType().equals(that.getProductAttributeType()) : that.getProductAttributeType() != null);
 
     }
 
@@ -111,8 +126,8 @@ public class ProductAttributeDTO implements ProductAttribute {
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + getQuantity();
-        result = 31 * result + (measurements != null ? measurements.hashCode() : 0);
-        result = 31 * result + (getEu_size() != null ? getEu_size().hashCode() : 0);
+        result = 31 * result + (fields != null ? fields.hashCode() : 0);
+        result = 31 * result + (getProductAttributeType() != null ? getProductAttributeType().hashCode() : 0);
         return result;
     }
 
@@ -121,8 +136,8 @@ public class ProductAttributeDTO implements ProductAttribute {
         return "ProductAttributeDTO{" +
                 "id=" + id +
                 ", quantity=" + quantity +
-                ", measurements=" + measurements +
-                ", eu_size=" + eu_size +
+                ", fields=" + fields +
+                ", attributeType=" + attributeType +
                 '}';
     }
 }

@@ -31,7 +31,7 @@ public class OrderItemColor implements Color{
     }
 
     @Override
-    public I18n getColor() {
+    public I18n getColorName() {
         return color;
     }
 
@@ -48,7 +48,7 @@ public class OrderItemColor implements Color{
     }
 
     @Override
-    public Color setColor(I18n color) {
+    public Color setColorName(I18n color) {
         this.color = color;
         return this;
     }
@@ -60,14 +60,14 @@ public class OrderItemColor implements Color{
 
         OrderItemColor that = (OrderItemColor) o;
 
-        if (getColor() != null ? !getColor().equals(that.getColor()) : that.getColor() != null) return false;
+        if (getColorName() != null ? !getColorName().equals(that.getColorName()) : that.getColorName() != null) return false;
         return !(getHex() != null ? !getHex().equals(that.getHex()) : that.getHex() != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = getColor() != null ? getColor().hashCode() : 0;
+        int result = getColorName() != null ? getColorName().hashCode() : 0;
         result = 31 * result + (getHex() != null ? getHex().hashCode() : 0);
         return result;
     }

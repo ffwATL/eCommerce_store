@@ -1,15 +1,25 @@
 package com.ffwatl;
 
+import com.ffwatl.fortest.BLogic;
+import com.ffwatl.fortest.ThirdExtendedSecond;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Temp {
-    static public void main(){
 
+    private static final List<Class<? extends BLogic>> BLOGICS = new ArrayList<>();
+
+    static {
+        /*BLOGICS.add(FirstBLogic.class);*/
+        BLOGICS.add(ThirdExtendedSecond.class);
     }
     @Test
     public void cheat(){
@@ -68,7 +78,7 @@ public class Temp {
         i = i++;
         System.out.println(i);
         /*JsonReader reader = new JsonReader(new FileReader("item_group_tree.json"));
-        Category i = new Gson().fromJson(reader, CategoryImpl.class);*/
+        ProductCategory i = new Gson().fromJson(reader, ProductCategoryImpl.class);*/
         AtomicInteger aI = new AtomicInteger(2);
       /*  fillParent(null, i);*/
 
@@ -98,9 +108,67 @@ public class Temp {
         return new File(dirName).listFiles((dir1, filename) -> {return filename.endsWith(endName);});
     }
 
-   /* private void fillParent(CategoryImpl parent, CategoryImpl child){
+    @Test
+    public void testMethodNamesUnambiguous() {
+        int errors = 0;
+        StringBuilder sb = new StringBuilder();
+
+        for (Class<? extends BLogic> clazz : BLOGICS) {
+            String expectedPackageName = BLogic.class.getPackage().getName();
+            List<Method> ms =/* new ArrayList<>()*/ Arrays.asList(clazz.getMethods());
+           /* filterByPackageName(expectedPackageName, clazz, ms);*/
+            // iterate all methods _declared_ exactly by this class
+            for (Method method1 : ms) {
+                for (Method method2 : ms) {
+                    if (method1.getName().equals(method2.getName()) && method1 != method2 && !method1.equals(method2) && !method1.getDeclaringClass().equals(Object.class)) {
+                        // get_cdm_data() with different agrs looks normal
+                        sb.append("Method with same name but ambiguous arguments:\n  ");
+                        sb.append(method1).append("\n  ");
+                        sb.append(method2).append('\n');
+                        sb.append(method1.getDeclaringClass()).append('\n');
+                        sb.append(method2.getDeclaringClass()).append('\n').append('\n');
+                        errors++;
+                    }
+                }
+            }
+        }
+        if (errors>0) {
+            String msg = "testMethodNamesUnambiguous: ERRORS: " + sb.toString();
+            System.err.println(msg);
+        }
+    }
+
+
+    private void filterByPackageName(String expectedPackageName, Class<?> clazz, List<Method> methodList) {
+        if(expectedPackageName == null) {
+            return;
+        }
+
+        List<Method> methods = Arrays.asList(clazz.getMethods());
+        Class<?>[] in = clazz.getInterfaces();
+
+        if(in.length > 0) {
+            for(Class<?> c: in) {
+                String interfacePackageName = c.getPackage().getName();
+                if(!interfacePackageName.startsWith(expectedPackageName)) {
+                    Method[] interfaceMethods = c.getMethods();
+                    methods.removeAll(Arrays.asList(interfaceMethods));
+                }
+            }
+        }
+        methodList.addAll(methods);
+
+        Class<?> superClass = clazz.getSuperclass();
+        String superPackageName = superClass.getPackage().getName();
+
+        if(superPackageName.startsWith(expectedPackageName) && !superClass.equals(Object.class)) {
+            filterByPackageName(expectedPackageName, superClass, methodList);
+        }
+    }
+
+   /* private void fillParent(ProductCategoryImpl parent, ProductCategoryImpl child){
         if(child == null) return;
-        for(CategoryImpl i: child.setParent(parent).getChild()){
+        for(ProductCategoryImpl i: child.setParent(parent).getChild()){
             fillParent(child, i);
         }
     }*/

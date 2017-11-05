@@ -9,11 +9,11 @@ public interface Color {
 
     String getHex();
 
-    I18n getColor();
+    I18n getColorName();
 
     Color setId(long id);
 
     Color setHex(String hex);
 
-    Color setColor(I18n color);
+    Color setColorName(I18n color);
 }

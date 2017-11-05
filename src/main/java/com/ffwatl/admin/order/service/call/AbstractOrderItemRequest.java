@@ -1,13 +1,13 @@
 package com.ffwatl.admin.order.service.call;
 
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.order.domain.Order;
 
 /**
  *  Only the product is required to add an item to an order.
  *
- * The category can be inferred from the product's default category.
+ * The productCategory can be inferred from the product's default productCategory.
  *
  * The sku can be inferred from either the passed in attributes as they are compared to the product's options or
  * the sku can be determined from the product's default sku.
@@ -19,7 +19,7 @@ import com.ffwatl.admin.order.domain.Order;
 public abstract class AbstractOrderItemRequest {
 
     protected String sku;
-    protected Category category;
+    protected ProductCategory productCategory;
     protected Product product;
     protected Order order;
     protected int quantity;
@@ -35,8 +35,8 @@ public abstract class AbstractOrderItemRequest {
         return incrementOrderItemQuantity;
     }
 
-    public Category getCategory() {
-        return category;
+    public ProductCategory getProductCategory() {
+        return productCategory;
     }
 
     public Product getProduct() {
@@ -69,8 +69,8 @@ public abstract class AbstractOrderItemRequest {
         this.incrementOrderItemQuantity = incrementOrderItemQuantity;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setProductCategory(ProductCategory productCategory) {
+        this.productCategory = productCategory;
     }
 
     public void setProduct(Product product) {
@@ -94,7 +94,7 @@ public abstract class AbstractOrderItemRequest {
     }
 
     protected void copyProperties(AbstractOrderItemRequest newRequest) {
-        newRequest.setCategory(category);
+        newRequest.setProductCategory(productCategory);
         newRequest.setProduct(product);
         newRequest.setQuantity(quantity);
         newRequest.setSku(sku);
@@ -114,7 +114,7 @@ public abstract class AbstractOrderItemRequest {
         if (getQuantity() != that.getQuantity()) return false;
         if (getSalePriceOverride() != that.getSalePriceOverride()) return false;
         if (getRetailPriceOverride() != that.getRetailPriceOverride()) return false;
-        if (getCategory() != null ? !getCategory().equals(that.getCategory()) : that.getCategory() != null)
+        if (getProductCategory() != null ? !getProductCategory().equals(that.getProductCategory()) : that.getProductCategory() != null)
             return false;
         if (getProduct() != null ? !getProduct().equals(that.getProduct()) : that.getProduct() != null) return false;
         return !(getOrder() != null ? !getOrder().equals(that.getOrder()) : that.getOrder() != null);
@@ -123,7 +123,7 @@ public abstract class AbstractOrderItemRequest {
 
     @Override
     public int hashCode() {
-        int result = getCategory() != null ? getCategory().hashCode() : 0;
+        int result = getProductCategory() != null ? getProductCategory().hashCode() : 0;
         result = 31 * result + (getProduct() != null ? getProduct().hashCode() : 0);
         result = 31 * result + (getOrder() != null ? getOrder().hashCode() : 0);
         result = 31 * result + getQuantity();
@@ -137,7 +137,7 @@ public abstract class AbstractOrderItemRequest {
     public String toString() {
         return "AbstractOrderItemRequest{" +
                 "sku='" + sku + '\'' +
-                ", category=" + category +
+                ", productCategory=" + productCategory +
                 ", product=" + product +
                 ", order=" + order +
                 ", quantity=" + quantity +

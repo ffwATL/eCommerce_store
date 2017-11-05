@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-       <bean id="categoryForNamedOrder" class="com.ffwatl.admin.catalog.domain.CategoryImpl">
+       <bean id="categoryForNamedOrder" class="com.ffwatl.admin.catalog.domain.ProductCategoryImpl">
               <property name="id" value="10"/>
               <property name="cat" value="BOTTOM"/>
               <property name="level" value="4"/>
@@ -54,7 +54,7 @@
               <property name="salePrice" value="0"/>
               <property name="discountingAllowed" value="true"/>
               <property name="quantity" value="2"/>
-              <property name="category" ref="categoryForNamedOrder"/>
+              <property name="productCategory" ref="categoryForNamedOrder"/>
               <property name="orderItemPriceDetails" ref="orderItemPriceDetailForNamedOrder"/>
               <property name="productId" value="100"/>
        </bean>

@@ -44,7 +44,7 @@ public class OrderProductDaoTest {
         assertThat(orderItem.getCandidateItemOffers(), empty());
 
         // all the nested objects should be null by the default
-        assertThat(orderItem.getCategory(), nullValue());
+        assertThat(orderItem.getProductCategory(), nullValue());
         assertThat(orderItem.getOrder(), nullValue());
 
         assertThat(orderItem.getColor(), nullValue());

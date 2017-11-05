@@ -21,11 +21,9 @@ public interface Product {
 
     I18n getDescription();
 
-    Category getCategory();
+    ProductCategory getProductCategory();
 
     User getAddedBy();
-
-    Gender getGender();
 
     String getExtraNotes();
 
@@ -55,6 +53,8 @@ public interface Product {
 
     Timestamp getLastChangeDate();
 
+    Gender getGender();
+
 
     Product setId(long id);
 
@@ -66,9 +66,9 @@ public interface Product {
 
     Product setCurrency(Currency currency);
 
-    Product setItemGroup(Category itemGroup);
+    Product setCategory(ProductCategory productCategory);
 
-    Product setItemName(I18n itemName);
+    Product setProductName(I18n itemName);
 
     Product setColor(Color color);
 

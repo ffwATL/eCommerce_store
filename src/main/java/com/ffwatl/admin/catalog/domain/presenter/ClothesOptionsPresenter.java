@@ -2,7 +2,7 @@ package com.ffwatl.admin.catalog.domain.presenter;
 
 
 import com.ffwatl.admin.catalog.domain.Brand;
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.Color;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class ClothesOptionsPresenter {
 
     private List<Brand> brandList;
     private List<Color> colorList;
-    private Category itemGroup;
+    private ProductCategory itemGroup;
     private String brandImgUrl;
 
     public String getBrandImgUrl() {
@@ -29,7 +29,7 @@ public class ClothesOptionsPresenter {
         return colorList;
     }
 
-    public Category getItemGroup() {
+    public ProductCategory getItemGroup() {
         return itemGroup;
     }
 
@@ -45,7 +45,7 @@ public class ClothesOptionsPresenter {
         this.colorList = colorList;
     }
 
-    public void setItemGroup(Category itemGroup) {
+    public void setItemGroup(ProductCategory itemGroup) {
         this.itemGroup = itemGroup;
     }
 

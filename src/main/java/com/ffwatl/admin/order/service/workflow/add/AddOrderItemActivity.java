@@ -1,6 +1,6 @@
 package com.ffwatl.admin.order.service.workflow.add;
 
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.Color;
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.catalog.service.CatalogService;
@@ -48,8 +48,8 @@ public class AddOrderItemActivity extends BaseActivity<ProcessContext<CartOperat
         if(product == null) {
             throw new IllegalArgumentException("Can't find a product requested with id: " + orderItemRequestDTO.getProductId());
         }
-        Category category = product.getCategory();
-        Color color = product.getColor();
+        ProductCategory productCategory = product.getProductCategory();
+        Color color = /*product.getColorName()*/ null;
 
         OrderItem item;
 
@@ -59,10 +59,10 @@ public class AddOrderItemActivity extends BaseActivity<ProcessContext<CartOperat
         itemRequest.setSalePriceOverride(orderItemRequestDTO.getOverrideSalePrice());
         itemRequest.setItemName(orderItemRequestDTO.getItemName());
         itemRequest.setOrder(order);
-        itemRequest.setCategory(category);
+        itemRequest.setProductCategory(productCategory);
         itemRequest.setProductAttribute(orderItemRequestDTO.getProductAttribute());
         itemRequest.setColor(new OrderItemColor()
-                .setColor(color.getColor())
+                .setColorName(color.getColorName())
                 .setHex(color.getHex()));
         itemRequest.setProduct(product);
 

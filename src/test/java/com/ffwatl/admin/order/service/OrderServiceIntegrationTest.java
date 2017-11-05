@@ -414,10 +414,10 @@ public class OrderServiceIntegrationTest {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private OrderItemRequest buildOrderItemRequestForOrderId(long productId, long customerId,
-                                                             long attrId, int requestedQuantity,
-                                                             boolean incrementOrderItemQuantity,
-                                                             long orderId) throws PricingException {
+    OrderItemRequest buildOrderItemRequestForOrderId(long productId, long customerId,
+                                                     long attrId, int requestedQuantity,
+                                                     boolean incrementOrderItemQuantity,
+                                                     long orderId) throws PricingException {
         Product product = productService.findById(productId);
         User customer = userService.findById(customerId);
         Order order = findOrderById(orderId, customer);
@@ -425,13 +425,13 @@ public class OrderServiceIntegrationTest {
         ProductAttribute productAttribute = catalogService.findProductAttributeById(attrId, FetchMode.LAZY);
 
         OrderItemRequest request = new OrderItemRequest();
-        request.setCategory(product.getCategory());
+        request.setProductCategory(product.getProductCategory());
         request.setQuantity(requestedQuantity);
         request.setOrder(order);
         request.setItemName(product.getProductName());
         request.setProduct(product);
         request.setProductAttribute(productAttribute);
-        request.setColor(product.getColor());
+        /*request.setColorName(product.getColorName());*/
         request.setRetailPriceOverride(product.getRetailPrice());
         request.setSalePriceOverride(product.getSalePrice());
         request.setIncrementOrderItemQuantity(incrementOrderItemQuantity);
@@ -455,7 +455,7 @@ public class OrderServiceIntegrationTest {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private void handleAddOrderItemRequest(OrderItemRequest request) throws AddToCartException {
+    void handleAddOrderItemRequest(OrderItemRequest request) throws AddToCartException {
         orderService.addItem(request.getOrder().getId(), new OrderItemRequestDTO(request), true);
     }
 

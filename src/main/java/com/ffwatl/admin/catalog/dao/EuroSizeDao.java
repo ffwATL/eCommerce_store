@@ -2,22 +2,22 @@ package com.ffwatl.admin.catalog.dao;
 
 
 import com.ffwatl.admin.catalog.domain.CommonCategory;
-import com.ffwatl.admin.catalog.domain.ProductAttributeTypeImpl;
+import com.ffwatl.admin.catalog.domain.ProductAttributeType;
 
 import java.util.List;
 
 public interface EuroSizeDao {
 
-    List<ProductAttributeTypeImpl> findByCat(CommonCategory cat);
+    List<ProductAttributeType> findByCat(CommonCategory cat);
 
-    ProductAttributeTypeImpl findById(long id);
+    ProductAttributeType findById(long id);
 
-    void save(ProductAttributeTypeImpl eu);
+    void save(ProductAttributeType eu);
 
     void removeSizeById(long id);
 
-    List<ProductAttributeTypeImpl> findAll();
+    List<ProductAttributeType> findAll();
 
-    List<ProductAttributeTypeImpl> findAllUsed();
+    List<ProductAttributeType> findAllUsed();
 
 }

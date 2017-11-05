@@ -3,8 +3,6 @@ package com.ffwatl.admin.catalog.service;
 import com.ffwatl.admin.catalog.dao.EuroSizeDao;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.ProductAttributeType;
-import com.ffwatl.admin.catalog.domain.ProductAttributeTypeImpl;
-import com.ffwatl.admin.catalog.domain.dto.ProductAttributeTypeDTO;
 import com.ffwatl.common.service.ConverterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +19,14 @@ public class EuroSizeServiceImpl extends ConverterDTO<ProductAttributeType> impl
 
 
     @Override
-    public ProductAttributeTypeImpl findById(long id) {
+    public ProductAttributeType findById(long id) {
         return euroSizeDao.findById(id);
     }
 
     @Override
     @Transactional
     public void save(ProductAttributeType eu) {
-        euroSizeDao.save((ProductAttributeTypeImpl)eu);
+        euroSizeDao.save((ProductAttributeType)eu);
     }
 
     @Override
@@ -62,17 +60,17 @@ public class EuroSizeServiceImpl extends ConverterDTO<ProductAttributeType> impl
     }
 
     @Override
-    public ProductAttributeTypeImpl transformDTO2Entity(ProductAttributeType old) {
-        return (ProductAttributeTypeImpl) new ProductAttributeTypeImpl()
+    public ProductAttributeType transformDTO2Entity(ProductAttributeType old) {
+        return /*(ProductAttributeType) new ProductAttributeType()
                 .setId(old.getId())
-                .setCat(old.getCat());
+                .setCat(old.getCat())*/ null;
     }
 
     @Override
     public ProductAttributeType transformEntity2DTO(ProductAttributeType old) {
-        return new ProductAttributeTypeDTO()
+        return /*new ProductAttributeTypeDTO()
                 .setId(old.getId())
                 .setName(old.getName())
-                .setCat(old.getCat());
+                .setCat(old.getCat())*/ null;
     }
 }

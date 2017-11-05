@@ -1,6 +1,6 @@
 package com.ffwatl.admin.catalog.service;
 
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
@@ -51,7 +51,7 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
-    public List<Product> findProductsByStatusAndCategory(boolean isActive, Category category, FetchMode fetchMode) {
+    public List<Product> findProductsByStatusAndCategory(boolean isActive, ProductCategory productCategory, FetchMode fetchMode) {
         return null;
     }
 
@@ -66,47 +66,47 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
-    public Category saveCategory(Category category) {
+    public ProductCategory saveCategory(ProductCategory productCategory) {
         return null;
     }
 
     @Override
-    public void saveCategoriesInBulk(List<? extends Category> list) {
+    public void saveCategoriesInBulk(List<? extends ProductCategory> list) {
 
     }
 
     @Override
-    public void removeCategory(Category category) {
+    public void removeCategory(ProductCategory productCategory) {
 
     }
 
     @Override
-    public Category findCategoryById(long categoryId, FetchMode fetchMode) {
+    public ProductCategory findCategoryById(long categoryId, FetchMode fetchMode) {
         return null;
     }
 
     @Override
-    public List<Category> findAllCategoriesUsed(FetchMode fetchMode) {
+    public List<ProductCategory> findAllCategoriesUsed(FetchMode fetchMode) {
         return null;
     }
 
     @Override
-    public List<Category> findGenderGroups(FetchMode fetchMode) {
+    public List<ProductCategory> findGenderGroups(FetchMode fetchMode) {
         return null;
     }
 
     @Override
-    public List<Category> findCategoriesByDepthLevel(int level, FetchMode fetchMode) {
+    public List<ProductCategory> findCategoriesByDepthLevel(int level, FetchMode fetchMode) {
         return null;
     }
 
     @Override
-    public List<Category> findCategoriesByCat(CommonCategory cat, FetchMode fetchMode) {
+    public List<ProductCategory> findCategoriesByCat(CommonCategory cat, FetchMode fetchMode) {
         return null;
     }
 
     @Override
-    public List<Category> findCategoriesByDepthLevelAndName(int level, String name, FetchMode fetchMode) {
+    public List<ProductCategory> findCategoriesByDepthLevelAndName(int level, String name, FetchMode fetchMode) {
         return null;
     }
 

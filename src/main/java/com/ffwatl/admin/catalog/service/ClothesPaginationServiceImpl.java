@@ -42,7 +42,7 @@ public class ClothesPaginationServiceImpl extends PaginationService implements C
         if(map.get("gender") != null) res = res.and(spec.isGenderEquals(map.get("gender")));
         Page<ProductImpl> result = clothesItemRepository.findAll(res, request);
         for(ProductImpl i: result.getContent()){
-            i.getCategory().setChild(null);
+            i.getProductCategory().setChild(null);
         }
         return result;
     }

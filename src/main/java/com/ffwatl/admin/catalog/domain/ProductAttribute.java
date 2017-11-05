@@ -9,7 +9,9 @@ public interface ProductAttribute extends Comparable<ProductAttribute> {
 
     Product getProduct();
 
-    ProductAttributeType getEu_size();
+    AttributeName getAttributeName();
+
+    ProductAttributeType getProductAttributeType();
 
     int getQuantity();
 
@@ -21,11 +23,13 @@ public interface ProductAttribute extends Comparable<ProductAttribute> {
 
     ProductAttribute setProduct(Product product);
 
+    ProductAttribute setAttributeName(AttributeName name);
+
     ProductAttribute setQuantity(int quantity);
 
     ProductAttribute setFields(List<Field> measurements);
 
-    ProductAttribute setEu_size(ProductAttributeType eu_size);
+    ProductAttribute setProductAttributeType(ProductAttributeType attributeType);
 
     ProductAttribute setVersion(int version);
 }

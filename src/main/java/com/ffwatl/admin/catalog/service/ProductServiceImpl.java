@@ -27,16 +27,13 @@ import java.util.Map;
 @Service("product_service")
 public class ProductServiceImpl implements ProductService {
 
-    private static final Logger logger = LogManager.getLogger("com.ffwatl.admin.web.controller.AddNewItemController");
+    private static final Logger LOGGER = LogManager.getLogger("com.ffwatl.admin.web.controller.AddNewItemController");
 
     @Autowired
     private ProductDao productDao;
 
     @Autowired
     private BrandService brandService;
-
-    @Autowired
-    private ColorService colorService;
 
     @Autowired
     private EuroSizeService euroSizeService;
@@ -51,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductImpl findById(long id) {
         ProductImpl item = productDao.findById(id);
-        item.getCategory().setChild(null);
+        item.getProductCategory().setChild(null);
         return item;
     }
 
@@ -76,12 +73,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void save(ProductImpl item) {
-        item.setColor(colorService.findById(item.getColor().getId()));
-        item.setItemGroup(itemGroupService.findById(item.getCategory().getId()));
+        item.setCategory(itemGroupService.findById(item.getProductCategory().getId()));
 
         item.setBrand(brandService.findById(item.getBrand().getId()));
         for (ProductAttribute s: item.getProductAttributes()){
-            s.setEu_size(euroSizeService.findById(s.getEu_size().getId()));
+           /* s.setProductAttributeType(euroSizeService.findById(s.getProductAttributeType().getId()));*/ //FIXME: update pls!!
         }
 
         productDao.save(item);
@@ -115,9 +111,8 @@ public class ProductServiceImpl implements ProductService {
         if(item == null) {
             throw new IllegalArgumentException("Probably wrong Product id. Product not found :( [id]="+freshItem.getId() );
         }
-        item.setItemGroup(itemGroupService.findById(freshItem.getCategory().getId()));
-        item.setColor(colorService.findById(freshItem.getColor().getId()));
-        item.setItemName(freshItem.getProductName());
+        item.setCategory(itemGroupService.findById(freshItem.getProductCategory().getId()));
+        item.setProductName(freshItem.getProductName());
         item.setActive(freshItem.isActive());
         item.setSalePrice(freshItem.getSalePrice());
 
@@ -147,7 +142,7 @@ public class ProductServiceImpl implements ProductService {
             System.err.println("Product == null");
             throw new IllegalArgumentException();
         }
-        item.getCategory().setChild(null);
+        item.getProductCategory().setChild(null);
         ProductUpdateImpl presenter = item2Presenter(item);
 
         if(item instanceof ProductImpl){
@@ -156,10 +151,10 @@ public class ProductServiceImpl implements ProductService {
             Collections.sort(((ProductClothes) item).getSize());
             cPresenter.setSize(((ProductClothes) item).getSize());
             cPresenter.setBrandImgUrl(settings.getBrandImgUrl());
-            logger.info("*****" + ((ProductClothes) item).getSize());
+            LOGGER.info("*****" + ((ProductClothes) item).getSize());
             return cPresenter;
         }
-        logger.info("not clothes");
+        LOGGER.info("not clothes");
         return presenter;*/
         return null;
     }
@@ -186,18 +181,16 @@ public class ProductServiceImpl implements ProductService {
         presenter.setAddedBy(user2Presenter(item.getAddedBy()));
         presenter.setId(item.getId());
 
-        presenter.setItemGroup(item.getCategory());
+        presenter.setCategory(item.getProductCategory());
         presenter.setSalePrice(item.getSalePrice());
         presenter.setActive(item.isActive());
         presenter.setRetailPrice(item.getRetailPrice());
-        presenter.setColor(item.getColor());
-        presenter.setItemName(item.getProductName());
+        presenter.setProductName(item.getProductName());
         presenter.setQuantity(item.getQuantity());
         presenter.setImages(urlImages(photoDir, "xl_.jpg", url));
         presenter.setThumbs(urlImages(photoDir, "s.jpg", url));
         presenter.setDescription(item.getDescription());
         presenter.setExtraNotes(item.getExtraNotes());
-        presenter.setGender(item.getGender());
         return presenter;
     }
 

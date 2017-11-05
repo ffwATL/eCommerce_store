@@ -12,5 +12,6 @@
             customer_id="1"
             order_sub_total_value="0"
             order_total_value="0"
-            total_fulfillment_charges="0"/>
+            total_fulfillment_charges="0"
+            version="0"/>
 </dataset>

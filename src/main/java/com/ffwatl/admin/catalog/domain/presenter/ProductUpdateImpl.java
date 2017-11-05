@@ -3,8 +3,7 @@ package com.ffwatl.admin.catalog.domain.presenter;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ffwatl.admin.catalog.domain.*;
-import com.ffwatl.admin.catalog.domain.dto.CategoryDTO;
-import com.ffwatl.admin.catalog.domain.dto.ColorDTO;
+import com.ffwatl.admin.catalog.domain.dto.ProductCategoryDTO;
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.user.domain.User;
@@ -24,7 +23,6 @@ public class ProductUpdateImpl implements ProductUpdate {
     private int salePrice;
     private int discount;
     private boolean isActive;
-    private Gender gender;
     private I18n description;
     private String extraNotes;
     private Currency currency;
@@ -33,12 +31,10 @@ public class ProductUpdateImpl implements ProductUpdate {
     private String metaKeys;
     private boolean isUsed;
 
-    @JsonDeserialize(as=ColorDTO.class)
-    private Color color;
     @JsonDeserialize(as=UserDTO.class)
     private User addedBy;
-    @JsonDeserialize(as=CategoryDTO.class)
-    private Category itemGroup;
+    @JsonDeserialize(as=ProductCategoryDTO.class)
+    private ProductCategory productCategory;
 
     private Date importDate;
     private Timestamp lastChangeDate;
@@ -67,8 +63,8 @@ public class ProductUpdateImpl implements ProductUpdate {
         return null;
     }
 
-    public Category getItemGroup() {
-        return itemGroup;
+    public ProductCategory getProductCategory() {
+        return productCategory;
     }
 
     @Override
@@ -100,18 +96,23 @@ public class ProductUpdateImpl implements ProductUpdate {
         return lastChangeDate;
     }
 
+    @Override
+    public Gender getGender() {
+        return null;
+    }
 
 
     public Currency getCurrency() {
         return currency;
     }
 
-    public long[] getOldSizes() {
-        return oldSizes;
+    @Override
+    public Color getColor() {
+        return null;
     }
 
-    public Gender getGender() {
-        return gender;
+    public long[] getOldSizes() {
+        return oldSizes;
     }
 
     public boolean isEdit() {
@@ -162,15 +163,6 @@ public class ProductUpdateImpl implements ProductUpdate {
     public boolean isActive() {
         return isActive;
     }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public Category getCategory() {
-        return itemGroup;
-    }
-
     public List<ProductImage> getImages() {
         return images;
     }
@@ -198,6 +190,11 @@ public class ProductUpdateImpl implements ProductUpdate {
     public ProductUpdate setVendorCode(String vendorCode) {
         this.vendorCode = vendorCode;
         return this;
+    }
+
+    @Override
+    public Product setGender(Gender gender) {
+        return null;
     }
 
     @Override
@@ -229,9 +226,14 @@ public class ProductUpdateImpl implements ProductUpdate {
         return this;
     }
 
-    public ProductUpdate setItemName(I18n itemName) {
+    public ProductUpdate setProductName(I18n itemName) {
         this.itemName = itemName;
         return this;
+    }
+
+    @Override
+    public Product setColor(Color color) {
+        return null;
     }
 
     public ProductUpdate setQuantity(int quantity) {
@@ -269,56 +271,55 @@ public class ProductUpdateImpl implements ProductUpdate {
         return this;
     }
 
-    public ProductUpdate setColor(Color color) {
-        this.color = color;
+    @Override
+    public ProductUpdate setCategory(ProductCategory productCategory) {
+        this.productCategory = productCategory;
         return this;
     }
 
-    public ProductUpdate setItemGroup(Category itemGroup) {
-        this.itemGroup = itemGroup;
-        return this;
-    }
-
+    @Override
     public ProductUpdate setImages(List<ProductImage> images) {
         this.images = images;
         return this;
     }
 
+    @Override
     public ProductUpdate setThumbs(List<ProductImage> thumbs) {
         this.thumbs = thumbs;
         return this;
     }
 
+    @Override
     public ProductUpdate setAddedBy(User addedBy) {
         this.addedBy = addedBy;
         return this;
     }
 
+    @Override
     public ProductUpdate setDescription(I18n description) {
         this.description = description;
         return this;
     }
 
+    @Override
     public ProductUpdate setImportDate(Date importDate) {
         this.importDate = importDate;
         return this;
     }
 
+    @Override
     public ProductUpdate setExtraNotes(String extraNotes) {
         this.extraNotes = extraNotes;
         return this;
     }
 
-    public ProductUpdate setGender(Gender gender) {
-        this.gender = gender;
-        return this;
-    }
-
+    @Override
     public ProductUpdate setRemovedImgs(int[] removedImgs) {
         this.removedImgs = removedImgs;
         return this;
     }
 
+    @Override
     public ProductUpdate setEdit(boolean edit) {
         this.edit = edit;
         return this;
@@ -334,7 +335,6 @@ public class ProductUpdateImpl implements ProductUpdate {
                 ", salePrice=" + salePrice +
                 ", discount=" + discount +
                 ", isActive=" + isActive +
-                ", gender=" + gender +
                 ", description=" + description +
                 ", extraNotes='" + extraNotes + '\'' +
                 ", currency=" + currency +
@@ -342,9 +342,8 @@ public class ProductUpdateImpl implements ProductUpdate {
                 ", metaInfo='" + metaInfo + '\'' +
                 ", metaKeys='" + metaKeys + '\'' +
                 ", isUsed=" + isUsed +
-                ", color=" + color +
                 ", addedBy=" + addedBy +
-                ", itemGroup=" + itemGroup +
+                ", productCategory=" + productCategory +
                 ", importDate=" + importDate +
                 ", lastChangeDate=" + lastChangeDate +
                 ", removedImgs=" + Arrays.toString(removedImgs) +

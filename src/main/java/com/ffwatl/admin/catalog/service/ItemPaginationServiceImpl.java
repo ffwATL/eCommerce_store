@@ -38,7 +38,7 @@ public class ItemPaginationServiceImpl extends PaginationService implements Item
         if(map.get("isSale") != null) spec = spec.and(itemSpec.isSale(map.get("isSale")));
         Page<ProductImpl> result = itemRepository.findAll(spec, request);
         for(ProductImpl i: result.getContent()){
-            i.getCategory().setChild(null);
+            i.getProductCategory().setChild(null);
         }
         return result;
     }

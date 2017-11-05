@@ -6,7 +6,7 @@ import com.ffwatl.admin.user.domain.UserImpl;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,27 +16,21 @@ import java.util.List;
  * only once. But if needed you can manually add new group through console.
  */
 @Entity
-@Table(name = "items_group")
-public class CategoryImpl implements Serializable, Category {
+@Table(name = "product_category")
+public class ProductCategoryImpl implements Serializable, ProductCategory {
 
     /**
-     * CategoryImpl identifier.
+     * Product Category identifier.
      */
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
     /**
-     * CategoryImpl's depth level value.
+     * Product Category's depth level value.
      */
     @Column(name = "level")
     private int level;
-
-    /**
-     * Common attribute for CategoryImpl objects.
-     */
-    @Column(name = "common_category")
-    private CommonCategory cat;
 
     /**
      * Group name object that contains different language translations.
@@ -48,15 +42,19 @@ public class CategoryImpl implements Serializable, Category {
     @JoinColumn(name = "user_id")
     private User createdBy;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = CategoryImpl.class)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = ProductCategoryImpl.class)
     @JoinColumn(name = "child_id")
-    private List<Category> child = new LinkedList<>();
+    private List<ProductCategory> child = new ArrayList<>();
 
-    @Column(name="cat_description", length = 2048)
+    @Column(name="description", length = 2048)
     private String description;
 
     @Column(name = "weight")
     private int weight;
+
+    @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = ProductAttributeTemplateImpl.class)
+    @JoinColumn(name = "attr_template_id")
+    private ProductAttributeTemplate attributeTemplate;
 
 
     public User getCreatedBy() {
@@ -71,15 +69,11 @@ public class CategoryImpl implements Serializable, Category {
         return id;
     }
 
-    public CommonCategory getCat() {
-        return cat;
-    }
-
     public int getLevel() {
         return level;
     }
 
-    public List<Category> getChild() {
+    public List<ProductCategory> getChild() {
         return child;
     }
 
@@ -91,43 +85,49 @@ public class CategoryImpl implements Serializable, Category {
         return description;
     }
 
-    public Category setId(long id) {
+    @Override
+    public ProductAttributeTemplate getProductAttributeTemplate() {
+        return attributeTemplate;
+    }
+    @Override
+    public ProductCategory setId(long id) {
         this.id = id;
         return this;
     }
-
-    public Category setCat(CommonCategory cat) {
-        this.cat = cat;
-        return this;
-    }
-
-    public Category setGroupName(I18n groupName) {
+    @Override
+    public ProductCategory setGroupName(I18n groupName) {
         this.groupName = groupName;
         return this;
     }
-
-    public Category setCreatedBy(User createdBy) {
+    @Override
+    public ProductCategory setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
         return this;
     }
-
-    public Category setDescription(String description) {
+    @Override
+    public ProductCategory setDescription(String description) {
         this.description = description;
         return this;
     }
-
-    public Category setChild(List<Category> child) {
+    @Override
+    public ProductCategory setChild(List<ProductCategory> child) {
         this.child = child;
         return this;
     }
-
-    public Category setLevel(int level) {
+    @Override
+    public ProductCategory setLevel(int level) {
         this.level = level;
         return this;
     }
-
-    public Category setWeight(int weight) {
+    @Override
+    public ProductCategory setWeight(int weight) {
         this.weight = weight;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setProductAttributeTemplate(ProductAttributeTemplate attributeTemplate) {
+        this.attributeTemplate = attributeTemplate;
         return this;
     }
 
@@ -136,50 +136,39 @@ public class CategoryImpl implements Serializable, Category {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CategoryImpl category = (CategoryImpl) o;
+        ProductCategoryImpl that = (ProductCategoryImpl) o;
 
-        if (getId() != category.getId()) return false;
-        if (getLevel() != category.getLevel()) return false;
-        if (getWeight() != category.getWeight()) return false;
-        if (getCat() != category.getCat()) return false;
-        if (getGroupName() != null ? !getGroupName().equals(category.getGroupName()) : category.getGroupName() != null)
-            return false;
-        if (getCreatedBy() != null ? !getCreatedBy().equals(category.getCreatedBy()) : category.getCreatedBy() != null)
-            return false;
-        if (getChild() != null ? !getChild().equals(category.getChild()) : category.getChild() != null) return false;
-        return !(getDescription() != null ? !getDescription().equals(category.getDescription()) : category.getDescription() != null);
-
+        if (getId() != that.getId()) return false;
+        if (getLevel() != that.getLevel()) return false;
+        if (getWeight() != that.getWeight()) return false;
+        return getGroupName() != null ? getGroupName().equals(that.getGroupName()) : that.getGroupName() == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + getLevel();
-        result = 31 * result + (getCat() != null ? getCat().hashCode() : 0);
         result = 31 * result + (getGroupName() != null ? getGroupName().hashCode() : 0);
-        result = 31 * result + (getCreatedBy() != null ? getCreatedBy().hashCode() : 0);
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
         result = 31 * result + getWeight();
         return result;
     }
 
     @Override
-    public String toString() {
-        return "CategoryImpl{" +
-                "id=" + id +
-                ", level=" + level +
-                ", cat=" + cat +
-                ", groupName=" + groupName +
-                ", createdBy=" + createdBy +
-                ", child=" + child +
-                ", description='" + description + '\'' +
-                ", weight=" + weight +
-                '}';
+    public int compareTo(ProductCategory o) {
+        if(o == null) return 1;
+        return groupName.compareTo(o.getGroupName());
     }
 
     @Override
-    public int compareTo(Category o) {
-        if(o == null) return 1;
-        return groupName.compareTo(o.getGroupName());
+    public String toString() {
+        return "ProductCategoryImpl{" +
+                "id=" + id +
+                ", level=" + level +
+                ", groupName=" + groupName +
+                ", createdBy=" + createdBy +
+                ", description='" + description + '\'' +
+                ", weight=" + weight +
+                ", attributeTemplate=" + attributeTemplate +
+                '}';
     }
 }

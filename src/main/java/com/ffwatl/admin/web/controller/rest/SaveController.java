@@ -3,10 +3,8 @@ package com.ffwatl.admin.web.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.admin.catalog.domain.BrandImpl;
-import com.ffwatl.admin.catalog.domain.Color;
 import com.ffwatl.admin.catalog.domain.presenter.ClothesOptionsPresenter;
 import com.ffwatl.admin.catalog.service.BrandService;
-import com.ffwatl.admin.catalog.service.ColorService;
 import com.ffwatl.util.Settings;
 import com.ffwatl.util.WebUtil;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Rest controller, serves all the ajax requests that starts with '/admin/ajax/save' and have 'POST' type.
@@ -30,23 +27,12 @@ import java.util.List;
 @RequestMapping(value = "/admin/ajax/save", method = RequestMethod.POST)
 public class SaveController {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Autowired
     private BrandService brandService;
     @Autowired
-    private ColorService colorService;
-    @Autowired
     private Settings settings; //contains url for images and directories to save images
-
-
-    @RequestMapping(value = "/color")
-    @ResponseBody
-    public ResponseEntity<List<Color>> saveNewColor(@RequestBody Color color){
-        colorService.save(color);
-        logger.trace("'ColorImpl' object with id="+ color.getId()+" were saved");
-        return ResponseEntity.ok(colorService.findAll());
-    }
 
     @RequestMapping(value = "/brand")
     @ResponseBody
@@ -55,19 +41,19 @@ public class SaveController {
         try {
             brand = new ObjectMapper().readValue(b, BrandImpl.class);
         } catch (Exception e) {
-            logger.error("error on mapping: "+ e.getMessage());
+            LOGGER.error("error on mapping: "+ e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         try {
             brandService.save(brand);
             saveBrandImg(settings.getBrandImgDir() + brand.getName().replace(" ", "_"), file);
         }catch (IOException e){
-            logger.error("Exception while saving brand img. " + e.getMessage());
-            logger.debug("Removing 'BrandImpl' with id=" + brand.getId());
+            LOGGER.error("Exception while saving brand img. {}", e.getMessage());
+            LOGGER.debug("Removing 'BrandImpl' with id={}", brand.getId());
             brandService.removeById(brand.getId());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }catch (Exception e){
-            logger.error("Exception while saving 'BrandImpl' into DB or something else: " + e.getMessage());
+            LOGGER.error("Exception while saving 'BrandImpl' into DB or something else: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         ClothesOptionsPresenter presenter = new ClothesOptionsPresenter();

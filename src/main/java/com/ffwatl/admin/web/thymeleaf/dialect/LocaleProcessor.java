@@ -35,8 +35,10 @@ public class LocaleProcessor extends AbstractStandardConditionalVisibilityTagPro
         }
         IWebContext context = (IWebContext) iTemplateContext;
         HttpServletRequest request = context.getRequest();
+
         final Locale locale = getLocaleResolver(request).resolveLocale(request);
         final String attributeValue = iProcessableElementTag.getAttributeValue(attributeName);
+
         if(StringUtils.isNotBlank(attributeValue)){
             if(locale.getLanguage().equals(attributeValue)) return true;
         }

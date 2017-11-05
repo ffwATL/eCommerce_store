@@ -21,6 +21,9 @@ public class FieldImpl implements Field{
     @Column(name = "field_value", nullable = false)
     private String value;
 
+    @Column(name = "field_type", nullable = false)
+    private FieldType fieldType;
+
     /**
      * Returns field Id;
      * @return field Id.
@@ -43,6 +46,10 @@ public class FieldImpl implements Field{
      */
     public String getValue() {
         return value;
+    }
+
+    public FieldType getFieldType() {
+        return fieldType;
     }
 
     /**
@@ -72,27 +79,39 @@ public class FieldImpl implements Field{
         return this;
     }
 
+    public Field setFieldType(FieldType fieldType) {
+        this.fieldType = fieldType;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         FieldImpl field = (FieldImpl) o;
-        return getName().equals(field.getName()) && getValue().equals(field.getValue());
+
+        if (getName() != null ? !getName().equals(field.getName()) : field.getName() != null) return false;
+        if (getValue() != null ? !getValue().equals(field.getValue()) : field.getValue() != null) return false;
+        return getFieldType() == field.getFieldType();
+
     }
 
     @Override
     public int hashCode() {
-        int result = getName().hashCode();
-        result = 31 * result + getValue().hashCode();
+        int result = getName() != null ? getName().hashCode() : 0;
+        result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
+        result = 31 * result + (getFieldType() != null ? getFieldType().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Field{" +
+        return "FieldImpl{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", value='" + value + '\'' +
+                ", fieldType=" + fieldType +
                 '}';
     }
 }

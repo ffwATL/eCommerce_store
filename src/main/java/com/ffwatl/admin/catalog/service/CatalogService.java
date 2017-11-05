@@ -1,6 +1,6 @@
 package com.ffwatl.admin.catalog.service;
 
-import com.ffwatl.admin.catalog.domain.Category;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
@@ -23,7 +23,7 @@ public interface CatalogService {
 
     List<Product> findProductsByStatus(boolean isActive, FetchMode fetchMode);
 
-    List<Product> findProductsByStatusAndCategory(boolean isActive, Category category, FetchMode fetchMode);
+    List<Product> findProductsByStatusAndCategory(boolean isActive, ProductCategory productCategory, FetchMode fetchMode);
 
     List<Product> findAllProducts(FetchMode fetchMode);
 
@@ -32,23 +32,23 @@ public interface CatalogService {
 
     /* Categories */
 
-    Category saveCategory(Category category);
+    ProductCategory saveCategory(ProductCategory productCategory);
 
-    void saveCategoriesInBulk(List<? extends Category> list);
+    void saveCategoriesInBulk(List<? extends ProductCategory> list);
 
-    void removeCategory(Category category);
+    void removeCategory(ProductCategory productCategory);
 
-    Category findCategoryById(long categoryId, FetchMode fetchMode);
+    ProductCategory findCategoryById(long categoryId, FetchMode fetchMode);
 
-    List<Category> findAllCategoriesUsed(FetchMode fetchMode);
+    List<ProductCategory> findAllCategoriesUsed(FetchMode fetchMode);
 
-    List<Category> findGenderGroups(FetchMode fetchMode);
+    List<ProductCategory> findGenderGroups(FetchMode fetchMode);
 
-    List<Category> findCategoriesByDepthLevel(int level, FetchMode fetchMode);
+    List<ProductCategory> findCategoriesByDepthLevel(int level, FetchMode fetchMode);
 
-    List<Category> findCategoriesByCat(CommonCategory cat, FetchMode fetchMode);
+    List<ProductCategory> findCategoriesByCat(CommonCategory cat, FetchMode fetchMode);
 
-    List<Category> findCategoriesByDepthLevelAndName(int level, String name, FetchMode fetchMode);
+    List<ProductCategory> findCategoriesByDepthLevelAndName(int level, String name, FetchMode fetchMode);
 
     ProductAttribute findProductAttributeById(long id, FetchMode fetchMode);
 

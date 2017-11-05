@@ -2,7 +2,7 @@ package com.ffwatl.admin.catalog.dao;
 
 
 import com.ffwatl.admin.catalog.domain.CommonCategory;
-import com.ffwatl.admin.catalog.domain.ProductAttributeTypeImpl;
+import com.ffwatl.admin.catalog.domain.ProductAttributeType;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,19 +16,19 @@ public class EuroSizeDaoImpl implements EuroSizeDao{
     private EntityManager em;
 
     @Override
-    public List<ProductAttributeTypeImpl> findByCat(CommonCategory cat) {
-        return em.createQuery("SELECT e FROM EuroSizeImpl e WHERE e.cat=:cat", ProductAttributeTypeImpl.class)
+    public List<ProductAttributeType> findByCat(CommonCategory cat) {
+        return em.createQuery("SELECT e FROM EuroSizeImpl e WHERE e.cat=:cat", ProductAttributeType.class)
                 .setParameter("cat", cat)
                 .getResultList();
     }
 
     @Override
-    public ProductAttributeTypeImpl findById(long id) {
-        return em.find(ProductAttributeTypeImpl.class, id);
+    public ProductAttributeType findById(long id) {
+        return em.find(ProductAttributeType.class, id);
     }
 
     @Override
-    public void save(ProductAttributeTypeImpl eu) {
+    public void save(ProductAttributeType eu) {
         em.persist(eu);
     }
 
@@ -38,12 +38,12 @@ public class EuroSizeDaoImpl implements EuroSizeDao{
     }
 
     @Override
-    public List<ProductAttributeTypeImpl> findAll() {
-        return em.createQuery("SELECT e FROM EuroSizeImpl e", ProductAttributeTypeImpl.class).getResultList();
+    public List<ProductAttributeType> findAll() {
+        return em.createQuery("SELECT e FROM EuroSizeImpl e", ProductAttributeType.class).getResultList();
     }
 
     @Override
-    public List<ProductAttributeTypeImpl> findAllUsed() {
-        return em.createQuery("SELECT DISTINCT s.eu_size FROM SizeImpl s", ProductAttributeTypeImpl.class).getResultList();
+    public List<ProductAttributeType> findAllUsed() {
+        return em.createQuery("SELECT DISTINCT s.eu_size FROM SizeImpl s", ProductAttributeType.class).getResultList();
     }
 }

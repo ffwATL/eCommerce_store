@@ -73,10 +73,10 @@ public class OrderDaoTest {
 
 
         User customer = userService.findById(1);
-        Category cat = itemGroupService.findById(17);
+        ProductCategory cat = itemGroupService.findById(17);
 
         OrderItem orderItem = new OrderItemImpl()
-                .setCategory(cat)
+                .setProductCategory(cat)
                 .setOrder(order);
 
         Offer offer = offerDao.findAllOffers().get(0);

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel='stylesheet' href='style.css'>
+    <script src="script.js" defer></script>
+</head>
+<body>
+<table class='t-main'>
+    <tr>
+        <th>Expected</th>
+        <th>Actual</th>
+    </tr>
+    <tr>
+        <td class='expected'>&lt;!--?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?--&gt;</td>
+        <td class='actual changed' >&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+            &lt;head&gt;
+            &lt;title&gt;Redirect&lt;/title&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+            This resource resides temporarily
+            &lt;a href=&quot;http://localhost:__server_port__/mobile/pl_mppl21/offer?static_sid=__sid__&amp;amp;landing_url=__enc_enc_fakeLandingURL__&quot;&gt;here&lt;/a&gt;
+            &lt;/body&gt;
+            &lt;/html&gt;</td>
+    </tr>
+    <tr>
+        <td class='expected'>&lt;!DOCTYPE html PUBLIC &quot;-//WAPFORUM//DTD XHTML Mobile 1.0//EN&quot; &quot;http://www.wapforum.org/DTD/xhtml-mobile10.dtd&quot;&gt;</td>
+        <td class='actual deleted' ></td>
+    </tr>
+    <tr>
+        <td class='expected'>&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+            &lt;head&gt;
+            &lt;title&gt;Redirect&lt;/title&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+            This resource resides temporarily
+            &lt;a href=&quot;http://localhost:__server_port__/app/mobile/pl_mppl21/offer?static_sid=__sid__&amp;amp;landing_url=__enc_enc_fakeLandingURL__&quot;&gt;here&lt;/a&gt;
+            &lt;/body&gt;
+            &lt;/html&gt;</td>
+        <td class='actual deleted' ></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -7,13 +7,7 @@ import com.ffwatl.admin.catalog.domain.filter.grid_filter.ClothesGridFilter;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilter;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.ItemGridFilter;
 import com.ffwatl.admin.catalog.domain.presenter.*;
-import com.ffwatl.admin.catalog.service.BrandService;
-import com.ffwatl.admin.catalog.service.ClothesPaginationService;
-import com.ffwatl.admin.catalog.service.ItemGroupService;
-import com.ffwatl.admin.catalog.service.ColorService;
-import com.ffwatl.admin.catalog.service.EuroSizeService;
-import com.ffwatl.admin.catalog.service.ItemPaginationServiceImpl;
-import com.ffwatl.admin.catalog.service.ProductService;
+import com.ffwatl.admin.catalog.service.*;
 import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +28,7 @@ import java.util.Map;
 @RequestMapping(value = "/admin/ajax/get", method = RequestMethod.POST)
 public class GetController {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Autowired
     private ItemGroupService itemGroupService;
@@ -48,30 +42,29 @@ public class GetController {
     private ClothesPaginationService clothesPaginationService;
     @Autowired
     private EuroSizeService euroSizeService;
-    @Autowired
-    private ColorService colorService;
+
     @Autowired
     private Settings settings; //contains url for images and directories to save images
 
 
     /**
      * Returns ItemGroupDTO object with all children by given group name. It's only looking for
-     * a result from level 1 of CategoryImpl hierarchy;
-     * @param name - name of the CategoryImpl from level 1 of CategoryImpl hierarchy;
+     * a result from level 1 of ProductCategoryImpl hierarchy;
+     * @param name - name of the ProductCategoryImpl from level 1 of ProductCategoryImpl hierarchy;
      * @return ItemGroupDTO object with all children.
      */
     @RequestMapping(value = "/itemgroup")
     @ResponseBody
-    public ResponseEntity<Category> ajaxAllItemGroupByName(@RequestParam String name){
-        Category result = itemGroupService.findByLvlAndByNameFetchCollection(1, name);
+    public ResponseEntity<ProductCategory> ajaxAllItemGroupByName(@RequestParam String name){
+        ProductCategory result = itemGroupService.findByLvlAndByNameFetchCollection(1, name);
         return ResponseEntity.ok(result);
     }
 
     /**
-     * Returns List of all ProductAttributeTypeImpl objects that corresponds given CommonCategory 'cat' parameter.
+     * Returns List of all ProductAttributeType objects that corresponds given CommonCategory 'cat' parameter.
      * If parameter 'cat' is empty, method returns status 400;
      * @param cat CommonCategory 'cat' parameter. Shouldn't be null;
-     * @return List of all ProductAttributeTypeImpl objects that corresponds given CommonCategory 'cat' parameter.
+     * @return List of all ProductAttributeType objects that corresponds given CommonCategory 'cat' parameter.
      */
     @RequestMapping(value = "/eurosize/cat")
     @ResponseBody
@@ -79,7 +72,7 @@ public class GetController {
         try {
             return ResponseEntity.ok(euroSizeService.findByCat(CommonCategory.valueOf(cat)));
         }catch (Exception e){
-            logger.error("Error on getting ProductAttributeTypeImpl by cat. " + e.getMessage());
+            LOGGER.error("Error on getting ProductAttributeType by cat. " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -92,14 +85,7 @@ public class GetController {
         result.setSize(euroSizeService.findAllUsed());
         result.setUsedCat(itemGroupService.findAllUsed());
         result.setGender(itemGroupService.findGenderGroup());
-        result.setColors(colorService.findAllUsed());
         return ResponseEntity.ok(result);
-    }
-
-    @RequestMapping(value = "/color/all")
-    @ResponseBody
-    public ResponseEntity<List<Color>> ajaxAllColor(){
-        return ResponseEntity.ok(colorService.findAll());
     }
 
     @RequestMapping(value = "/brand/all")
@@ -120,7 +106,7 @@ public class GetController {
             presenter.setTotalItems(page.getTotalElements());
             return ResponseEntity.ok(presenter);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -129,7 +115,6 @@ public class GetController {
     @ResponseBody
     public ResponseEntity<ItemsExpressInfoPresenter> ajaxExpressEdit(@RequestParam CommonCategory cat){
         return ResponseEntity.ok(new ItemsExpressInfoPresenter()
-                        .setColor(colorService.findAll())
                         .setItemGroup(itemGroupService.findByCatNoChildren(cat))
         );
     }
@@ -144,10 +129,11 @@ public class GetController {
     @ResponseBody
     public ResponseEntity<ClothesOptionsPresenter> ajaxClothesOptions() throws JsonProcessingException {
         ClothesOptionsPresenter presenter = new ClothesOptionsPresenter();
+
         presenter.setItemGroup(itemGroupService.findByLvlAndByNameFetchCollection(1, "Clothes"));
         presenter.setBrandList(brandService.findAll());
-        presenter.setColorList(colorService.findAll());
         presenter.setBrandImgUrl(settings.getBrandImgUrl());
+
         return ResponseEntity.ok(presenter);
     }
 
@@ -155,7 +141,7 @@ public class GetController {
         GridFilter filter;
         if(cat == null) filter = new ItemGridFilter(params);
         else if(cat.equals("Clothes") || cat.equals("Одежда")){
-            logger.info("params: " + params);
+            LOGGER.info("params: " + params);
             filter = new ClothesGridFilter(params);
             return clothesPaginationService.findAllByFilter(filter);
         }else filter = new ItemGridFilter(params);
