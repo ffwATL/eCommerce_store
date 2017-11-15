@@ -37,8 +37,7 @@ public class OrderItemImpl implements OrderItem{
     @Embedded
     private I18n productName;
 
-    @ManyToOne(targetEntity = ProductAttributeType.class)
-    @JoinColumn(name = "product_attribute_type_id")
+    @Column(name = "product_attribute_type")
     private ProductAttributeType productAttributeType;
 
     @ManyToOne(targetEntity = ProductAttributeImpl.class, cascade = CascadeType.MERGE)
@@ -283,7 +282,7 @@ public class OrderItemImpl implements OrderItem{
     }
 
     @Override
-    public OrderItem setCategory(ProductCategory productCategory) {
+    public OrderItem setProductCategory(ProductCategory productCategory) {
         this.productCategory = productCategory;
         return this;
     }

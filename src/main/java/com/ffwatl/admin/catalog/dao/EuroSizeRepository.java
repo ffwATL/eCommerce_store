@@ -1,3 +1,4 @@
+/*
 package com.ffwatl.admin.catalog.dao;
 
 
@@ -10,4 +11,4 @@ import java.util.List;
 public interface EuroSizeRepository extends JpaRepository<ProductAttributeType, Long>{
 
     List<ProductAttributeType> findByCat(CommonCategory cat);
-}
+}*/

@@ -3,8 +3,8 @@ package com.ffwatl.admin.catalog.service;
 
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.catalog.domain.ProductImpl;
-import com.ffwatl.admin.catalog.domain.presenter.ProductUpdateImpl;
-import com.ffwatl.admin.catalog.domain.presenter.ItemUpdatePresenter;
+import com.ffwatl.admin.catalog.domain.response.ProductUpdateImpl;
+import com.ffwatl.admin.catalog.domain.response.ItemUpdatePresenter;
 import com.ffwatl.common.persistence.FetchMode;
 
 import java.util.List;
@@ -21,6 +21,7 @@ public interface ProductService {
     Product save(Product product);
 
     void remove(Product item);
+    void removeById(long id);
 
     void changeItemStatus(ProductImpl item);
     void updateSingleItem(ItemUpdatePresenter update);

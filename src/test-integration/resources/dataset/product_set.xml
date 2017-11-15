@@ -1,0 +1,38 @@
+<dataset>
+    <brand id="1"
+           name="ASOS"/>
+
+    <color id="1"
+           locale_en="Khaki"
+           hex="00000"/>
+
+    <product_category id="1"
+                 level="4"
+                 locale_en="Jackets"
+                 weight="600"
+            />
+
+    <product id="1"
+             p_name_en="ASOS Parka Jacket With Faux Fur Hood In Khaki"
+            origin_price="200"
+            retail_price="600"
+            sale_price="0"
+            currency="2"
+            gender="1"
+            active="true"
+            used="false"
+            import_dt="1970-01-01"
+            last_change_dt="1970-01-01 19:59:28"
+            category_id="1"
+            brand_id="1"
+            can_sell_without_attributes="false"
+            color_id="1"
+            />
+
+    <users id="1"
+           user_name="Jack Hamper"
+           email="jack.hamper@gmail.com"
+           psw_hash="zxeQSC(_^%123"
+           first_name="Jack"/>
+
+</dataset>

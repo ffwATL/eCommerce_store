@@ -142,7 +142,7 @@ public interface OrderItem extends Serializable {
 
     OrderItem setOrderItemPriceDetails(Set<OrderItemPriceDetail> orderItemPriceDetails);
 
-    OrderItem setCategory(ProductCategory productCategory);
+    OrderItem setProductCategory(ProductCategory productCategory);
 
     OrderItem setCandidateItemOffers(Set<CandidateItemOffer> candidateItemOffers);
 

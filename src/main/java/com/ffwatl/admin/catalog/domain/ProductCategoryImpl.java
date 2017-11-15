@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "product_category")
 public class ProductCategoryImpl implements Serializable, ProductCategory {
 
+    private static final long serialVersionUID = 5105837513477369159L;
     /**
      * Product Category identifier.
      */

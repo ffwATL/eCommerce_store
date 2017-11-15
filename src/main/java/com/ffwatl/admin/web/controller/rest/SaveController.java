@@ -3,7 +3,7 @@ package com.ffwatl.admin.web.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ffwatl.admin.catalog.domain.BrandImpl;
-import com.ffwatl.admin.catalog.domain.presenter.ClothesOptionsPresenter;
+import com.ffwatl.admin.catalog.domain.response.ClothesOptionsPresenter;
 import com.ffwatl.admin.catalog.service.BrandService;
 import com.ffwatl.util.Settings;
 import com.ffwatl.util.WebUtil;

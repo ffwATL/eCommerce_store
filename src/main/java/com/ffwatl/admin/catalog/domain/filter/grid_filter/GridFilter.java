@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class GridFilter {
 
-    public static final String REG_EXP = "\\|";
+    private static final String REG_EXP = "\\|";
 
     private final Map<String, String> params;
     private String option = "1";

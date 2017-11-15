@@ -6,7 +6,7 @@ import com.ffwatl.admin.catalog.domain.*;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.ClothesGridFilter;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilter;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.ItemGridFilter;
-import com.ffwatl.admin.catalog.domain.presenter.*;
+import com.ffwatl.admin.catalog.domain.response.*;
 import com.ffwatl.admin.catalog.service.*;
 import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/admin/ajax/get", method = RequestMethod.POST)
+@Deprecated
 public class GetController {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -38,10 +39,6 @@ public class GetController {
     private ProductService productService;
     @Autowired
     private ItemPaginationServiceImpl itemPaginationService;
-    @Autowired
-    private ClothesPaginationService clothesPaginationService;
-    @Autowired
-    private EuroSizeService euroSizeService;
 
     @Autowired
     private Settings settings; //contains url for images and directories to save images
@@ -70,7 +67,7 @@ public class GetController {
     @ResponseBody
     public ResponseEntity<List<ProductAttributeType>> ajaxEuroSizeByCat(@RequestParam String cat){
         try {
-            return ResponseEntity.ok(euroSizeService.findByCat(CommonCategory.valueOf(cat)));
+            return ResponseEntity.ok(new ArrayList<>()/*euroSizeService.findByCat(CommonCategory.valueOf(cat))*/);
         }catch (Exception e){
             LOGGER.error("Error on getting ProductAttributeType by cat. " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -82,7 +79,7 @@ public class GetController {
     public ResponseEntity<FilterProductClothes> ajaxClothesFilters(){
         FilterProductClothes result = new FilterProductClothes();
         result.setBrandList(brandService.findAllUsed());
-        result.setSize(euroSizeService.findAllUsed());
+       /* result.setSize(euroSizeService.findAllUsed());*/
         result.setUsedCat(itemGroupService.findAllUsed());
         result.setGender(itemGroupService.findGenderGroup());
         return ResponseEntity.ok(result);
@@ -96,10 +93,10 @@ public class GetController {
 
     @RequestMapping(value = "/item/all")
     @ResponseBody
-    public ResponseEntity<ProductCatalog> ajaxAllItems(@RequestParam Map<String, String> params){
+    public ResponseEntity<CatalogImpl> ajaxAllItems(@RequestParam Map<String, String> params){
         Page<? extends ProductImpl> page = getPage(params.get("cat"), params);
         try {
-            ProductCatalog presenter = new ProductCatalog(fillItemCatalog((List<ProductImpl>) page.getContent()));
+            CatalogImpl presenter = new CatalogImpl(fillItemCatalog((List<ProductImpl>) page.getContent()));
             presenter.setPge(page.getNumber());
             presenter.setPgeSize(page.getNumberOfElements());
             presenter.setTotalPages(page.getTotalPages());
@@ -143,15 +140,15 @@ public class GetController {
         else if(cat.equals("Clothes") || cat.equals("Одежда")){
             LOGGER.info("params: " + params);
             filter = new ClothesGridFilter(params);
-            return clothesPaginationService.findAllByFilter(filter);
+            return /*clothesPaginationService.findAllByFilter(filter)*/ null;
         }else filter = new ItemGridFilter(params);
         return itemPaginationService.findAll(filter);
     }
 
-    private List<CatalogItem> fillItemCatalog(List<ProductImpl> items){
-        List<CatalogItem> itemCatalogList = new ArrayList<>(items.size());
+    private List<CatalogItemImpl> fillItemCatalog(List<ProductImpl> items){
+        List<CatalogItemImpl> itemCatalogList = new ArrayList<>(items.size());
         for(ProductImpl i: items){
-            CatalogItem catalog = new CatalogItem(i, settings.getPhotoUrl());
+            CatalogItemImpl catalog = new CatalogItemImpl(i, settings.getPhotoUrl());
             itemCatalogList.add(catalog);
         }
         return itemCatalogList;

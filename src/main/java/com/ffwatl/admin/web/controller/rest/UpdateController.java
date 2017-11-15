@@ -2,7 +2,7 @@ package com.ffwatl.admin.web.controller.rest;
 
 
 import com.ffwatl.admin.catalog.domain.ProductImpl;
-import com.ffwatl.admin.catalog.domain.presenter.ItemUpdatePresenter;
+import com.ffwatl.admin.catalog.domain.response.ItemUpdatePresenter;
 import com.ffwatl.admin.catalog.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

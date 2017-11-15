@@ -5,9 +5,9 @@ import com.ffwatl.admin.catalog.dao.ProductDao;
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
 import com.ffwatl.admin.catalog.domain.ProductImpl;
-import com.ffwatl.admin.catalog.domain.presenter.ItemUpdatePresenter;
-import com.ffwatl.admin.catalog.domain.presenter.ProductImage;
-import com.ffwatl.admin.catalog.domain.presenter.ProductUpdateImpl;
+import com.ffwatl.admin.catalog.domain.response.ItemUpdatePresenter;
+import com.ffwatl.admin.catalog.domain.response.ProductImage;
+import com.ffwatl.admin.catalog.domain.response.ProductUpdateImpl;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.admin.user.domain.dto.UserDTO;
 import com.ffwatl.common.persistence.FetchMode;
@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
@@ -34,9 +35,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private BrandService brandService;
-
-    @Autowired
-    private EuroSizeService euroSizeService;
 
     @Autowired
     private ItemGroupService itemGroupService;
@@ -89,11 +87,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void remove(Product item) {
         if(item == null) {
             throw new IllegalArgumentException("Null Product is given");
         }
         productDao.remove(item);
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void removeById(long id) {
+        LOGGER.info("Removing product with id={}", id);
+        if(id < 1) {
+            throw new IllegalArgumentException("Wrong product id is given: " + id);
+        }
+
+        Product product = productDao.findById(id);
+        productDao.remove(product);
     }
 
     @Override

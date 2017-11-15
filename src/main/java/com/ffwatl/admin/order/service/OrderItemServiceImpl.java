@@ -66,7 +66,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .setSalePrice(itemRequest.getSalePriceOverride())
                 .setRetailPrice(itemRequest.getRetailPriceOverride())
                 .setProductAttribute(itemRequest.getProductAttribute())
-                .setCategory(itemRequest.getProductCategory())
+                .setProductCategory(itemRequest.getProductCategory())
                 .setColor(itemRequest.getColor())
                 .setProductAttribute(itemRequest.getProductAttribute())
                 .setProductAttributeType(itemRequest.getProductAttribute().getProductAttributeType())
