@@ -16,8 +16,12 @@ public class ClothesGridFilter extends ItemGridFilter{
 
     @Override
     public Map<String, List<GridFilterRule>> getRules() {
-        if(listMap.size() < 1) this.listMap = super.getRules();
-        else if(listMap.size() > 0) return this.listMap;
+        if(listMap.size() < 1) {
+            this.listMap = super.getRules();
+        }
+        else {
+            return this.listMap;
+        }
         listMap.put("size", fillRule("id", params.get("size")));
         listMap.put("brand", fillRule("id", params.get("brand")));
         listMap.put("color", fillRule("id", params.get("color")));

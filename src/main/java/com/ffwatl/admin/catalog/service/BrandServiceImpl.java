@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+@Service("brand_service")
 @Transactional(readOnly = true)
 public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandService {
 
@@ -26,16 +26,24 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
 
     @Override
     @Transactional
-    public void save(BrandImpl brand) {
-        if(brand == null) throw new IllegalArgumentException("BrandImpl can't be null");
-        if(findByName(brand.getName()) != null) throw new IllegalArgumentException("BrandImpl with same name is already exist");
-        brandDao.save(brand);
+    public void save(Brand brand) {
+        if(brand == null) {
+            throw new IllegalArgumentException("BrandImpl can't be null");
+        }
+
+        if(brand.getId() == 0 && findByName(brand.getName()) != null) {
+            throw new IllegalArgumentException("Brand object with the same name is already exist");
+        }
+
+        brandDao.save((BrandImpl) transformDTO2Entity(brand));
     }
 
     @Override
     @Transactional
     public void save(List<BrandImpl> list) {
-        if(list == null || list.size() < 1) throw new IllegalArgumentException("BrandImpl list: " + list);
+        if(list == null || list.size() < 1) {
+            throw new IllegalArgumentException("BrandImpl list: " + list);
+        }
         list.forEach(brandDao::save);
     }
 

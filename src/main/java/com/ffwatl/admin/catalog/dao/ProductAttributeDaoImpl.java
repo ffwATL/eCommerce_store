@@ -16,8 +16,8 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository
-public class ProductAttributeDaoImpl implements ProductAttributeDao,FetchModeOption<ProductAttribute, ProductAttributeImpl> {
+@Repository("product_attribute_dao")
+public class ProductAttributeDaoImpl implements ProductAttributeDao, FetchModeOption<ProductAttribute, ProductAttributeImpl> {
 
     @PersistenceContext
     private EntityManager em;

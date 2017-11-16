@@ -10,7 +10,7 @@ public interface BrandService {
 
     BrandImpl findById(long id);
 
-    void save(BrandImpl brand);
+    void save(Brand brand);
 
     void save(List<BrandImpl> list);
 

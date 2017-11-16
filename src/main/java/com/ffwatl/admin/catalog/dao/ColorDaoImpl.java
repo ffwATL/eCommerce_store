@@ -8,11 +8,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Repository
+@Repository("color_dao")
 public class ColorDaoImpl implements ColorDao {
 
     @PersistenceContext
     private EntityManager em;
+
+
 
     @Override
     public Color findById(long id) {
@@ -21,7 +23,12 @@ public class ColorDaoImpl implements ColorDao {
 
     @Override
     public void save(Color c) {
-        em.persist(c);
+        em.merge(c);
+    }
+
+    @Override
+    public void remove(Color c) {
+        em.remove(c);
     }
 
     @Override
@@ -31,6 +38,6 @@ public class ColorDaoImpl implements ColorDao {
 
     @Override
     public List<ColorImpl> findAllUsed() {
-        return em.createQuery("SELECT DISTINCT i.color FROM ProductImpl i",ColorImpl.class).getResultList();
+        return em.createQuery("SELECT DISTINCT i.color FROM ProductImpl i", ColorImpl.class).getResultList();
     }
 }

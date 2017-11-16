@@ -13,6 +13,10 @@ public interface ColorService {
 
     void save(List<Color> list);
 
+    void remove(Color c);
+
+    void removeById(long id);
+
     List<Color> findAll();
     List<Color> findAllUsed();
 }

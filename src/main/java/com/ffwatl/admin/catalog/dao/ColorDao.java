@@ -13,6 +13,8 @@ public interface ColorDao {
 
     void save(Color c);
 
+    void remove(Color c);
+
     List<ColorImpl> findAll();
 
     List<ColorImpl> findAllUsed();

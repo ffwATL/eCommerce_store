@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Repository
+@Repository("brand_dao")
 public class BrandDaoImpl implements BrandDao{
 
     @PersistenceContext
