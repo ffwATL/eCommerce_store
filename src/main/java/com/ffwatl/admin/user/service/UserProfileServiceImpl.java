@@ -1,6 +1,7 @@
 package com.ffwatl.admin.user.service;
 
 
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.service.ConverterDTO;
 import com.ffwatl.admin.user.dao.UserProfileDao;
 import com.ffwatl.admin.user.domain.Role;
@@ -27,13 +28,13 @@ public class UserProfileServiceImpl extends ConverterDTO<UserProfile> implements
     @Override
     @Transactional
     public void save(UserProfile userProfile) {
-        userProfileDao.save(transformDTO2Entity(userProfile));
+        userProfileDao.save(transformDTO2Entity(userProfile, FetchMode.LAZY));
     }
 
     @Override
     @Transactional
     public void save(List<UserProfile> list) {
-        List<UserProfile> listEntity = transformList(list, ENTITY_OBJECT);
+        List<UserProfile> listEntity = transformList(list, ENTITY_OBJECT, FetchMode.LAZY);
         for(UserProfile u: listEntity){
             userProfileDao.save((UserProfileImpl) u);
         }
@@ -42,12 +43,12 @@ public class UserProfileServiceImpl extends ConverterDTO<UserProfile> implements
     @Override
     @Transactional
     public void remove(UserProfile userProfile) {
-        userProfileDao.remove(transformDTO2Entity(userProfile));
+        userProfileDao.remove(transformDTO2Entity(userProfile, FetchMode.LAZY));
     }
 
     @Override
     public List<UserProfile> findAll() {
-        return transformList(userProfileDao.findAll(), DTO_OBJECT);
+        return transformList(userProfileDao.findAll(), DTO_OBJECT, FetchMode.LAZY);
     }
 
     @Override
@@ -66,12 +67,12 @@ public class UserProfileServiceImpl extends ConverterDTO<UserProfile> implements
     }
 
     @Override
-    public UserProfile transformEntity2DTO(UserProfile old) {
+    public UserProfile transformEntity2DTO(UserProfile old, FetchMode fetchMode) {
         return null;
     }
 
     @Override
-    public UserProfileImpl transformDTO2Entity(UserProfile old){
+    public UserProfileImpl transformDTO2Entity(UserProfile old, FetchMode fetchMode){
         return (UserProfileImpl) new UserProfileImpl().setId(old.getId()).setRole(old.getRole());
     }
 }

@@ -24,67 +24,54 @@ public class ProductCategoryDTO implements ProductCategory {
      */
     private long id;
 
-    /**
-     * Group name object that contains different language translations.
-     */
-    private I18n groupName;
+    private int weight;
 
     /**
      * ProductCategory's depth level value.
      */
     private int level;
 
-
-    private String description;
-
-    private int weight;
-
-    @JsonDeserialize(contentAs=ProductCategoryDTO.class)
-
-    private List<ProductCategory> child = new ArrayList<>();
-
     @JsonDeserialize(as=UserDTO.class)
     private User createdBy;
 
-    public ProductCategoryDTO(){}
+    private ProductCategory parent;
 
-    public ProductCategoryDTO(ProductCategory i){
-        this(i, ProductCategory.NO_CHILD);
+    @JsonDeserialize(contentAs=ProductCategoryDTO.class)
+    private List<ProductCategory> child = new ArrayList<>();
+
+    /**
+     * Group name object that contains different language translations.
+     */
+    private I18n categoryName;
+
+    private String description;
+
+    @JsonDeserialize(contentAs = ProductAttributeTemplateDTO.class)
+    private ProductAttributeTemplate attributeTemplate;
+
+    public ProductCategoryDTO() {
     }
 
-    public ProductCategoryDTO(ProductCategory i, boolean fetched){
-        this.id = i.getId();
-        this.description = i.getDescription();
-        this.level = i.getLevel();
-        this.weight = i.getWeight();
-        this.groupName = i.getGroupName();
-        this.createdBy = i.getCreatedBy();
-        this.weight = i.getWeight();
+    public ProductCategoryDTO(ProductCategory i, boolean fetched) {
+        setId(i.getId());
+        setCategoryName(i.getCategoryName());
+        setCreatedBy(i.getCreatedBy());
+        setDescription(i.getDescription());
+        setLevel(i.getLevel());
+        setWeight(i.getWeight());
+        setProductAttributeTemplate(i.getProductAttributeTemplate());
 
         if(fetched && i.getChild() != null){
-            for(ProductCategory c : i.getChild()){
-                child.add(new ProductCategoryDTO(c, ProductCategory.FETCHED));
+            for(ProductCategory c : i.getChild()) {
+                child.add(new ProductCategoryDTO(c, true));
             }
         }
     }
 
 
+    @Override
     public long getId() {
         return id;
-    }
-
-    public I18n getGroupName() {
-        return groupName;
-    }
-
-    @Override
-    public String getDescription() {
-        return this.description;
-    }
-
-    @Override
-    public ProductAttributeTemplate getProductAttributeTemplate() {
-        return null;
     }
 
     @Override
@@ -94,46 +81,45 @@ public class ProductCategoryDTO implements ProductCategory {
 
     @Override
     public int getWeight() {
-        return this.weight;
+        return weight;
     }
 
     @Override
     public User getCreatedBy() {
-        return this.createdBy;
+        return createdBy;
+    }
+
+    @Override
+    public ProductCategory getParent() {
+        return parent;
     }
 
     @Override
     public List<ProductCategory> getChild() {
-        return this.child;
+        return child;
     }
+
+    @Override
+    public I18n getCategoryName() {
+        return categoryName;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public ProductAttributeTemplate getProductAttributeTemplate() {
+        return attributeTemplate;
+    }
+
     @Override
     public ProductCategory setId(long id) {
         this.id = id;
         return this;
     }
-    @Override
-    public ProductCategory setGroupName(I18n groupName) {
-        this.groupName = groupName;
-        return this;
-    }
 
-    @Override
-    public ProductCategory setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    @Override
-    public ProductCategory setDescription(String description) {
-        this.description = description;
-        return this;
-    }
-
-    @Override
-    public ProductCategory setChild(List<ProductCategory> child) {
-        this.child = child;
-        return this;
-    }
     @Override
     public ProductCategory setLevel(int level) {
         this.level = level;
@@ -147,14 +133,49 @@ public class ProductCategoryDTO implements ProductCategory {
     }
 
     @Override
-    public ProductCategory setProductAttributeTemplate(ProductAttributeTemplate attributeTemplate) {
+    public ProductCategory setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
         return this;
     }
 
     @Override
+    public ProductCategory setParent(ProductCategory parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setChild(List<ProductCategory> child) {
+        this.child = child;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setCategoryName(I18n categoryName) {
+        this.categoryName = categoryName;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setProductAttributeTemplate(ProductAttributeTemplate attributeTemplate) {
+        this.attributeTemplate = attributeTemplate;
+        return this;
+    }
+
+
+
+    @Override
     public int compareTo(ProductCategory o) {
-        if(o == null) return 1;
-        return groupName.compareTo(o.getGroupName());
+        if (o == null) {
+            return 1;
+        }
+        return categoryName.compareTo(o.getCategoryName());
     }
 
     @Override
@@ -167,24 +188,16 @@ public class ProductCategoryDTO implements ProductCategory {
         if (getId() != that.getId()) return false;
         if (getLevel() != that.getLevel()) return false;
         if (getWeight() != that.getWeight()) return false;
-        if (getGroupName() != null ? !getGroupName().equals(that.getGroupName()) : that.getGroupName() != null)
-            return false;
-        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
-            return false;
-        if (getChild() != null ? !getChild().equals(that.getChild()) : that.getChild() != null) return false;
-        return !(getCreatedBy() != null ? !getCreatedBy().equals(that.getCreatedBy()) : that.getCreatedBy() != null);
+        return getCategoryName() != null ? getCategoryName().equals(that.getCategoryName()) : that.getCategoryName() == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getGroupName() != null ? getGroupName().hashCode() : 0);
         result = 31 * result + getLevel();
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + (getCategoryName() != null ? getCategoryName().hashCode() : 0);
         result = 31 * result + getWeight();
-        result = 31 * result + (getChild() != null ? getChild().hashCode() : 0);
-        result = 31 * result + (getCreatedBy() != null ? getCreatedBy().hashCode() : 0);
         return result;
     }
 
@@ -192,12 +205,12 @@ public class ProductCategoryDTO implements ProductCategory {
     public String toString() {
         return "ProductCategoryDTO{" +
                 "id=" + id +
-                ", groupName=" + groupName +
-                ", level=" + level +
-                ", description='" + description + '\'' +
                 ", weight=" + weight +
-                ", child=" + child +
+                ", level=" + level +
                 ", createdBy=" + createdBy +
+                ", categoryName=" + categoryName +
+                ", description='" + description + '\'' +
+                ", attributeTemplate=" + attributeTemplate +
                 '}';
     }
 }

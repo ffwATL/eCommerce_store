@@ -19,27 +19,32 @@ public interface ProductCategory extends Comparable<ProductCategory>{
 
     User getCreatedBy();
 
+    ProductCategory getParent();
+
     List<ProductCategory> getChild();
 
-    I18n getGroupName();
+    I18n getCategoryName();
 
     String getDescription();
 
     ProductAttributeTemplate getProductAttributeTemplate();
 
+
     ProductCategory setId(long id);
-
-    ProductCategory setGroupName(I18n groupName);
-
-    ProductCategory setCreatedBy(User createdBy);
-
-    ProductCategory setDescription(String description);
-
-    ProductCategory setChild(List<ProductCategory> child);
 
     ProductCategory setLevel(int level);
 
     ProductCategory setWeight(int weight);
+
+    ProductCategory setCreatedBy(User createdBy);
+
+    ProductCategory setParent(ProductCategory parent);
+
+    ProductCategory setChild(List<ProductCategory> child);
+
+    ProductCategory setCategoryName(I18n categoryName);
+
+    ProductCategory setDescription(String description);
 
     ProductCategory setProductAttributeTemplate(ProductAttributeTemplate attributeTemplate);
 

@@ -23,6 +23,7 @@ import java.util.Map;
 
 /**
  * Rest controller, serves all the ajax requests that starts with '/admin/ajax/get' and have 'POST' type.
+ * Deprecated! This controller will be removed soon, since we've moved to REST API
  */
 @RestController
 @RequestMapping(value = "/admin/ajax/get", method = RequestMethod.POST)
@@ -32,7 +33,7 @@ public class GetController {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Autowired
-    private ItemGroupService itemGroupService;
+    private ProductCategoryService productCategoryService;
     @Autowired
     private BrandService brandService;
     @Autowired
@@ -53,7 +54,7 @@ public class GetController {
     @RequestMapping(value = "/itemgroup")
     @ResponseBody
     public ResponseEntity<ProductCategory> ajaxAllItemGroupByName(@RequestParam String name){
-        ProductCategory result = itemGroupService.findByLvlAndByNameFetchCollection(1, name);
+        ProductCategory result = productCategoryService.findByLvlAndByName(1, name, null);
         return ResponseEntity.ok(result);
     }
 
@@ -80,8 +81,8 @@ public class GetController {
         FilterProductClothes result = new FilterProductClothes();
         result.setBrandList(brandService.findAllUsed());
        /* result.setSize(euroSizeService.findAllUsed());*/
-        result.setUsedCat(itemGroupService.findAllUsed());
-        result.setGender(itemGroupService.findGenderGroup());
+
+        result.setGender(null);
         return ResponseEntity.ok(result);
     }
 
@@ -112,7 +113,7 @@ public class GetController {
     @ResponseBody
     public ResponseEntity<ItemsExpressInfoPresenter> ajaxExpressEdit(@RequestParam CommonCategory cat){
         return ResponseEntity.ok(new ItemsExpressInfoPresenter()
-                        .setItemGroup(itemGroupService.findByCatNoChildren(cat))
+                        .setItemGroup(null)
         );
     }
 
@@ -127,7 +128,7 @@ public class GetController {
     public ResponseEntity<ClothesOptionsPresenter> ajaxClothesOptions() throws JsonProcessingException {
         ClothesOptionsPresenter presenter = new ClothesOptionsPresenter();
 
-        presenter.setItemGroup(itemGroupService.findByLvlAndByNameFetchCollection(1, "Clothes"));
+        presenter.setItemGroup(productCategoryService.findByLvlAndByName(1, "Clothes", null));
         presenter.setBrandList(brandService.findAll());
         presenter.setBrandImgUrl(settings.getBrandImgUrl());
 

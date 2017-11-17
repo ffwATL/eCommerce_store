@@ -1,25 +1,40 @@
 package com.ffwatl.common.service;
 
 
+import com.ffwatl.common.persistence.FetchMode;
+
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class ConverterDTO<I> {
 
     public static final int DTO_OBJECT = 0;
     public static final int ENTITY_OBJECT = 1;
 
-    public List<I> transformList(@NotNull List<? extends I> old, int objectType){
-        switch (objectType){
-            case DTO_OBJECT: return old.stream().map(this::transformEntity2DTO).collect(Collectors.toList());
-            case ENTITY_OBJECT: return old.stream().map(this::transformDTO2Entity).collect(Collectors.toList());
-            default: throw new IllegalArgumentException("Wrong object type were passed; [type] = " + objectType);
+    public List<I> transformList(@NotNull List<? extends I> old, int toObjectType, FetchMode fetchMode) {
+        List<I> result = new ArrayList<>();
+
+        switch (toObjectType) {
+            case DTO_OBJECT: {
+                for (I o: old) {
+                    result.add(transformEntity2DTO(o, fetchMode));
+                }
+                return result;
+            }
+            case ENTITY_OBJECT: {
+                for (I o: old) {
+                    result.add(transformDTO2Entity(o, fetchMode));
+                }
+                return result;
+            }
+            default: throw new IllegalArgumentException("Wrong object type were passed; [type] = " + toObjectType);
         }
     }
 
-    public abstract I transformDTO2Entity(I old);
+    //FIXME: FetchMode need to be added!!
+    public abstract I transformDTO2Entity(I old, FetchMode fetchMode);
 
-    public abstract I transformEntity2DTO(I old);
+    public abstract I transformEntity2DTO(I old, FetchMode fetchMode);
 
 }

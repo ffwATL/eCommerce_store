@@ -17,7 +17,7 @@ import javax.persistence.criteria.Root;
 import java.util.Collections;
 import java.util.List;
 
-@Repository
+@Repository("product_category_dao")
 public class ProductCategoryDaoImpl implements ProductCategoryDao, FetchModeOption<ProductCategory, ProductCategoryImpl> {
 
     @PersistenceContext
@@ -38,16 +38,6 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao, FetchModeOpti
 
         List<ProductCategory> result = em.createQuery(criteria).getResultList();
         return result != null && result.size() > 0 ? result.get(0) : null;
-    }
-
-    @Override
-    public List<ProductCategoryImpl> findByName(String name) {
-        return em.createQuery("SELECT i FROM ProductCategoryImpl i WHERE " +
-                "i.groupName.locale_en=:name " +
-                "OR i.groupName.locale_ru=:name " +
-                "OR i.groupName.locale_ua=:name", ProductCategoryImpl.class)
-                .setParameter("name",name)
-                .getResultList();
     }
 
     @Override
@@ -110,11 +100,6 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao, FetchModeOpti
     }
 
     @Override
-    public List<ProductCategory> findAllUsed() {
-        return em.createQuery("SELECT DISTINCT i.productCategory FROM ProductImpl i", ProductCategory.class).getResultList();
-    }
-
-    @Override
     public List<ProductCategory> findAllInUse(FetchMode fetchMode) {
         if(fetchMode == FetchMode.LAZY){
             return em.createQuery("SELECT DISTINCT i.productCategory FROM ProductImpl i", ProductCategory.class).getResultList();
@@ -140,16 +125,6 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao, FetchModeOpti
 
         List<ProductCategory> result = em.createQuery(criteria).getResultList();
         return result != null && result.size() > 0 ? result : Collections.emptyList();
-
-    }
-
-    @Override
-    public ProductCategoryImpl findByLvlAndNameFetched(int level, String name){
-        return em.createQuery("SELECT i FROM ProductCategoryImpl i LEFT JOIN FETCH i.child WHERE i.level=:lvl " +
-                "AND i.groupName.locale_en=:name", ProductCategoryImpl.class)
-                .setParameter("lvl", level)
-                .setParameter("name", name)
-                .getSingleResult();
     }
 
     @Override

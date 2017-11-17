@@ -13,8 +13,6 @@ public interface ProductCategoryDao {
 
     ProductCategory findById(long id, FetchMode fetchMode);
 
-    List<ProductCategoryImpl> findByName(String name);
-
     List<ProductCategory> findByName(String name, FetchMode fetchMode);
 
     ProductCategory save(ProductCategory itemGroup);
@@ -27,10 +25,9 @@ public interface ProductCategoryDao {
 
     List<ProductCategory> findByLevel(int level, FetchMode fetchMode);
 
-    List<ProductCategory> findAllUsed();
     List<ProductCategory> findAllInUse(FetchMode fetchMode);
+
     List<ProductCategory> findByLevelAndName(int level, String name, FetchMode fetchMode);
 
-    ProductCategoryImpl findByLvlAndNameFetched(int level, String name);
     List<ProductCategoryImpl> findByLvlFetchedChild(int lvl);
 }

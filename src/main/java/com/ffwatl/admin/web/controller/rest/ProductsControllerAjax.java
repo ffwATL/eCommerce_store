@@ -20,6 +20,9 @@ public class ProductsControllerAjax {
     @Autowired
     private ProductService productService;
 
+
+
+
     @RequestMapping(value = "/api/public/products", method = RequestMethod.GET)
     public ResponseEntity<Catalog> get(@RequestParam CatalogRequest request) {
         return ResponseEntity.ok().body(null);
@@ -46,8 +49,7 @@ public class ProductsControllerAjax {
                     .setException(e)
                     .setMessage(e.getMessage()));
         }
-        return ResponseEntity.ok(new ControllerResponseImpl()
-                .setMessage("OK!"));
+        return ResponseEntity.ok(ControllerResponseImpl.OK);
 
     }
 }

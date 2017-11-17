@@ -6,7 +6,7 @@
        <bean id="categoryForNamedOrder" class="com.ffwatl.admin.catalog.domain.ProductCategoryImpl">
               <property name="id" value="10"/>
               <property name="level" value="4"/>
-              <property name="groupName">
+              <property name="categoryName">
                      <bean class="com.ffwatl.admin.i18n.domain.I18n">
                             <property name="locale_en" value="Jeans"/>
                             <property name="locale_ru" value="Джинсы"/>

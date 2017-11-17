@@ -5,6 +5,7 @@ import com.ffwatl.admin.catalog.dao.ColorDao;
 import com.ffwatl.admin.catalog.domain.Color;
 import com.ffwatl.admin.catalog.domain.ColorImpl;
 import com.ffwatl.admin.catalog.domain.dto.ColorDTO;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.service.ConverterDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +42,7 @@ public class ColorServiceImpl extends ConverterDTO<Color> implements ColorServic
             throw new IllegalArgumentException("Entity 'Color' can't be null");
         }
         if(c instanceof ColorDTO) {
-            c = transformDTO2Entity(c);
+            c = transformDTO2Entity(c, FetchMode.LAZY);
         }
         LOGGER.trace("save --> {}", c);
         colorDao.save(c);
@@ -80,17 +81,17 @@ public class ColorServiceImpl extends ConverterDTO<Color> implements ColorServic
 
     @Override
     public List<Color> findAll() {
-        return transformList(colorDao.findAll(), DTO_OBJECT);
+        return transformList(colorDao.findAll(), DTO_OBJECT, FetchMode.LAZY);
     }
 
     @Override
     public List<Color> findAllUsed() {
-        return transformList(colorDao.findAllUsed(), DTO_OBJECT);
+        return transformList(colorDao.findAllUsed(), DTO_OBJECT, FetchMode.LAZY);
     }
 
 
     @Override
-    public ColorImpl transformDTO2Entity(Color old) {
+    public ColorImpl transformDTO2Entity(Color old, FetchMode fetchMode) {
         return (ColorImpl) new ColorImpl()
                 .setId(old.getId())
                 .setColorName(old.getColorName())
@@ -98,7 +99,7 @@ public class ColorServiceImpl extends ConverterDTO<Color> implements ColorServic
     }
 
     @Override
-    public Color transformEntity2DTO(Color old) {
+    public Color transformEntity2DTO(Color old, FetchMode fetchMode) {
         return new ColorDTO()
                 .setId(old.getId())
                 .setColorName(old.getColorName())

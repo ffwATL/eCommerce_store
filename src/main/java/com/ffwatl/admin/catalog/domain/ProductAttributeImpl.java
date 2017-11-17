@@ -165,7 +165,6 @@ public class ProductAttributeImpl implements ProductAttribute {
     public String toString() {
         return "ProductAttributeImpl{" +
                 "id=" + id +
-                ", product=" + product +
                 ", attributeName=" + attributeName +
                 ", quantity=" + quantity +
                 ", fields=" + fields +

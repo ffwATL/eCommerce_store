@@ -261,7 +261,7 @@
                             <li th:each="group, index : ${globalCategories}">
                                 <span>
                                     <input type="checkbox" th:id="'global_'+${index.index}">
-                                    <label th:text="${group.getGroupName().getLocale_en()}">Clothes</label>
+                                    <label th:text="${group.getCategoryName().getLocale_en()}">Clothes</label>
                                 </span>
                             </li>
                         </ul>

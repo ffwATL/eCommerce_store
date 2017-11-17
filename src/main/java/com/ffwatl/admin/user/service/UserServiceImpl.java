@@ -2,6 +2,7 @@ package com.ffwatl.admin.user.service;
 
 
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilter;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.service.ConverterDTO;
 import com.ffwatl.admin.user.dao.UserDao;
 import com.ffwatl.admin.user.dao.UserRepository;
@@ -66,8 +67,10 @@ public class UserServiceImpl extends ConverterDTO<User> implements UserService {
     @Override
     public User findUserByEmail(String email){
         UserImpl u = findByEmail(email);
-        if(u == null) throw new IllegalArgumentException("UserImpl with that email not found ;(");
-        return transformEntity2DTO(u);
+        if(u == null) {
+            throw new IllegalArgumentException("UserImpl with that email not found ;(");
+        }
+        return transformEntity2DTO(u, FetchMode.FETCHED);
     }
 
     @Override
@@ -76,22 +79,25 @@ public class UserServiceImpl extends ConverterDTO<User> implements UserService {
     }
 
     @Override
-    public UserImpl transformDTO2Entity(User old) {
+    public UserImpl transformDTO2Entity(User old, FetchMode fetchMode) {
         return null;
     }
 
     @Override
-    public User transformEntity2DTO(User old) {
+    public User transformEntity2DTO(User old, FetchMode fetchMode) {
         Address addressImpl = old.getAddress();
+
         Address addressDto = addressImpl == null ? null : new AddressDTO()
                 .setCity(addressImpl.getCity())
                 .setCountry(addressImpl.getCountry())
                 .setId(addressImpl.getId())
                 .setStreet(addressImpl.getStreet())
                 .setZipCode(addressImpl.getZipCode());
+
         Set<UserProfile> userProfileSet = old.getUserProfiles().stream().map(profile -> new UserProfileDTO()
                 .setId(profile.getId())
                 .setRole(profile.getRole())).collect(Collectors.toSet());
+
         return new UserDTO()
                 .setId(old.getId())
                 .setAddress(addressDto)

@@ -5,6 +5,7 @@ import com.ffwatl.admin.catalog.dao.BrandDao;
 import com.ffwatl.admin.catalog.domain.Brand;
 import com.ffwatl.admin.catalog.domain.BrandImpl;
 import com.ffwatl.admin.catalog.domain.dto.BrandDTO;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.service.ConverterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
             throw new IllegalArgumentException("Brand object with the same name is already exist");
         }
 
-        brandDao.save((BrandImpl) transformDTO2Entity(brand));
+        brandDao.save((BrandImpl) transformDTO2Entity(brand, FetchMode.LAZY));
     }
 
     @Override
@@ -55,7 +56,7 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
 
     @Override
     public List<Brand> findAll() {
-        return transformList(brandDao.findAll(), DTO_OBJECT);
+        return transformList(brandDao.findAll(), DTO_OBJECT, FetchMode.LAZY);
     }
 
     @Override
@@ -75,11 +76,11 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
 
     @Override
     public List<Brand> findAllUsed() {
-        return transformList(brandDao.findAllUsed(), DTO_OBJECT);
+        return transformList(brandDao.findAllUsed(), DTO_OBJECT, FetchMode.LAZY);
     }
 
     @Override
-    public Brand transformDTO2Entity(Brand old) {
+    public Brand transformDTO2Entity(Brand old, FetchMode fetchMode) {
         return new BrandImpl()
                 .setId(old.getId())
                 .setName(old.getName())
@@ -87,7 +88,7 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
     }
 
     @Override
-    public Brand transformEntity2DTO(Brand brandImpl){
+    public Brand transformEntity2DTO(Brand brandImpl, FetchMode fetchMode){
         return new BrandDTO()
                 .setId(brandImpl.getId())
                 .setDescription(brandImpl.getDescription())

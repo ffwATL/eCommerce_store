@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     private BrandService brandService;
 
     @Autowired
-    private ItemGroupService itemGroupService;
+    private ProductCategoryService productCategoryService;
 
     @Autowired
     private Settings settings;
@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void save(ProductImpl item) {
-        item.setCategory(itemGroupService.findById(item.getProductCategory().getId()));
+        item.setCategory(productCategoryService.findById(item.getProductCategory().getId()));
 
         item.setBrand(brandService.findById(item.getBrand().getId()));
         for (ProductAttribute s: item.getProductAttributes()){
@@ -122,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
         if(item == null) {
             throw new IllegalArgumentException("Probably wrong Product id. Product not found :( [id]="+freshItem.getId() );
         }
-        item.setCategory(itemGroupService.findById(freshItem.getProductCategory().getId()));
+        item.setCategory(productCategoryService.findById(freshItem.getProductCategory().getId()));
         item.setProductName(freshItem.getProductName());
         item.setActive(freshItem.isActive());
         item.setSalePrice(freshItem.getSalePrice());

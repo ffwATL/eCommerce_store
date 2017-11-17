@@ -12,11 +12,11 @@ public interface FetchModeOption<T, I extends T> {
     void addFetch(Root<I> root);
 
     default CriteriaProperty<T, I> buildCriteriaProperty(CriteriaBuilder cb, final FetchMode fetchMode,
-                                                         Class<T> iClazz, Class<I> implClazz){
+                                                         Class<T> iClazz, Class<I> implClazz) {
         CriteriaQuery<T> criteria = cb.createQuery(iClazz);
         Root<I> root = criteria.from(implClazz);
 
-        if(fetchMode == FetchMode.FETCHED){
+        if (fetchMode == FetchMode.FETCHED) {
             addFetch(root);
             // do stuff
         }

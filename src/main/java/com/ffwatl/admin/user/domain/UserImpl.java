@@ -16,7 +16,7 @@ public class UserImpl implements User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name")
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -65,136 +65,168 @@ public class UserImpl implements User {
     @JoinColumn(name = "user_id")
     private User createdBy;
 
+
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    @Override
     public Set<UserProfile> getUserProfiles() {
         return userProfiles;
     }
 
+    @Override
     public State getState() {
         return state;
     }
 
+    @Override
     public String getPhotoUrl() {
         return photoUrl;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public Address getAddress() {
         return address;
     }
 
+    @Override
     public String getUserName() {
         return userName;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
 
+    @Override
     public String getFirstName() {
         return firstName;
     }
 
+    @Override
     public String getLastName() {
         return lastName;
     }
 
+    @Override
     public OperatorCode getOperatorCode() {
         return operatorCode;
     }
 
+    @Override
     public String getSkype() {
         return skype;
     }
 
+    @Override
     public Date getCreateDt() {
         return createDt;
     }
 
+    @Override
     public User getCreatedBy() {
         return createdBy;
     }
 
+
+    @Override
     public User setId(long id) {
         this.id = id;
         return this;
     }
 
+    @Override
     public User setUserName(String userName) {
         this.userName = userName;
         return this;
     }
 
+    @Override
     public User setEmail(String email) {
         this.email = email;
         return this;
     }
 
+    @Override
     public User setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
 
+    @Override
     public User setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
 
+    @Override
     public User setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
 
+    @Override
     public User setOperatorCode(OperatorCode code) {
         this.operatorCode = code;
         return this;
     }
 
+    @Override
     public User setSkype(String skype) {
         this.skype = skype;
         return this;
     }
 
+    @Override
     public User setCreateDt(Date createDt) {
         this.createDt = createDt;
         return this;
     }
 
+    @Override
     public User setPassword(String password) {
         this.password = password;
         return this;
     }
 
+    @Override
     public User setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
         return this;
     }
 
+    @Override
     public User setAddress(Address address) {
         this.address = address;
         return this;
     }
 
+    @Override
     public User setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
         return this;
     }
 
+    @Override
     public User setUserProfiles(Set<UserProfile> userProfiles) {
         this.userProfiles = userProfiles;
         return this;
     }
 
+    @Override
     public User setState(State state) {
         this.state = state;
         return this;
@@ -207,50 +239,16 @@ public class UserImpl implements User {
 
         UserImpl user = (UserImpl) o;
 
-        if (getId() != user.getId()) return false;
         if (getUserName() != null ? !getUserName().equals(user.getUserName()) : user.getUserName() != null)
             return false;
-        if (getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null) return false;
-        if (getPassword() != null ? !getPassword().equals(user.getPassword()) : user.getPassword() != null)
-            return false;
-        if (getFirstName() != null ? !getFirstName().equals(user.getFirstName()) : user.getFirstName() != null)
-            return false;
-        if (getLastName() != null ? !getLastName().equals(user.getLastName()) : user.getLastName() != null)
-            return false;
-        if (getPhotoUrl() != null ? !getPhotoUrl().equals(user.getPhotoUrl()) : user.getPhotoUrl() != null)
-            return false;
-        if (getOperatorCode() != null ? !getOperatorCode().equals(user.getOperatorCode()) : user.getOperatorCode() != null)
-            return false;
-        if (getPhoneNumber() != null ? !getPhoneNumber().equals(user.getPhoneNumber()) : user.getPhoneNumber() != null)
-            return false;
-        if (getAddress() != null ? !getAddress().equals(user.getAddress()) : user.getAddress() != null) return false;
-        if (getSkype() != null ? !getSkype().equals(user.getSkype()) : user.getSkype() != null) return false;
-        if (getCreateDt() != null ? !getCreateDt().equals(user.getCreateDt()) : user.getCreateDt() != null)
-            return false;
-        if (getState() != user.getState()) return false;
-        if (getUserProfiles() != null ? !getUserProfiles().equals(user.getUserProfiles()) : user.getUserProfiles() != null)
-            return false;
-        return !(getCreatedBy() != null ? !getCreatedBy().equals(user.getCreatedBy()) : user.getCreatedBy() != null);
 
+        return getEmail() != null ? getEmail().equals(user.getEmail()) : user.getEmail() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getUserName() != null ? getUserName().hashCode() : 0);
+        int result = (getUserName() != null ? getUserName().hashCode() : 0);
         result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
-        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
-        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
-        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
-        result = 31 * result + (getPhotoUrl() != null ? getPhotoUrl().hashCode() : 0);
-        result = 31 * result + (getOperatorCode() != null ? getOperatorCode().hashCode() : 0);
-        result = 31 * result + (getPhoneNumber() != null ? getPhoneNumber().hashCode() : 0);
-        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
-        result = 31 * result + (getSkype() != null ? getSkype().hashCode() : 0);
-        result = 31 * result + (getCreateDt() != null ? getCreateDt().hashCode() : 0);
-        result = 31 * result + (getState() != null ? getState().hashCode() : 0);
-        result = 31 * result + (getUserProfiles() != null ? getUserProfiles().hashCode() : 0);
-        result = 31 * result + (getCreatedBy() != null ? getCreatedBy().hashCode() : 0);
         return result;
     }
 
@@ -260,14 +258,8 @@ public class UserImpl implements User {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", photoUrl='" + photoUrl + '\'' +
-                ", operatorCode=" + operatorCode +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address=" + address +
-                ", skype='" + skype + '\'' +
                 ", createDt=" + createDt +
                 ", state=" + state +
                 ", userProfiles=" + userProfiles +

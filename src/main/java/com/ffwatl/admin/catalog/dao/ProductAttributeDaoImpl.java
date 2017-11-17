@@ -36,7 +36,7 @@ public class ProductAttributeDaoImpl implements ProductAttributeDao, FetchModeOp
         criteria.where(property.getBuilder().equal(root.get("id"), id));
         List<ProductAttribute> result = em.createQuery(criteria).getResultList();
 
-        if(result == null || result.size() < 1){
+        if (result == null || result.size() < 1) {
             return null;
         }
         ProductAttribute attribute = result.get(0);
@@ -57,6 +57,6 @@ public class ProductAttributeDaoImpl implements ProductAttributeDao, FetchModeOp
 
     @Override
     public void addFetch(Root<ProductAttributeImpl> root) {
-        root.fetch("measurements", JoinType.LEFT);
+        root.fetch("fields", JoinType.LEFT);
     }
 }

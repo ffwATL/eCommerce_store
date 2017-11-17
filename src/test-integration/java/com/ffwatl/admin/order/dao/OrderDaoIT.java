@@ -1,6 +1,6 @@
 package com.ffwatl.admin.order.dao;
 
-import com.ffwatl.admin.catalog.service.ItemGroupService;
+import com.ffwatl.admin.catalog.service.ProductCategoryService;
 import com.ffwatl.admin.offer.dao.OfferDao;
 import com.ffwatl.admin.offer.domain.CandidateItemOffer;
 import com.ffwatl.admin.offer.domain.OrderAdjustment;
@@ -46,7 +46,7 @@ public class OrderDaoIT {
     private UserService userService;
 
     @Autowired
-    private ItemGroupService itemGroupService;
+    private ProductCategoryService productCategoryService;
 
     private List<OrderItem> orderItems = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class OrderDaoIT {
 
 
         User customer = userService.findById(1);
-        ProductCategory cat = itemGroupService.findById(17);
+        ProductCategory cat = productCategoryService.findById(17);
 
         OrderItem orderItem = new OrderItemImpl()
                 .setProductCategory(cat)

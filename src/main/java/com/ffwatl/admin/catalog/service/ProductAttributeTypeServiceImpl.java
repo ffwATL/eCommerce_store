@@ -3,6 +3,7 @@ package com.ffwatl.admin.catalog.service;
 import com.ffwatl.admin.catalog.dao.EuroSizeDao;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.ProductAttributeType;
+import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.service.ConverterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class EuroSizeServiceImpl extends ConverterDTO<ProductAttributeType> implements EuroSizeService {
+public class ProductAttributeTypeServiceImpl extends ConverterDTO<ProductAttributeType> implements ProductAttributeTypeService {
 
     @Autowired
     private EuroSizeDao euroSizeDao;
@@ -32,12 +33,12 @@ public class EuroSizeServiceImpl extends ConverterDTO<ProductAttributeType> impl
     @Override
     @Transactional
     public List<ProductAttributeType> findByCat(CommonCategory cat){
-        return transformList(euroSizeDao.findByCat(cat), DTO_OBJECT);
+        return transformList(euroSizeDao.findByCat(cat), DTO_OBJECT, FetchMode.LAZY);
     }
 
     @Override
     public List<ProductAttributeType> findAllUsed() {
-        List<ProductAttributeType> list = transformList(euroSizeDao.findAllUsed(), DTO_OBJECT);
+        List<ProductAttributeType> list = transformList(euroSizeDao.findAllUsed(), DTO_OBJECT, FetchMode.LAZY);
         Collections.sort(list);
         return list;
     }
@@ -56,18 +57,18 @@ public class EuroSizeServiceImpl extends ConverterDTO<ProductAttributeType> impl
 
     @Override
     public List<ProductAttributeType> findAll() {
-        return transformList(euroSizeDao.findAll(), DTO_OBJECT);
+        return transformList(euroSizeDao.findAll(), DTO_OBJECT, FetchMode.LAZY);
     }
 
     @Override
-    public ProductAttributeType transformDTO2Entity(ProductAttributeType old) {
+    public ProductAttributeType transformDTO2Entity(ProductAttributeType old, FetchMode fetchMode) {
         return /*(ProductAttributeType) new ProductAttributeType()
                 .setId(old.getId())
                 .setCat(old.getCat())*/ null;
     }
 
     @Override
-    public ProductAttributeType transformEntity2DTO(ProductAttributeType old) {
+    public ProductAttributeType transformEntity2DTO(ProductAttributeType old, FetchMode fetchMode) {
         return /*new ProductAttributeTypeDTO()
                 .setId(old.getId())
                 .setName(old.getName())

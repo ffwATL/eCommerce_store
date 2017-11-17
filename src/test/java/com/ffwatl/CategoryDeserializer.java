@@ -20,7 +20,7 @@ public class CategoryDeserializer implements JsonDeserializer<ProductCategory> {
 
     private ProductCategory extractIgroup(JsonObject jsonObject, JsonDeserializationContext context){
         ProductCategory productCategory = new ProductCategoryImpl();
-        productCategory.setGroupName(context.deserialize(jsonObject.get("groupName"), I18n.class));
+        productCategory.setCategoryName(context.deserialize(jsonObject.get("groupName"), I18n.class));
         productCategory.setLevel(jsonObject.get("level").getAsInt());
         JsonElement childElement = jsonObject.get("child");
         if(childElement != null){

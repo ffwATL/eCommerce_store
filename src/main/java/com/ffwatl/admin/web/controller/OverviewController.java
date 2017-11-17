@@ -2,7 +2,7 @@ package com.ffwatl.admin.web.controller;
 
 
 import com.ffwatl.admin.catalog.domain.ProductCategory;
-import com.ffwatl.admin.catalog.service.ItemGroupService;
+import com.ffwatl.admin.catalog.service.ProductCategoryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class OverviewController {
     private static final Logger logger = LogManager.getLogger("com.ffwatl.admin.web.controller.OverviewController");
 
     @Autowired
-    private ItemGroupService itemGroupService;
+    private ProductCategoryService productCategoryService;
 
 
     @RequestMapping(value = "/admin/overview/all", method = RequestMethod.GET)
@@ -34,7 +34,7 @@ public class OverviewController {
                 if(c.getName().equals("app")) cookie = c.getValue();
             }
         }
-        List<ProductCategory> result = itemGroupService.findByLvlLazyWithoutChild(1);
+        List<ProductCategory> result = productCategoryService.findByLevel(1);
         resolveI18n(lang != null ? lang : cookie, result);
         model.addAttribute("globalCategories", result);
         return "admin/overview/itemOverview";
@@ -44,21 +44,21 @@ public class OverviewController {
         switch (lang) {
             case "en":
                 for (ProductCategory i : list) {
-                    String l = i.getGroupName().getLocale_en();
-                    i.getGroupName().setLocale_ru(l);
-                    i.getGroupName().setLocale_ua(l);
+                    String l = i.getCategoryName().getLocale_en();
+                    i.getCategoryName().setLocale_ru(l);
+                    i.getCategoryName().setLocale_ua(l);
                 }
             case "ru":
                 for (ProductCategory i : list) {
-                    String l = i.getGroupName().getLocale_ru();
-                    i.getGroupName().setLocale_en(l);
-                    i.getGroupName().setLocale_ua(l);
+                    String l = i.getCategoryName().getLocale_ru();
+                    i.getCategoryName().setLocale_en(l);
+                    i.getCategoryName().setLocale_ua(l);
                 }
             case "ua":
                 for (ProductCategory i : list) {
-                    String l = i.getGroupName().getLocale_ua();
-                    i.getGroupName().setLocale_en(l);
-                    i.getGroupName().setLocale_ru(l);
+                    String l = i.getCategoryName().getLocale_ua();
+                    i.getCategoryName().setLocale_en(l);
+                    i.getCategoryName().setLocale_ru(l);
                 }
         }
 

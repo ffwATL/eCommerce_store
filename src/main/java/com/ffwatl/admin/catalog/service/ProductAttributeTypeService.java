@@ -6,7 +6,7 @@ import com.ffwatl.admin.catalog.domain.ProductAttributeType;
 
 import java.util.List;
 
-public interface EuroSizeService {
+public interface ProductAttributeTypeService {
 
     ProductAttributeType findById(long id);
 

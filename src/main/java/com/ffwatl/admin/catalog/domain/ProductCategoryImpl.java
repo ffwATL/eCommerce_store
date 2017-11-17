@@ -33,55 +33,71 @@ public class ProductCategoryImpl implements Serializable, ProductCategory {
     @Column(name = "level")
     private int level;
 
-    /**
-     * Group name object that contains different language translations.
-     */
-    @Embedded
-    private I18n groupName;
+    @Column(name = "weight")
+    private int weight;
 
     @OneToOne(cascade = CascadeType.MERGE, targetEntity = UserImpl.class)
     @JoinColumn(name = "user_id")
     private User createdBy;
 
+    @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = ProductCategoryImpl.class)
+    @JoinColumn(name = "parent_id")
+    private ProductCategory parent;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = ProductCategoryImpl.class)
-    @JoinColumn(name = "child_id")
     private List<ProductCategory> child = new ArrayList<>();
+
+    /**
+     * Category name object that contains different language translations.
+     */
+    @Embedded
+    private I18n categoryName;
 
     @Column(name="description", length = 2048)
     private String description;
-
-    @Column(name = "weight")
-    private int weight;
 
     @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = ProductAttributeTemplateImpl.class)
     @JoinColumn(name = "attr_template_id")
     private ProductAttributeTemplate attributeTemplate;
 
 
-    public User getCreatedBy() {
-        return createdBy;
-    }
 
-    public int getWeight() {
-        return weight;
-    }
-
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public int getLevel() {
         return level;
     }
 
+    @Override
+    public int getWeight() {
+        return weight;
+    }
+
+    @Override
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    @Override
+    public ProductCategory getParent() {
+        return parent;
+    }
+
+    @Override
     public List<ProductCategory> getChild() {
         return child;
     }
 
-    public I18n getGroupName() {
-        return groupName;
+    @Override
+    public I18n getCategoryName() {
+        return categoryName;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
@@ -90,39 +106,52 @@ public class ProductCategoryImpl implements Serializable, ProductCategory {
     public ProductAttributeTemplate getProductAttributeTemplate() {
         return attributeTemplate;
     }
+
     @Override
     public ProductCategory setId(long id) {
         this.id = id;
         return this;
     }
-    @Override
-    public ProductCategory setGroupName(I18n groupName) {
-        this.groupName = groupName;
-        return this;
-    }
-    @Override
-    public ProductCategory setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-        return this;
-    }
-    @Override
-    public ProductCategory setDescription(String description) {
-        this.description = description;
-        return this;
-    }
-    @Override
-    public ProductCategory setChild(List<ProductCategory> child) {
-        this.child = child;
-        return this;
-    }
+
     @Override
     public ProductCategory setLevel(int level) {
         this.level = level;
         return this;
     }
+
     @Override
     public ProductCategory setWeight(int weight) {
         this.weight = weight;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setParent(ProductCategory parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setChild(List<ProductCategory> child) {
+        this.child = child;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setCategoryName(I18n categoryName) {
+        this.categoryName = categoryName;
+        return this;
+    }
+
+    @Override
+    public ProductCategory setDescription(String description) {
+        this.description = description;
         return this;
     }
 
@@ -142,22 +171,24 @@ public class ProductCategoryImpl implements Serializable, ProductCategory {
         if (getId() != that.getId()) return false;
         if (getLevel() != that.getLevel()) return false;
         if (getWeight() != that.getWeight()) return false;
-        return getGroupName() != null ? getGroupName().equals(that.getGroupName()) : that.getGroupName() == null;
+        return getCategoryName() != null ? getCategoryName().equals(that.getCategoryName()) : that.getCategoryName() == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (getId() ^ (getId() >>> 32));
         result = 31 * result + getLevel();
-        result = 31 * result + (getGroupName() != null ? getGroupName().hashCode() : 0);
+        result = 31 * result + (getCategoryName() != null ? getCategoryName().hashCode() : 0);
         result = 31 * result + getWeight();
         return result;
     }
 
     @Override
     public int compareTo(ProductCategory o) {
-        if(o == null) return 1;
-        return groupName.compareTo(o.getGroupName());
+        if (o == null) {
+            return 1;
+        }
+        return categoryName.compareTo(o.getCategoryName());
     }
 
     @Override
@@ -165,7 +196,7 @@ public class ProductCategoryImpl implements Serializable, ProductCategory {
         return "ProductCategoryImpl{" +
                 "id=" + id +
                 ", level=" + level +
-                ", groupName=" + groupName +
+                ", categoryName=" + categoryName +
                 ", createdBy=" + createdBy +
                 ", description='" + description + '\'' +
                 ", weight=" + weight +
