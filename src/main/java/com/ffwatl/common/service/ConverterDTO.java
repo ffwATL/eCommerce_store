@@ -9,8 +9,8 @@ import java.util.List;
 
 public abstract class ConverterDTO<I> {
 
-    public static final int DTO_OBJECT = 0;
-    public static final int ENTITY_OBJECT = 1;
+    protected static final int DTO_OBJECT = 0;
+    protected static final int ENTITY_OBJECT = 1;
 
     public List<I> transformList(@NotNull List<? extends I> old, int toObjectType, FetchMode fetchMode) {
         List<I> result = new ArrayList<>();

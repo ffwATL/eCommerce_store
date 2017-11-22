@@ -28,7 +28,7 @@ public class BrandController {
     public ResponseEntity<List<Brand>> get(@RequestParam boolean onlyUsed){
         List<Brand> brandList;
 
-        if(onlyUsed) {
+        if (onlyUsed) {
             brandList = brandService.findAllUsed();
         }else {
             brandList = brandService.findAll();
