@@ -69,23 +69,23 @@ public class ProductImpl implements Product {
     private String metaKeys;
 
     @Column(name = "origin_price")
-    private int originPrice;
+    private Integer originPrice;
 
     @Column(name = "retail_price")
-    private int retailPrice;
+    private Integer retailPrice;
 
     @Column(name = "sale_price")
-    private int salePrice;
+    private Integer salePrice;
 
     @Column(name = "currency")
     private Currency currency;
 
 
     @Column(name = "active")
-    private boolean isActive;
+    private Boolean isActive;
 
     @Column(name = "used")
-    private boolean isUsed;
+    private Boolean isUsed;
 
     @Column(name = "import_dt", nullable = false)
     private Date importDate;
@@ -98,10 +98,13 @@ public class ProductImpl implements Product {
     private User addedBy;
 
     @Column(name = "can_sell_without_attributes")
-    private boolean canSellWithoutOptions = false;
+    private Boolean canSellWithoutOptions = false;
 
     @Column(name = "gender")
     private Gender gender;
+
+    @Column(name = "number_of_images")
+    private Integer numberOfImages;
 
     @Override
     public long getId() {
@@ -134,7 +137,7 @@ public class ProductImpl implements Product {
     }
 
     @Override
-    public boolean isUsed() {
+    public Boolean isUsed() {
         return isUsed;
     }
 
@@ -168,8 +171,8 @@ public class ProductImpl implements Product {
     }
 
     @Override
-    public int getQuantity() {
-        int quantity = 0;
+    public Integer getQuantity() {
+        Integer quantity = 0;
         if(productAttributes != null){
             for(ProductAttribute pa: productAttributes){
                 quantity += pa.getQuantity();
@@ -184,20 +187,20 @@ public class ProductImpl implements Product {
     }
 
     @Override
-    public int getOriginPrice() {
+    public Integer getOriginPrice() {
         return originPrice;
     }
 
     @Override
-    public int getRetailPrice() {
+    public Integer getRetailPrice() {
         return retailPrice;
     }
     @Override
-    public int getSalePrice() {
+    public Integer getSalePrice() {
         return salePrice;
     }
     @Override
-    public boolean isActive() {
+    public Boolean isActive() {
         return isActive;
     }
     @Override
@@ -210,8 +213,18 @@ public class ProductImpl implements Product {
     }
 
     @Override
+    public Boolean getCanSellWithoutOptions() {
+        return canSellWithoutOptions;
+    }
+
+    @Override
     public Gender getGender() {
         return gender;
+    }
+
+    @Override
+    public Integer getNumberOfImages() {
+        return numberOfImages;
     }
 
     @Override
@@ -243,7 +256,7 @@ public class ProductImpl implements Product {
         return this;
     }
     @Override
-    public Product setCategory(ProductCategory productCategory) {
+    public Product setProductCategory(ProductCategory productCategory) {
         this.productCategory = productCategory;
         return this;
     }
@@ -260,23 +273,23 @@ public class ProductImpl implements Product {
     }
 
     @Override
-    public Product setOriginPrice(int originPrice) {
+    public Product setOriginPrice(Integer originPrice) {
         this.originPrice = originPrice;
         return this;
     }
 
     @Override
-    public Product setRetailPrice(int retailPrice) {
+    public Product setRetailPrice(Integer retailPrice) {
         this.retailPrice = retailPrice;
         return this;
     }
     @Override
-    public Product setSalePrice(int salePrice) {
+    public Product setSalePrice(Integer salePrice) {
         this.salePrice = salePrice;
         return this;
     }
     @Override
-    public Product setActive(boolean isActive) {
+    public Product setActive(Boolean isActive) {
         this.isActive = isActive;
         return this;
     }
@@ -306,7 +319,7 @@ public class ProductImpl implements Product {
         return this;
     }
     @Override
-    public Product setIsUsed(boolean isUsed) {
+    public Product setIsUsed(Boolean isUsed) {
         this.isUsed = isUsed;
         return this;
     }
@@ -322,8 +335,20 @@ public class ProductImpl implements Product {
     }
 
     @Override
+    public Product setCanSellWithoutOptions(Boolean canSellWithoutOptions) {
+        this.canSellWithoutOptions = canSellWithoutOptions;
+        return this;
+    }
+
+    @Override
     public Product setGender(Gender gender) {
         this.gender = gender;
+        return this;
+    }
+
+    @Override
+    public Product setNumberOfImages(Integer numberOfImages) {
+        this.numberOfImages = numberOfImages;
         return this;
     }
 
@@ -381,6 +406,7 @@ public class ProductImpl implements Product {
                 ", addedBy=" + addedBy +
                 ", canSellWithoutOptions=" + canSellWithoutOptions +
                 ", gender=" + gender +
+                ", numberOfImages=" + numberOfImages +
                 '}';
     }
 }

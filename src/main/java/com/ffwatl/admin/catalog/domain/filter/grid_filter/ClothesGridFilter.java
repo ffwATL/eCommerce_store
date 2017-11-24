@@ -1,6 +1,8 @@
 package com.ffwatl.admin.catalog.domain.filter.grid_filter;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class ClothesGridFilter extends ItemGridFilter{

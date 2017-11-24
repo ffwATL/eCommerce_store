@@ -1,8 +1,7 @@
 package com.ffwatl.admin.web.controller.rest;
 
 import com.ffwatl.admin.catalog.domain.Color;
-import com.ffwatl.admin.catalog.domain.response.ControllerResponse;
-import com.ffwatl.admin.catalog.domain.response.ControllerResponseImpl;
+import com.ffwatl.admin.catalog.domain.dto.response.ControllerResponse;
 import com.ffwatl.admin.catalog.service.ColorService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,11 +46,11 @@ public class ColorController {
             colorService.removeById(id);
         } catch (Exception e) {
             LOGGER.error("delete --> url='/api/private/colors/{}', exception: {}", id, e.toString());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ControllerResponseImpl()
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ControllerResponse()
                     .setException(e)
                     .setMessage("Can't remove 'Color' entity by id="+id));
         }
 
-        return ResponseEntity.ok(ControllerResponseImpl.OK);
+        return ResponseEntity.ok(ControllerResponse.OK);
     }
 }

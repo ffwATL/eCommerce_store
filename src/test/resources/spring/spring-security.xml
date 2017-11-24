@@ -13,14 +13,14 @@
 	<context:component-scan base-package="com.ffwatl"/>
 
 	<http auto-config="true">
-		<intercept-url pattern="/" access="permitAll" />
-		<intercept-url pattern="/admin/**" access="hasRole('ADMINISTRATOR') or hasRole('MANAGER')" />
+		<intercept-url pattern="/" accessMode="permitAll" />
+		<intercept-url pattern="/admin/**" accessMode="hasRole('ADMINISTRATOR') or hasRole('MANAGER')" />
 		<form-login  login-page="/login"
                      username-parameter="username"
                      password-parameter="password"
 					 authentication-success-handler-ref="customSuccessHandler"
 					 authentication-failure-handler-ref="authenticationFailureHandler"/>
-       	<access-denied-handler error-page="/Access_Denied"/>
+       	<accessMode-denied-handler error-page="/Access_Denied"/>
 		<csrf />
 	</http>
 	<beans:bean id="authenticationFailureHandler"

@@ -23,10 +23,6 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao, FetchModeOpti
     @PersistenceContext
     private EntityManager em;
 
-    @Override
-    public ProductCategoryImpl findById(long id) {
-        return em.find(ProductCategoryImpl.class, id);
-    }
 
     @Override
     public ProductCategory findById(long id, FetchMode fetchMode) {

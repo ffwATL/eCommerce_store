@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface ProductCategoryDao {
 
-    ProductCategoryImpl findById(long id);
-
     ProductCategory findById(long id, FetchMode fetchMode);
 
     List<ProductCategory> findByName(String name, FetchMode fetchMode);

@@ -5,17 +5,20 @@ import com.ffwatl.admin.catalog.dao.BrandDao;
 import com.ffwatl.admin.catalog.domain.Brand;
 import com.ffwatl.admin.catalog.domain.BrandImpl;
 import com.ffwatl.admin.catalog.domain.dto.BrandDTO;
+import com.ffwatl.admin.catalog.domain.dto.response.AccessMode;
 import com.ffwatl.common.persistence.FetchMode;
-import com.ffwatl.common.service.ConverterDTO;
+import com.ffwatl.common.service.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.ffwatl.common.service.ConvertToType.DTO_OBJECT;
+
 @Service("brand_service")
 @Transactional(readOnly = true)
-public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandService {
+public class BrandServiceImpl extends Converter<Brand> implements BrandService {
 
     @Autowired
     private BrandDao brandDao;
@@ -36,7 +39,7 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
             throw new IllegalArgumentException("Brand object with the same name is already exist");
         }
 
-        brandDao.save((BrandImpl) transformDTO2Entity(brand, FetchMode.LAZY));
+        brandDao.save((BrandImpl) transformDTO2Entity(brand, FetchMode.LAZY, AccessMode.ALL));
     }
 
     @Override
@@ -56,7 +59,7 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
 
     @Override
     public List<Brand> findAll() {
-        return transformList(brandDao.findAll(), DTO_OBJECT, FetchMode.LAZY);
+        return transformList(brandDao.findAll(), DTO_OBJECT, FetchMode.LAZY, AccessMode.ALL);
     }
 
     @Override
@@ -76,11 +79,11 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
 
     @Override
     public List<Brand> findAllUsed() {
-        return transformList(brandDao.findAllUsed(), DTO_OBJECT, FetchMode.LAZY);
+        return transformList(brandDao.findAllUsed(), DTO_OBJECT, FetchMode.LAZY, AccessMode.ALL);
     }
 
     @Override
-    public Brand transformDTO2Entity(Brand old, FetchMode fetchMode) {
+    public Brand transformDTO2Entity(Brand old, FetchMode fetchMode, AccessMode accessMode) {
         return new BrandImpl()
                 .setId(old.getId())
                 .setName(old.getName())
@@ -88,7 +91,7 @@ public class BrandServiceImpl extends ConverterDTO<Brand> implements BrandServic
     }
 
     @Override
-    public Brand transformEntity2DTO(Brand brandImpl, FetchMode fetchMode){
+    public Brand transformEntity2DTO(Brand brandImpl, FetchMode fetchMode, AccessMode accessMode){
         return new BrandDTO()
                 .setId(brandImpl.getId())
                 .setDescription(brandImpl.getDescription())

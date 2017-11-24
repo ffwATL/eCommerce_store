@@ -1,11 +1,11 @@
-package com.ffwatl.admin.catalog.domain.response;
+package com.ffwatl.admin.catalog.domain.dto.response;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.Color;
-import com.ffwatl.admin.catalog.domain.dto.ProductCategoryDTO;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.dto.ColorDTO;
+import com.ffwatl.admin.catalog.domain.dto.ProductCategoryDTO;
 
 import java.io.Serializable;
 import java.util.List;

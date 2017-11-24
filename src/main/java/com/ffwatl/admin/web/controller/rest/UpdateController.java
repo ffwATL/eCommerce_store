@@ -2,7 +2,7 @@ package com.ffwatl.admin.web.controller.rest;
 
 
 import com.ffwatl.admin.catalog.domain.ProductImpl;
-import com.ffwatl.admin.catalog.domain.response.ItemUpdatePresenter;
+import com.ffwatl.admin.catalog.domain.dto.response.ItemUpdatePresenter;
 import com.ffwatl.admin.catalog.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +32,7 @@ public class UpdateController {
     @ResponseBody
     public ResponseEntity<String> updateSingleItem(@RequestBody ItemUpdatePresenter update){
         try {
-            productService.updateSingleItem(update);
+           /* productService.processSingleProductRequest(update);*/
         }catch (Exception e){
             logger.error("Error on single Product update. " + update.getItem());
             logger.error(e.getMessage());
@@ -68,7 +68,7 @@ public class UpdateController {
     @ResponseBody
     public ResponseEntity<String> updateItems(@RequestBody ItemUpdatePresenter update){
         try{
-            productService.updateItems(update);
+            /*productService.processProductRequestInBulk(update);*/
         }catch (Exception e){
             logger.error("Error on multi items update. " + update);
             logger.error(e.getMessage());

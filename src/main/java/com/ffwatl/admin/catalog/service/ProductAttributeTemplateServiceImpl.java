@@ -4,8 +4,9 @@ import com.ffwatl.admin.catalog.dao.ProductAttributeTemplateDao;
 import com.ffwatl.admin.catalog.domain.ProductAttributeTemplate;
 import com.ffwatl.admin.catalog.domain.ProductAttributeTemplateImpl;
 import com.ffwatl.admin.catalog.domain.dto.ProductAttributeTemplateDTO;
+import com.ffwatl.admin.catalog.domain.dto.response.AccessMode;
 import com.ffwatl.common.persistence.FetchMode;
-import com.ffwatl.common.service.ConverterDTO;
+import com.ffwatl.common.service.Converter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.ffwatl.common.service.ConvertToType.DTO_OBJECT;
+
 /**
  * @author mmed 11/17/17
  */
 @Service("product_attribute_template_service")
 @Transactional(readOnly = true)
-public class ProductAttributeTemplateServiceImpl extends ConverterDTO<ProductAttributeTemplate> implements ProductAttributeTemplateService {
+public class ProductAttributeTemplateServiceImpl extends Converter<ProductAttributeTemplate> implements ProductAttributeTemplateService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -37,7 +40,7 @@ public class ProductAttributeTemplateServiceImpl extends ConverterDTO<ProductAtt
             throw new IllegalArgumentException("wrong 'ProductAttributeTemplate' id is given: " + id);
         }
         ProductAttributeTemplate attributeTemplate = attributeTemplateDao.findById(id, fetchMode);
-        attributeTemplate = transformEntity2DTO(attributeTemplate, fetchMode);
+        attributeTemplate = transformEntity2DTO(attributeTemplate, fetchMode, AccessMode.ALL);
 
         LOGGER.trace("findById --> {}", attributeTemplate);
         return attributeTemplate;
@@ -48,7 +51,7 @@ public class ProductAttributeTemplateServiceImpl extends ConverterDTO<ProductAtt
         LOGGER.trace("findAll --> fetchMode={}", fetchMode);
 
         List<ProductAttributeTemplate> result = attributeTemplateDao.findAll(fetchMode);
-        result = transformList(result, DTO_OBJECT, fetchMode);
+        result = transformList(result, DTO_OBJECT, fetchMode, AccessMode.ALL);
         LOGGER.trace("findAll --> {}", result);
         return result;
     }
@@ -81,7 +84,7 @@ public class ProductAttributeTemplateServiceImpl extends ConverterDTO<ProductAtt
     public void remove(ProductAttributeTemplate attributeTemplate) {
         LOGGER.trace("remove --> {}", attributeTemplate);
         if (attributeTemplate == null) {
-            LOGGER.error("remove --> Can't persist 'ProductAttributeTemplate' entity because it is null");
+            LOGGER.error("remove --> Can't remove 'ProductAttributeTemplate' entity because it is null");
         }else if (!(attributeTemplate instanceof ProductAttributeTemplateImpl)) {
             attributeTemplate = attributeTemplateDao.findById(attributeTemplate.getId(), FetchMode.LAZY);
         }
@@ -90,7 +93,7 @@ public class ProductAttributeTemplateServiceImpl extends ConverterDTO<ProductAtt
     }
 
     @Override
-    public ProductAttributeTemplate transformDTO2Entity(ProductAttributeTemplate old, FetchMode fetchMode) {
+    public ProductAttributeTemplate transformDTO2Entity(ProductAttributeTemplate old, FetchMode fetchMode, AccessMode accessMode) {
         ProductAttributeTemplate entity = new ProductAttributeTemplateImpl();
 
         if (fetchMode == FetchMode.FETCHED) {
@@ -104,7 +107,7 @@ public class ProductAttributeTemplateServiceImpl extends ConverterDTO<ProductAtt
     }
 
     @Override
-    public ProductAttributeTemplate transformEntity2DTO(ProductAttributeTemplate old, FetchMode fetchMode) {
+    public ProductAttributeTemplate transformEntity2DTO(ProductAttributeTemplate old, FetchMode fetchMode, AccessMode accessMode) {
         ProductAttributeTemplate dto = new ProductAttributeTemplateDTO();
 
         if (fetchMode == FetchMode.FETCHED) {
@@ -116,4 +119,5 @@ public class ProductAttributeTemplateServiceImpl extends ConverterDTO<ProductAtt
                 .setId(old.getId())
                 .setTemplateName(old.getTemplateName());
     }
+
 }

@@ -29,7 +29,7 @@ public interface Product {
 
     String getVendorCode();
 
-    boolean isUsed();
+    Boolean isUsed();
 
     String getMetaInfo();
 
@@ -39,21 +39,25 @@ public interface Product {
 
     Color getColor();
 
-    int getQuantity();
+    Integer getQuantity();
 
-    int getOriginPrice();
+    Integer getOriginPrice();
 
-    int getRetailPrice();
+    Integer getRetailPrice();
 
-    int getSalePrice();
+    Integer getSalePrice();
 
-    boolean isActive();
+    Boolean isActive();
 
     Date getImportDate();
 
     Timestamp getLastChangeDate();
 
+    Boolean getCanSellWithoutOptions();
+
     Gender getGender();
+
+    Integer getNumberOfImages();
 
 
     Product setId(long id);
@@ -66,19 +70,19 @@ public interface Product {
 
     Product setCurrency(Currency currency);
 
-    Product setCategory(ProductCategory productCategory);
+    Product setProductCategory(ProductCategory productCategory);
 
     Product setProductName(I18n itemName);
 
     Product setColor(Color color);
 
-    Product setOriginPrice(int originPrice);
+    Product setOriginPrice(Integer originPrice);
 
-    Product setRetailPrice(int originPrice);
+    Product setRetailPrice(Integer originPrice);
 
-    Product setSalePrice(int salePrice);
+    Product setSalePrice(Integer salePrice);
 
-    Product setActive(boolean isActive);
+    Product setActive(Boolean isActive);
 
     Product setImportDate(Date importDate);
 
@@ -90,12 +94,16 @@ public interface Product {
 
     Product setAddedBy(User addedBy);
 
-    Product setIsUsed(boolean isUsed);
+    Product setIsUsed(Boolean isUsed);
 
     Product setExtraNotes(String extraNotes);
 
     Product setVendorCode(String vendorCode);
 
+    Product setCanSellWithoutOptions(Boolean canSellWithoutOptions);
+
     Product setGender(Gender gender);
+
+    Product setNumberOfImages(Integer numberOfImages);
 
 }

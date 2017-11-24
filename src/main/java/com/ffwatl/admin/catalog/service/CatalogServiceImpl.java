@@ -4,6 +4,7 @@ import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.CommonCategory;
 import com.ffwatl.admin.catalog.domain.Product;
 import com.ffwatl.admin.catalog.domain.ProductAttribute;
+import com.ffwatl.admin.catalog.domain.dto.response.AccessMode;
 import com.ffwatl.common.persistence.FetchMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public Product findProductById(long id, FetchMode fetchMode) {
-        return productService.findById(id);
+        return productService.findById(id, fetchMode, AccessMode.CUSTOMER);
     }
 
     @Override

@@ -1,6 +1,9 @@
-package com.ffwatl.admin.catalog.domain.response;
+package com.ffwatl.admin.catalog.domain.dto.response;
 
-import com.ffwatl.admin.catalog.domain.*;
+import com.ffwatl.admin.catalog.domain.Color;
+import com.ffwatl.admin.catalog.domain.Product;
+import com.ffwatl.admin.catalog.domain.ProductAttribute;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.currency.domain.Currency;
 import com.ffwatl.admin.i18n.domain.I18n;
 

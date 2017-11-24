@@ -9,11 +9,12 @@ import java.util.List;
 
 public interface ProductDao {
 
-    ProductImpl findById(long id);
     Product findById(long id, FetchMode fetchMode);
-    List<ProductImpl> findAll();
+
     List<Product> findAll(FetchMode fetchMode);
+
     Product save(Product item);
+
     void remove(Product item);
 
     List<Product> findByStatus(boolean isActive, FetchMode fetchMode);

@@ -6,7 +6,7 @@ import com.ffwatl.admin.catalog.domain.*;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.ClothesGridFilter;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilter;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.ItemGridFilter;
-import com.ffwatl.admin.catalog.domain.response.*;
+import com.ffwatl.admin.catalog.domain.dto.response.*;
 import com.ffwatl.admin.catalog.service.*;
 import com.ffwatl.util.Settings;
 import org.apache.logging.log4j.LogManager;
@@ -119,8 +119,8 @@ public class GetController {
 
     @RequestMapping(value = "/item/single")
     @ResponseBody
-    public ResponseEntity<ProductUpdateImpl> ajaxSingleItem(@RequestParam long id){
-        return ResponseEntity.ok(productService.findItemPresenterById(id));
+    public ResponseEntity<String> ajaxSingleItem(@RequestParam long id){
+        return null;
     }
 
     @RequestMapping(value = "/item/options/clothes")

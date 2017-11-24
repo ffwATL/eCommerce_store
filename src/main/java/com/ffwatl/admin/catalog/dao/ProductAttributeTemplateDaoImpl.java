@@ -5,7 +5,6 @@ import com.ffwatl.admin.catalog.domain.ProductAttributeTemplateImpl;
 import com.ffwatl.common.persistence.CriteriaProperty;
 import com.ffwatl.common.persistence.FetchMode;
 import com.ffwatl.common.persistence.FetchModeOption;
-import com.ffwatl.common.service.ConverterDTO;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Repository;
 

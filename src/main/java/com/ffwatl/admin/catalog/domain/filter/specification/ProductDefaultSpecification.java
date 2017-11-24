@@ -1,8 +1,8 @@
 package com.ffwatl.admin.catalog.domain.filter.specification;
 
 
-import com.ffwatl.admin.catalog.domain.ProductImpl;
 import com.ffwatl.admin.catalog.domain.ProductCategoryImpl;
+import com.ffwatl.admin.catalog.domain.ProductImpl;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilterRule;
 import org.springframework.data.jpa.domain.Specification;
 

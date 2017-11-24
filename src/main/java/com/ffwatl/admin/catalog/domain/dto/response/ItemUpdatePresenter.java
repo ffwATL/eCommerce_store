@@ -1,4 +1,4 @@
-package com.ffwatl.admin.catalog.domain.response;
+package com.ffwatl.admin.catalog.domain.dto.response;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

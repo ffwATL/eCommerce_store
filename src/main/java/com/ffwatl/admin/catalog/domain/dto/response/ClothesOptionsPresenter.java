@@ -1,9 +1,9 @@
-package com.ffwatl.admin.catalog.domain.response;
+package com.ffwatl.admin.catalog.domain.dto.response;
 
 
 import com.ffwatl.admin.catalog.domain.Brand;
-import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.Color;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 
 import java.util.List;
 

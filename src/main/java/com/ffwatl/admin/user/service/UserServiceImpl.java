@@ -1,9 +1,10 @@
 package com.ffwatl.admin.user.service;
 
 
+import com.ffwatl.admin.catalog.domain.dto.response.AccessMode;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilter;
 import com.ffwatl.common.persistence.FetchMode;
-import com.ffwatl.common.service.ConverterDTO;
+import com.ffwatl.common.service.Converter;
 import com.ffwatl.admin.user.dao.UserDao;
 import com.ffwatl.admin.user.dao.UserRepository;
 import com.ffwatl.admin.user.domain.Address;
@@ -23,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service("user_service")
-public class UserServiceImpl extends ConverterDTO<User> implements UserService {
+public class UserServiceImpl extends Converter<User> implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -70,7 +71,7 @@ public class UserServiceImpl extends ConverterDTO<User> implements UserService {
         if(u == null) {
             throw new IllegalArgumentException("UserImpl with that email not found ;(");
         }
-        return transformEntity2DTO(u, FetchMode.FETCHED);
+        return transformEntity2DTO(u, FetchMode.FETCHED, AccessMode.ALL);
     }
 
     @Override
@@ -79,12 +80,12 @@ public class UserServiceImpl extends ConverterDTO<User> implements UserService {
     }
 
     @Override
-    public UserImpl transformDTO2Entity(User old, FetchMode fetchMode) {
+    public UserImpl transformDTO2Entity(User old, FetchMode fetchMode, AccessMode accessMode) {
         return null;
     }
 
     @Override
-    public User transformEntity2DTO(User old, FetchMode fetchMode) {
+    public User transformEntity2DTO(User old, FetchMode fetchMode, AccessMode accessMode) {
         Address addressImpl = old.getAddress();
 
         Address addressDto = addressImpl == null ? null : new AddressDTO()

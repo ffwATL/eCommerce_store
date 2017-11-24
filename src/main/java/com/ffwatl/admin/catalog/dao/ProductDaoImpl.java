@@ -15,17 +15,11 @@ import javax.persistence.criteria.Root;
 import java.util.Collections;
 import java.util.List;
 
-@Repository
+@Repository("product_dao")
 public class ProductDaoImpl implements ProductDao, FetchModeOption<Product, ProductImpl> {
 
     @PersistenceContext
     private EntityManager em;
-
-
-    @Override
-    public ProductImpl findById(long id) {
-        return em.find(ProductImpl.class, id);
-    }
 
     @Override
     public Product findById(long id, FetchMode fetchMode) {
@@ -37,11 +31,6 @@ public class ProductDaoImpl implements ProductDao, FetchModeOption<Product, Prod
 
         List<Product> result = em.createQuery(criteria).getResultList();
         return result != null && result.size() > 0 ? result.get(0) : null;
-    }
-
-    @Override
-    public List<ProductImpl> findAll() {
-        return em.createQuery("SELECT i FROM ProductImpl i",ProductImpl.class).getResultList();
     }
 
     @Override

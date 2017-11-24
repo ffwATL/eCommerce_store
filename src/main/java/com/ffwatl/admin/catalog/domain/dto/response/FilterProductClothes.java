@@ -1,8 +1,10 @@
-package com.ffwatl.admin.catalog.domain.response;
+package com.ffwatl.admin.catalog.domain.dto.response;
 
 
-import com.ffwatl.admin.catalog.domain.*;
-import com.ffwatl.admin.catalog.domain.dto.ProductCategoryDTO;
+import com.ffwatl.admin.catalog.domain.Brand;
+import com.ffwatl.admin.catalog.domain.Color;
+import com.ffwatl.admin.catalog.domain.ProductAttributeType;
+import com.ffwatl.admin.catalog.domain.ProductCategory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -106,7 +108,7 @@ public class FilterProductClothes implements Serializable {
      */
     private ProductCategory resolveItemGroup(ProductCategory itemGroup, List<ProductCategory> all, List<ProductCategory> gender){
         if(itemGroup.getLevel() == 2){
-            gender.add(new ProductCategoryDTO(itemGroup));
+           /* gender.add(new ProductCategoryDTO(itemGroup));*/
         }
         if(itemGroup.getChild() != null && itemGroup.getChild().size() > 0){
             for(ProductCategory i: itemGroup.getChild()) {
@@ -114,7 +116,8 @@ public class FilterProductClothes implements Serializable {
                 else resolveItemGroup(i, all, gender);*/ // FIXME: update pls!
             }
         }
-        return new ProductCategoryDTO(itemGroup);
+        return /*new ProductCategoryDTO(itemGroup);*/ null;
+
     }
 
     @Override

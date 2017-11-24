@@ -3,8 +3,6 @@ package com.ffwatl.admin.catalog.domain.filter.specification;
 
 import com.ffwatl.admin.catalog.domain.*;
 import com.ffwatl.admin.catalog.domain.filter.grid_filter.GridFilterRule;
-import com.ffwatl.admin.catalog.domain.BrandImpl;
-
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;

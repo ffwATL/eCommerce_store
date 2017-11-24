@@ -2,224 +2,329 @@ package com.ffwatl.admin.catalog.service;
 
 
 import com.ffwatl.admin.catalog.dao.ProductDao;
-import com.ffwatl.admin.catalog.domain.Product;
-import com.ffwatl.admin.catalog.domain.ProductAttribute;
-import com.ffwatl.admin.catalog.domain.ProductImpl;
-import com.ffwatl.admin.catalog.domain.response.ItemUpdatePresenter;
-import com.ffwatl.admin.catalog.domain.response.ProductImage;
-import com.ffwatl.admin.catalog.domain.response.ProductUpdateImpl;
+import com.ffwatl.admin.catalog.domain.*;
+import com.ffwatl.admin.catalog.domain.dto.ProductDTO;
+import com.ffwatl.admin.catalog.domain.dto.response.*;
+import com.ffwatl.admin.currency.domain.Currency;
+import com.ffwatl.admin.i18n.domain.I18n;
 import com.ffwatl.admin.user.domain.User;
-import com.ffwatl.admin.user.domain.dto.UserDTO;
+import com.ffwatl.admin.user.service.UserService;
 import com.ffwatl.common.persistence.FetchMode;
-import com.ffwatl.util.Settings;
+import com.ffwatl.common.service.Converter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
+import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import static com.ffwatl.common.service.ConvertToType.DTO_OBJECT;
 
 @Service("product_service")
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl extends Converter<Product> implements ProductService {
 
-    private static final Logger LOGGER = LogManager.getLogger("com.ffwatl.admin.web.controller.AddNewItemController");
+    private static final Logger LOGGER = LogManager.getLogger();
 
-    @Autowired
+    @Resource(name = "product_dao")
     private ProductDao productDao;
 
-    @Autowired
+    @Resource(name = "brand_service")
     private BrandService brandService;
 
-    @Autowired
+    @Resource(name = "product_category_service")
     private ProductCategoryService productCategoryService;
 
-    @Autowired
-    private Settings settings;
+    @Resource(name = "color_service")
+    private ColorService colorService;
+
+    @Resource(name = "user_service")
+    private UserService userService;
 
 
-    @Override
-    public ProductImpl findById(long id) {
-        ProductImpl item = productDao.findById(id);
-        item.getProductCategory().setChild(null);
-        return item;
-    }
 
     @Override
-    public Product findById(long id, FetchMode fetchMode) {
-        if(id < 1) {
-            throw new IllegalArgumentException("Wrong Product ID given: " + id);
+    public Product findById(long id, FetchMode fetchMode, AccessMode accessMode) {
+
+        if (id < 1) {
+            LOGGER.error("findById --> wrong 'Product' id={} is given", id);
+            throw new IllegalArgumentException("Wrong 'Product' id given: " + id);
         }
-        return productDao.findById(id, fetchMode);
+        LOGGER.trace("findById --> id={}, fetchMode={}", id, fetchMode);
+
+        Product product = productDao.findById(id, fetchMode);
+        product = transformEntity2DTO(product, fetchMode, accessMode);
+
+        LOGGER.trace("findById --> {}", product);
+        return product;
     }
 
     @Override
-    public List<ProductImpl> findAll() {
-        return productDao.findAll();
-    }
+    public List<Product> findAll(FetchMode fetchMode, AccessMode accessMode) {
+        LOGGER.trace("findAll --> fetchMode={}, accessMode={}", fetchMode, accessMode);
+        List<Product> productList = productDao.findAll(fetchMode);
+        productList = transformList(productList, DTO_OBJECT, fetchMode, accessMode);
 
-    @Override
-    public List<Product> findAll(FetchMode fetchMode) {
-        return productDao.findAll(fetchMode);
+        LOGGER.trace("findAll --> {}", productList);
+        return productList;
     }
 
     @Override
     @Transactional
-    public void save(ProductImpl item) {
-        item.setCategory(productCategoryService.findById(item.getProductCategory().getId()));
-
-        item.setBrand(brandService.findById(item.getBrand().getId()));
-        for (ProductAttribute s: item.getProductAttributes()){
-           /* s.setProductAttributeType(euroSizeService.findById(s.getProductAttributeType().getId()));*/ //FIXME: update pls!!
-        }
-
-        productDao.save(item);
-    }
-
-    @Override
     public Product save(Product product) {
+        if (product == null) {
+            LOGGER.error("save --> Can't save 'Product' entity because it's null");
+            throw new IllegalArgumentException("Can't save 'Product' entity because it's null");
+        }
+        LOGGER.trace("save --> {}", product);
+
+        if (!(product instanceof ProductImpl)) {
+            product = transformDTO2Entity(product, FetchMode.FETCHED, AccessMode.ADMIN_ONLY);
+        }
         return productDao.save(product);
     }
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void remove(Product item) {
-        if(item == null) {
-            throw new IllegalArgumentException("Null Product is given");
+    public void remove(Product product) {
+
+        if (product == null) {
+            LOGGER.error("remove --> Can't remove 'Product' entity because it's null");
+            throw new IllegalArgumentException("Can't remove 'Product' entity because it's null");
         }
-        productDao.remove(item);
+        LOGGER.trace("remove --> {}", product);
+        removeById(product.getId());
     }
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void removeById(long id) {
-        LOGGER.info("Removing product with id={}", id);
-        if(id < 1) {
+        if (id < 1) {
+            LOGGER.error("removeById --> Wrong product id={} is given", id);
             throw new IllegalArgumentException("Wrong product id is given: " + id);
         }
+        LOGGER.debug("removeById --> Removing 'Product' with id={}", id);
 
-        Product product = productDao.findById(id);
+        Product product = productDao.findById(id, FetchMode.LAZY);
         productDao.remove(product);
+        LOGGER.trace("removeById --> Removed 'Product' with id={}", id);
     }
 
     @Override
     @Transactional
-    public void changeItemStatus(ProductImpl item){
-        ProductImpl item_1 = findById(item.getId());
-        item_1.setActive(item.isActive());
+    public void changeItemStatus(Product request) {
+        if (request == null || request.getId() < 1 || request.isActive() == null) {
+            LOGGER.error("changeItemStatus --> given wrong 'ProductRequest' object. Please check logic above. {}", request);
+            throw new IllegalArgumentException("given wrong 'ProductRequest' object. Please check logic above. " + request);
+        }
+        final long id = request.getId();
+        final boolean isActive = request.isActive();
+        LOGGER.trace("changeItemStatus --> changing Product id={}, isActive={}", id, isActive);
+
+        Product product = findById(id, FetchMode.LAZY, AccessMode.ADMIN_ONLY);
+        product.setActive(isActive);
     }
 
     @Override
     @Transactional
-    public void updateSingleItem(ItemUpdatePresenter update){
-        Product freshItem = update.getItem();
-        ProductImpl item = findById(freshItem.getId());
-        if(item == null) {
-            throw new IllegalArgumentException("Probably wrong Product id. Product not found :( [id]="+freshItem.getId() );
+    public void processSingleProductRequest(Product request) {
+        if (request == null || request.getId() < 1) {
+            LOGGER.error("processSingleProductRequest --> given wrong 'ProductRequest' object. Please check logic above. {}", request);
+            throw new IllegalArgumentException("given wrong 'ProductRequest' object. Please check logic above. " + request);
         }
-        item.setCategory(productCategoryService.findById(freshItem.getProductCategory().getId()));
-        item.setProductName(freshItem.getProductName());
-        item.setActive(freshItem.isActive());
-        item.setSalePrice(freshItem.getSalePrice());
 
-        item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
+        final long id = request.getId();
+        final Boolean isActive = request.isActive();
+        final Boolean isUsed = request.isUsed();
+        final I18n productName = request.getProductName();
+        final I18n description = request.getDescription();
+
+        final String vendorCode = request.getVendorCode();
+        final String extraNotes = request.getExtraNotes();
+        final String metaInfo = request.getMetaInfo();
+        final String metaKeys = request.getMetaKeys();
+
+        final Integer originPrice= request.getOriginPrice();
+        final Integer retailPrice = request.getRetailPrice();
+        final Integer salePrice = request.getSalePrice();
+        final Currency currency = request.getCurrency();
+        final Gender gender = request.getGender();
+
+        Brand brand =request.getBrand();
+        Color color = request.getColor();
+        ProductCategory productCategory = request.getProductCategory();
+
+        Product product = findById(id, FetchMode.LAZY, AccessMode.ADMIN_ONLY);
+
+        if(product == null) {
+            LOGGER.error("processSingleProductRequest --> Probably wrong Product id. Product not found for id={}", id);
+            throw new IllegalArgumentException("Probably wrong Product id. Product not found for id="+id);
+        }
+
+        LOGGER.trace("processSingleProductRequest --> processing request: {}", request);
+
+        if (isActive != null) {
+            product.setActive(isActive);
+        }
+        if (isUsed != null) {
+            product.setIsUsed(isUsed);
+        }
+        if (productName != null) {
+            product.setProductName(productName); // all locales must be set anyway(!!) even if only one of them were updated
+        }
+        if (description != null) {
+            product.setDescription(description);
+        }
+        if (vendorCode != null) {
+            product.setVendorCode(vendorCode);
+        }
+        if (extraNotes != null) {
+            product.setExtraNotes(extraNotes);
+        }
+        if (metaInfo != null) {
+            product.setMetaInfo(metaInfo);
+        }
+        if (metaKeys != null) {
+            product.setMetaKeys(metaKeys);
+        }
+        if (originPrice != null) {
+            product.setOriginPrice(originPrice);
+        }
+        if (retailPrice != null) {
+            product.setRetailPrice(retailPrice);
+        }
+        if (salePrice != null) {
+            product.setSalePrice(salePrice);
+        }
+        if (currency != null) {
+            product.setCurrency(currency);
+        }
+        if (gender != null) {
+            product.setGender(gender);
+        }
+
+        if (brand != null) {
+            brand = brandService.findById(brand.getId());
+            product.setBrand(brand);
+        }
+        if (color != null) {
+            color = colorService.findById(color.getId());
+            product.setColor(color);
+        }
+        if (productCategory != null) {
+            productCategory = productCategoryService.findById(productCategory.getId(), FetchMode.LAZY);
+            product.setProductCategory(productCategory);
+        }
+
+        product.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
     }
 
     @Override
     @Transactional
-    public void updateItems(ItemUpdatePresenter update) {
-        Map<String, String> map = update.getOptions();
-        long[] ids = update.getIdentifiers();
-        int priceValue = map.get("priceValue") != null ? Integer.valueOf(map.get("priceValue")) : 0;
-        int discount = map.get("discount") != null ? Integer.valueOf(map.get("discount")) : -1;
-        for (long id: ids){
-            ProductImpl item = findById(id);
-            item.setSalePrice(item.getSalePrice() + priceValue);
+    public void processProductRequestInBulk(List<Product> productRequestList) {
+        if (productRequestList == null) {
+            LOGGER.error("processProductRequestInBulk --> wrong argument is given: null");
+            throw new IllegalArgumentException("wrong argument is given: null");
+        }
 
-            if(map.get("isActive") != null) item.setActive(Boolean.valueOf(map.get("isActive")));
-            item.setLastChangeDate(new Timestamp(System.currentTimeMillis()));
+        LOGGER.trace("processProductRequestInBulk --> size: {}", productRequestList.size());
+
+        for (Product r: productRequestList) {
+            processSingleProductRequest(r);
         }
     }
 
-    @Override
-    public ProductUpdateImpl findItemPresenterById(long id) {
-        /*ProductImpl item = productDao.findById(id);
-        if(item == null){
-            System.err.println("Product == null");
-            throw new IllegalArgumentException();
-        }
-        item.getProductCategory().setChild(null);
-        ProductUpdateImpl presenter = item2Presenter(item);
 
-        if(item instanceof ProductImpl){
-            ClothesItemPresenter cPresenter = new ClothesItemPresenter(presenter);
-            cPresenter.setBrand(((ProductClothes) item).getBrand());
-            Collections.sort(((ProductClothes) item).getSize());
-            cPresenter.setSize(((ProductClothes) item).getSize());
-            cPresenter.setBrandImgUrl(settings.getBrandImgUrl());
-            LOGGER.info("*****" + ((ProductClothes) item).getSize());
-            return cPresenter;
+
+    @Override
+    public Product transformDTO2Entity(Product old, FetchMode fetchMode, AccessMode accessMode) {
+        if (accessMode == null) {
+            LOGGER.fatal("transformDTO2Entity --> can't start conversion because of given AccessMode = [null]");
+            throw new IllegalArgumentException("Access mode can't be null");
+        }else if (old instanceof ProductImpl) {
+            return old;
         }
-        LOGGER.info("not clothes");
-        return presenter;*/
+
+        Product entity = productDao.findById(old.getId(), fetchMode)
+                .setId(old.getId())
+                .setBrand(old.getBrand())
+                .setActive(old.isActive())
+                .setColor(old.getColor())
+                .setCurrency(old.getCurrency())
+                .setDescription(old.getDescription())
+                .setExtraNotes(old.getExtraNotes())
+                .setIsUsed(old.isUsed())
+                .setMetaInfo(old.getMetaInfo())
+                .setMetaKeys(old.getMetaKeys())
+                .setNumberOfImages(old.getNumberOfImages())
+                .setVendorCode(old.getVendorCode())
+                .setProductCategory(old.getProductCategory())
+                .setProductName(old.getProductName())
+                .setSalePrice(old.getSalePrice())
+                .setOriginPrice(old.getOriginPrice())
+                .setRetailPrice(old.getRetailPrice());
+
+        if (fetchMode == FetchMode.FETCHED) {
+            entity.setProductAttributes(old.getProductAttributes());
+        }
+
+        processAccessMode(old, entity, accessMode);
+
+        return entity;
+    }
+
+    @Override
+    public Product transformEntity2DTO(Product old, FetchMode fetchMode, AccessMode accessMode) {
+        if (accessMode == null) {
+            LOGGER.fatal("transformDTO2Entity --> can't start conversion because of given AccessMode = [null]");
+            throw new IllegalArgumentException("Access mode can't be null");
+        }else if (old instanceof ProductDTO) {
+            return old;
+        }
+
+        Product dto = new ProductDTO()
+                .setId(old.getId())
+                .setBrand(old.getBrand())
+                .setActive(old.isActive())
+                .setColor(old.getColor())
+                .setCurrency(old.getCurrency())
+                .setDescription(old.getDescription())
+                .setExtraNotes(old.getExtraNotes())
+                .setIsUsed(old.isUsed())
+                .setMetaInfo(old.getMetaInfo())
+                .setMetaKeys(old.getMetaKeys())
+                .setNumberOfImages(old.getNumberOfImages())
+                .setVendorCode(old.getVendorCode())
+                .setProductCategory(old.getProductCategory())
+                .setProductName(old.getProductName())
+                .setSalePrice(old.getSalePrice())
+                .setOriginPrice(old.getOriginPrice())
+                .setRetailPrice(old.getRetailPrice());
+
+        if (fetchMode == FetchMode.FETCHED) {
+            dto.setProductAttributes(old.getProductAttributes());
+        }
+
+        processAccessMode(old, dto, accessMode);
         return null;
     }
 
-    private UserDTO user2Presenter(User u){
-        if(u == null) return null;
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(u.getId());
-        userDTO.setFirstName(u.getFirstName());
-        userDTO.setEmail(u.getEmail());
-        userDTO.setLastName(u.getLastName());
-        userDTO.setCreateDt(u.getCreateDt());
-        userDTO.setPhotoUrl(u.getPhotoUrl());
-        userDTO.setState(u.getState());
-        return userDTO;
-    }
+    private void processAccessMode(Product old, Product fresh, AccessMode accessMode) {
+        if (accessMode.getRole() < AccessMode.CUSTOMER.getRole()) {
+            fresh
+                    .setImportDate(old.getImportDate())
+                    .setLastChangeDate(old.getLastChangeDate());
+            User user;
+            if (old.getAddedBy() != null && old instanceof ProductDTO) {
+                user = userService.findById(old.getAddedBy().getId());
 
-    private ProductUpdateImpl item2Presenter(ProductImpl item){
-        String photoDir = settings.getPhotoDir()+"item_"+item.getId();
-        String url = settings.getPhotoUrl() +"item_"+item.getId()+"/";
-
-        ProductUpdateImpl presenter = new ProductUpdateImpl();
-
-        presenter.setAddedBy(user2Presenter(item.getAddedBy()));
-        presenter.setId(item.getId());
-
-        presenter.setCategory(item.getProductCategory());
-        presenter.setSalePrice(item.getSalePrice());
-        presenter.setActive(item.isActive());
-        presenter.setRetailPrice(item.getRetailPrice());
-        presenter.setProductName(item.getProductName());
-        presenter.setQuantity(item.getQuantity());
-        presenter.setImages(urlImages(photoDir, "xl_.jpg", url));
-        presenter.setThumbs(urlImages(photoDir, "s.jpg", url));
-        presenter.setDescription(item.getDescription());
-        presenter.setExtraNotes(item.getExtraNotes());
-        return presenter;
-    }
-
-    private List<ProductImage> urlImages(String directory, String end, String url) {
-        List<ProductImage> textFiles = new ArrayList<>();
-        File[] files = new File(directory).listFiles();
-        if(files != null){
-            for (File file : files) {
-                if (file.getName().endsWith(end)) {
-                    ProductImage image = new ProductImage();
-                    image.setSize(file.length());
-                    image.setName(file.getName());
-                    image.setUrl(url+file.getName());
-                    textFiles.add(image);
-                }
+            }else {
+                user = old.getAddedBy();
             }
-        }
 
-        return textFiles;
+            fresh.setAddedBy(user);
+        }
     }
 }

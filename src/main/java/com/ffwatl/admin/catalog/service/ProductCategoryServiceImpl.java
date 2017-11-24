@@ -6,9 +6,10 @@ import com.ffwatl.admin.catalog.domain.ProductAttributeTemplate;
 import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.domain.ProductCategoryImpl;
 import com.ffwatl.admin.catalog.domain.dto.ProductCategoryDTO;
+import com.ffwatl.admin.catalog.domain.dto.response.AccessMode;
 import com.ffwatl.admin.user.domain.User;
 import com.ffwatl.common.persistence.FetchMode;
-import com.ffwatl.common.service.ConverterDTO;
+import com.ffwatl.common.service.Converter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,14 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ffwatl.common.service.ConvertToType.DTO_OBJECT;
+
 /**
  * Implementation of ProductCategoryService.
  */
 @Service("product_category_service")
 @Transactional(readOnly = true)
-public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> implements ProductCategoryService {
+public class ProductCategoryServiceImpl extends Converter<ProductCategory> implements ProductCategoryService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -32,10 +35,10 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
     private ProductCategoryDao productCategoryDao;
 
     @Resource(name = "user_service")
-    private ConverterDTO<User> userConverter;
+    private Converter<User> userConverter;
 
     @Resource(name = "product_attribute_template_service")
-    private ConverterDTO<ProductAttributeTemplate> templateConverter;
+    private Converter<ProductAttributeTemplate> templateConverter;
 
     /**
      * Returns ProductCategoryImpl object from DB by given id value;
@@ -43,14 +46,15 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
      * @return ProductCategoryImpl object.
      */
     @Override
-    public ProductCategory findById(long id) {
-        LOGGER.trace("findById --> id={}", id);
+    public ProductCategory findById(long id, FetchMode fetchMode) {
+        LOGGER.trace("findById --> id={}, fetchMode={}", id, fetchMode);
         if (id < 1) {
             LOGGER.error("findById --> wrong id={} is given", id);
             throw new IllegalArgumentException("Wrong 'ProductCategory' id is given: "+id);
         }
 
-        ProductCategory productCategory = productCategoryDao.findById(id);
+        ProductCategory productCategory = productCategoryDao.findById(id, fetchMode);
+        productCategory = transformEntity2DTO(productCategory, fetchMode, AccessMode.ALL);
         LOGGER.trace("findById --> id={}, {}", id, productCategory);
         return productCategory;
     }
@@ -72,7 +76,7 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
         if(!(productCategory instanceof ProductCategoryImpl)) {
             LOGGER.trace("save --> need to transform DTO object to entity");
             FetchMode fetchMode = productCategory.getId() > 0 ? FetchMode.FETCHED : FetchMode.LAZY;
-            productCategory = transformDTO2Entity(productCategory, fetchMode);
+            productCategory = transformDTO2Entity(productCategory, fetchMode, AccessMode.ALL);
         }
 
         productCategoryDao.save(productCategory);
@@ -109,7 +113,7 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
         }
 
         ProductCategory result = list.get(0);
-        return transformEntity2DTO(result, fetchMode);
+        return transformEntity2DTO(result, fetchMode, AccessMode.ALL);
     }
 
     /**
@@ -129,7 +133,7 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
         }
         ProductCategory result = list.get(0);
         LOGGER.trace("findByLvlAndByName --> level={}, name={}, fetchMode={}, {}", level, name, fetchMode, result);
-        return transformEntity2DTO(result, fetchMode);
+        return transformEntity2DTO(result, fetchMode, AccessMode.ALL);
     }
 
     /**
@@ -148,20 +152,20 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
         List<ProductCategory> list = productCategoryDao.findByLevel(level, fetchMode);
         LOGGER.trace("findByLevel --> level={}, fetchMode={}\n{}", list);
 
-        return transformList(list, DTO_OBJECT, fetchMode);
+        return transformList(list, DTO_OBJECT, fetchMode, AccessMode.ALL);
     }
 
     @Override
     public List<ProductCategory> findAllUsed(FetchMode fetchMode) {
         List<ProductCategory> result = productCategoryDao.findAllInUse(fetchMode);
         LOGGER.trace("findAllUsed --> fetchMode={}\n{}", fetchMode, result);
-        return transformList(result, DTO_OBJECT, fetchMode);
+        return transformList(result, DTO_OBJECT, fetchMode, AccessMode.ALL);
     }
 
     @Override
-    public ProductCategory transformDTO2Entity(ProductCategory old, FetchMode fetchMode) {
-        User userEntity = userConverter.transformDTO2Entity(old.getCreatedBy(), fetchMode);
-        ProductAttributeTemplate template = templateConverter.transformDTO2Entity(old.getProductAttributeTemplate(), fetchMode);
+    public ProductCategory transformDTO2Entity(ProductCategory old, FetchMode fetchMode, AccessMode accessMode) {
+        User userEntity = userConverter.transformDTO2Entity(old.getCreatedBy(), fetchMode, accessMode);
+        ProductAttributeTemplate template = templateConverter.transformDTO2Entity(old.getProductAttributeTemplate(), fetchMode, accessMode);
 
         ProductCategory parent = old.getParent();
 
@@ -183,7 +187,7 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
             for (ProductCategory c: old.getChild()) {
                 c.setParent(result);
                 /*c.setChild(new ArrayList<>());*/ // since we don't want them to be fetched
-                childListEntity.add(transformDTO2Entity(c, fetchMode));
+                childListEntity.add(transformDTO2Entity(c, fetchMode, accessMode));
             }
         }
 
@@ -199,9 +203,9 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
     }
 
     @Override
-    public ProductCategory transformEntity2DTO(ProductCategory old, FetchMode fetchMode) {
-        User userDto = userConverter.transformEntity2DTO(old.getCreatedBy(), fetchMode);
-        ProductAttributeTemplate template = templateConverter.transformEntity2DTO(old.getProductAttributeTemplate(), fetchMode);
+    public ProductCategory transformEntity2DTO(ProductCategory old, FetchMode fetchMode, AccessMode accessMode) {
+        User userDto = userConverter.transformEntity2DTO(old.getCreatedBy(), fetchMode, accessMode);
+        ProductAttributeTemplate template = templateConverter.transformEntity2DTO(old.getProductAttributeTemplate(), fetchMode, accessMode);
 
         ProductCategory parent = old.getParent();
 
@@ -222,7 +226,7 @@ public class ProductCategoryServiceImpl extends ConverterDTO<ProductCategory> im
             for (ProductCategory c: old.getChild()) {
                 c.setParent(result);
                 c.setChild(new ArrayList<>()); // since we don't want them to be fetched
-                childListDto.add(transformEntity2DTO(c, fetchMode));
+                childListDto.add(transformEntity2DTO(c, fetchMode, accessMode));
             }
         }
 

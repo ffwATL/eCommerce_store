@@ -1,6 +1,8 @@
 package com.ffwatl.admin.catalog.domain.dto;
 
-import com.ffwatl.admin.catalog.domain.*;
+import com.ffwatl.admin.catalog.domain.AttributeName;
+import com.ffwatl.admin.catalog.domain.Field;
+import com.ffwatl.admin.catalog.domain.ProductAttributeTemplate;
 import com.ffwatl.admin.i18n.domain.I18n;
 
 import java.util.ArrayList;

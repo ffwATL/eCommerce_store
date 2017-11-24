@@ -1,10 +1,9 @@
 package com.ffwatl.admin.web.controller.rest;
 
 import com.ffwatl.admin.catalog.domain.Product;
-import com.ffwatl.admin.catalog.domain.request.CatalogRequest;
-import com.ffwatl.admin.catalog.domain.response.Catalog;
-import com.ffwatl.admin.catalog.domain.response.ControllerResponse;
-import com.ffwatl.admin.catalog.domain.response.ControllerResponseImpl;
+import com.ffwatl.admin.catalog.domain.dto.request.CatalogRequest;
+import com.ffwatl.admin.catalog.domain.dto.response.ControllerResponse;
+import com.ffwatl.admin.catalog.domain.dto.response.PageResponse;
 import com.ffwatl.admin.catalog.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,20 +23,22 @@ public class ProductsControllerAjax {
 
 
     @RequestMapping(value = "/api/public/products", method = RequestMethod.GET)
-    public ResponseEntity<Catalog> get(@RequestParam CatalogRequest request) {
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<PageResponse<Product>> get(@RequestParam CatalogRequest request) {
+        return ResponseEntity.ok().body(new PageResponse<>());
     }
 
     @RequestMapping(value = "/api/public/products/{id}", method = RequestMethod.GET)
-    public ResponseEntity<String> get(@PathVariable("id") long id) {
-        return ResponseEntity.ok("cool");
+    public ResponseEntity<ControllerResponse<Product>> get(@PathVariable("id") long id) {
+        // getting a product by given id
+        return ResponseEntity.ok(new ControllerResponse<>());
     }
 
 
 
     @RequestMapping(value = "/api/public/products/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<String> put(@PathVariable("id") long id, @RequestParam Product product){
-        return ResponseEntity.ok("/api/public/products/ 200 OK");
+    public ResponseEntity<ControllerResponse<String>> put(@PathVariable("id") long id, @RequestParam Product product) {
+        // update product.. delegate it to the service
+        return ResponseEntity.ok(new ControllerResponse<>());
     }
 
     @RequestMapping(value = "/api/private/products/{id}", method = RequestMethod.DELETE)
@@ -45,11 +46,11 @@ public class ProductsControllerAjax {
         try {
             productService.removeById(id);
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ControllerResponseImpl()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ControllerResponse()
                     .setException(e)
                     .setMessage(e.getMessage()));
         }
-        return ResponseEntity.ok(ControllerResponseImpl.OK);
+        return ResponseEntity.ok(ControllerResponse.OK);
 
     }
 }

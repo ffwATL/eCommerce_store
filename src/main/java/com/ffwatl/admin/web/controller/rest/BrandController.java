@@ -1,8 +1,7 @@
 package com.ffwatl.admin.web.controller.rest;
 
 import com.ffwatl.admin.catalog.domain.Brand;
-import com.ffwatl.admin.catalog.domain.response.ControllerResponse;
-import com.ffwatl.admin.catalog.domain.response.ControllerResponseImpl;
+import com.ffwatl.admin.catalog.domain.dto.response.ControllerResponse;
 import com.ffwatl.admin.catalog.service.BrandService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,12 +45,12 @@ public class BrandController {
             LOGGER.error("put request for url: /api/public/brands, exception:{}", e.toString());
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ControllerResponseImpl()
+                    .body(new ControllerResponse()
                             .setException(e)
                             .setMessage(e.getMessage()));
         }
 
-        return ResponseEntity.ok(ControllerResponseImpl.OK);
+        return ResponseEntity.ok(ControllerResponse.OK);
     }
 
 
@@ -73,10 +72,10 @@ public class BrandController {
             LOGGER.error("delete request for url: /api/public/brands/{}\nexception: {}", id, e.toString());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ControllerResponseImpl()
+                    .body(new ControllerResponse()
                             .setException(e)
                             .setMessage("Can't remove 'Brand' object with id="+id));
         }
-        return ResponseEntity.ok(ControllerResponseImpl.OK);
+        return ResponseEntity.ok(ControllerResponse.OK);
     }
 }

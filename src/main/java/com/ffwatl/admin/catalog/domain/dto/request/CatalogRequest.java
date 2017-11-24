@@ -1,4 +1,4 @@
-package com.ffwatl.admin.catalog.domain.request;
+package com.ffwatl.admin.catalog.domain.dto.request;
 
 /**
  * @author mmed 11/15/17

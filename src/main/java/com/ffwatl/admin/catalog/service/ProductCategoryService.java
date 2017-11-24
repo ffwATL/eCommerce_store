@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProductCategoryService {
 
-    ProductCategory findById(long id);
+    ProductCategory findById(long id, FetchMode fetchMode);
 
     void save(ProductCategory itemGroup);
 

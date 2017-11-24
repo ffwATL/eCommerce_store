@@ -3,6 +3,7 @@ package com.ffwatl.admin.web.controller;
 
 import com.ffwatl.admin.catalog.domain.ProductCategory;
 import com.ffwatl.admin.catalog.service.ProductCategoryService;
+import com.ffwatl.common.persistence.FetchMode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class OverviewController {
                 if(c.getName().equals("app")) cookie = c.getValue();
             }
         }
-        List<ProductCategory> result = productCategoryService.findByLevel(1);
+        List<ProductCategory> result = productCategoryService.findByLevel(1, FetchMode.LAZY);
         resolveI18n(lang != null ? lang : cookie, result);
         model.addAttribute("globalCategories", result);
         return "admin/overview/itemOverview";
