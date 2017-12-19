@@ -31,7 +31,7 @@ public class BrandServiceImpl extends Converter<Brand> implements BrandService {
     @Override
     @Transactional
     public void save(Brand brand) {
-        if(brand == null) {
+        if (brand == null) {
             throw new IllegalArgumentException("BrandImpl can't be null");
         }
 
@@ -45,8 +45,8 @@ public class BrandServiceImpl extends Converter<Brand> implements BrandService {
     @Override
     @Transactional
     public void save(List<BrandImpl> list) {
-        if(list == null || list.size() < 1) {
-            throw new IllegalArgumentException("BrandImpl list: " + list);
+        if (list == null || list.size() < 1) {
+            throw new IllegalArgumentException(String.format("BrandImpl list: %s", list));
         }
         list.forEach(brandDao::save);
     }
@@ -65,7 +65,9 @@ public class BrandServiceImpl extends Converter<Brand> implements BrandService {
     @Override
     @Transactional
     public void removeByName(String name) {
-        if(name == null) throw new IllegalArgumentException("Name can't be null");
+        if(name == null) {
+            throw new IllegalArgumentException("Name can't be null");
+        }
         BrandImpl b = findByName(name);
         if(b == null) throw new IllegalArgumentException("Such element not present in DB");
         brandDao.remove(b);

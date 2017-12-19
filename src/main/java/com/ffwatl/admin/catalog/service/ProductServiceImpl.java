@@ -160,7 +160,7 @@ public class ProductServiceImpl extends Converter<Product> implements ProductSer
 
         if(product == null) {
             LOGGER.error("processSingleProductRequest --> Probably wrong Product id. Product not found for id={}", id);
-            throw new IllegalArgumentException("Probably wrong Product id. Product not found for id="+id);
+            throw new IllegalArgumentException(String.format("Probably wrong Product id. Product not found for id=%d", id));
         }
 
         LOGGER.trace("processSingleProductRequest --> processing request: {}", request);
@@ -247,7 +247,12 @@ public class ProductServiceImpl extends Converter<Product> implements ProductSer
             return old;
         }
 
-        Product entity = productDao.findById(old.getId(), fetchMode)
+        Product entity = productDao.findById(old.getId(), fetchMode);
+        if (entity == null) {
+            entity = new ProductImpl();
+        }
+
+        entity
                 .setId(old.getId())
                 .setBrand(old.getBrand())
                 .setActive(old.isActive())

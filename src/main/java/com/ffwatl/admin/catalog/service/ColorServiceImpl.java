@@ -29,7 +29,7 @@ public class ColorServiceImpl extends Converter<Color> implements ColorService{
 
     @Override
     public Color findById(long id) {
-        if(id < 1) {
+        if (id < 1) {
             LOGGER.warn("findById --> wrong id={} is given", id);
             throw new IllegalArgumentException("Wrong id is given: id=" + id);
         }
@@ -40,7 +40,7 @@ public class ColorServiceImpl extends Converter<Color> implements ColorService{
     @Override
     @Transactional
     public void save(Color c) {
-        if(c == null) {
+        if (c == null) {
             LOGGER.error("save --> given 'Color' entity is null");
             throw new IllegalArgumentException("Entity 'Color' can't be null");
         }
@@ -54,7 +54,7 @@ public class ColorServiceImpl extends Converter<Color> implements ColorService{
     @Override
     @Transactional
     public void save(List<Color> list) {
-        if(list == null || list.size() < 1) {
+        if (list == null || list.size() < 1) {
             LOGGER.error("save --> incorrect 'Color' entity list is given: {}", list);
             throw new IllegalArgumentException("Entity ColorImpl can't be null");
         }
@@ -64,7 +64,7 @@ public class ColorServiceImpl extends Converter<Color> implements ColorService{
     @Override
     @Transactional
     public void remove(Color c) {
-        if(c == null) {
+        if (c == null) {
             LOGGER.error("remove --> given 'Color' entity is null");
             throw new IllegalArgumentException("Entity 'Color' can't be null");
         }

@@ -32,7 +32,7 @@ public class ColorController {
         }else {
             colorList = colorService.findAll();
         }
-        LOGGER.debug("get --> url='/api/public/colors'\n{}", colorList);
+        LOGGER.debug("GET: url='/api/public/colors'\n{}", colorList);
 
         return ResponseEntity.ok(colorList);
     }
@@ -40,15 +40,15 @@ public class ColorController {
 
     @RequestMapping(name = "/api/private/colors/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<ControllerResponse> delete(@PathVariable long id) {
-        LOGGER.debug("delete --> url='/api/private/colors/{}'", id);
+        LOGGER.debug("DELETE: url='/api/private/colors/{}'", id);
 
         try {
             colorService.removeById(id);
         } catch (Exception e) {
-            LOGGER.error("delete --> url='/api/private/colors/{}', exception: {}", id, e.toString());
+            LOGGER.error("DELETE: url='/api/private/colors/{}', exception: {}", id, e.toString());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ControllerResponse()
                     .setException(e)
-                    .setMessage("Can't remove 'Color' entity by id="+id));
+                    .setMessage(String.format("Can't remove 'Color' entity by id=%d", id)));
         }
 
         return ResponseEntity.ok(ControllerResponse.OK);
